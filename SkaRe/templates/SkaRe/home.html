@@ -1,0 +1,56 @@
+{% extends 'SkaRe/base.html' %}
+
+{% block title %}Home - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">Welcome to SkaRe!</h1>
+            <p class="lead">Manage Groups and Participants in the PlachtIS system.</p>
+            <hr class="my-4">
+            
+            {% if user.is_authenticated %}
+                <p>Hello, {{ user.first_name }} {{ user.last_name }}! You are logged in as <strong>{{ user.username }}</strong>.</p>
+                <p class="mb-0">
+                    <a class="btn btn-primary btn-lg me-2" href="/admin/" role="button">Go to Admin Panel</a>
+                    <a class="btn btn-secondary btn-lg" href="{% url 'SkaRe:logout' %}" role="button">Logout</a>
+                </p>
+            {% else %}
+                <p>Please login or register to access the system.</p>
+                <p class="mb-0">
+                    <a class="btn btn-primary btn-lg me-2" href="{% url 'SkaRe:login' %}" role="button">Login</a>
+                    <a class="btn btn-success btn-lg" href="{% url 'SkaRe:register' %}" role="button">Register</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if user.is_authenticated %}
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Groups</h5>
+            </div>
+            <div class="card-body">
+                <p>Manage groups in the system through the admin panel.</p>
+                <a href="/admin/SkaRe/group/" class="btn btn-info">Manage Groups</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Participants</h5>
+            </div>
+            <div class="card-body">
+                <p>Manage participants in the system through the admin panel.</p>
+                <a href="/admin/SkaRe/participant/" class="btn btn-success">Manage Participants</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
