@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  web:
+    image: ghcr.io/${GITHUB_REPOSITORY:-owner/repo}:latest
+    container_name: plachtis-web
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=PlachtIS.settings
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./data:/app/db_data
+    command: >
+      sh -c "python manage.py migrate &&
+             gunicorn PlachtIS.wsgi:application --bind 0.0.0.0:8000 --workers 3"
