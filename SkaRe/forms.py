@@ -55,14 +55,24 @@ class ParticipantForm(forms.ModelForm):
     """
     Form for creating/editing a Participant.
     """
+    date_of_birth = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',
+            'placeholder': 'YYYY-MM-DD'
+        }),
+        help_text='Date of birth'
+    )
+    
     class Meta:
         model = Participant
-        fields = ['first_name', 'last_name', 'email', 'phone']
+        fields = ['first_name', 'last_name', 'nickname', 'date_of_birth', 'health_restrictions', 'dietary_restrictions']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone (optional)'}),
+            'nickname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nickname (optional)'}),
+            'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Health restrictions (optional)', 'rows': 2}),
+            'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Dietary restrictions (optional)', 'rows': 2}),
         }
 
 

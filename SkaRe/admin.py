@@ -12,8 +12,24 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'email', 'phone', 'group', 'created_at']
+    list_display = ['first_name', 'last_name', 'nickname', 'date_of_birth', 'group', 'created_at']
     list_filter = ['group', 'created_at', 'updated_at']
-    search_fields = ['first_name', 'last_name', 'email', 'phone']
+    search_fields = ['first_name', 'last_name', 'nickname']
     readonly_fields = ['created_at', 'updated_at']
     autocomplete_fields = ['group']
+    fieldsets = (
+        ('Personal Information', {
+            'fields': ('first_name', 'last_name', 'nickname', 'date_of_birth')
+        }),
+        ('Health & Dietary', {
+            'fields': ('health_restrictions', 'dietary_restrictions'),
+            'classes': ('collapse',)
+        }),
+        ('Group Assignment', {
+            'fields': ('group',)
+        }),
+        ('Metadata', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )

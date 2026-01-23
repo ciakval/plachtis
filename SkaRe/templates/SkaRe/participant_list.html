@@ -20,8 +20,10 @@
         <thead class="table-success">
             <tr>
                 <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
+                <th>Nickname</th>
+                <th>Date of Birth</th>
+                <th>Health</th>
+                <th>Dietary</th>
                 <th>Group</th>
                 <th>Joined</th>
             </tr>
@@ -30,9 +32,23 @@
             {% for participant in participants %}
             <tr>
                 <td><strong>{{ participant.first_name }} {{ participant.last_name }}</strong></td>
-                <td>{{ participant.email }}</td>
-                <td>{{ participant.phone|default:"N/A" }}</td>
-                <td><span class="badge bg-info">{{ participant.group.name }}</span></td>
+                <td>{{ participant.nickname|default:"-" }}</td>
+                <td>{{ participant.date_of_birth|date:"M d, Y" }}</td>
+                <td>
+                    {% if participant.health_restrictions %}
+                        <span class="badge bg-warning text-dark" title="{{ participant.health_restrictions }}">Yes</span>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if participant.dietary_restrictions %}
+                        <span class="badge bg-info" title="{{ participant.dietary_restrictions }}">Yes</span>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td><span class="badge bg-success">{{ participant.group.name }}</span></td>
                 <td>{{ participant.created_at|date:"M d, Y" }}</td>
             </tr>
             {% endfor %}
