@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World Messages</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .message {
+            background-color: #f4f4f4;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .timestamp {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .no-messages {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello World Messages</h1>
+    
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="message">
+                <p><strong>{{ msg.message }}</strong></p>
+                <p class="timestamp">Created at: {{ msg.created_at|date:"Y-m-d H:i:s" }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-messages">No messages yet. Visit the admin panel to create some!</p>
+    {% endif %}
+    
+    <p><a href="/admin/">Go to Admin Panel</a></p>
+</body>
+</html>
