@@ -3,8 +3,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import UserRegistrationForm, GroupForm, ParticipantFormSet
-from .models import Group, Participant
+from .forms import UserRegistrationForm, UnitForm, ParticipantFormSet
+from .models import Unit, Participant
 
 
 def register(request):
@@ -63,42 +63,42 @@ def home(request):
 
 
 @login_required
-def group_list(request):
+def unit_list(request):
     """
-    View to list all groups.
+    View to list all units.
     """
-    groups = Group.objects.all().order_by('-created_at')
-    return render(request, 'SkaRe/group_list.html', {'groups': groups})
+    units = Unit.objects.all().order_by('-created_at')
+    return render(request, 'SkaRe/unit_list.html', {'units': units})
 
 
 @login_required
-def create_group_with_participants(request):
+def create_unit_with_participants(request):
     """
-    View to create a group with multiple participants.
+    View to create a unit with multiple participants.
     """
     if request.method == 'POST':
-        group_form = GroupForm(request.POST)
+        unit_form = UnitForm(request.POST)
         
-        if group_form.is_valid():
-            group = group_form.save()
-            participant_formset = ParticipantFormSet(request.POST, instance=group)
+        if unit_form.is_valid():
+            unit = unit_form.save()
+            participant_formset = ParticipantFormSet(request.POST, instance=unit)
             
             if participant_formset.is_valid():
                 participant_formset.save()
-                messages.success(request, f'Group "{group.name}" created successfully with participants!')
-                return redirect('SkaRe:group_list')
+                messages.success(request, f'Unit "{unit.unit_name}" created successfully with participants!')
+                return redirect('SkaRe:unit_list')
             else:
-                # If participants are invalid, delete the group and show errors
-                group.delete()
+                # If participants are invalid, delete the unit and show errors
+                unit.delete()
                 messages.error(request, 'Please correct the errors in the participant forms.')
         else:
             participant_formset = ParticipantFormSet(request.POST)
     else:
-        group_form = GroupForm()
+        unit_form = UnitForm()
         participant_formset = ParticipantFormSet()
     
-    return render(request, 'SkaRe/create_group_with_participants.html', {
-        'group_form': group_form,
+    return render(request, 'SkaRe/create_unit_with_participants.html', {
+        'unit_form': unit_form,
         'participant_formset': participant_formset,
     })
 
@@ -108,5 +108,5 @@ def participant_list(request):
     """
     View to list all participants.
     """
-    participants = Participant.objects.all().select_related('group').order_by('-created_at')
+    participants = Participant.objects.all().select_related('unit').order_by('-created_at')
     return render(request, 'SkaRe/participant_list.html', {'participants': participants})

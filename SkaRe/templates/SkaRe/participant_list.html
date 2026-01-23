@@ -8,8 +8,8 @@
         <h2>All Participants</h2>
     </div>
     <div class="col-md-4 text-end">
-        <a href="{% url 'SkaRe:create_group' %}" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> Add via New Group
+        <a href="{% url 'SkaRe:create_unit' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Add via New Unit
         </a>
     </div>
 </div>
@@ -21,10 +21,12 @@
             <tr>
                 <th>Name</th>
                 <th>Nickname</th>
+                <th>Category</th>
                 <th>Date of Birth</th>
                 <th>Health</th>
                 <th>Dietary</th>
-                <th>Group</th>
+                <th>Info</th>
+                <th>Unit</th>
                 <th>Joined</th>
             </tr>
         </thead>
@@ -33,6 +35,15 @@
             <tr>
                 <td><strong>{{ participant.first_name }} {{ participant.last_name }}</strong></td>
                 <td>{{ participant.nickname|default:"-" }}</td>
+                <td>
+                    {% if participant.category == 'ADULT' %}
+                        <span class="badge bg-primary">Adult</span>
+                    {% elif participant.category == 'SCOUT' %}
+                        <span class="badge bg-success">Scout</span>
+                    {% elif participant.category == 'SCOUT_CUB' %}
+                        <span class="badge bg-warning text-dark">Scout Cub</span>
+                    {% endif %}
+                </td>
                 <td>{{ participant.date_of_birth|date:"M d, Y" }}</td>
                 <td>
                     {% if participant.health_restrictions %}
@@ -48,7 +59,14 @@
                         -
                     {% endif %}
                 </td>
-                <td><span class="badge bg-success">{{ participant.group.name }}</span></td>
+                <td>
+                    {% if participant.relevant_information %}
+                        <span class="badge bg-secondary" title="{{ participant.relevant_information }}">Yes</span>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td><span class="badge bg-success">{{ participant.unit.unit_name }}</span></td>
                 <td>{{ participant.created_at|date:"M d, Y" }}</td>
             </tr>
             {% endfor %}
@@ -58,8 +76,8 @@
 {% else %}
 <div class="alert alert-info">
     <h4>No participants found</h4>
-    <p>There are no participants in the system yet. Create a group and add participants to get started!</p>
-    <a href="{% url 'SkaRe:create_group' %}" class="btn btn-primary">Create Group with Participants</a>
+    <p>There are no participants in the system yet. Create a unit and add participants to get started!</p>
+    <a href="{% url 'SkaRe:create_unit' %}" class="btn btn-primary">Create Unit with Participants</a>
 </div>
 {% endif %}
 {% endblock %}

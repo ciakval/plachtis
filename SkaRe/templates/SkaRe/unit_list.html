@@ -1,0 +1,61 @@
+{% extends 'SkaRe/base.html' %}
+
+{% block title %}Units - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-md-8">
+        <h2>Units</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'SkaRe:create_unit' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Create New Unit
+        </a>
+    </div>
+</div>
+
+{% if units %}
+<div class="row">
+    {% for unit in units %}
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ unit.unit_name }} <small>({{ unit.unit_evidence_id }})</small></h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>Contact:</strong> {{ unit.contact_person_name }}</p>
+                <p class="card-text"><strong>Email:</strong> {{ unit.contact_email }}</p>
+                <p class="card-text"><strong>Phone:</strong> {{ unit.contact_phone }}</p>
+                {% if unit.backup_contact_phone %}
+                    <p class="card-text"><strong>Backup:</strong> {{ unit.backup_contact_phone }}</p>
+                {% endif %}
+                {% if unit.relevant_information %}
+                    <p class="card-text text-muted">{{ unit.relevant_information|truncatewords:15 }}</p>
+                {% endif %}
+                
+                <hr>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-muted">
+                            <strong>Participants:</strong> {{ unit.participants.count }}
+                        </small>
+                        <br>
+                        <small class="text-muted">
+                            Created: {{ unit.created_at|date:"M d, Y" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <h4>No units found</h4>
+    <p>There are no units in the system yet. Create your first unit to get started!</p>
+    <a href="{% url 'SkaRe:create_unit' %}" class="btn btn-primary">Create Your First Unit</a>
+</div>
+{% endif %}
+{% endblock %}

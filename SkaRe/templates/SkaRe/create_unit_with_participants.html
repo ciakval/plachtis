@@ -1,39 +1,85 @@
 {% extends 'SkaRe/base.html' %}
 
-{% block title %}Create Group with Participants - SkaRe{% endblock %}
+{% block title %}Create Unit with Participants - SkaRe{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-10">
+    <div class="col-md-11">
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Create New Group with Participants</h3>
+                <h3 class="mb-0">Create New Unit with Participants</h3>
             </div>
             <div class="card-body">
-                <form method="post" id="group-form">
+                <form method="post" id="unit-form">
                     {% csrf_token %}
                     
-                    <h4 class="mb-3">Group Information</h4>
+                    <h4 class="mb-3">Unit Information</h4>
                     <div class="border rounded p-3 mb-4 bg-light">
-                        <div class="mb-3">
-                            <label for="{{ group_form.name.id_for_label }}" class="form-label">Group Name <span class="text-danger">*</span></label>
-                            {{ group_form.name }}
-                            {% if group_form.name.errors %}
-                                <div class="text-danger">{{ group_form.name.errors }}</div>
-                            {% endif %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ unit_form.unit_name.id_for_label }}" class="form-label">Unit Name <span class="text-danger">*</span></label>
+                                {{ unit_form.unit_name }}
+                                {% if unit_form.unit_name.errors %}
+                                    <div class="text-danger">{{ unit_form.unit_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ unit_form.unit_evidence_id.id_for_label }}" class="form-label">Unit Evidence ID <span class="text-danger">*</span></label>
+                                {{ unit_form.unit_evidence_id }}
+                                {% if unit_form.unit_evidence_id.errors %}
+                                    <div class="text-danger">{{ unit_form.unit_evidence_id.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ unit_form.contact_person_name.id_for_label }}" class="form-label">Contact Person Name <span class="text-danger">*</span></label>
+                                {{ unit_form.contact_person_name }}
+                                {% if unit_form.contact_person_name.errors %}
+                                    <div class="text-danger">{{ unit_form.contact_person_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ unit_form.contact_email.id_for_label }}" class="form-label">Contact Email <span class="text-danger">*</span></label>
+                                {{ unit_form.contact_email }}
+                                {% if unit_form.contact_email.errors %}
+                                    <div class="text-danger">{{ unit_form.contact_email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ unit_form.contact_phone.id_for_label }}" class="form-label">Contact Phone <span class="text-danger">*</span></label>
+                                {{ unit_form.contact_phone }}
+                                {% if unit_form.contact_phone.errors %}
+                                    <div class="text-danger">{{ unit_form.contact_phone.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ unit_form.backup_contact_phone.id_for_label }}" class="form-label">Backup Contact Phone</label>
+                                {{ unit_form.backup_contact_phone }}
+                                {% if unit_form.backup_contact_phone.errors %}
+                                    <div class="text-danger">{{ unit_form.backup_contact_phone.errors }}</div>
+                                {% endif %}
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="{{ group_form.description.id_for_label }}" class="form-label">Description</label>
-                            {{ group_form.description }}
-                            {% if group_form.description.errors %}
-                                <div class="text-danger">{{ group_form.description.errors }}</div>
+                            <label for="{{ unit_form.relevant_information.id_for_label }}" class="form-label">Relevant Information</label>
+                            {{ unit_form.relevant_information }}
+                            {% if unit_form.relevant_information.errors %}
+                                <div class="text-danger">{{ unit_form.relevant_information.errors }}</div>
                             {% endif %}
                         </div>
                     </div>
 
                     <h4 class="mb-3">Participants (Optional)</h4>
-                    <p class="text-muted mb-3">Add participants to this group. You can add more later.</p>
+                    <p class="text-muted mb-3">Add participants to this unit. You can add more later.</p>
                     
                     {{ participant_formset.management_form }}
                     
@@ -41,14 +87,16 @@
                         <table class="table table-bordered table-hover table-sm" id="participant-table">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="width: 5%">#</th>
-                                    <th style="width: 18%">First Name *</th>
-                                    <th style="width: 18%">Last Name *</th>
-                                    <th style="width: 15%">Nickname</th>
-                                    <th style="width: 12%">Birth Date *</th>
-                                    <th style="width: 15%">Health</th>
-                                    <th style="width: 15%">Dietary</th>
-                                    <th style="width: 5%">Act</th>
+                                    <th style="width: 4%">#</th>
+                                    <th style="width: 12%">First Name *</th>
+                                    <th style="width: 12%">Last Name *</th>
+                                    <th style="width: 10%">Nickname</th>
+                                    <th style="width: 10%">Birth Date *</th>
+                                    <th style="width: 10%">Category *</th>
+                                    <th style="width: 12%">Health</th>
+                                    <th style="width: 12%">Dietary</th>
+                                    <th style="width: 14%">Info</th>
+                                    <th style="width: 4%">Act</th>
                                 </tr>
                             </thead>
                             <tbody id="participant-forms">
@@ -82,6 +130,12 @@
                                         {% endif %}
                                     </td>
                                     <td>
+                                        {{ form.category }}
+                                        {% if form.category.errors %}
+                                            <div class="text-danger small">{{ form.category.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
                                         {{ form.health_restrictions }}
                                         {% if form.health_restrictions.errors %}
                                             <div class="text-danger small">{{ form.health_restrictions.errors }}</div>
@@ -91,6 +145,12 @@
                                         {{ form.dietary_restrictions }}
                                         {% if form.dietary_restrictions.errors %}
                                             <div class="text-danger small">{{ form.dietary_restrictions.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.relevant_information }}
+                                        {% if form.relevant_information.errors %}
+                                            <div class="text-danger small">{{ form.relevant_information.errors }}</div>
                                         {% endif %}
                                     </td>
                                     <td class="text-center align-middle">
@@ -117,9 +177,9 @@
 
                     <div class="d-flex gap-2 mt-4">
                         <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-check-circle"></i> Create Group & Add Participants
+                            <i class="bi bi-check-circle"></i> Create Unit & Add Participants
                         </button>
-                        <a href="{% url 'SkaRe:group_list' %}" class="btn btn-secondary btn-lg">Cancel</a>
+                        <a href="{% url 'SkaRe:unit_list' %}" class="btn btn-secondary btn-lg">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -130,7 +190,8 @@
 <style>
 .participant-form input[type="text"],
 .participant-form input[type="date"],
-.participant-form textarea {
+.participant-form textarea,
+.participant-form select {
     border: 1px solid #dee2e6;
     padding: 0.25rem 0.4rem;
     font-size: 0.85rem;
@@ -183,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newForm.setAttribute('data-form-index', formIndex);
         
         // Clear all input values
-        newForm.querySelectorAll('input[type="text"], input[type="date"], textarea').forEach(input => {
+        newForm.querySelectorAll('input[type="text"], input[type="date"], textarea, select').forEach(input => {
             input.value = '';
             // Update name and id attributes
             const name = input.getAttribute('name');
@@ -233,8 +294,8 @@ document.addEventListener('DOMContentLoaded', function() {
             remainingForms.forEach((form, index) => {
                 form.setAttribute('data-form-index', index);
                 
-                // Update all input names and ids
-                form.querySelectorAll('input').forEach(input => {
+                // Update all input, textarea, and select names and ids
+                form.querySelectorAll('input, textarea, select').forEach(input => {
                     const name = input.getAttribute('name');
                     const id = input.getAttribute('id');
                     if (name && name.includes('participants-')) {

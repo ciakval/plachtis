@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import inlineformset_factory
-from .models import Group, Participant
+from .models import Unit, Participant
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -38,16 +38,22 @@ class UserRegistrationForm(UserCreationForm):
         return email
 
 
-class GroupForm(forms.ModelForm):
+class UnitForm(forms.ModelForm):
     """
-    Form for creating/editing a Group.
+    Form for creating/editing a Unit.
     """
     class Meta:
-        model = Group
-        fields = ['name', 'description']
+        model = Unit
+        fields = ['unit_name', 'unit_evidence_id', 'contact_person_name', 'contact_email', 
+                  'contact_phone', 'backup_contact_phone', 'relevant_information']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Group Name'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description', 'rows': 3}),
+            'unit_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Unit Name'}),
+            'unit_evidence_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10, 816.08.001'}),
+            'contact_person_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Contact Person Name'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Contact Email'}),
+            'contact_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Contact Phone'}),
+            'backup_contact_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Backup Phone (optional)'}),
+            'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Relevant information', 'rows': 3}),
         }
 
 
@@ -66,19 +72,21 @@ class ParticipantForm(forms.ModelForm):
     
     class Meta:
         model = Participant
-        fields = ['first_name', 'last_name', 'nickname', 'date_of_birth', 'health_restrictions', 'dietary_restrictions']
+        fields = ['first_name', 'last_name', 'nickname', 'date_of_birth', 'category', 'health_restrictions', 'dietary_restrictions', 'relevant_information']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
             'nickname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nickname (optional)'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
             'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Health restrictions (optional)', 'rows': 2}),
             'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Dietary restrictions (optional)', 'rows': 2}),
+            'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Relevant information (optional)', 'rows': 2}),
         }
 
 
-# Formset for adding multiple participants to a group
+# Formset for adding multiple participants to a unit
 ParticipantFormSet = inlineformset_factory(
-    Group,
+    Unit,
     Participant,
     form=ParticipantForm,
     extra=3,  # Number of empty forms to display

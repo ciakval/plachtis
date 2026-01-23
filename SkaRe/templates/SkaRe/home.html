@@ -7,7 +7,7 @@
     <div class="col-md-12">
         <div class="jumbotron bg-light p-5 rounded">
             <h1 class="display-4">Welcome to SkaRe!</h1>
-            <p class="lead">Manage Groups and Participants in the PlachtIS system.</p>
+            <p class="lead">Manage Units and Participants in the PlachtIS system.</p>
             <hr class="my-4">
             
             {% if user.is_authenticated %}
@@ -32,12 +32,12 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header bg-info text-white">
-                <h5 class="mb-0">Groups</h5>
+                <h5 class="mb-0">Units</h5>
             </div>
             <div class="card-body">
-                <p>Create and manage groups in the system.</p>
-                <a href="{% url 'SkaRe:group_list' %}" class="btn btn-info">View Groups</a>
-                <a href="{% url 'SkaRe:create_group' %}" class="btn btn-success">Create Group</a>
+                <p>Create and manage units in the system.</p>
+                <a href="{% url 'SkaRe:unit_list' %}" class="btn btn-info">View Units</a>
+                <a href="{% url 'SkaRe:create_unit' %}" class="btn btn-success">Create Unit</a>
             </div>
         </div>
     </div>
