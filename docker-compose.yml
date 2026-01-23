@@ -8,7 +8,9 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DJANGO_SETTINGS_MODULE=PlachtIS.settings
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_DEBUG=False
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS:-plachtis.remesh.cz}
       - PYTHONUNBUFFERED=1
     volumes:
       - ./data:/app/db_data
