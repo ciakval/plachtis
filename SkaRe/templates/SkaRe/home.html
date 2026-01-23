@@ -35,8 +35,9 @@
                 <h5 class="mb-0">Groups</h5>
             </div>
             <div class="card-body">
-                <p>Manage groups in the system through the admin panel.</p>
-                <a href="/admin/SkaRe/group/" class="btn btn-info">Manage Groups</a>
+                <p>Create and manage groups in the system.</p>
+                <a href="{% url 'SkaRe:group_list' %}" class="btn btn-info">View Groups</a>
+                <a href="{% url 'SkaRe:create_group' %}" class="btn btn-success">Create Group</a>
             </div>
         </div>
     </div>
@@ -46,8 +47,8 @@
                 <h5 class="mb-0">Participants</h5>
             </div>
             <div class="card-body">
-                <p>Manage participants in the system through the admin panel.</p>
-                <a href="/admin/SkaRe/participant/" class="btn btn-success">Manage Participants</a>
+                <p>View and manage participants in the system.</p>
+                <a href="{% url 'SkaRe:participant_list' %}" class="btn btn-success">View Participants</a>
             </div>
         </div>
     </div>

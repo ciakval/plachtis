@@ -1,0 +1,243 @@
+{% extends 'SkaRe/base.html' %}
+
+{% block title %}Create Group with Participants - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Create New Group with Participants</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" id="group-form">
+                    {% csrf_token %}
+                    
+                    <h4 class="mb-3">Group Information</h4>
+                    <div class="border rounded p-3 mb-4 bg-light">
+                        <div class="mb-3">
+                            <label for="{{ group_form.name.id_for_label }}" class="form-label">Group Name <span class="text-danger">*</span></label>
+                            {{ group_form.name }}
+                            {% if group_form.name.errors %}
+                                <div class="text-danger">{{ group_form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ group_form.description.id_for_label }}" class="form-label">Description</label>
+                            {{ group_form.description }}
+                            {% if group_form.description.errors %}
+                                <div class="text-danger">{{ group_form.description.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <h4 class="mb-3">Participants (Optional)</h4>
+                    <p class="text-muted mb-3">Add participants to this group. You can add more later.</p>
+                    
+                    {{ participant_formset.management_form }}
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="participant-table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                    <th style="width: 20%">First Name</th>
+                                    <th style="width: 20%">Last Name</th>
+                                    <th style="width: 25%">Email</th>
+                                    <th style="width: 20%">Phone</th>
+                                    <th style="width: 10%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="participant-forms">
+                                {% for form in participant_formset %}
+                                <tr class="participant-form" data-form-index="{{ forloop.counter0 }}">
+                                    <td class="text-center align-middle">
+                                        <strong class="participant-number">{{ forloop.counter }}</strong>
+                                    </td>
+                                    <td>
+                                        {{ form.first_name }}
+                                        {% if form.first_name.errors %}
+                                            <div class="text-danger small">{{ form.first_name.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.last_name }}
+                                        {% if form.last_name.errors %}
+                                            <div class="text-danger small">{{ form.last_name.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.email }}
+                                        {% if form.email.errors %}
+                                            <div class="text-danger small">{{ form.email.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.phone }}
+                                        {% if form.phone.errors %}
+                                            <div class="text-danger small">{{ form.phone.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm remove-form-btn" title="Remove participant">
+                                            <i class="bi bi-dash-circle"></i>
+                                        </button>
+                                        {{ form.id }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <button type="button" id="add-participant" class="btn btn-success btn-sm">
+                            <i class="bi bi-plus-circle"></i> Add Participant
+                        </button>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <strong>Tip:</strong> Use the + button to add more participants. Empty rows will be ignored.
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle"></i> Create Group & Add Participants
+                        </button>
+                        <a href="{% url 'SkaRe:group_list' %}" class="btn btn-secondary btn-lg">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.participant-form input[type="text"],
+.participant-form input[type="email"] {
+    border: 1px solid #dee2e6;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.9rem;
+}
+#participant-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+.remove-form-btn {
+    padding: 0.25rem 0.5rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const participantFormsContainer = document.getElementById('participant-forms');
+    const totalFormsInput = document.getElementById('id_participants-TOTAL_FORMS');
+    const addButton = document.getElementById('add-participant');
+    
+    let formCount = parseInt(totalFormsInput.value);
+    
+    // Function to update participant numbers
+    function updateParticipantNumbers() {
+        const forms = participantFormsContainer.querySelectorAll('.participant-form');
+        forms.forEach((form, index) => {
+            const numberSpan = form.querySelector('.participant-number');
+            if (numberSpan) {
+                numberSpan.textContent = index + 1;
+            }
+        });
+    }
+    
+    // Function to clone and add a new form
+    function addForm() {
+        const emptyForm = participantFormsContainer.querySelector('.participant-form:first-child');
+        if (!emptyForm) return;
+        
+        const newForm = emptyForm.cloneNode(true);
+        
+        // Update form index in all fields
+        const formIndex = formCount;
+        newForm.setAttribute('data-form-index', formIndex);
+        
+        // Clear all input values
+        newForm.querySelectorAll('input[type="text"], input[type="email"]').forEach(input => {
+            input.value = '';
+            // Update name and id attributes
+            const name = input.getAttribute('name');
+            const id = input.getAttribute('id');
+            if (name) {
+                input.setAttribute('name', name.replace(/participants-\d+/, `participants-${formIndex}`));
+            }
+            if (id) {
+                input.setAttribute('id', id.replace(/id_participants-\d+/, `id_participants-${formIndex}`));
+            }
+        });
+        
+        // Update hidden fields (id field)
+        newForm.querySelectorAll('input[type="hidden"]').forEach(input => {
+            const name = input.getAttribute('name');
+            const id = input.getAttribute('id');
+            if (name && name.includes('participants-')) {
+                input.setAttribute('name', name.replace(/participants-\d+/, `participants-${formIndex}`));
+            }
+            if (id && id.includes('id_participants-')) {
+                input.setAttribute('id', id.replace(/id_participants-\d+/, `id_participants-${formIndex}`));
+            }
+            if (!name || !name.includes('id')) {
+                input.value = '';
+            }
+        });
+        
+        // Clear error messages
+        newForm.querySelectorAll('.text-danger').forEach(error => error.remove());
+        
+        participantFormsContainer.appendChild(newForm);
+        formCount++;
+        totalFormsInput.value = formCount;
+        updateParticipantNumbers();
+    }
+    
+    // Function to remove a specific form
+    function removeSpecificForm(formElement) {
+        const forms = participantFormsContainer.querySelectorAll('.participant-form');
+        if (forms.length > 1) {
+            formElement.remove();
+            formCount--;
+            totalFormsInput.value = formCount;
+            
+            // Re-index all remaining forms
+            const remainingForms = participantFormsContainer.querySelectorAll('.participant-form');
+            remainingForms.forEach((form, index) => {
+                form.setAttribute('data-form-index', index);
+                
+                // Update all input names and ids
+                form.querySelectorAll('input').forEach(input => {
+                    const name = input.getAttribute('name');
+                    const id = input.getAttribute('id');
+                    if (name && name.includes('participants-')) {
+                        input.setAttribute('name', name.replace(/participants-\d+/, `participants-${index}`));
+                    }
+                    if (id && id.includes('id_participants-')) {
+                        input.setAttribute('id', id.replace(/id_participants-\d+/, `id_participants-${index}`));
+                    }
+                });
+            });
+            
+            updateParticipantNumbers();
+        } else {
+            alert('You must keep at least one participant row.');
+        }
+    }
+    
+    // Event listeners
+    addButton.addEventListener('click', addForm);
+    
+    // Event delegation for remove buttons on individual forms
+    participantFormsContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-form-btn')) {
+            const form = e.target.closest('.participant-form');
+            removeSpecificForm(form);
+        }
+    });
+});
+</script>
+{% endblock %}
