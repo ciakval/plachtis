@@ -133,3 +133,7 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
+
+    # This should help with proxy CSRF issues
+    CSRF_TRUSTED_ORIGINS = ["https://plachtis.remesh.cz"]
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
