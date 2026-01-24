@@ -15,7 +15,9 @@
             {% if user.is_authenticated %}
                 <p>Hello, {{ user.first_name }} {{ user.last_name }}! You are logged in as <strong>{{ user.username }}</strong>.</p>
                 <p class="mb-0">
-                    <a class="btn btn-primary btn-lg me-2" href="/admin/" role="button">Go to Admin Panel</a>
+                    {% if user.is_staff %}
+                        <a class="btn btn-primary btn-lg me-2" href="/admin/" role="button">Go to Admin Panel</a>
+                    {% endif %}
                     <a class="btn btn-secondary btn-lg" href="{% url 'SkaRe:logout' %}" role="button">Logout</a>
                 </p>
             {% else %}
