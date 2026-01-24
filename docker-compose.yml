@@ -10,6 +10,7 @@ services:
       - DJANGO_DEBUG=False
       - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS:-plachtis.remesh.cz}
       - PYTHONUNBUFFERED=1
+      - DB_DIR=/app/db_data
     volumes:
       - ./data:/app/db_data
     networks:

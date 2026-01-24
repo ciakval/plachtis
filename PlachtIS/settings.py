@@ -74,10 +74,13 @@ WSGI_APPLICATION = 'PlachtIS.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# Use db_data directory for database to ensure persistence in Docker
+DB_DIR = os.environ.get('DB_DIR', str(BASE_DIR))
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(DB_DIR, 'db.sqlite3'),
     }
 }
 
