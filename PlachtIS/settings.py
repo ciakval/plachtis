@@ -28,6 +28,10 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# Always allow localhost for health checks
+if 'localhost' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('localhost')
+
 
 # Application definition
 
@@ -131,6 +135,10 @@ LOGIN_URL = 'SkaRe:login'
 LOGIN_REDIRECT_URL = 'SkaRe:home'
 LOGOUT_REDIRECT_URL = 'SkaRe:login'
 
+# Proxy and CSRF settings (needed for Caddy reverse proxy)
+CSRF_TRUSTED_ORIGINS = ["https://plachtis.remesh.cz"]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Production security settings
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
@@ -141,7 +149,3 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-
-    # This should help with proxy CSRF issues
-    CSRF_TRUSTED_ORIGINS = ["https://plachtis.remesh.cz"]
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
