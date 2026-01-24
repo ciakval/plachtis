@@ -69,6 +69,21 @@ plachtis.remesh.cz {
 
 **Important:** Do not configure Caddy to serve static files separately - whitenoise handles all static file serving with proper headers and compression.
 
+## Static Files
+
+### Development
+- Static files are in `SkaRe/static/` (committed to Git)
+- Django serves them automatically with DEBUG=True
+- Run `python manage.py collectstatic` to test collection
+
+### Production/Docker
+- During Docker build, `collectstatic` runs automatically (see Dockerfile line 32)
+- Static files are collected to `staticfiles/` directory (not committed to Git)
+- Whitenoise serves them from memory with compression and caching headers
+- Source files in `SkaRe/static/` must be committed to Git
+
+**Important:** Always commit your source static files (`SkaRe/static/`) to Git. The `staticfiles/` directory is generated during deployment and should not be committed.
+
 ## Security Features
 
 ### Development (DEBUG=True)
