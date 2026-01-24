@@ -5,6 +5,7 @@ class Unit(models.Model):
     """
     Model representing a Unit in the system.
     """
+    is_individual = models.BooleanField(default=False, help_text="Whether this unit represents an individual registration")
     unit_name = models.CharField(max_length=200, help_text="Name of the unit")
     unit_evidence_id = models.CharField(max_length=50, help_text="Unit evidence ID (e.g., 523.10, 816.08.001)")
     contact_person_name = models.CharField(max_length=200, help_text="Name of the contact person")

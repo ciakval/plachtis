@@ -14,4 +14,8 @@ urlpatterns = [
     path('units/create/', views.create_unit_with_participants, name='create_unit'),
     path('units/<int:unit_id>/edit/', views.edit_unit_with_participants, name='edit_unit'),
     path('participants/', views.participant_list, name='participant_list'),
+    
+    # Individual management
+    path('individuals/create/', views.create_individual, name='create_individual'),
+    path('individuals/<int:unit_id>/edit/', views.edit_individual, name='edit_individual'),
 ]

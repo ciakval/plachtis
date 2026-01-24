@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import UserRegistrationForm, UnitForm, ParticipantFormSet
+from .forms import UserRegistrationForm, UnitForm, ParticipantFormSet, IndividualForm
 from .models import Unit, Participant
 
 
@@ -144,3 +144,76 @@ def edit_unit_with_participants(request, unit_id):
         'unit': unit,
     })
 
+
+@login_required
+def create_individual(request):
+    """
+    View to create an individual (Unit with one Participant).
+    """
+    if request.method == 'POST':
+        form = IndividualForm(request.POST)
+        
+        if form.is_valid():
+            unit = form.save()
+            messages.success(request, f'Individual "{unit.unit_name}" registered successfully!')
+            return redirect('SkaRe:unit_list')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        form = IndividualForm()
+    
+    return render(request, 'SkaRe/create_individual.html', {
+        'form': form,
+    })
+
+
+@login_required
+def edit_individual(request, unit_id):
+    """
+    View to edit an individual (Unit with one Participant).
+    """
+    unit = get_object_or_404(Unit, id=unit_id, is_individual=True)
+    participant = unit.participants.first()
+    
+    if request.method == 'POST':
+        form = IndividualForm(request.POST)
+        
+        if form.is_valid():
+            form.save(unit_instance=unit)
+            messages.success(request, f'Individual "{unit.unit_name}" updated successfully!')
+            return redirect('SkaRe:unit_list')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        # Pre-populate form with existing data
+        initial_data = {
+            'unit_name': unit.unit_name,
+            'unit_evidence_id': unit.unit_evidence_id,
+            'contact_email': unit.contact_email,
+            'contact_phone': unit.contact_phone,
+            'backup_contact_phone': unit.backup_contact_phone,
+            'expected_arrival': unit.expected_arrival,
+            'expected_departure': unit.expected_departure,
+            'home_town': unit.home_town,
+            'accommodation_expectations': unit.accommodation_expectations,
+            'wishes_notes': unit.wishes_notes,
+        }
+        
+        if participant:
+            initial_data.update({
+                'first_name': participant.first_name,
+                'last_name': participant.last_name,
+                'nickname': participant.nickname,
+                'date_of_birth': participant.date_of_birth,
+                'category': participant.category,
+                'health_restrictions': participant.health_restrictions,
+                'dietary_restrictions': participant.dietary_restrictions,
+                'relevant_information': participant.relevant_information,
+            })
+        
+        form = IndividualForm(initial=initial_data)
+    
+    return render(request, 'SkaRe/edit_individual.html', {
+        'form': form,
+        'unit': unit,
+    })
