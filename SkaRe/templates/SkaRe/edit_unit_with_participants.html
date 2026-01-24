@@ -1,13 +1,13 @@
 {% extends 'SkaRe/base.html' %}
 
-{% block title %}Create Unit with Participants - SkaRe{% endblock %}
+{% block title %}Edit Unit - SkaRe{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-11">
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Create New Unit with Participants</h3>
+                <h3 class="mb-0">Edit Unit: {{ unit.unit_name }}</h3>
             </div>
             <div class="card-body">
                 <form method="post" id="unit-form">
@@ -169,8 +169,8 @@
                         </div>
                     </div>
 
-                    <h4 class="mb-3">Participants (Optional)</h4>
-                    <p class="text-muted mb-3">Add participants to this unit. You can add more later.</p>
+                    <h4 class="mb-3">Participants</h4>
+                    <p class="text-muted mb-3">Add, edit, or remove participants from this unit.</p>
                     
                     {{ participant_formset.management_form }}
                     
@@ -187,7 +187,7 @@
                                     <th style="width: 12%">Health</th>
                                     <th style="width: 12%">Dietary</th>
                                     <th style="width: 14%">Info</th>
-                                    <th style="width: 4%">Act</th>
+                                    <th style="width: 4%">Delete</th>
                                 </tr>
                             </thead>
                             <tbody id="participant-forms">
@@ -245,9 +245,16 @@
                                         {% endif %}
                                     </td>
                                     <td class="text-center align-middle">
-                                        <button type="button" class="btn btn-danger btn-sm remove-form-btn" title="Remove participant">
-                                            <i class="bi bi-dash-circle"></i>
-                                        </button>
+                                        {% if form.instance.pk %}
+                                            {{ form.DELETE }}
+                                            <label for="{{ form.DELETE.id_for_label }}" class="form-check-label">
+                                                <i class="bi bi-trash text-danger"></i>
+                                            </label>
+                                        {% else %}
+                                            <button type="button" class="btn btn-danger btn-sm remove-form-btn" title="Remove participant">
+                                                <i class="bi bi-dash-circle"></i>
+                                            </button>
+                                        {% endif %}
                                         {{ form.id }}
                                     </td>
                                 </tr>
@@ -263,12 +270,12 @@
                     </div>
 
                     <div class="alert alert-info">
-                        <strong>Tip:</strong> Fields marked with * are required. Use the + button to add more participants. Empty rows will be ignored.
+                        <strong>Tip:</strong> Fields marked with * are required. Use the + button to add more participants. Check the Delete checkbox to remove existing participants.
                     </div>
 
                     <div class="d-flex gap-2 mt-4">
                         <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-check-circle"></i> Create Unit & Add Participants
+                            <i class="bi bi-check-circle"></i> Update Unit & Participants
                         </button>
                         <a href="{% url 'SkaRe:unit_list' %}" class="btn btn-secondary btn-lg">Cancel</a>
                     </div>
@@ -301,6 +308,9 @@
 #participant-table th {
     font-size: 0.85rem;
     white-space: nowrap;
+}
+.participant-form input[type="checkbox"] {
+    width: auto;
 }
 </style>
 
@@ -348,8 +358,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Update hidden fields (id field)
-        newForm.querySelectorAll('input[type="hidden"]').forEach(input => {
+        // Update hidden fields (id field) and checkboxes
+        newForm.querySelectorAll('input[type="hidden"], input[type="checkbox"]').forEach(input => {
             const name = input.getAttribute('name');
             const id = input.getAttribute('id');
             if (name && name.includes('participants-')) {
@@ -358,10 +368,30 @@ document.addEventListener('DOMContentLoaded', function() {
             if (id && id.includes('id_participants-')) {
                 input.setAttribute('id', id.replace(/id_participants-\d+/, `id_participants-${formIndex}`));
             }
-            if (!name || !name.includes('id')) {
+            if (input.type === 'checkbox') {
+                input.checked = false;
+            } else if (!name || !name.includes('-id')) {
                 input.value = '';
             }
         });
+        
+        // Update labels
+        newForm.querySelectorAll('label').forEach(label => {
+            const forAttr = label.getAttribute('for');
+            if (forAttr && forAttr.includes('id_participants-')) {
+                label.setAttribute('for', forAttr.replace(/id_participants-\d+/, `id_participants-${formIndex}`));
+            }
+        });
+        
+        // Remove delete checkbox UI for new forms and show remove button
+        const deleteCell = newForm.querySelector('td:last-child');
+        if (deleteCell) {
+            deleteCell.innerHTML = `
+                <button type="button" class="btn btn-danger btn-sm remove-form-btn" title="Remove participant">
+                    <i class="bi bi-dash-circle"></i>
+                </button>
+            `;
+        }
         
         // Clear error messages
         newForm.querySelectorAll('.text-danger').forEach(error => error.remove());
@@ -394,6 +424,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     if (id && id.includes('id_participants-')) {
                         input.setAttribute('id', id.replace(/id_participants-\d+/, `id_participants-${index}`));
+                    }
+                });
+                
+                // Update labels
+                form.querySelectorAll('label').forEach(label => {
+                    const forAttr = label.getAttribute('for');
+                    if (forAttr && forAttr.includes('id_participants-')) {
+                        label.setAttribute('for', forAttr.replace(/id_participants-\d+/, `id_participants-${index}`));
                     }
                 });
             });
