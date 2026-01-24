@@ -1,0 +1,21 @@
+services:
+  web:
+    image: ghcr.io/${GITHUB_REPOSITORY:-owner/repo}:latest
+    container_name: plachtis-web
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_DEBUG=False
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS:-plachtis.remesh.cz}
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./data:/app/db_data
+    networks:
+      - proxy
+
+# Use an external network named 'proxy' for reverse proxying
+networks:
+  proxy:
+    external: true
