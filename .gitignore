@@ -66,6 +66,11 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# Django static files collected for deployment
+# (source static files in SkaRe/static/ should be committed)
+staticfiles/
+static_root/
+
 # Flask stuff:
 instance/
 .webassets-cache
