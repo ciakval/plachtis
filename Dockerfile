@@ -23,8 +23,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy project files
 COPY . /app/
 
-# Create a non-root user
+# Create a non-root user and db_data directory
 RUN useradd -m -u 1000 appuser && \
+    mkdir -p /app/db_data && \
     chown -R appuser:appuser /app
 USER appuser
 
@@ -37,7 +38,9 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
 
 # Run migrations and start gunicorn
 # Use exec to replace shell process so signals are properly forwarded
-CMD python manage.py migrate && \
+# Ensure db_data directory is writable
+CMD mkdir -p /app/db_data && \
+    python manage.py migrate && \
     exec gunicorn PlachtIS.wsgi:application \
         --bind 0.0.0.0:8000 \
         --workers 3 \
