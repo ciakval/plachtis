@@ -27,6 +27,10 @@ COPY . /app/
 RUN useradd -m -u 1000 appuser && \
     mkdir -p /app/db_data && \
     chown -R appuser:appuser /app
+
+# Collect static files before switching to non-root user
+RUN python manage.py collectstatic --noinput
+
 USER appuser
 
 # Expose port

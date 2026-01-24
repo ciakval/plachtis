@@ -57,6 +57,18 @@ Every push to `main` branch will:
 4. Pull the new image on VPS
 5. Restart containers with new code
 
+## Caddy Configuration
+
+The application uses whitenoise to serve static files directly from Django/Gunicorn. Your Caddy configuration should use a simple reverse proxy without special handling for static files:
+
+```caddy
+plachtis.remesh.cz {
+    reverse_proxy localhost:8000
+}
+```
+
+**Important:** Do not configure Caddy to serve static files separately - whitenoise handles all static file serving with proper headers and compression.
+
 ## Security Features
 
 ### Development (DEBUG=True)
