@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -110,3 +110,37 @@ def participant_list(request):
     """
     participants = Participant.objects.all().select_related('unit').order_by('-created_at')
     return render(request, 'SkaRe/participant_list.html', {'participants': participants})
+
+
+@login_required
+def edit_unit_with_participants(request, unit_id):
+    """
+    View to edit a unit with its participants.
+    """
+    unit = get_object_or_404(Unit, id=unit_id)
+    
+    if request.method == 'POST':
+        unit_form = UnitForm(request.POST, instance=unit)
+        
+        if unit_form.is_valid():
+            unit = unit_form.save()
+            participant_formset = ParticipantFormSet(request.POST, instance=unit)
+            
+            if participant_formset.is_valid():
+                participant_formset.save()
+                messages.success(request, f'Unit "{unit.unit_name}" updated successfully!')
+                return redirect('SkaRe:unit_list')
+            else:
+                messages.error(request, 'Please correct the errors in the participant forms.')
+        else:
+            participant_formset = ParticipantFormSet(request.POST, instance=unit)
+    else:
+        unit_form = UnitForm(instance=unit)
+        participant_formset = ParticipantFormSet(instance=unit)
+    
+    return render(request, 'SkaRe/edit_unit_with_participants.html', {
+        'unit_form': unit_form,
+        'participant_formset': participant_formset,
+        'unit': unit,
+    })
+
