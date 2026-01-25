@@ -4,7 +4,7 @@ This guide will help you set up and run this Django application locally on your 
 
 ## Prerequisites
 
-- Python 3.8 or higher
+- Python 3.12 or higher
 - pip (Python package manager)
 - Git
 
@@ -66,6 +66,20 @@ python manage.py runserver
 Open your browser and navigate to:
 - Application: `http://127.0.0.1:8000/`
 - Admin panel: `http://127.0.0.1:8000/admin/`
+
+## Alternative: installation using `uv`
+
+Steps 2.-4. can be simplified when using [`uv`](https://docs.astral.sh/uv/getting-started/installation/). 
+
+From the cloned repository, run:
+```bash
+uv sync
+```
+This sets up the virtual environment, installs the correct version of Python, and installs the dependencies described in `pyproject.toml`.
+
+You can then either activate the environment as described above, or use the `uv run` command instead of `python`, e.g., `uv run manage.py runserver`. 
+
+To add and install new dependencies, use `uv add package`. 
 
 ## Troubleshooting
 
