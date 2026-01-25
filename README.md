@@ -6,6 +6,8 @@ Jeho cílem je poskytovat technologickou podporu pro registraci účastníků a 
 
 Aktuální verze běží na adrese https://plachtis.remesh.cz.
 
+Připomínky a nápady na vylepšení najdete na https://github.com/ciakval/plachtis/issues.
+
 ## Getting Started
 
 Pro vývojáře, kteří si chtějí PlachtIS spustit, slouží [Getting Started guide](doc/GETTING-STARTED.md) (_v angličtině_).
@@ -16,4 +18,4 @@ Pro vývojáře, kteří si chtějí PlachtIS spustit, slouží [Getting Started
 * evidence přítomných účastníků a export potřebných informací
 * správa plavenek
 
-Jednotlivé případy užití jsou dokumentovány v [samostatném souboru](doc/USE-CASES.md).
+[Priority](doc/PRIORITIES.md) a jednotlivé [případy užití](doc/USE-CASES.md) jsou dokumentovány v samostatných souborech.
