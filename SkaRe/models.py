@@ -64,29 +64,30 @@ class ScoutUnit(models.Model):
         ordering = ["name"]
 
 
-class Participant(models.Model):
+class Person(models.Model):
+    """Represents a person in the system.
     """
-    Model representing a Participant in the system.
-    """
-
-    class ScoutCategory(models.TextChoices):
-        ADULT = "ADULT", "Adult"
-        ROVER = "ROVER", "Rover"
-        SCOUT = "SCOUT", "Scout"
-        CUB = "CUB", "Cub"
-
+    
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     nickname = models.CharField(
         max_length=100, blank=True, help_text="Optional nickname"
     )
     date_of_birth = models.DateField(help_text="Date of birth")
+    
+    class ScoutCategory(models.TextChoices):
+        ADULT = "ADULT", "Adult"
+        ROVER = "ROVER", "Rover"
+        SCOUT = "SCOUT", "Scout"
+        CUB = "CUB", "Cub"
+        
     category = models.CharField(
         max_length=20,
         choices=ScoutCategory.choices,
         default=ScoutCategory.SCOUT,
         help_text="Scout category",
     )
+    
     health_restrictions = models.TextField(
         blank=True, help_text="Any health restrictions or medical conditions"
     )
@@ -94,30 +95,22 @@ class Participant(models.Model):
         blank=True, help_text="Any dietary restrictions or preferences"
     )
     relevant_information = models.TextField(
-        blank=True, help_text="Any relevant information about the participant"
+        blank=True, help_text="Any relevant information about the person"
     )
-
-    created_by = models.ForeignKey(
-        User,
-        on_delete=models.RESTRICT,
-        related_name="participants",
-        help_text="User who created this participant",
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
+    
     def __str__(self):
         if self.nickname:
             return f"{self.first_name} {self.last_name} ({self.nickname})"
         return f"{self.first_name} {self.last_name}"
-
-    class Meta:
-        ordering = ["last_name", "first_name"]
-
-
-class RegistrationBase(models.Model):
+    
+class Entity(models.Model):
     """
-    Abstract base model for registration entities.
+    Represents a registration entity in the system.
+    
+    Registration entity is anything that can be registered:
+    - Unit
+    - Individual Participant
+    - Organizer
     """
 
     created_by = models.ForeignKey(
@@ -134,23 +127,16 @@ class RegistrationBase(models.Model):
         help_text="Whether this unit is unlocked for editing after the deadline (set by privileged users only)",
     )
     
-    unit = models.ForeignKey(
+    scout_unit = models.ForeignKey(
         'ScoutUnit',
         on_delete=models.RESTRICT,
         related_name="%(class)ss",
         help_text="The scout unit this entry belongs to",
+        null=True, blank=True,
     )
     
     contact_email = models.EmailField(help_text="Contact email address")
     contact_phone = models.CharField(max_length=20, help_text="Contact phone number")
-
-    relevant_information = models.TextField(
-        blank=True, help_text="Any relevant information about the unit"
-    )
-
-    wishes_notes = models.TextField(
-        blank=True, help_text="Wishes, notes for organizers, etc."
-    )
 
     # Event logistics fields
     expected_arrival = models.DateTimeField(
@@ -176,14 +162,25 @@ class RegistrationBase(models.Model):
         # After deadline, only allow if unit is unlocked
         return self.unlocked_for_editing
 
-    class Meta:
-        abstract = True
-
-
-class Unit(RegistrationBase):
+class Unit(models.Model):
     """
-    Model representing a Unit in the system.
+    Represents a registered unit (scout troop, oddil, stredisko) in the system.
     """
+    
+    entity = models.OneToOneField(
+        Entity,
+        on_delete=models.CASCADE,
+        related_name="unit_profile",
+        help_text="The registration entity associated with this unit",
+    )
+    
+    scout_unit = models.ForeignKey(
+        ScoutUnit,
+        on_delete=models.RESTRICT,
+        related_name="units",
+        help_text="The scout unit this unit belongs to",
+        null=True, blank=True,
+    )
 
     contact_person_name = models.CharField(
         max_length=200, help_text="Name of the contact person"
@@ -209,21 +206,55 @@ class Unit(RegistrationBase):
 
     # Accommodation fields
     accommodation_expectations = models.TextField(
-        blank=True, help_text="Accommodation expectations"
+        blank=True, help_text="Accommodation expectations (small tents, large tent, caravan, ...)"
     )
     estimated_accommodation_area = models.CharField(
         max_length=100, blank=True, help_text="Estimated needed area for accommodation"
     )
 
-    def __str__(self):
-        return f"{self.unit.name} ({self.unit.evidence_id})"
+class RegularParticipant(Person):
+    """
+    Model representing a regular Participant in the system.
+    
+    Regular participant is a member of a specific Unit.
+    """
+    unit = models.ForeignKey(
+        Unit,
+        on_delete=models.RESTRICT,
+        related_name="regular_participants",
+        help_text="The unit this participant belongs to",
+    )
+    
+class IndividualParticipant(Person):
+    """
+    Model representing an Individual Participant in the system.
+    
+    Individual Participants are those who register independently,
+    not as part of a Unit.
+    Therefore, they are an Entity on their own.
+    """
+    entity = models.OneToOneField(
+        Entity,
+        on_delete=models.CASCADE,
+        related_name="individual_participant_profile",
+        help_text="The registration entity associated with this individual participant",
+    )
+    
+    scout_unit = models.ForeignKey(
+        ScoutUnit,
+        on_delete=models.RESTRICT,
+        related_name="individual_participants",
+        help_text="The scout unit this individual participant belongs to",
+        null=True, blank=True,
+    )
+    
 
-    class Meta(RegistrationBase.Meta):
-        ordering = ["unit_name"]
-
-class Organizer(RegistrationBase, Participant):
+class Organizer(Person):
     """
     Model representing an Organizer in the system.
+    
+    The Organizer is a special type of participant with additional fields
+    related to their role in the event organization.
     """
     
     class Division(models.TextChoices):
@@ -269,7 +300,9 @@ class Organizer(RegistrationBase, Participant):
     class AccomodationOptions(models.TextChoices):
         WITH_UNIT = "WITH_UNIT", "With Unit"
         OWN_TENT = "OWN_TENT", "Own Tent"
+        CARAVAN = "CARAVAN", "Caravan"
         NEED_TENT = "NEED_TENT", "Need Tent"
+        INSIDE_BUILDING = "INSIDE_BUILDING", "Inside Building"
     
     accommodation = models.CharField(
         max_length=20,
@@ -284,4 +317,5 @@ class Organizer(RegistrationBase, Participant):
     )
 
     def __str__(self):
-        return f"Organizer {Participant.__str__(self)} ({self.division})"
+        return f"Organizer {self.participant} ({self.division})"
+    
