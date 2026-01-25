@@ -1,39 +1,19 @@
 # PlachtIS
 
-## Základní popis
 PlachtIS je informační a registrační systém vyvinutý pro potřeby SkaRe, s potenciálem sloužit i dalším akcím.
 
 Jeho cílem je poskytovat technologickou podporu pro registraci účastníků a lodí, evidenci přítomných na akci a poskytování aktuálních informací.
 
-## Případy užití
+Aktuální verze běží na adrese https://plachtis.remesh.cz.
 
-### Před akcí
+## Getting Started
 
-#### Účastníci
-* vytvoření uživatelského účtu (login+registrace)
-* registrace oddílu
-* registrace účastníka - jednotlivce
-* registrace organizátora / člena servis týmu
-* zobrazení (své) registrace
-* změny v registraci (do určitého data)
+Pro vývojáře, kteří si chtějí PlachtIS spustit, slouží [Getting Started guide](doc/GETTING-STARTED.md) (_v angličtině_).
 
-#### Organizátoři
-* vytvoření uživatelského účtu (login+registrace)
-* přehled registrací
-* náhled do jednotlivých registrací
-* nastavení data do kdy lze provádět nové registrace a dělat změny
-* explicitní odemčení konkrétní registrace pro úpravy
-* přehled místa potřebného pro jednotlivé oddíly
+## Cíle projektu
 
-### Na akci
+* registrace účastníků a organizátorů
+* evidence přítomných účastníků a export potřebných informací
+* správa plavenek
 
-* evidence fyzicky přítomných účastníků akce (příjezd, odjezd)
-* úpravy v registraci (např. "člen X nepřijede", "zapomněli jsme napsat, že člen Y má stravovací omezení", ...)
-* zobrazení registrovaných skupin (oddílů)
-* vyhledání účastníka
-* export údajů pro kuchyni (= počet přítomných z každé skupiny + jejich stravovací omezení)
-* export údajů pro zdravotníky (= seznam přítomných se zdravotními problémy + kontakt na vedoucího)
-
-### Po akci
-
-* export statistik (počty účastníků, věkové kategorie, ...)
+Jednotlivé případy užití jsou dokumentovány v [samostatném souboru](doc/USE-CASES.md).
