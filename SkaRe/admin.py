@@ -1,7 +1,9 @@
 from django.contrib import admin
-from .models import Unit, Participant
+from .models import Unit, Participant, EventSettings
+from solo.admin import SingletonModelAdmin
 
-
+# This ensures the admin jumps directly to the edit form
+admin.site.register(EventSettings, SingletonModelAdmin)
 
 @admin.register(Unit)
 class UnitAdmin(admin.ModelAdmin):
