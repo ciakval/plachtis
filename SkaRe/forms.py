@@ -247,7 +247,7 @@ class IndividualForm(forms.Form):
         help_text='Any relevant information about the participant'
     )
     
-    def save(self, unit_instance=None):
+    def save(self, unit_instance=None, user=None):
         """
         Save the form data to create or update a Unit and its associated Participant.
         """
@@ -289,6 +289,8 @@ class IndividualForm(forms.Form):
             unit_instance.save()
             unit = unit_instance
         else:
+            if user:
+                unit_data['created_by'] = user
             unit = Unit.objects.create(**unit_data)
         
         # Prepare participant data

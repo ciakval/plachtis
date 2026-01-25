@@ -1,10 +1,66 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+
+
+class EventSettings(models.Model):
+    """
+    Model for event settings, including registration deadlines.
+    Only one instance should exist.
+    """
+    registration_deadline = models.DateTimeField(
+        help_text="Deadline for creating new Units and Participants"
+    )
+    event_name = models.CharField(
+        max_length=200,
+        default="Event",
+        help_text="Name of the event"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.event_name} - Registration Deadline: {self.registration_deadline}"
+
+    class Meta:
+        verbose_name = "Event Settings"
+        verbose_name_plural = "Event Settings"
+
+    @classmethod
+    def is_registration_open(cls):
+        """Check if registration is still open"""
+        try:
+            settings = cls.objects.first()
+            if settings:
+                return timezone.now() < settings.registration_deadline
+            return True  # If no settings exist, allow registration
+        except Exception:
+            return True
+
+    @classmethod
+    def get_deadline(cls):
+        """Get the registration deadline"""
+        try:
+            settings = cls.objects.first()
+            return settings.registration_deadline if settings else None
+        except Exception:
+            return None
 
 
 class Unit(models.Model):
     """
     Model representing a Unit in the system.
     """
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='units',
+        help_text="User who created this unit"
+    )
+    unlocked_for_editing = models.BooleanField(
+        default=False,
+        help_text="Whether this unit is unlocked for editing after the deadline (set by privileged users only)"
+    )
     is_individual = models.BooleanField(default=False, help_text="Whether this unit represents an individual registration")
     unit_name = models.CharField(max_length=200, help_text="Name of the unit")
     unit_evidence_id = models.CharField(max_length=50, help_text="Unit evidence ID (e.g., 523.10, 816.08.001)")
@@ -35,6 +91,19 @@ class Unit(models.Model):
 
     def __str__(self):
         return f"{self.unit_name} ({self.unit_evidence_id})"
+
+    def can_be_edited(self, user):
+        """Check if this unit can be edited by the given user"""
+        # User must be the owner
+        if self.created_by != user:
+            return False
+        
+        # If registration is still open, allow editing
+        if EventSettings.is_registration_open():
+            return True
+        
+        # After deadline, only allow if unit is unlocked
+        return self.unlocked_for_editing
 
     class Meta:
         ordering = ['unit_name']
