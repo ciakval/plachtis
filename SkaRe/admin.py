@@ -1,28 +1,6 @@
 from django.contrib import admin
-from .models import Unit, Participant, EventSettings
+from .models import Unit, Participant
 
-
-@admin.register(EventSettings)
-class EventSettingsAdmin(admin.ModelAdmin):
-    list_display = ['event_name', 'registration_deadline', 'created_at', 'updated_at']
-    readonly_fields = ['created_at', 'updated_at']
-    fieldsets = (
-        ('Event Information', {
-            'fields': ('event_name', 'registration_deadline')
-        }),
-        ('Metadata', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
-    )
-
-    def has_add_permission(self, request):
-        # Only allow creating one EventSettings instance
-        return not EventSettings.objects.exists()
-
-    def has_delete_permission(self, request, obj=None):
-        # Prevent deletion of EventSettings
-        return False
 
 
 @admin.register(Unit)

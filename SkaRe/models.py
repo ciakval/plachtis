@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from solo.models import SingletonModel
 
 
-class EventSettings(models.Model):
+class EventSettings(SingletonModel):
     """
     Model for event settings, including registration deadlines.
     Only one instance should exist.
@@ -11,16 +12,9 @@ class EventSettings(models.Model):
     registration_deadline = models.DateTimeField(
         help_text="Deadline for creating new Units and Participants"
     )
-    event_name = models.CharField(
-        max_length=200,
-        default="Event",
-        help_text="Name of the event"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.event_name} - Registration Deadline: {self.registration_deadline}"
+        return f"Registration Deadline: {self.registration_deadline}"
 
     class Meta:
         verbose_name = "Event Settings"
@@ -30,7 +24,7 @@ class EventSettings(models.Model):
     def is_registration_open(cls):
         """Check if registration is still open"""
         try:
-            settings = cls.objects.first()
+            settings = cls.get_solo()
             if settings:
                 return timezone.now() < settings.registration_deadline
             return True  # If no settings exist, allow registration
@@ -41,7 +35,7 @@ class EventSettings(models.Model):
     def get_deadline(cls):
         """Get the registration deadline"""
         try:
-            settings = cls.objects.first()
+            settings = cls.get_solo()
             return settings.registration_deadline if settings else None
         except Exception:
             return None
