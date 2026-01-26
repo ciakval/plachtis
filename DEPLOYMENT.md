@@ -84,6 +84,26 @@ plachtis.remesh.cz {
 
 **Important:** Always commit your source static files (`SkaRe/static/`) to Git. The `staticfiles/` directory is generated during deployment and should not be committed.
 
+## Translations
+
+### Development
+- Translation source files (`.po`) are in `locale/` directory (committed to Git)
+- Compiled translation files (`.mo`) are **not** committed to Git (excluded by `.gitignore`)
+- Run `python manage.py compilemessages` to compile translations locally for testing
+
+### Production/Docker
+- During Docker build, `compilemessages` runs automatically after copying project files
+- The `gettext` package is installed in the Docker image to enable compilation
+- Compiled `.mo` files are generated at build time inside the container
+
+**Important:** Only commit `.po` files (translation sources) to Git. The `.mo` files (compiled translations) are generated during deployment and should not be committed.
+
+### Adding or Updating Translations
+1. Update or create `.po` files in the `locale/` directory
+2. Test locally: `python manage.py compilemessages` then `python manage.py runserver`
+3. Commit only the `.po` files to Git
+4. Deploy - the Docker build will automatically compile the translations
+
 ## Security Features
 
 ### Development (DEBUG=True)
