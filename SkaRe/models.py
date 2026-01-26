@@ -108,6 +108,16 @@ class Entity(models.Model):
         help_text="Whether this unit is unlocked for editing after the deadline (set by privileged users only)",
     )
     
+    paid = models.BooleanField(
+        default=False,
+        help_text="Whether the registration fee has been paid (set by privileged users only)",
+    )
+    
+    accepted = models.BooleanField(
+        default=False,
+        help_text="Whether the registration has been accepted (set by privileged users only)",
+    )
+    
     scout_unit_name = models.CharField(
         max_length=200,
         help_text="Name of the scout unit",
