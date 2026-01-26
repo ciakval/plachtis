@@ -226,6 +226,13 @@ class Organizer(Person):
     related to their role in the event organization.
     """
     
+    entity = models.OneToOneField(
+        Entity,
+        on_delete=models.CASCADE,
+        related_name="organizer_profile",
+        help_text="The registration entity associated with this organizer",
+    )
+    
     class Division(models.TextChoices):
         MANAGEMENT = "MANAGEMENT", "Management"
         RACING = "RACING", "Racing"
