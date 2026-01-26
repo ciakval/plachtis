@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import ScoutUnit, Entity, Unit, RegularParticipant
+from .models import Unit, RegularParticipant
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -43,39 +43,19 @@ class UserRegistrationForm(UserCreationForm):
         return user
 
 
-class ScoutUnitForm(forms.ModelForm):
-    """Form for creating a new ScoutUnit."""
-    class Meta:
-        model = ScoutUnit
-        fields = ['name', 'evidence_id']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 5. oddíl Koráb'}),
-            'evidence_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
-        }
-
-
 class UnitRegistrationForm(forms.ModelForm):
     """Form for registering a new Unit."""
     
-    # Scout Unit selection - existing or new
-    existing_scout_unit = forms.ModelChoiceField(
-        queryset=ScoutUnit.objects.all(),
-        required=False,
-        empty_label="-- Select existing unit --",
-        widget=forms.Select(attrs={'class': 'form-control', 'id': 'existing-scout-unit'}),
-        label="Existing Scout Unit"
-    )
-    
-    # New Scout Unit fields
-    new_scout_unit_name = forms.CharField(
+    # Scout Unit fields
+    scout_unit_name = forms.CharField(
         max_length=200,
-        required=False,
+        required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 5. oddíl Koráb'}),
-        label="New Scout Unit Name"
+        label="Scout Unit Name"
     )
-    new_scout_unit_evidence_id = forms.CharField(
+    scout_unit_evidence_id = forms.CharField(
         max_length=50,
-        required=False,
+        required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
         label="Evidence ID"
     )
@@ -107,6 +87,16 @@ class UnitRegistrationForm(forms.ModelForm):
         label="Home Town"
     )
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add 'is-invalid' class to fields with errors
+        for field_name, field in self.fields.items():
+            if field_name in self.errors:
+                if 'class' in field.widget.attrs:
+                    field.widget.attrs['class'] += ' is-invalid'
+                else:
+                    field.widget.attrs['class'] = 'is-invalid'
+    
     class Meta:
         model = Unit
         fields = [
@@ -129,30 +119,20 @@ class UnitRegistrationForm(forms.ModelForm):
             'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control'}),
         }
-    
-    def clean(self):
-        cleaned_data = super().clean()
-        existing = cleaned_data.get('existing_scout_unit')
-        new_name = cleaned_data.get('new_scout_unit_name')
-        new_evidence = cleaned_data.get('new_scout_unit_evidence_id')
-        
-        # Must specify either existing or new scout unit
-        if not existing and not (new_name and new_evidence):
-            raise forms.ValidationError(
-                'You must either select an existing scout unit or provide details for a new one.'
-            )
-        
-        # Cannot specify both
-        if existing and (new_name or new_evidence):
-            raise forms.ValidationError(
-                'Please choose either an existing scout unit OR create a new one, not both.'
-            )
-        
-        return cleaned_data
 
 
 class RegularParticipantForm(forms.ModelForm):
     """Form for adding a regular participant to a unit."""
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add 'is-invalid' class to fields with errors
+        for field_name, field in self.fields.items():
+            if field_name in self.errors:
+                if 'class' in field.widget.attrs:
+                    field.widget.attrs['class'] += ' is-invalid'
+                else:
+                    field.widget.attrs['class'] = 'is-invalid'
     
     class Meta:
         model = RegularParticipant

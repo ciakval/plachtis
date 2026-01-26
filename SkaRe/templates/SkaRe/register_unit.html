@@ -26,32 +26,18 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-12 mb-3">
-                                    <label for="{{ unit_form.existing_scout_unit.id_for_label }}" class="form-label">{{ unit_form.existing_scout_unit.label }}</label>
-                                    {{ unit_form.existing_scout_unit }}
-                                    {% if unit_form.existing_scout_unit.errors %}
-                                        <div class="text-danger">{{ unit_form.existing_scout_unit.errors }}</div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            
-                            <div class="text-center my-2">
-                                <strong>--- OR CREATE NEW SCOUT UNIT ---</strong>
-                            </div>
-                            
-                            <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="{{ unit_form.new_scout_unit_name.id_for_label }}" class="form-label">{{ unit_form.new_scout_unit_name.label }}</label>
-                                    {{ unit_form.new_scout_unit_name }}
-                                    {% if unit_form.new_scout_unit_name.errors %}
-                                        <div class="text-danger">{{ unit_form.new_scout_unit_name.errors }}</div>
+                                    <label for="{{ unit_form.scout_unit_name.id_for_label }}" class="form-label">{{ unit_form.scout_unit_name.label }} <span class="text-danger">*</span></label>
+                                    {{ unit_form.scout_unit_name }}
+                                    {% if unit_form.scout_unit_name.errors %}
+                                        <div class="text-danger">{{ unit_form.scout_unit_name.errors }}</div>
                                     {% endif %}
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="{{ unit_form.new_scout_unit_evidence_id.id_for_label }}" class="form-label">{{ unit_form.new_scout_unit_evidence_id.label }}</label>
-                                    {{ unit_form.new_scout_unit_evidence_id }}
-                                    {% if unit_form.new_scout_unit_evidence_id.errors %}
-                                        <div class="text-danger">{{ unit_form.new_scout_unit_evidence_id.errors }}</div>
+                                    <label for="{{ unit_form.scout_unit_evidence_id.id_for_label }}" class="form-label">{{ unit_form.scout_unit_evidence_id.label }} <span class="text-danger">*</span></label>
+                                    {{ unit_form.scout_unit_evidence_id }}
+                                    {% if unit_form.scout_unit_evidence_id.errors %}
+                                        <div class="text-danger">{{ unit_form.scout_unit_evidence_id.errors }}</div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -70,14 +56,14 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="{{ unit_form.contact_person_name.id_for_label }}" class="form-label">{{ unit_form.contact_person_name.label }}</label>
+                                    <label for="{{ unit_form.contact_person_name.id_for_label }}" class="form-label">{{ unit_form.contact_person_name.label }} <span class="text-danger">*</span></label>
                                     {{ unit_form.contact_person_name }}
                                     {% if unit_form.contact_person_name.errors %}
                                         <div class="text-danger">{{ unit_form.contact_person_name.errors }}</div>
                                     {% endif %}
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="{{ unit_form.contact_email.id_for_label }}" class="form-label">{{ unit_form.contact_email.label }}</label>
+                                    <label for="{{ unit_form.contact_email.id_for_label }}" class="form-label">{{ unit_form.contact_email.label }} <span class="text-danger">*</span></label>
                                     {{ unit_form.contact_email }}
                                     {% if unit_form.contact_email.errors %}
                                         <div class="text-danger">{{ unit_form.contact_email.errors }}</div>
@@ -86,7 +72,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="{{ unit_form.contact_phone.id_for_label }}" class="form-label">{{ unit_form.contact_phone.label }}</label>
+                                    <label for="{{ unit_form.contact_phone.id_for_label }}" class="form-label">{{ unit_form.contact_phone.label }} <span class="text-danger">*</span></label>
                                     {{ unit_form.contact_phone }}
                                     {% if unit_form.contact_phone.errors %}
                                         <div class="text-danger">{{ unit_form.contact_phone.errors }}</div>
@@ -217,11 +203,11 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th style="width: 40px;">#</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
+                                            <th>First Name <span class="text-danger">*</span></th>
+                                            <th>Last Name <span class="text-danger">*</span></th>
                                             <th>Nickname</th>
-                                            <th>Date of Birth</th>
-                                            <th>Category</th>
+                                            <th>Date of Birth <span class="text-danger">*</span></th>
+                                            <th>Category <span class="text-danger">*</span></th>
                                             <th>Health</th>
                                             <th>Dietary</th>
                                             <th>Info</th>

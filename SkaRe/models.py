@@ -45,25 +45,6 @@ class EventSettings(SingletonModel):
             return None
 
 
-class ScoutUnit(models.Model):
-    """
-    Represents a scout unit the participants are a part of.
-
-    When registering, users either choose an existing unit or create a new one.
-    """
-
-    name = models.CharField(max_length=200, help_text="Name of the scout unit")
-    evidence_id = models.CharField(
-        max_length=50, help_text="Unit evidence ID (e.g., 523.10, 816.08.001)"
-    )
-
-    def __str__(self):
-        return f"{self.name} ({self.evidence_id})"
-
-    class Meta:
-        ordering = ["name"]
-
-
 class Person(models.Model):
     """Represents a person in the system.
     """
@@ -127,12 +108,15 @@ class Entity(models.Model):
         help_text="Whether this unit is unlocked for editing after the deadline (set by privileged users only)",
     )
     
-    scout_unit = models.ForeignKey(
-        'ScoutUnit',
-        on_delete=models.RESTRICT,
-        related_name="%(class)ss",
-        help_text="The scout unit this entry belongs to",
-        null=True, blank=True,
+    scout_unit_name = models.CharField(
+        max_length=200,
+        help_text="Name of the scout unit",
+        blank=True,
+    )
+    scout_unit_evidence_id = models.CharField(
+        max_length=50,
+        help_text="Unit evidence ID (e.g., 523.10, 816.08.001)",
+        blank=True,
     )
     
     contact_email = models.EmailField(help_text="Contact email address")
@@ -174,14 +158,6 @@ class Unit(models.Model):
         help_text="The registration entity associated with this unit",
     )
     
-    scout_unit = models.ForeignKey(
-        ScoutUnit,
-        on_delete=models.RESTRICT,
-        related_name="units",
-        help_text="The scout unit this unit belongs to",
-        null=True, blank=True,
-    )
-
     contact_person_name = models.CharField(
         max_length=200, help_text="Name of the contact person"
     )
@@ -310,5 +286,6 @@ class Organizer(Person):
     )
 
     def __str__(self):
-        return f"Organizer {self.participant} ({self.division})"
+        person_name = super().__str__()
+        return f"Organizer {person_name} ({self.division})"
     
