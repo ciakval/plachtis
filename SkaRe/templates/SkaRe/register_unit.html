@@ -1,0 +1,353 @@
+{% extends 'SkaRe/base.html' %}
+
+{% block title %}Register Unit - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Register Unit</h3>
+            </div>
+            <div class="card-body">
+                {% if deadline %}
+                <div class="alert alert-info">
+                    <i class="bi bi-calendar-event"></i> Registration deadline: <strong>{{ deadline|date:"F j, Y, g:i a" }}</strong>
+                </div>
+                {% endif %}
+
+                <form method="post" id="unit-registration-form">
+                    {% csrf_token %}
+                    
+                    <!-- Scout Unit Selection -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Scout Unit Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="{{ unit_form.existing_scout_unit.id_for_label }}" class="form-label">{{ unit_form.existing_scout_unit.label }}</label>
+                                    {{ unit_form.existing_scout_unit }}
+                                    {% if unit_form.existing_scout_unit.errors %}
+                                        <div class="text-danger">{{ unit_form.existing_scout_unit.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="text-center my-2">
+                                <strong>--- OR CREATE NEW SCOUT UNIT ---</strong>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ unit_form.new_scout_unit_name.id_for_label }}" class="form-label">{{ unit_form.new_scout_unit_name.label }}</label>
+                                    {{ unit_form.new_scout_unit_name }}
+                                    {% if unit_form.new_scout_unit_name.errors %}
+                                        <div class="text-danger">{{ unit_form.new_scout_unit_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ unit_form.new_scout_unit_evidence_id.id_for_label }}" class="form-label">{{ unit_form.new_scout_unit_evidence_id.label }}</label>
+                                    {{ unit_form.new_scout_unit_evidence_id }}
+                                    {% if unit_form.new_scout_unit_evidence_id.errors %}
+                                        <div class="text-danger">{{ unit_form.new_scout_unit_evidence_id.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            {% if unit_form.non_field_errors %}
+                                <div class="alert alert-danger">{{ unit_form.non_field_errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Contact Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ unit_form.contact_person_name.id_for_label }}" class="form-label">{{ unit_form.contact_person_name.label }}</label>
+                                    {{ unit_form.contact_person_name }}
+                                    {% if unit_form.contact_person_name.errors %}
+                                        <div class="text-danger">{{ unit_form.contact_person_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ unit_form.contact_email.id_for_label }}" class="form-label">{{ unit_form.contact_email.label }}</label>
+                                    {{ unit_form.contact_email }}
+                                    {% if unit_form.contact_email.errors %}
+                                        <div class="text-danger">{{ unit_form.contact_email.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ unit_form.contact_phone.id_for_label }}" class="form-label">{{ unit_form.contact_phone.label }}</label>
+                                    {{ unit_form.contact_phone }}
+                                    {% if unit_form.contact_phone.errors %}
+                                        <div class="text-danger">{{ unit_form.contact_phone.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ unit_form.backup_contact_phone.id_for_label }}" class="form-label">{{ unit_form.backup_contact_phone.label }}</label>
+                                    {{ unit_form.backup_contact_phone }}
+                                    {% if unit_form.backup_contact_phone.errors %}
+                                        <div class="text-danger">{{ unit_form.backup_contact_phone.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Logistics -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Event Logistics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ unit_form.home_town.id_for_label }}" class="form-label">{{ unit_form.home_town.label }}</label>
+                                    {{ unit_form.home_town }}
+                                    {% if unit_form.home_town.errors %}
+                                        <div class="text-danger">{{ unit_form.home_town.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ unit_form.expected_arrival.id_for_label }}" class="form-label">{{ unit_form.expected_arrival.label }}</label>
+                                    {{ unit_form.expected_arrival }}
+                                    {% if unit_form.expected_arrival.errors %}
+                                        <div class="text-danger">{{ unit_form.expected_arrival.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ unit_form.expected_departure.id_for_label }}" class="form-label">{{ unit_form.expected_departure.label }}</label>
+                                    {{ unit_form.expected_departure }}
+                                    {% if unit_form.expected_departure.errors %}
+                                        <div class="text-danger">{{ unit_form.expected_departure.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Boats -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Boat Estimates</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="{{ unit_form.boats_p550.id_for_label }}" class="form-label">{{ unit_form.boats_p550.label }}</label>
+                                    {{ unit_form.boats_p550 }}
+                                    {% if unit_form.boats_p550.errors %}
+                                        <div class="text-danger">{{ unit_form.boats_p550.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="{{ unit_form.boats_sail.id_for_label }}" class="form-label">{{ unit_form.boats_sail.label }}</label>
+                                    {{ unit_form.boats_sail }}
+                                    {% if unit_form.boats_sail.errors %}
+                                        <div class="text-danger">{{ unit_form.boats_sail.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="{{ unit_form.boats_paddle.id_for_label }}" class="form-label">{{ unit_form.boats_paddle.label }}</label>
+                                    {{ unit_form.boats_paddle }}
+                                    {% if unit_form.boats_paddle.errors %}
+                                        <div class="text-danger">{{ unit_form.boats_paddle.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="{{ unit_form.boats_motor.id_for_label }}" class="form-label">{{ unit_form.boats_motor.label }}</label>
+                                    {{ unit_form.boats_motor }}
+                                    {% if unit_form.boats_motor.errors %}
+                                        <div class="text-danger">{{ unit_form.boats_motor.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accommodation -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Accommodation</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ unit_form.accommodation_expectations.id_for_label }}" class="form-label">{{ unit_form.accommodation_expectations.label }}</label>
+                                    {{ unit_form.accommodation_expectations }}
+                                    {% if unit_form.accommodation_expectations.errors %}
+                                        <div class="text-danger">{{ unit_form.accommodation_expectations.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ unit_form.estimated_accommodation_area.id_for_label }}" class="form-label">{{ unit_form.estimated_accommodation_area.label }}</label>
+                                    {{ unit_form.estimated_accommodation_area }}
+                                    {% if unit_form.estimated_accommodation_area.errors %}
+                                        <div class="text-danger">{{ unit_form.estimated_accommodation_area.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Participants -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Unit Participants</h5>
+                            <div>
+                                <button type="button" class="btn btn-sm btn-success" id="add-participant">
+                                    <i class="bi bi-plus-circle"></i> Add Participant
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {{ participant_formset.management_form }}
+                            
+                            <div id="participant-forms" class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 40px;">#</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Nickname</th>
+                                            <th>Date of Birth</th>
+                                            <th>Category</th>
+                                            <th>Health</th>
+                                            <th>Dietary</th>
+                                            <th>Info</th>
+                                            <th style="width: 60px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="participant-table-body">
+                                        {% for form in participant_formset %}
+                                        <tr class="participant-row" data-form-index="{{ forloop.counter0 }}">
+                                            <td class="text-center participant-number">{{ forloop.counter }}</td>
+                                            <td>{{ form.first_name }}</td>
+                                            <td>{{ form.last_name }}</td>
+                                            <td>{{ form.nickname }}</td>
+                                            <td>{{ form.date_of_birth }}</td>
+                                            <td>{{ form.category }}</td>
+                                            <td>{{ form.health_restrictions }}</td>
+                                            <td>{{ form.dietary_restrictions }}</td>
+                                            <td>{{ form.relevant_information }}</td>
+                                            <td class="text-center">
+                                                {{ form.DELETE }}
+                                                <button type="button" class="btn btn-sm btn-danger remove-participant">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="text-muted mt-2">
+                                <small>Click "Add Participant" to add more rows. Fill in the participant information in each row.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle"></i> Register Unit
+                        </button>
+                        <a href="{% url 'SkaRe:home' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden template for new participant rows -->
+<table style="display: none;">
+    <tbody id="empty-participant-form">
+        <tr class="participant-row">
+            <td class="text-center participant-number"></td>
+            <td><input type="text" name="participants-__prefix__-first_name" class="form-control form-control-sm" placeholder="First name" id="id_participants-__prefix__-first_name"></td>
+            <td><input type="text" name="participants-__prefix__-last_name" class="form-control form-control-sm" placeholder="Last name" id="id_participants-__prefix__-last_name"></td>
+            <td><input type="text" name="participants-__prefix__-nickname" class="form-control form-control-sm" placeholder="Nickname" id="id_participants-__prefix__-nickname"></td>
+            <td><input type="date" name="participants-__prefix__-date_of_birth" class="form-control form-control-sm" id="id_participants-__prefix__-date_of_birth"></td>
+            <td>
+                <select name="participants-__prefix__-category" class="form-control form-control-sm" id="id_participants-__prefix__-category">
+                    <option value="ADULT">Adult</option>
+                    <option value="ROVER">Rover</option>
+                    <option value="SCOUT" selected>Scout</option>
+                    <option value="CUB">Cub</option>
+                </select>
+            </td>
+            <td><textarea name="participants-__prefix__-health_restrictions" class="form-control form-control-sm" rows="2" placeholder="Health restrictions" id="id_participants-__prefix__-health_restrictions"></textarea></td>
+            <td><textarea name="participants-__prefix__-dietary_restrictions" class="form-control form-control-sm" rows="2" placeholder="Dietary restrictions" id="id_participants-__prefix__-dietary_restrictions"></textarea></td>
+            <td><textarea name="participants-__prefix__-relevant_information" class="form-control form-control-sm" rows="2" placeholder="Relevant information" id="id_participants-__prefix__-relevant_information"></textarea></td>
+            <td class="text-center">
+                <input type="checkbox" name="participants-__prefix__-DELETE" id="id_participants-__prefix__-DELETE" style="display: none;">
+                <button type="button" class="btn btn-sm btn-danger remove-participant">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const totalFormsInput = document.querySelector('#id_participants-TOTAL_FORMS');
+    const tableBody = document.querySelector('#participant-table-body');
+    const addButton = document.querySelector('#add-participant');
+    
+    // Function to update row numbers
+    function updateRowNumbers() {
+        const rows = tableBody.querySelectorAll('.participant-row:not([style*="display: none"])');
+        rows.forEach((row, index) => {
+            row.querySelector('.participant-number').textContent = index + 1;
+        });
+    }
+    
+    // Add new participant row
+    addButton.addEventListener('click', function() {
+        const currentFormCount = parseInt(totalFormsInput.value);
+        const emptyForm = document.querySelector('#empty-participant-form tr').cloneNode(true);
+        
+        // Replace __prefix__ with actual form number
+        emptyForm.innerHTML = emptyForm.innerHTML.replace(/__prefix__/g, currentFormCount);
+        emptyForm.dataset.formIndex = currentFormCount;
+        
+        tableBody.appendChild(emptyForm);
+        totalFormsInput.value = currentFormCount + 1;
+        
+        updateRowNumbers();
+    });
+    
+    // Remove participant row
+    tableBody.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-participant')) {
+            const row = e.target.closest('.participant-row');
+            const deleteCheckbox = row.querySelector('input[name$="-DELETE"]');
+            
+            if (deleteCheckbox) {
+                deleteCheckbox.checked = true;
+                row.style.display = 'none';
+            } else {
+                row.remove();
+            }
+            
+            updateRowNumbers();
+        }
+    });
+    
+    // Initial row numbering
+    updateRowNumbers();
+});
+</script>
+{% endblock %}

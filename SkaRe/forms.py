@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from .models import ScoutUnit, Entity, Unit, RegularParticipant
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -40,3 +41,146 @@ class UserRegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class ScoutUnitForm(forms.ModelForm):
+    """Form for creating a new ScoutUnit."""
+    class Meta:
+        model = ScoutUnit
+        fields = ['name', 'evidence_id']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 5. oddíl Koráb'}),
+            'evidence_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
+        }
+
+
+class UnitRegistrationForm(forms.ModelForm):
+    """Form for registering a new Unit."""
+    
+    # Scout Unit selection - existing or new
+    existing_scout_unit = forms.ModelChoiceField(
+        queryset=ScoutUnit.objects.all(),
+        required=False,
+        empty_label="-- Select existing unit --",
+        widget=forms.Select(attrs={'class': 'form-control', 'id': 'existing-scout-unit'}),
+        label="Existing Scout Unit"
+    )
+    
+    # New Scout Unit fields
+    new_scout_unit_name = forms.CharField(
+        max_length=200,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 5. oddíl Koráb'}),
+        label="New Scout Unit Name"
+    )
+    new_scout_unit_evidence_id = forms.CharField(
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
+        label="Evidence ID"
+    )
+    
+    # Entity fields
+    contact_email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+        label="Contact Email"
+    )
+    contact_phone = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
+        label="Contact Phone"
+    )
+    expected_arrival = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+        label="Expected Arrival"
+    )
+    expected_departure = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+        label="Expected Departure"
+    )
+    home_town = forms.CharField(
+        max_length=200,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Home Town"
+    )
+    
+    class Meta:
+        model = Unit
+        fields = [
+            'contact_person_name',
+            'backup_contact_phone',
+            'boats_p550',
+            'boats_sail',
+            'boats_paddle',
+            'boats_motor',
+            'accommodation_expectations',
+            'estimated_accommodation_area',
+        ]
+        widgets = {
+            'contact_person_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'backup_contact_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 987 654 321'}),
+            'boats_p550': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'boats_sail': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'boats_paddle': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        existing = cleaned_data.get('existing_scout_unit')
+        new_name = cleaned_data.get('new_scout_unit_name')
+        new_evidence = cleaned_data.get('new_scout_unit_evidence_id')
+        
+        # Must specify either existing or new scout unit
+        if not existing and not (new_name and new_evidence):
+            raise forms.ValidationError(
+                'You must either select an existing scout unit or provide details for a new one.'
+            )
+        
+        # Cannot specify both
+        if existing and (new_name or new_evidence):
+            raise forms.ValidationError(
+                'Please choose either an existing scout unit OR create a new one, not both.'
+            )
+        
+        return cleaned_data
+
+
+class RegularParticipantForm(forms.ModelForm):
+    """Form for adding a regular participant to a unit."""
+    
+    class Meta:
+        model = RegularParticipant
+        fields = [
+            'first_name',
+            'last_name',
+            'nickname',
+            'date_of_birth',
+            'category',
+            'health_restrictions',
+            'dietary_restrictions',
+            'relevant_information',
+        ]
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'First name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Last name'}),
+            'nickname': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Nickname'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-control form-control-sm', 'type': 'date'}),
+            'category': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'health_restrictions': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': 'Health restrictions'}),
+            'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': 'Dietary restrictions'}),
+            'relevant_information': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': 'Relevant information'}),
+        }
+
+
+# Formset for handling multiple participants
+RegularParticipantFormSet = forms.formset_factory(
+    RegularParticipantForm,
+    extra=3,  # Start with 3 empty forms
+    can_delete=True
+)
