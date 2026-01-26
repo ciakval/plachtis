@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
-from .forms import UserRegistrationForm, UnitRegistrationForm, RegularParticipantFormSet, ScoutUnitForm
+from django import forms
+from .forms import UserRegistrationForm, UnitRegistrationForm, RegularParticipantFormSet, RegularParticipantForm
 from .models import ScoutUnit, Entity, Unit, RegularParticipant, EventSettings
 
 
@@ -135,3 +136,132 @@ def register_unit(request):
         'deadline': EventSettings.get_deadline(),
     }
     return render(request, 'SkaRe/register_unit.html', context)
+
+
+@login_required
+def list_units(request):
+    """View for listing units created by the current user."""
+    # Get all entities created by the user that have a Unit associated
+    units = Unit.objects.filter(entity__created_by=request.user).select_related(
+        'entity', 'scout_unit'
+    ).prefetch_related('regular_participants')
+    
+    context = {
+        'units': units,
+    }
+    return render(request, 'SkaRe/list_units.html', context)
+
+
+@login_required
+def edit_unit(request, unit_id):
+    """View for editing an existing Unit."""
+    unit = get_object_or_404(Unit, id=unit_id)
+    
+    # Check if user owns this unit
+    if unit.entity.created_by != request.user:
+        messages.error(request, 'You do not have permission to edit this unit.')
+        return redirect('SkaRe:list_units')
+    
+    # Check if unit can be edited
+    if not unit.entity.can_be_edited(request.user):
+        messages.error(request, 'This unit cannot be edited after the registration deadline.')
+        return redirect('SkaRe:list_units')
+    
+    # Define forms inline
+    class ScoutUnitEditForm(forms.ModelForm):
+        class Meta:
+            model = ScoutUnit
+            fields = ['name', 'evidence_id']
+            widgets = {
+                'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 5. oddíl Koráb'}),
+                'evidence_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
+            }
+    
+    class UnitEditForm(forms.ModelForm):
+        class Meta:
+            model = Unit
+            fields = [
+                'contact_person_name',
+                'backup_contact_phone',
+                'boats_p550',
+                'boats_sail',
+                'boats_paddle',
+                'boats_motor',
+                'accommodation_expectations',
+                'estimated_accommodation_area',
+            ]
+            widgets = {
+                'contact_person_name': forms.TextInput(attrs={'class': 'form-control'}),
+                'backup_contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
+                'boats_p550': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'boats_sail': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'boats_paddle': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+                'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control'}),
+            }
+    
+    class EntityEditForm(forms.ModelForm):
+        class Meta:
+            model = Entity
+            fields = ['contact_email', 'contact_phone', 'expected_arrival', 'expected_departure', 'home_town']
+            widgets = {
+                'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
+                'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
+                'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+                'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+                'home_town': forms.TextInput(attrs={'class': 'form-control'}),
+            }
+    
+    # Create participant formset
+    ParticipantFormSet = forms.modelformset_factory(
+        RegularParticipant,
+        form=RegularParticipantForm,
+        extra=1,
+        can_delete=True
+    )
+    
+    if request.method == 'POST':
+        scout_unit_form = ScoutUnitEditForm(request.POST, instance=unit.scout_unit)
+        unit_form = UnitEditForm(request.POST, instance=unit)
+        entity_form = EntityEditForm(request.POST, instance=unit.entity)
+        participant_formset = ParticipantFormSet(
+            request.POST,
+            queryset=RegularParticipant.objects.filter(unit=unit),
+            prefix='participants'
+        )
+        
+        if scout_unit_form.is_valid() and unit_form.is_valid() and entity_form.is_valid() and participant_formset.is_valid():
+            try:
+                with transaction.atomic():
+                    # Save scout unit, entity and unit
+                    scout_unit_form.save()
+                    entity_form.save()
+                    unit_form.save()
+                    
+                    # Save participants
+                    participant_formset.save()
+                    
+                    messages.success(request, f'Unit "{unit.scout_unit.name}" updated successfully!')
+                    return redirect('SkaRe:list_units')
+            except Exception as e:
+                messages.error(request, f'Error updating unit: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        scout_unit_form = ScoutUnitEditForm(instance=unit.scout_unit)
+        unit_form = UnitEditForm(instance=unit)
+        entity_form = EntityEditForm(instance=unit.entity)
+        participant_formset = ParticipantFormSet(
+            queryset=RegularParticipant.objects.filter(unit=unit),
+            prefix='participants'
+        )
+    
+    context = {
+        'unit': unit,
+        'scout_unit_form': scout_unit_form,
+        'unit_form': unit_form,
+        'entity_form': entity_form,
+        'participant_formset': participant_formset,
+    }
+    return render(request, 'SkaRe/edit_unit.html', context)

@@ -1,0 +1,285 @@
+{% extends 'SkaRe/base.html' %}
+
+{% block title %}Edit Unit - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4"><i class="bi bi-pencil-square"></i> Edit Unit: {{ unit.scout_unit.name }}</h1>
+        
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Scout Unit Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ scout_unit_form.name.id_for_label }}" class="form-label">
+                                {{ scout_unit_form.name.label }}
+                            </label>
+                            {{ scout_unit_form.name }}
+                            {% if scout_unit_form.name.errors %}
+                                <div class="text-danger">{{ scout_unit_form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ scout_unit_form.evidence_id.id_for_label }}" class="form-label">
+                                {{ scout_unit_form.evidence_id.label }}
+                            </label>
+                            {{ scout_unit_form.evidence_id }}
+                            {% if scout_unit_form.evidence_id.errors %}
+                                <div class="text-danger">{{ scout_unit_form.evidence_id.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Contact Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ entity_form.contact_email.id_for_label }}" class="form-label">
+                                {{ entity_form.contact_email.label }}
+                            </label>
+                            {{ entity_form.contact_email }}
+                            {% if entity_form.contact_email.errors %}
+                                <div class="text-danger">{{ entity_form.contact_email.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ entity_form.contact_phone.id_for_label }}" class="form-label">
+                                {{ entity_form.contact_phone.label }}
+                            </label>
+                            {{ entity_form.contact_phone }}
+                            {% if entity_form.contact_phone.errors %}
+                                <div class="text-danger">{{ entity_form.contact_phone.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ unit_form.contact_person_name.id_for_label }}" class="form-label">
+                                {{ unit_form.contact_person_name.label }}
+                            </label>
+                            {{ unit_form.contact_person_name }}
+                            {% if unit_form.contact_person_name.errors %}
+                                <div class="text-danger">{{ unit_form.contact_person_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ unit_form.backup_contact_phone.id_for_label }}" class="form-label">
+                                {{ unit_form.backup_contact_phone.label }}
+                            </label>
+                            {{ unit_form.backup_contact_phone }}
+                            {% if unit_form.backup_contact_phone.errors %}
+                                <div class="text-danger">{{ unit_form.backup_contact_phone.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Event Logistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ entity_form.expected_arrival.id_for_label }}" class="form-label">
+                                {{ entity_form.expected_arrival.label }}
+                            </label>
+                            {{ entity_form.expected_arrival }}
+                            {% if entity_form.expected_arrival.errors %}
+                                <div class="text-danger">{{ entity_form.expected_arrival.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ entity_form.expected_departure.id_for_label }}" class="form-label">
+                                {{ entity_form.expected_departure.label }}
+                            </label>
+                            {{ entity_form.expected_departure }}
+                            {% if entity_form.expected_departure.errors %}
+                                <div class="text-danger">{{ entity_form.expected_departure.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ entity_form.home_town.id_for_label }}" class="form-label">
+                            {{ entity_form.home_town.label }}
+                        </label>
+                        {{ entity_form.home_town }}
+                        {% if entity_form.home_town.errors %}
+                            <div class="text-danger">{{ entity_form.home_town.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Boat Estimates</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="{{ unit_form.boats_p550.id_for_label }}" class="form-label">
+                                {{ unit_form.boats_p550.label }}
+                            </label>
+                            {{ unit_form.boats_p550 }}
+                            {% if unit_form.boats_p550.errors %}
+                                <div class="text-danger">{{ unit_form.boats_p550.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="{{ unit_form.boats_sail.id_for_label }}" class="form-label">
+                                {{ unit_form.boats_sail.label }}
+                            </label>
+                            {{ unit_form.boats_sail }}
+                            {% if unit_form.boats_sail.errors %}
+                                <div class="text-danger">{{ unit_form.boats_sail.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="{{ unit_form.boats_paddle.id_for_label }}" class="form-label">
+                                {{ unit_form.boats_paddle.label }}
+                            </label>
+                            {{ unit_form.boats_paddle }}
+                            {% if unit_form.boats_paddle.errors %}
+                                <div class="text-danger">{{ unit_form.boats_paddle.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="{{ unit_form.boats_motor.id_for_label }}" class="form-label">
+                                {{ unit_form.boats_motor.label }}
+                            </label>
+                            {{ unit_form.boats_motor }}
+                            {% if unit_form.boats_motor.errors %}
+                                <div class="text-danger">{{ unit_form.boats_motor.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Accommodation</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="{{ unit_form.accommodation_expectations.id_for_label }}" class="form-label">
+                            {{ unit_form.accommodation_expectations.label }}
+                        </label>
+                        {{ unit_form.accommodation_expectations }}
+                        {% if unit_form.accommodation_expectations.errors %}
+                            <div class="text-danger">{{ unit_form.accommodation_expectations.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ unit_form.estimated_accommodation_area.id_for_label }}" class="form-label">
+                            {{ unit_form.estimated_accommodation_area.label }}
+                        </label>
+                        {{ unit_form.estimated_accommodation_area }}
+                        {% if unit_form.estimated_accommodation_area.errors %}
+                            <div class="text-danger">{{ unit_form.estimated_accommodation_area.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-people-fill"></i> Participants</h5>
+                </div>
+                <div class="card-body">
+                    {{ participant_formset.management_form }}
+                    
+                    {% for form in participant_formset %}
+                        <div class="participant-form border rounded p-3 mb-3">
+                            {% if form.instance.pk %}
+                                <h6 class="mb-3">Edit Participant</h6>
+                            {% else %}
+                                <h6 class="mb-3">New Participant</h6>
+                            {% endif %}
+                            
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    {{ form.first_name.label_tag }}
+                                    {{ form.first_name }}
+                                    {{ form.first_name.errors }}
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    {{ form.last_name.label_tag }}
+                                    {{ form.last_name }}
+                                    {{ form.last_name.errors }}
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    {{ form.nickname.label_tag }}
+                                    {{ form.nickname }}
+                                    {{ form.nickname.errors }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    {{ form.date_of_birth.label_tag }}
+                                    {{ form.date_of_birth }}
+                                    {{ form.date_of_birth.errors }}
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    {{ form.category.label_tag }}
+                                    {{ form.category }}
+                                    {{ form.category.errors }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    {{ form.health_restrictions.label_tag }}
+                                    {{ form.health_restrictions }}
+                                    {{ form.health_restrictions.errors }}
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    {{ form.dietary_restrictions.label_tag }}
+                                    {{ form.dietary_restrictions }}
+                                    {{ form.dietary_restrictions.errors }}
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    {{ form.relevant_information.label_tag }}
+                                    {{ form.relevant_information }}
+                                    {{ form.relevant_information.errors }}
+                                </div>
+                            </div>
+                            
+                            {% if form.instance.pk %}
+                                <div class="form-check mt-2">
+                                    {{ form.DELETE }}
+                                    <label class="form-check-label text-danger" for="{{ form.DELETE.id_for_label }}">
+                                        Delete this participant
+                                    </label>
+                                </div>
+                            {% endif %}
+                            {{ form.id }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{% url 'SkaRe:list_units' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="bi bi-check-circle"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
