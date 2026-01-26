@@ -1,11 +1,12 @@
 {% extends 'SkaRe/base.html' %}
+{% load i18n %}
 
-{% block title %}My Individual Participants - SkaRe{% endblock %}
+{% block title %}{% trans "My Individual Participants" %} - SkaRe{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <h1 class="mb-4"><i class="bi bi-person"></i> My Registered Individual Participants</h1>
+        <h1 class="mb-4"><i class="bi bi-person"></i> {% trans "My Registered Individual Participants" %}</h1>
         
         {% if participants %}
             <div class="row">
@@ -19,30 +20,30 @@
                         </div>
                         <div class="card-body">
                             <p class="mb-2">
-                                <strong>Category:</strong> <span class="badge bg-secondary">{{ participant.get_category_display }}</span>
+                                <strong>{% trans "Category" %}:</strong> <span class="badge bg-secondary">{{ participant.get_category_display }}</span>
                             </p>
                             <p class="mb-2">
-                                <strong>Date of Birth:</strong> {{ participant.date_of_birth|date:"d.m.Y" }}
+                                <strong>{% trans "Date of Birth" %}:</strong> {{ participant.date_of_birth|date:"d.m.Y" }}
                             </p>
                             <p class="mb-2">
-                                <strong>Email:</strong> {{ participant.entity.contact_email }}
+                                <strong>{% trans "Email" %}:</strong> {{ participant.entity.contact_email }}
                             </p>
                             <p class="mb-2">
-                                <strong>Phone:</strong> {{ participant.entity.contact_phone }}
+                                <strong>{% trans "Phone" %}:</strong> {{ participant.entity.contact_phone }}
                             </p>
                             {% if participant.entity.home_town %}
                             <p class="mb-2">
-                                <strong>Home Town:</strong> {{ participant.entity.home_town }}
+                                <strong>{% trans "Home Town" %}:</strong> {{ participant.entity.home_town }}
                             </p>
                             {% endif %}
                             {% if participant.entity.expected_arrival %}
                             <p class="mb-2">
-                                <strong>Expected Arrival:</strong> {{ participant.entity.expected_arrival|date:"d.m.Y H:i" }}
+                                <strong>{% trans "Expected Arrival" %}:</strong> {{ participant.entity.expected_arrival|date:"d.m.Y H:i" }}
                             </p>
                             {% endif %}
                             {% if participant.entity.expected_departure %}
                             <p class="mb-2">
-                                <strong>Expected Departure:</strong> {{ participant.entity.expected_departure|date:"d.m.Y H:i" }}
+                                <strong>{% trans "Expected Departure" %}:</strong> {{ participant.entity.expected_departure|date:"d.m.Y H:i" }}
                             </p>
                             {% endif %}
                             

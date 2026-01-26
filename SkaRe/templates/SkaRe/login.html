@@ -1,20 +1,21 @@
 {% extends 'SkaRe/base.html' %}
+{% load i18n %}
 
-{% block title %}Login - SkaRe{% endblock %}
+{% block title %}{% trans "Login" %} - SkaRe{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-5">
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Login</h3>
+                <h3 class="mb-0">{% trans "Login" %}</h3>
             </div>
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
                     
                     <div class="mb-3">
-                        <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                        <label for="{{ form.username.id_for_label }}" class="form-label">{% trans "Username" %}</label>
                         <input type="text" name="username" class="form-control" id="{{ form.username.id_for_label }}" required>
                         {% if form.username.errors %}
                             <div class="text-danger">{{ form.username.errors }}</div>
@@ -22,19 +23,19 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                        <label for="{{ form.password.id_for_label }}" class="form-label">{% trans "Password" %}</label>
                         <input type="password" name="password" class="form-control" id="{{ form.password.id_for_label }}" required>
                         {% if form.password.errors %}
                             <div class="text-danger">{{ form.password.errors }}</div>
                         {% endif %}
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <button type="submit" class="btn btn-primary w-100">{% trans "Login" %}</button>
                 </form>
                 
                 <hr>
                 <p class="text-center mb-0">
-                    Don't have an account? <a href="{% url 'SkaRe:register' %}">Register here</a>
+                    {% trans "Don't have an account?" %} <a href="{% url 'SkaRe:register' %}">{% trans "Register here" %}</a>
                 </p>
             </div>
         </div>

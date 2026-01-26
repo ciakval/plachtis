@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,17 +56,17 @@
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <span class="navbar-text text-white me-3">Hello, {{ user.first_name|default:user.username }}!</span>
+                            <span class="navbar-text text-white me-3">{% trans "Hello" %}, {{ user.first_name|default:user.username }}!</span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'SkaRe:logout' %}">Logout</a>
+                            <a class="nav-link" href="{% url 'SkaRe:logout' %}">{% trans "Logout" %}</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'SkaRe:login' %}">Login</a>
+                            <a class="nav-link" href="{% url 'SkaRe:login' %}">{% trans "Login" %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'SkaRe:register' %}">Register</a>
+                            <a class="nav-link" href="{% url 'SkaRe:register' %}">{% trans "Register" %}</a>
                         </li>
                     {% endif %}
                 </ul>

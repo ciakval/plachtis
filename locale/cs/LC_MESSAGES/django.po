@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 22:35+0000\n"
+"POT-Creation-Date: 2026-01-26 23:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
 "<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
 #: SkaRe/forms.py:55
 msgid "Scout Unit Name"
 msgstr "Název oddílu/střediska/přístavu"
 
 #: SkaRe/forms.py:61 SkaRe/models.py:127
+#: SkaRe/templates/SkaRe/list_units.html:23
 msgid "Evidence ID"
 msgstr "Evidenční číslo oddílu/střediska/přístavu"
 
@@ -35,14 +37,20 @@ msgid "Contact Phone"
 msgstr "Kontaktní telefon"
 
 #: SkaRe/forms.py:77 SkaRe/forms.py:186 SkaRe/forms.py:250
+#: SkaRe/templates/SkaRe/list_individual_participants.html:41
+#: SkaRe/templates/SkaRe/list_units.html:41
 msgid "Expected Arrival"
 msgstr "Očekávaný příjezd"
 
 #: SkaRe/forms.py:82 SkaRe/forms.py:191 SkaRe/forms.py:255
+#: SkaRe/templates/SkaRe/list_individual_participants.html:46
+#: SkaRe/templates/SkaRe/list_units.html:46
 msgid "Expected Departure"
 msgstr "Očekávaný odjezd"
 
 #: SkaRe/forms.py:88 SkaRe/forms.py:197 SkaRe/forms.py:261
+#: SkaRe/templates/SkaRe/list_individual_participants.html:36
+#: SkaRe/templates/SkaRe/list_units.html:36
 msgid "Home Town"
 msgstr "Odkud/Kam jedete?"
 
@@ -66,7 +74,7 @@ msgstr "Příjmení"
 msgid "Optional nickname"
 msgstr "Přezdívka (volitelně)"
 
-#: SkaRe/models.py:56
+#: SkaRe/models.py:56 SkaRe/templates/SkaRe/register_unit.html:209
 msgid "Nickname"
 msgstr "Přezdívka"
 
@@ -95,6 +103,9 @@ msgid "Scout category"
 msgstr "Výchovná kategorie"
 
 #: SkaRe/models.py:71
+#: SkaRe/templates/SkaRe/list_individual_participants.html:23
+#: SkaRe/templates/SkaRe/list_organizers.html:26
+#: SkaRe/templates/SkaRe/register_unit.html:211
 msgid "Category"
 msgstr "Výchovná kategorie"
 
@@ -194,11 +205,11 @@ msgstr "Odkud/Kam jedete?"
 
 #: SkaRe/models.py:180
 msgid "The registration entity associated with this unit"
-msgstr ""
+msgstr "Registrační entita přiřazená k této jednotce"
 
 #: SkaRe/models.py:181 SkaRe/models.py:257 SkaRe/models.py:275
 msgid "Entity"
-msgstr ""
+msgstr "Entita"
 
 #: SkaRe/models.py:186
 msgid "Name of the contact person"
@@ -274,11 +285,11 @@ msgstr "Jednotka"
 
 #: SkaRe/models.py:256
 msgid "The registration entity associated with this individual participant"
-msgstr ""
+msgstr "Registrační entita přiřazená k tomuto jednotlivci"
 
 #: SkaRe/models.py:274
 msgid "The registration entity associated with this organizer"
-msgstr ""
+msgstr "Registrační entita přiřazená k tomuto pořadateli"
 
 #: SkaRe/models.py:279
 msgid "Management"
@@ -320,7 +331,7 @@ msgstr "Ostatní"
 msgid "Division the organizer belongs to"
 msgstr "Divize SkaRe"
 
-#: SkaRe/models.py:294
+#: SkaRe/models.py:294 SkaRe/templates/SkaRe/list_organizers.html:23
 msgid "Division"
 msgstr "Divize"
 
@@ -340,7 +351,7 @@ msgstr "Auto s přívěsem"
 msgid "Transport method to the event"
 msgstr "Způsob dopravy na akci"
 
-#: SkaRe/models.py:307
+#: SkaRe/models.py:307 SkaRe/templates/SkaRe/list_organizers.html:42
 msgid "Transport"
 msgstr "Způsob dopravy na akci"
 
@@ -384,7 +395,8 @@ msgstr "Uvnitř v budově"
 msgid "Accommodation preference of the organizer"
 msgstr "Požadavky na ubytování organizátora"
 
-#: SkaRe/models.py:334
+#: SkaRe/models.py:334 SkaRe/templates/SkaRe/list_organizers.html:45
+#: SkaRe/templates/SkaRe/register_unit.html:167
 msgid "Accommodation"
 msgstr "Způsob ubytování"
 
@@ -395,6 +407,288 @@ msgstr "Zda se organizátor zavazuje dodržovat Kodex jednání dospělých"
 #: SkaRe/models.py:340
 msgid "Codex agreement"
 msgstr "Zavazuji se dodržovat Kodex jednání dospělých"
+
+#: SkaRe/templates/SkaRe/base.html:59 SkaRe/templates/SkaRe/home.html:16
+msgid "Hello"
+msgstr "Ahoj"
+
+#: SkaRe/templates/SkaRe/base.html:62 SkaRe/templates/SkaRe/home.html:51
+msgid "Logout"
+msgstr "Odhlásit se"
+
+#: SkaRe/templates/SkaRe/base.html:66 SkaRe/templates/SkaRe/home.html:57
+#: SkaRe/templates/SkaRe/login.html:4 SkaRe/templates/SkaRe/login.html:11
+#: SkaRe/templates/SkaRe/login.html:33
+msgid "Login"
+msgstr "Přihlásit se"
+
+#: SkaRe/templates/SkaRe/base.html:69 SkaRe/templates/SkaRe/home.html:19
+#: SkaRe/templates/SkaRe/home.html:58 SkaRe/templates/SkaRe/register.html:4
+#: SkaRe/templates/SkaRe/register.html:11
+#: SkaRe/templates/SkaRe/register.html:67
+msgid "Register"
+msgstr "Registrace"
+
+#: SkaRe/templates/SkaRe/home.html:5
+#, fuzzy
+#| msgid "Home Town"
+msgid "Home"
+msgstr "Odkud/Kam jedete?"
+
+#: SkaRe/templates/SkaRe/home.html:12
+msgid "Manage Units and Participants in the PlachtIS system."
+msgstr "Spravujte jednotky a účastníky v systému PlachtIS."
+
+#: SkaRe/templates/SkaRe/home.html:16
+msgid "You are logged in as"
+msgstr "Jste přihlášeni jako"
+
+#: SkaRe/templates/SkaRe/home.html:21 SkaRe/templates/SkaRe/list_units.html:109
+#: SkaRe/templates/SkaRe/register_unit.html:4
+#: SkaRe/templates/SkaRe/register_unit.html:11
+#: SkaRe/templates/SkaRe/register_unit.html:250
+#, fuzzy
+#| msgid "With Unit"
+msgid "Register Unit"
+msgstr "Registrovat jednotku"
+
+#: SkaRe/templates/SkaRe/home.html:24
+msgid "Register Individual Participant"
+msgstr "Registrovat jednotlivce"
+
+#: SkaRe/templates/SkaRe/home.html:27
+msgid "Register Organizer"
+msgstr "Registrovat pořadatele"
+
+#: SkaRe/templates/SkaRe/home.html:32
+#, fuzzy
+#| msgid "Dietary restrictions"
+msgid "My Registrations"
+msgstr "Stravovací omezení / preference"
+
+#: SkaRe/templates/SkaRe/home.html:34 SkaRe/templates/SkaRe/list_units.html:4
+#, fuzzy
+#| msgid "Unit"
+msgid "My Units"
+msgstr "Jednotka"
+
+#: SkaRe/templates/SkaRe/home.html:37
+#: SkaRe/templates/SkaRe/list_individual_participants.html:4
+msgid "My Individual Participants"
+msgstr "Moji jednotlivci"
+
+#: SkaRe/templates/SkaRe/home.html:40
+#: SkaRe/templates/SkaRe/list_organizers.html:4
+msgid "My Organizers"
+msgstr "Moji pořadatelé"
+
+#: SkaRe/templates/SkaRe/home.html:47
+msgid "Admin Panel"
+msgstr "Administrace"
+
+#: SkaRe/templates/SkaRe/home.html:55
+msgid "Please login or register to access the system."
+msgstr "Pro přístup do systému se prosím přihlaste nebo zaregistrujte."
+
+#: SkaRe/templates/SkaRe/list_individual_participants.html:9
+msgid "My Registered Individual Participants"
+msgstr "Moji registrovaní jednotlivci"
+
+#: SkaRe/templates/SkaRe/list_individual_participants.html:26
+#: SkaRe/templates/SkaRe/list_organizers.html:29
+#: SkaRe/templates/SkaRe/register_unit.html:210
+#, fuzzy
+#| msgid "Date of birth"
+msgid "Date of Birth"
+msgstr "Datum narození"
+
+#: SkaRe/templates/SkaRe/list_individual_participants.html:29
+#: SkaRe/templates/SkaRe/list_organizers.html:32
+#: SkaRe/templates/SkaRe/list_units.html:29
+#: SkaRe/templates/SkaRe/register.html:43
+msgid "Email"
+msgstr "E-mail"
+
+#: SkaRe/templates/SkaRe/list_individual_participants.html:32
+#: SkaRe/templates/SkaRe/list_organizers.html:35
+#: SkaRe/templates/SkaRe/list_units.html:32
+msgid "Phone"
+msgstr "Telefon"
+
+#: SkaRe/templates/SkaRe/list_organizers.html:9
+#, fuzzy
+#| msgid "Dietary restrictions"
+msgid "My Registered Organizers"
+msgstr "Stravovací omezení / preference"
+
+#: SkaRe/templates/SkaRe/list_organizers.html:40
+msgid "Logistics"
+msgstr "Logistika"
+
+#: SkaRe/templates/SkaRe/list_organizers.html:49
+msgid "Needs lift from transport hub"
+msgstr "Potřebuje svézt z dopravního uzlu"
+
+#: SkaRe/templates/SkaRe/list_units.html:9
+msgid "My Registered Units"
+msgstr "Moje registrované jednotky"
+
+#: SkaRe/templates/SkaRe/list_units.html:26
+#, fuzzy
+#| msgid "Contact Phone"
+msgid "Contact Person"
+msgstr "Kontaktní osoba"
+
+#: SkaRe/templates/SkaRe/list_units.html:52
+#: SkaRe/templates/SkaRe/register_unit.html:128
+msgid "Boat Estimates"
+msgstr "Odhad počtu lodí"
+
+#: SkaRe/templates/SkaRe/list_units.html:73
+msgid "Participants"
+msgstr "Účastníci"
+
+#: SkaRe/templates/SkaRe/list_units.html:86
+msgid "No participants registered yet."
+msgstr "Zatím nejsou registrováni žádní účastníci."
+
+#: SkaRe/templates/SkaRe/list_units.html:90
+msgid "Registered"
+msgstr "Registrováno"
+
+#: SkaRe/templates/SkaRe/list_units.html:95
+#, fuzzy
+#| msgid "With Unit"
+msgid "Edit Unit"
+msgstr "Se svým oddílem"
+
+#: SkaRe/templates/SkaRe/list_units.html:104
+msgid "No Units Yet"
+msgstr "Zatím žádné jednotky"
+
+#: SkaRe/templates/SkaRe/list_units.html:105
+msgid ""
+"You haven't registered any units yet. Click the button below to register "
+"your first unit!"
+msgstr ""
+"Zatím jste neregistrovali žádné jednotky. Klikněte na tlačítko níže a "
+"zaregistrujte svou první jednotku!"
+
+#: SkaRe/templates/SkaRe/list_units.html:117
+msgid "Back to Home"
+msgstr "Zpět na domovskou stránku"
+
+#: SkaRe/templates/SkaRe/list_units.html:120
+msgid "Register Another Unit"
+msgstr "Registrovat další jednotku"
+
+#: SkaRe/templates/SkaRe/login.html:18
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+#: SkaRe/templates/SkaRe/login.html:26 SkaRe/templates/SkaRe/register.html:51
+msgid "Password"
+msgstr "Heslo"
+
+#: SkaRe/templates/SkaRe/login.html:38
+msgid "Don't have an account?"
+msgstr "Nemáte účet?"
+
+#: SkaRe/templates/SkaRe/login.html:38
+msgid "Register here"
+msgstr "Registrujte se zde"
+
+#: SkaRe/templates/SkaRe/register.html:18
+msgid "Username (Login)"
+msgstr "Uživatelské jméno (login)"
+
+#: SkaRe/templates/SkaRe/register.html:27
+#: SkaRe/templates/SkaRe/register_unit.html:207
+#, fuzzy
+#| msgid "First name"
+msgid "First Name"
+msgstr "Jméno"
+
+#: SkaRe/templates/SkaRe/register.html:35
+#: SkaRe/templates/SkaRe/register_unit.html:208
+#, fuzzy
+#| msgid "Last name"
+msgid "Last Name"
+msgstr "Příjmení"
+
+#: SkaRe/templates/SkaRe/register.html:60
+msgid "Confirm Password"
+msgstr "Potvrdit heslo"
+
+#: SkaRe/templates/SkaRe/register.html:72
+msgid "Already have an account?"
+msgstr "Už máte účet?"
+
+#: SkaRe/templates/SkaRe/register.html:72
+msgid "Login here"
+msgstr "Přihlaste se zde"
+
+#: SkaRe/templates/SkaRe/register_unit.html:16
+#, fuzzy
+#| msgid "Dietary restrictions"
+msgid "Registration deadline"
+msgstr "Stravovací omezení / preference"
+
+#: SkaRe/templates/SkaRe/register_unit.html:26
+#, fuzzy
+#| msgid "Information"
+msgid "Scout Unit Information"
+msgstr "Informace o skautské jednotce"
+
+#: SkaRe/templates/SkaRe/register_unit.html:55
+#, fuzzy
+#| msgid "Information"
+msgid "Contact Information"
+msgstr "Kontaktní informace"
+
+#: SkaRe/templates/SkaRe/register_unit.html:96
+#, fuzzy
+#| msgid "Event Settings"
+msgid "Event Logistics"
+msgstr "Logistika akce"
+
+#: SkaRe/templates/SkaRe/register_unit.html:192
+msgid "Unit Participants"
+msgstr "Účastníci jednotky"
+
+#: SkaRe/templates/SkaRe/register_unit.html:195
+msgid "Add Participant"
+msgstr "Přidat účastníka"
+
+#: SkaRe/templates/SkaRe/register_unit.html:212
+msgid "Health"
+msgstr "Zdravotní a psychický stav"
+
+#: SkaRe/templates/SkaRe/register_unit.html:213
+msgid "Dietary"
+msgstr "Stravovací omezení a preference"
+
+#: SkaRe/templates/SkaRe/register_unit.html:214
+msgid "Info"
+msgstr "Další Informace"
+
+#: SkaRe/templates/SkaRe/register_unit.html:215
+#, fuzzy
+#| msgid "Accommodation"
+msgid "Action"
+msgstr "Akce"
+
+#: SkaRe/templates/SkaRe/register_unit.html:243
+msgid ""
+"Click 'Add Participant' to add more rows. Fill in the participant "
+"information in each row."
+msgstr ""
+"Klikněte na 'Přidat účastníka' pro přidání dalších řádků. Vyplnëte informace o "
+"účastníkch v každém řádku."
+
+#: SkaRe/templates/SkaRe/register_unit.html:252
+msgid "Cancel"
+msgstr "Zrušit"
 
 #: SkaRe/views.py:40
 msgid "Invalid username or password."
