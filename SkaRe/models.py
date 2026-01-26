@@ -240,13 +240,6 @@ class IndividualParticipant(Person):
         help_text="The registration entity associated with this individual participant",
     )
     
-    scout_unit = models.ForeignKey(
-        ScoutUnit,
-        on_delete=models.RESTRICT,
-        related_name="individual_participants",
-        help_text="The scout unit this individual participant belongs to",
-        null=True, blank=True,
-    )
     
 
 class Organizer(Person):
