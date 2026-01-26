@@ -1,0 +1,243 @@
+{% extends 'SkaRe/base.html' %}
+
+{% block title %}Register Organizer - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Register Organizer</h3>
+            </div>
+            <div class="card-body">
+                {% if deadline %}
+                <div class="alert alert-info">
+                    <i class="bi bi-calendar-event"></i> Registration deadline: <strong>{{ deadline|date:"F j, Y, g:i a" }}</strong>
+                </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <!-- Personal Information -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Personal Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }} <span class="text-danger">*</span></label>
+                                    {{ form.first_name }}
+                                    {% if form.first_name.errors %}
+                                        <div class="text-danger">{{ form.first_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }} <span class="text-danger">*</span></label>
+                                    {{ form.last_name }}
+                                    {% if form.last_name.errors %}
+                                        <div class="text-danger">{{ form.last_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.nickname.id_for_label }}" class="form-label">{{ form.nickname.label }}</label>
+                                    {{ form.nickname }}
+                                    {% if form.nickname.errors %}
+                                        <div class="text-danger">{{ form.nickname.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">{{ form.date_of_birth.label }} <span class="text-danger">*</span></label>
+                                    {{ form.date_of_birth }}
+                                    {% if form.date_of_birth.errors %}
+                                        <div class="text-danger">{{ form.date_of_birth.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.category.id_for_label }}" class="form-label">{{ form.category.label }} <span class="text-danger">*</span></label>
+                                    {{ form.category }}
+                                    {% if form.category.errors %}
+                                        <div class="text-danger">{{ form.category.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Contact Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.contact_email.id_for_label }}" class="form-label">{{ form.contact_email.label }} <span class="text-danger">*</span></label>
+                                    {{ form.contact_email }}
+                                    {% if form.contact_email.errors %}
+                                        <div class="text-danger">{{ form.contact_email.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.contact_phone.id_for_label }}" class="form-label">{{ form.contact_phone.label }} <span class="text-danger">*</span></label>
+                                    {{ form.contact_phone }}
+                                    {% if form.contact_phone.errors %}
+                                        <div class="text-danger">{{ form.contact_phone.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Organizer Details -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Organizer Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.division.id_for_label }}" class="form-label">{{ form.division.label }} <span class="text-danger">*</span></label>
+                                    {{ form.division }}
+                                    {% if form.division.errors %}
+                                        <div class="text-danger">{{ form.division.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.transport.id_for_label }}" class="form-label">{{ form.transport.label }} <span class="text-danger">*</span></label>
+                                    {{ form.transport }}
+                                    {% if form.transport.errors %}
+                                        <div class="text-danger">{{ form.transport.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.accommodation.id_for_label }}" class="form-label">{{ form.accommodation.label }} <span class="text-danger">*</span></label>
+                                    {{ form.accommodation }}
+                                    {% if form.accommodation.errors %}
+                                        <div class="text-danger">{{ form.accommodation.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        {{ form.need_lift }}
+                                        <label class="form-check-label" for="{{ form.need_lift.id_for_label }}">
+                                            {{ form.need_lift.label }}
+                                        </label>
+                                        {% if form.need_lift.errors %}
+                                            <div class="text-danger">{{ form.need_lift.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        {{ form.want_travel_order }}
+                                        <label class="form-check-label" for="{{ form.want_travel_order.id_for_label }}">
+                                            {{ form.want_travel_order.label }}
+                                        </label>
+                                        {% if form.want_travel_order.errors %}
+                                            <div class="text-danger">{{ form.want_travel_order.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-check">
+                                        {{ form.codex_agreement }}
+                                        <label class="form-check-label" for="{{ form.codex_agreement.id_for_label }}">
+                                            {{ form.codex_agreement.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {% if form.codex_agreement.errors %}
+                                            <div class="text-danger">{{ form.codex_agreement.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Logistics -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Event Logistics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ form.home_town.id_for_label }}" class="form-label">{{ form.home_town.label }}</label>
+                                    {{ form.home_town }}
+                                    {% if form.home_town.errors %}
+                                        <div class="text-danger">{{ form.home_town.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ form.expected_arrival.id_for_label }}" class="form-label">{{ form.expected_arrival.label }}</label>
+                                    {{ form.expected_arrival }}
+                                    {% if form.expected_arrival.errors %}
+                                        <div class="text-danger">{{ form.expected_arrival.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ form.expected_departure.id_for_label }}" class="form-label">{{ form.expected_departure.label }}</label>
+                                    {{ form.expected_departure }}
+                                    {% if form.expected_departure.errors %}
+                                        <div class="text-danger">{{ form.expected_departure.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Health & Dietary Information -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Health & Dietary Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="{{ form.health_restrictions.id_for_label }}" class="form-label">{{ form.health_restrictions.label }}</label>
+                                {{ form.health_restrictions }}
+                                {% if form.health_restrictions.errors %}
+                                    <div class="text-danger">{{ form.health_restrictions.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.dietary_restrictions.id_for_label }}" class="form-label">{{ form.dietary_restrictions.label }}</label>
+                                {{ form.dietary_restrictions }}
+                                {% if form.dietary_restrictions.errors %}
+                                    <div class="text-danger">{{ form.dietary_restrictions.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.relevant_information.id_for_label }}" class="form-label">{{ form.relevant_information.label }}</label>
+                                {{ form.relevant_information }}
+                                {% if form.relevant_information.errors %}
+                                    <div class="text-danger">{{ form.relevant_information.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'SkaRe:home' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle"></i> Register Organizer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
