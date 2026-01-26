@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Unit, RegularParticipant
+from .models import Unit, RegularParticipant, IndividualParticipant, Organizer
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -164,3 +164,143 @@ RegularParticipantFormSet = forms.formset_factory(
     extra=3,  # Start with 3 empty forms
     can_delete=True
 )
+
+
+class IndividualParticipantRegistrationForm(forms.ModelForm):
+    """Form for registering an individual participant."""
+    
+    # Entity fields
+    contact_email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+        label="Contact Email"
+    )
+    contact_phone = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
+        label="Contact Phone"
+    )
+    expected_arrival = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+        label="Expected Arrival"
+    )
+    expected_departure = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+        label="Expected Departure"
+    )
+    home_town = forms.CharField(
+        max_length=200,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Home Town"
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add 'is-invalid' class to fields with errors
+        for field_name, field in self.fields.items():
+            if field_name in self.errors:
+                if 'class' in field.widget.attrs:
+                    field.widget.attrs['class'] += ' is-invalid'
+                else:
+                    field.widget.attrs['class'] = 'is-invalid'
+    
+    class Meta:
+        model = IndividualParticipant
+        fields = [
+            'first_name',
+            'last_name',
+            'nickname',
+            'date_of_birth',
+            'category',
+            'health_restrictions',
+            'dietary_restrictions',
+            'relevant_information',
+        ]
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last name'}),
+            'nickname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nickname (optional)'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Any health restrictions or medical conditions'}),
+            'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Any dietary restrictions or preferences'}),
+            'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Any relevant information'}),
+        }
+
+
+class OrganizerRegistrationForm(forms.ModelForm):
+    """Form for registering an organizer."""
+    
+    # Entity fields
+    contact_email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+        label="Contact Email"
+    )
+    contact_phone = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
+        label="Contact Phone"
+    )
+    expected_arrival = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+        label="Expected Arrival"
+    )
+    expected_departure = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+        label="Expected Departure"
+    )
+    home_town = forms.CharField(
+        max_length=200,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Home Town"
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add 'is-invalid' class to fields with errors
+        for field_name, field in self.fields.items():
+            if field_name in self.errors:
+                if 'class' in field.widget.attrs:
+                    field.widget.attrs['class'] += ' is-invalid'
+                else:
+                    field.widget.attrs['class'] = 'is-invalid'
+    
+    class Meta:
+        model = Organizer
+        fields = [
+            'first_name',
+            'last_name',
+            'nickname',
+            'date_of_birth',
+            'category',
+            'health_restrictions',
+            'dietary_restrictions',
+            'relevant_information',
+            'division',
+            'transport',
+            'need_lift',
+            'want_travel_order',
+            'accommodation',
+            'codex_agreement',
+        ]
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last name'}),
+            'nickname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nickname (optional)'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Any health restrictions or medical conditions'}),
+            'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Any dietary restrictions or preferences'}),
+            'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Any relevant information'}),
+            'division': forms.Select(attrs={'class': 'form-control'}),
+            'transport': forms.Select(attrs={'class': 'form-control'}),
+            'need_lift': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'want_travel_order': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'accommodation': forms.Select(attrs={'class': 'form-control'}),
+            'codex_agreement': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }

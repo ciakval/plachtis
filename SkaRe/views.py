@@ -5,8 +5,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
 from django import forms
-from .forms import UserRegistrationForm, UnitRegistrationForm, RegularParticipantFormSet
-from .models import Entity, Unit, RegularParticipant, EventSettings
+from .forms import (
+    UserRegistrationForm, UnitRegistrationForm, RegularParticipantFormSet,
+    IndividualParticipantRegistrationForm, OrganizerRegistrationForm
+)
+from .models import (
+    Entity, Unit, RegularParticipant, EventSettings,
+    IndividualParticipant, Organizer
+)
 
 
 def home(request):
@@ -280,3 +286,337 @@ def edit_unit(request, unit_id):
         'existing_participants': existing_participants,
     }
     return render(request, 'SkaRe/edit_unit.html', context)
+
+
+@login_required
+def register_individual_participant(request):
+    """View for registering a new Individual Participant."""
+    
+    # Check if registration is still open
+    if not EventSettings.is_registration_open():
+        messages.error(request, 'Registration is currently closed.')
+        return redirect('SkaRe:home')
+    
+    if request.method == 'POST':
+        form = IndividualParticipantRegistrationForm(request.POST)
+        
+        if form.is_valid():
+            try:
+                with transaction.atomic():
+                    # Create Entity
+                    entity = Entity.objects.create(
+                        created_by=request.user,
+                        contact_email=form.cleaned_data['contact_email'],
+                        contact_phone=form.cleaned_data['contact_phone'],
+                        expected_arrival=form.cleaned_data.get('expected_arrival'),
+                        expected_departure=form.cleaned_data.get('expected_departure'),
+                        home_town=form.cleaned_data.get('home_town', '')
+                    )
+                    
+                    # Create Individual Participant
+                    participant = form.save(commit=False)
+                    participant.entity = entity
+                    participant.save()
+                    
+                    messages.success(
+                        request,
+                        f'Individual Participant "{participant}" registered successfully!'
+                    )
+                    return redirect('SkaRe:home')
+                    
+            except Exception as e:
+                messages.error(request, f'Error registering individual participant: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        form = IndividualParticipantRegistrationForm()
+    
+    context = {
+        'form': form,
+        'deadline': EventSettings.get_deadline(),
+    }
+    return render(request, 'SkaRe/register_individual_participant.html', context)
+
+
+@login_required
+def list_individual_participants(request):
+    """View for listing individual participants created by the current user."""
+    participants = IndividualParticipant.objects.filter(
+        entity__created_by=request.user
+    ).select_related('entity')
+    
+    context = {
+        'participants': participants,
+    }
+    return render(request, 'SkaRe/list_individual_participants.html', context)
+
+
+@login_required
+def edit_individual_participant(request, participant_id):
+    """View for editing an existing Individual Participant."""
+    participant = get_object_or_404(IndividualParticipant, id=participant_id)
+    
+    # Check if user owns this participant
+    if participant.entity.created_by != request.user:
+        messages.error(request, 'You do not have permission to edit this participant.')
+        return redirect('SkaRe:list_individual_participants')
+    
+    # Check if participant can be edited
+    if not participant.entity.can_be_edited(request.user):
+        messages.error(request, 'This participant cannot be edited after the registration deadline.')
+        return redirect('SkaRe:list_individual_participants')
+    
+    # Define forms inline
+    class IndividualParticipantEditForm(forms.ModelForm):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for field_name, field in self.fields.items():
+                if field_name in self.errors:
+                    if 'class' in field.widget.attrs:
+                        field.widget.attrs['class'] += ' is-invalid'
+                    else:
+                        field.widget.attrs['class'] = 'is-invalid'
+        
+        class Meta:
+            model = IndividualParticipant
+            fields = [
+                'first_name',
+                'last_name',
+                'nickname',
+                'date_of_birth',
+                'category',
+                'health_restrictions',
+                'dietary_restrictions',
+                'relevant_information',
+            ]
+            widgets = {
+                'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+                'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+                'nickname': forms.TextInput(attrs={'class': 'form-control'}),
+                'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+                'category': forms.Select(attrs={'class': 'form-control'}),
+                'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+                'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+                'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            }
+    
+    class EntityEditForm(forms.ModelForm):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for field_name, field in self.fields.items():
+                if field_name in self.errors:
+                    if 'class' in field.widget.attrs:
+                        field.widget.attrs['class'] += ' is-invalid'
+                    else:
+                        field.widget.attrs['class'] = 'is-invalid'
+        
+        class Meta:
+            model = Entity
+            fields = ['contact_email', 'contact_phone', 'expected_arrival', 'expected_departure', 'home_town']
+            widgets = {
+                'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
+                'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
+                'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+                'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+                'home_town': forms.TextInput(attrs={'class': 'form-control'}),
+            }
+    
+    if request.method == 'POST':
+        participant_form = IndividualParticipantEditForm(request.POST, instance=participant)
+        entity_form = EntityEditForm(request.POST, instance=participant.entity)
+        
+        if participant_form.is_valid() and entity_form.is_valid():
+            try:
+                with transaction.atomic():
+                    entity_form.save()
+                    participant_form.save()
+                    
+                    messages.success(request, f'Individual Participant "{participant}" updated successfully!')
+                    return redirect('SkaRe:list_individual_participants')
+            except Exception as e:
+                messages.error(request, f'Error updating participant: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        participant_form = IndividualParticipantEditForm(instance=participant)
+        entity_form = EntityEditForm(instance=participant.entity)
+    
+    context = {
+        'participant': participant,
+        'participant_form': participant_form,
+        'entity_form': entity_form,
+    }
+    return render(request, 'SkaRe/edit_individual_participant.html', context)
+
+
+@login_required
+def register_organizer(request):
+    """View for registering a new Organizer."""
+    
+    # Check if registration is still open
+    if not EventSettings.is_registration_open():
+        messages.error(request, 'Registration is currently closed.')
+        return redirect('SkaRe:home')
+    
+    if request.method == 'POST':
+        form = OrganizerRegistrationForm(request.POST)
+        
+        if form.is_valid():
+            try:
+                with transaction.atomic():
+                    # Create Entity
+                    entity = Entity.objects.create(
+                        created_by=request.user,
+                        contact_email=form.cleaned_data['contact_email'],
+                        contact_phone=form.cleaned_data['contact_phone'],
+                        expected_arrival=form.cleaned_data.get('expected_arrival'),
+                        expected_departure=form.cleaned_data.get('expected_departure'),
+                        home_town=form.cleaned_data.get('home_town', '')
+                    )
+                    
+                    # Create Organizer
+                    organizer = form.save(commit=False)
+                    organizer.entity = entity
+                    organizer.save()
+                    
+                    messages.success(
+                        request,
+                        f'Organizer "{organizer}" registered successfully!'
+                    )
+                    return redirect('SkaRe:home')
+                    
+            except Exception as e:
+                messages.error(request, f'Error registering organizer: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        form = OrganizerRegistrationForm()
+    
+    context = {
+        'form': form,
+        'deadline': EventSettings.get_deadline(),
+    }
+    return render(request, 'SkaRe/register_organizer.html', context)
+
+
+@login_required
+def list_organizers(request):
+    """View for listing organizers created by the current user."""
+    organizers = Organizer.objects.filter(
+        entity__created_by=request.user
+    ).select_related('entity')
+    
+    context = {
+        'organizers': organizers,
+    }
+    return render(request, 'SkaRe/list_organizers.html', context)
+
+
+@login_required
+def edit_organizer(request, organizer_id):
+    """View for editing an existing Organizer."""
+    organizer = get_object_or_404(Organizer, id=organizer_id)
+    
+    # Check if user owns this organizer
+    if organizer.entity.created_by != request.user:
+        messages.error(request, 'You do not have permission to edit this organizer.')
+        return redirect('SkaRe:list_organizers')
+    
+    # Check if organizer can be edited
+    if not organizer.entity.can_be_edited(request.user):
+        messages.error(request, 'This organizer cannot be edited after the registration deadline.')
+        return redirect('SkaRe:list_organizers')
+    
+    # Define forms inline
+    class OrganizerEditForm(forms.ModelForm):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for field_name, field in self.fields.items():
+                if field_name in self.errors:
+                    if 'class' in field.widget.attrs:
+                        field.widget.attrs['class'] += ' is-invalid'
+                    else:
+                        field.widget.attrs['class'] = 'is-invalid'
+        
+        class Meta:
+            model = Organizer
+            fields = [
+                'first_name',
+                'last_name',
+                'nickname',
+                'date_of_birth',
+                'category',
+                'health_restrictions',
+                'dietary_restrictions',
+                'relevant_information',
+                'division',
+                'transport',
+                'need_lift',
+                'want_travel_order',
+                'accommodation',
+                'codex_agreement',
+            ]
+            widgets = {
+                'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+                'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+                'nickname': forms.TextInput(attrs={'class': 'form-control'}),
+                'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+                'category': forms.Select(attrs={'class': 'form-control'}),
+                'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+                'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+                'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+                'division': forms.Select(attrs={'class': 'form-control'}),
+                'transport': forms.Select(attrs={'class': 'form-control'}),
+                'need_lift': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+                'want_travel_order': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+                'accommodation': forms.Select(attrs={'class': 'form-control'}),
+                'codex_agreement': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            }
+    
+    class EntityEditForm(forms.ModelForm):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for field_name, field in self.fields.items():
+                if field_name in self.errors:
+                    if 'class' in field.widget.attrs:
+                        field.widget.attrs['class'] += ' is-invalid'
+                    else:
+                        field.widget.attrs['class'] = 'is-invalid'
+        
+        class Meta:
+            model = Entity
+            fields = ['contact_email', 'contact_phone', 'expected_arrival', 'expected_departure', 'home_town']
+            widgets = {
+                'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
+                'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
+                'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+                'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+                'home_town': forms.TextInput(attrs={'class': 'form-control'}),
+            }
+    
+    if request.method == 'POST':
+        organizer_form = OrganizerEditForm(request.POST, instance=organizer)
+        entity_form = EntityEditForm(request.POST, instance=organizer.entity)
+        
+        if organizer_form.is_valid() and entity_form.is_valid():
+            try:
+                with transaction.atomic():
+                    entity_form.save()
+                    organizer_form.save()
+                    
+                    messages.success(request, f'Organizer "{organizer}" updated successfully!')
+                    return redirect('SkaRe:list_organizers')
+            except Exception as e:
+                messages.error(request, f'Error updating organizer: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        organizer_form = OrganizerEditForm(instance=organizer)
+        entity_form = EntityEditForm(instance=organizer.entity)
+    
+    context = {
+        'organizer': organizer,
+        'organizer_form': organizer_form,
+        'entity_form': entity_form,
+    }
+    return render(request, 'SkaRe/edit_organizer.html', context)

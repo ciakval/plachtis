@@ -14,20 +14,43 @@
             
             {% if user.is_authenticated %}
                 <p>Hello, {{ user.first_name }} {{ user.last_name }}! You are logged in as <strong>{{ user.username }}</strong>.</p>
-                <p class="mb-3">
-                    <a class="btn btn-success btn-lg me-2" href="{% url 'SkaRe:register_unit' %}" role="button">
+                
+                <div class="mb-4">
+                    <h5>Register</h5>
+                    <a class="btn btn-primary btn-lg me-2 mb-2" href="{% url 'SkaRe:register_unit' %}" role="button">
                         <i class="bi bi-people"></i> Register Unit
                     </a>
-                    <a class="btn btn-info btn-lg me-2" href="{% url 'SkaRe:list_units' %}" role="button">
+                    <a class="btn btn-primary btn-lg me-2 mb-2" href="{% url 'SkaRe:register_individual_participant' %}" role="button">
+                        <i class="bi bi-person"></i> Register Individual Participant
+                    </a>
+                    <a class="btn btn-success btn-lg mb-2" href="{% url 'SkaRe:register_organizer' %}" role="button">
+                        <i class="bi bi-star"></i> Register Organizer
+                    </a>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>My Registrations</h5>
+                    <a class="btn btn-info btn-lg me-2 mb-2" href="{% url 'SkaRe:list_units' %}" role="button">
                         <i class="bi bi-list-ul"></i> My Units
                     </a>
+                    <a class="btn btn-info btn-lg me-2 mb-2" href="{% url 'SkaRe:list_individual_participants' %}" role="button">
+                        <i class="bi bi-person-lines-fill"></i> My Individual Participants
+                    </a>
+                    <a class="btn btn-info btn-lg mb-2" href="{% url 'SkaRe:list_organizers' %}" role="button">
+                        <i class="bi bi-star-fill"></i> My Organizers
+                    </a>
+                </div>
+                
+                <div class="mb-3">
                     {% if user.is_staff %}
-                        <a class="btn btn-primary btn-lg me-2" href="/admin/" role="button">Go to Admin Panel</a>
+                        <a class="btn btn-warning btn-lg me-2" href="/admin/" role="button">
+                            <i class="bi bi-gear"></i> Admin Panel
+                        </a>
                     {% endif %}
-                </p>
-                <p class="mb-0">
-                    <a class="btn btn-secondary btn-lg" href="{% url 'SkaRe:logout' %}" role="button">Logout</a>
-                </p>
+                    <a class="btn btn-secondary btn-lg" href="{% url 'SkaRe:logout' %}" role="button">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </a>
+                </div>
             {% else %}
                 <p>Please login or register to access the system.</p>
                 <p class="mb-0">

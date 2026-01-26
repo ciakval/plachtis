@@ -1,0 +1,118 @@
+{% extends 'SkaRe/base.html' %}
+
+{% block title %}My Organizers - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4"><i class="bi bi-star"></i> My Registered Organizers</h1>
+        
+        {% if organizers %}
+            <div class="row">
+                {% for organizer in organizers %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-star-fill"></i> {{ organizer }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-2">
+                                <strong>Division:</strong> <span class="badge bg-success">{{ organizer.get_division_display }}</span>
+                            </p>
+                            <p class="mb-2">
+                                <strong>Category:</strong> <span class="badge bg-secondary">{{ organizer.get_category_display }}</span>
+                            </p>
+                            <p class="mb-2">
+                                <strong>Date of Birth:</strong> {{ organizer.date_of_birth|date:"d.m.Y" }}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Email:</strong> {{ organizer.entity.contact_email }}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Phone:</strong> {{ organizer.entity.contact_phone }}
+                            </p>
+                            
+                            <hr>
+                            
+                            <h6 class="mb-2">Logistics</h6>
+                            <p class="mb-2">
+                                <strong>Transport:</strong> {{ organizer.get_transport_display }}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Accommodation:</strong> {{ organizer.get_accommodation_display }}
+                            </p>
+                            {% if organizer.need_lift %}
+                            <p class="mb-2">
+                                <i class="bi bi-check-circle text-success"></i> Needs lift from transport hub
+                            </p>
+                            {% endif %}
+                            {% if organizer.want_travel_order %}
+                            <p class="mb-2">
+                                <i class="bi bi-check-circle text-success"></i> Wants travel order
+                            </p>
+                            {% endif %}
+                            
+                            {% if organizer.entity.home_town %}
+                            <p class="mb-2">
+                                <strong>Home Town:</strong> {{ organizer.entity.home_town }}
+                            </p>
+                            {% endif %}
+                            {% if organizer.entity.expected_arrival %}
+                            <p class="mb-2">
+                                <strong>Expected Arrival:</strong> {{ organizer.entity.expected_arrival|date:"d.m.Y H:i" }}
+                            </p>
+                            {% endif %}
+                            {% if organizer.entity.expected_departure %}
+                            <p class="mb-2">
+                                <strong>Expected Departure:</strong> {{ organizer.entity.expected_departure|date:"d.m.Y H:i" }}
+                            </p>
+                            {% endif %}
+                            
+                            {% if organizer.health_restrictions %}
+                            <hr>
+                            <p class="mb-2">
+                                <strong>Health Restrictions:</strong><br>
+                                {{ organizer.health_restrictions }}
+                            </p>
+                            {% endif %}
+                            
+                            {% if organizer.dietary_restrictions %}
+                            <p class="mb-2">
+                                <strong>Dietary Restrictions:</strong><br>
+                                {{ organizer.dietary_restrictions }}
+                            </p>
+                            {% endif %}
+                            
+                            <p class="mb-2">
+                                <strong>Codex Agreement:</strong> 
+                                {% if organizer.codex_agreement %}
+                                    <span class="badge bg-success">Agreed</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Not Agreed</span>
+                                {% endif %}
+                            </p>
+                            
+                            <div class="text-muted small mt-3">
+                                <i class="bi bi-calendar-check"></i> Registered: {{ organizer.entity.created_at|date:"d.m.Y H:i" }}
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'SkaRe:edit_organizer' organizer.id %}" class="btn btn-success btn-sm">
+                                <i class="bi bi-pencil"></i> Edit Organizer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> You haven't registered any organizers yet.
+                <a href="{% url 'SkaRe:register_organizer' %}" class="alert-link">Register as an organizer now!</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
