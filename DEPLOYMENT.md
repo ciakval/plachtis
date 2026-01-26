@@ -29,7 +29,7 @@ The application now uses environment variables for sensitive configuration, ensu
    cd /home/plachtis/DOCKER/plachtis
    cat > .env << 'EOF'
    DJANGO_SECRET_KEY=<your-generated-secret-key-here>
-   DJANGO_ALLOWED_HOSTS=plachtis.remesh.cz
+   DJANGO_ALLOWED_HOSTS=plachtis.remesh.cz,plachtis.skare.cz
    EOF
    ```
 

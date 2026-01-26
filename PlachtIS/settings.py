@@ -136,7 +136,7 @@ LOGIN_REDIRECT_URL = 'SkaRe:home'
 LOGOUT_REDIRECT_URL = 'SkaRe:login'
 
 # Proxy and CSRF settings (needed for Caddy reverse proxy)
-CSRF_TRUSTED_ORIGINS = ["https://plachtis.remesh.cz"]
+CSRF_TRUSTED_ORIGINS = ["https://plachtis.remesh.cz","https://plachtis.skare.cz"]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Production security settings
