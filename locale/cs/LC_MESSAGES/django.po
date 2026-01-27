@@ -84,19 +84,19 @@ msgstr "Datum narození"
 
 #: SkaRe/models.py:61
 msgid "Adult"
-msgstr "Dospělý"
+msgstr "Dospělý (18+)"
 
 #: SkaRe/models.py:62
 msgid "Rover"
-msgstr "Rover/Ranger"
+msgstr "Rover/Ranger (15-17)"
 
 #: SkaRe/models.py:63
 msgid "Scout"
-msgstr "Skaut/Skautka"
+msgstr "Skaut/Skautka (11-14)"
 
 #: SkaRe/models.py:64
 msgid "Cub"
-msgstr "Vlče/Světluška"
+msgstr "Vlče/Světluška (6-10)"
 
 #: SkaRe/models.py:70
 msgid "Scout category"
