@@ -66,9 +66,10 @@ class Person(models.Model):
     category = models.CharField(
         max_length=20,
         choices=ScoutCategory.choices,
-        default=ScoutCategory.SCOUT,
+        default=None,
         help_text=_("Scout category"),
         verbose_name=_("Category"),
+        null=True, blank=True
     )
     
     health_restrictions = models.TextField(
