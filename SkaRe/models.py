@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -15,11 +16,11 @@ class EventSettings(SingletonModel):
 
     registration_deadline = models.DateTimeField(
         help_text=_("Deadline for creating new Units and Participants"),
-        default=timezone.now() + timezone.timedelta(days=365),
+        default=datetime(2026, 4, 1, 23, 59, 59, tzinfo=timezone.get_current_timezone()),
     )
 
     def __str__(self):
-        return _("Event Settings")
+        return "Event Settings"
 
     class Meta:
         verbose_name = _("Event Settings")
