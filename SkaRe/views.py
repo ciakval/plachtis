@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
 from django import forms
+from django.utils.translation import gettext as _
 from .forms import (
     UserRegistrationForm, UnitRegistrationForm, RegularParticipantFormSet,
     IndividualParticipantRegistrationForm, OrganizerRegistrationForm
@@ -32,11 +33,11 @@ def user_login(request):
         
         if user is not None:
             login(request, user)
-            messages.success(request, f'Welcome back, {user.first_name or user.username}!')
+            messages.success(request, _(f'Welcome back, {user.first_name or user.username}!'))
             next_url = request.GET.get('next', 'SkaRe:home')
             return redirect(next_url)
         else:
-            messages.error(request, 'Invalid username or password.')
+            messages.error(request, _('Invalid username or password.'))
     
     form = AuthenticationForm()
     return render(request, 'SkaRe/login.html', {'form': form})
@@ -45,7 +46,7 @@ def user_login(request):
 def user_logout(request):
     """User logout view."""
     logout(request)
-    messages.success(request, 'You have been logged out successfully.')
+    messages.success(request, _('You have been logged out successfully.'))
     return redirect('SkaRe:login')
 
 
@@ -59,10 +60,10 @@ def user_register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, f'Welcome, {user.first_name}! Your account has been created successfully.')
+            messages.success(request, _(f'Welcome, {user.first_name}! Your account has been created successfully.'))
             return redirect('SkaRe:home')
         else:
-            messages.error(request, 'Please correct the errors below.')
+            messages.error(request, _('Please correct the errors below.'))
     else:
         form = UserRegistrationForm()
     
@@ -75,7 +76,7 @@ def register_unit(request):
     
     # Check if registration is still open
     if not EventSettings.is_registration_open():
-        messages.error(request, 'Registration is currently closed.')
+        messages.error(request, _('Registration is currently closed.'))
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
@@ -113,14 +114,14 @@ def register_unit(request):
                     
                     messages.success(
                         request,
-                        f'Unit "{entity.scout_unit_name}" registered successfully with {participant_count} participant(s)!'
+                        _(f'Unit "{entity.scout_unit_name}" registered successfully with {participant_count} participant(s)!')
                     )
                     return redirect('SkaRe:home')
                     
             except Exception as e:
-                messages.error(request, f'Error registering unit: {str(e)}')
+                messages.error(request, _(f'Error registering unit: {str(e)}'))
         else:
-            messages.error(request, 'Please correct the errors in the form.')
+            messages.error(request, _('Please correct the errors in the form.'))
     else:
         unit_form = UnitRegistrationForm()
         participant_formset = RegularParticipantFormSet(prefix='participants')
@@ -154,12 +155,12 @@ def edit_unit(request, unit_id):
     
     # Check if user owns this unit
     if unit.entity.created_by != request.user:
-        messages.error(request, 'You do not have permission to edit this unit.')
+        messages.error(request, _('You do not have permission to edit this unit.'))
         return redirect('SkaRe:list_units')
     
     # Check if unit can be edited
     if not unit.entity.can_be_edited(request.user):
-        messages.error(request, 'This unit cannot be edited after the registration deadline.')
+        messages.error(request, _('This unit cannot be edited after the registration deadline.'))
         return redirect('SkaRe:list_units')
     
     # Define forms inline
@@ -249,12 +250,12 @@ def edit_unit(request, unit_id):
                             participant.save()
                             participant_count += 1
                     
-                    messages.success(request, f'Unit "{unit.entity.scout_unit_name}" updated successfully with {participant_count} participant(s)!')
+                    messages.success(request, _(f'Unit "{unit.entity.scout_unit_name}" updated successfully with {participant_count} participant(s)!'))
                     return redirect('SkaRe:list_units')
             except Exception as e:
-                messages.error(request, f'Error updating unit: {str(e)}')
+                messages.error(request, _(f'Error updating unit: {str(e)}'))
         else:
-            messages.error(request, 'Please correct the errors in the form.')
+            messages.error(request, _('Please correct the errors in the form.'))
     else:
         unit_form = UnitEditForm(instance=unit)
         entity_form = EntityEditForm(instance=unit.entity)
@@ -294,7 +295,7 @@ def register_individual_participant(request):
     
     # Check if registration is still open
     if not EventSettings.is_registration_open():
-        messages.error(request, 'Registration is currently closed.')
+        messages.error(request, _('Registration is currently closed.'))
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
@@ -320,14 +321,14 @@ def register_individual_participant(request):
                     
                     messages.success(
                         request,
-                        f'Individual Participant "{participant}" registered successfully!'
+                        _(f'Individual Participant "{participant}" registered successfully!')
                     )
                     return redirect('SkaRe:home')
                     
             except Exception as e:
-                messages.error(request, f'Error registering individual participant: {str(e)}')
+                messages.error(request, _(f'Error registering individual participant: {str(e)}'))
         else:
-            messages.error(request, 'Please correct the errors in the form.')
+            messages.error(request, _('Please correct the errors in the form.'))
     else:
         form = IndividualParticipantRegistrationForm()
     
@@ -358,12 +359,12 @@ def edit_individual_participant(request, participant_id):
     
     # Check if user owns this participant
     if participant.entity.created_by != request.user:
-        messages.error(request, 'You do not have permission to edit this participant.')
+        messages.error(request, _('You do not have permission to edit this participant.'))
         return redirect('SkaRe:list_individual_participants')
     
     # Check if participant can be edited
     if not participant.entity.can_be_edited(request.user):
-        messages.error(request, 'This participant cannot be edited after the registration deadline.')
+        messages.error(request, _('This participant cannot be edited after the registration deadline.'))
         return redirect('SkaRe:list_individual_participants')
     
     # Define forms inline
@@ -431,12 +432,12 @@ def edit_individual_participant(request, participant_id):
                     entity_form.save()
                     participant_form.save()
                     
-                    messages.success(request, f'Individual Participant "{participant}" updated successfully!')
+                    messages.success(request, _(f'Individual Participant "{participant}" updated successfully!'))
                     return redirect('SkaRe:list_individual_participants')
             except Exception as e:
-                messages.error(request, f'Error updating participant: {str(e)}')
+                messages.error(request, _(f'Error updating participant: {str(e)}'))
         else:
-            messages.error(request, 'Please correct the errors in the form.')
+            messages.error(request, _('Please correct the errors in the form.'))
     else:
         participant_form = IndividualParticipantEditForm(instance=participant)
         entity_form = EntityEditForm(instance=participant.entity)
@@ -455,7 +456,7 @@ def register_organizer(request):
     
     # Check if registration is still open
     if not EventSettings.is_registration_open():
-        messages.error(request, 'Registration is currently closed.')
+        messages.error(request, _('Registration is currently closed.'))
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
@@ -481,14 +482,14 @@ def register_organizer(request):
                     
                     messages.success(
                         request,
-                        f'Organizer "{organizer}" registered successfully!'
+                        _(f'Organizer "{organizer}" registered successfully!')
                     )
                     return redirect('SkaRe:home')
                     
             except Exception as e:
-                messages.error(request, f'Error registering organizer: {str(e)}')
+                messages.error(request, _(f'Error registering organizer: {str(e)}'))
         else:
-            messages.error(request, 'Please correct the errors in the form.')
+            messages.error(request, _('Please correct the errors in the form.'))
     else:
         form = OrganizerRegistrationForm()
     
@@ -519,12 +520,12 @@ def edit_organizer(request, organizer_id):
     
     # Check if user owns this organizer
     if organizer.entity.created_by != request.user:
-        messages.error(request, 'You do not have permission to edit this organizer.')
+        messages.error(request, _('You do not have permission to edit this organizer.'))
         return redirect('SkaRe:list_organizers')
     
     # Check if organizer can be edited
     if not organizer.entity.can_be_edited(request.user):
-        messages.error(request, 'This organizer cannot be edited after the registration deadline.')
+        messages.error(request, _('This organizer cannot be edited after the registration deadline.'))
         return redirect('SkaRe:list_organizers')
     
     # Define forms inline
@@ -604,12 +605,12 @@ def edit_organizer(request, organizer_id):
                     entity_form.save()
                     organizer_form.save()
                     
-                    messages.success(request, f'Organizer "{organizer}" updated successfully!')
+                    messages.success(request, _(f'Organizer "{organizer}" updated successfully!'))
                     return redirect('SkaRe:list_organizers')
             except Exception as e:
-                messages.error(request, f'Error updating organizer: {str(e)}')
+                messages.error(request, _(f'Error updating organizer: {str(e)}'))
         else:
-            messages.error(request, 'Please correct the errors in the form.')
+            messages.error(request, _('Please correct the errors in the form.'))
     else:
         organizer_form = OrganizerEditForm(instance=organizer)
         entity_form = EntityEditForm(instance=organizer.entity)

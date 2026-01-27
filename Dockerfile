@@ -13,6 +13,7 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
+    gettext \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -28,7 +29,8 @@ RUN useradd -m -u 1000 appuser && \
     mkdir -p /app/db_data && \
     chown -R appuser:appuser /app
 
-# Collect static files before switching to non-root user
+# Compile translation messages and collect static files before switching to non-root user
+RUN python manage.py compilemessages
 RUN python manage.py collectstatic --noinput
 
 USER appuser

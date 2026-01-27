@@ -1,11 +1,12 @@
 {% extends 'SkaRe/base.html' %}
+{% load i18n %}
 
-{% block title %}My Units - SkaRe{% endblock %}
+{% block title %}{% trans "My Units" %} - SkaRe{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <h1 class="mb-4"><i class="bi bi-list-ul"></i> My Registered Units</h1>
+        <h1 class="mb-4"><i class="bi bi-list-ul"></i> {% trans "My Registered Units" %}</h1>
         
         {% if units %}
             <div class="row">
@@ -19,36 +20,36 @@
                         </div>
                         <div class="card-body">
                             <p class="mb-2">
-                                <strong>Evidence ID:</strong> {{ unit.entity.scout_unit_evidence_id }}
+                                <strong>{% trans "Evidence ID" %}:</strong> {{ unit.entity.scout_unit_evidence_id }}
                             </p>
                             <p class="mb-2">
-                                <strong>Contact Person:</strong> {{ unit.contact_person_name }}
+                                <strong>{% trans "Contact Person" %}:</strong> {{ unit.contact_person_name }}
                             </p>
                             <p class="mb-2">
-                                <strong>Email:</strong> {{ unit.entity.contact_email }}
+                                <strong>{% trans "Email" %}:</strong> {{ unit.entity.contact_email }}
                             </p>
                             <p class="mb-2">
-                                <strong>Phone:</strong> {{ unit.entity.contact_phone }}
+                                <strong>{% trans "Phone" %}:</strong> {{ unit.entity.contact_phone }}
                             </p>
                             {% if unit.entity.home_town %}
                             <p class="mb-2">
-                                <strong>Home Town:</strong> {{ unit.entity.home_town }}
+                                <strong>{% trans "Home Town" %}:</strong> {{ unit.entity.home_town }}
                             </p>
                             {% endif %}
                             {% if unit.entity.expected_arrival %}
                             <p class="mb-2">
-                                <strong>Expected Arrival:</strong> {{ unit.entity.expected_arrival|date:"d.m.Y H:i" }}
+                                <strong>{% trans "Expected Arrival" %}:</strong> {{ unit.entity.expected_arrival|date:"d.m.Y H:i" }}
                             </p>
                             {% endif %}
                             {% if unit.entity.expected_departure %}
                             <p class="mb-2">
-                                <strong>Expected Departure:</strong> {{ unit.entity.expected_departure|date:"d.m.Y H:i" }}
+                                <strong>{% trans "Expected Departure" %}:</strong> {{ unit.entity.expected_departure|date:"d.m.Y H:i" }}
                             </p>
                             {% endif %}
                             
                             <hr>
                             
-                            <h6 class="mb-3">Boat Estimates</h6>
+                            <h6 class="mb-3">{% trans "Boat Estimates" %}</h6>
                             <div class="row mb-2">
                                 <div class="col-6">
                                     <i class="bi bi-sailboat"></i> P550: <strong>{{ unit.boats_p550 }}</strong>
@@ -69,7 +70,7 @@
                             <hr>
                             
                             <h6 class="mb-2">
-                                <i class="bi bi-person-fill"></i> Participants ({{ unit.regular_participants.count }})
+                                <i class="bi bi-person-fill"></i> {% trans "Participants" %} ({{ unit.regular_participants.count }})
                             </h6>
                             {% if unit.regular_participants.all %}
                                 <ul class="list-group list-group-flush mb-3">
@@ -82,16 +83,16 @@
                                     {% endfor %}
                                 </ul>
                             {% else %}
-                                <p class="text-muted">No participants registered yet.</p>
+                                <p class="text-muted">{% trans "No participants registered yet." %}</p>
                             {% endif %}
                             
                             <div class="text-muted small">
-                                <i class="bi bi-calendar-check"></i> Registered: {{ unit.entity.created_at|date:"d.m.Y H:i" }}
+                                <i class="bi bi-calendar-check"></i> {% trans "Registered" %}: {{ unit.entity.created_at|date:"d.m.Y H:i" }}
                             </div>
                         </div>
                         <div class="card-footer">
                             <a href="{% url 'SkaRe:edit_unit' unit.id %}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-pencil"></i> Edit Unit
+                                <i class="bi bi-pencil"></i> {% trans "Edit Unit" %}
                             </a>
                         </div>
                     </div>
@@ -100,12 +101,12 @@
             </div>
         {% else %}
             <div class="alert alert-info" role="alert">
-                <h4 class="alert-heading"><i class="bi bi-info-circle"></i> No Units Yet</h4>
-                <p>You haven't registered any units yet. Click the button below to register your first unit!</p>
+                <h4 class="alert-heading"><i class="bi bi-info-circle"></i> {% trans "No Units Yet" %}</h4>
+                <p>{% trans "You haven't registered any units yet. Click the button below to register your first unit!" %}</p>
                 <hr>
                 <p class="mb-0">
                     <a class="btn btn-success" href="{% url 'SkaRe:register_unit' %}" role="button">
-                        <i class="bi bi-plus-circle"></i> Register Unit
+                        <i class="bi bi-plus-circle"></i> {% trans "Register Unit" %}
                     </a>
                 </p>
             </div>
@@ -113,10 +114,10 @@
         
         <div class="mt-4">
             <a class="btn btn-primary" href="{% url 'SkaRe:home' %}" role="button">
-                <i class="bi bi-house"></i> Back to Home
+                <i class="bi bi-house"></i> {% trans "Back to Home" %}
             </a>
             <a class="btn btn-success" href="{% url 'SkaRe:register_unit' %}" role="button">
-                <i class="bi bi-plus-circle"></i> Register Another Unit
+                <i class="bi bi-plus-circle"></i> {% trans "Register Another Unit" %}
             </a>
         </div>
     </div>

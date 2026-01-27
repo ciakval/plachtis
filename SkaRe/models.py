@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from solo.models import SingletonModel
 
 
@@ -13,16 +14,16 @@ class EventSettings(SingletonModel):
     """
 
     registration_deadline = models.DateTimeField(
-        help_text="Deadline for creating new Units and Participants",
+        help_text=_("Deadline for creating new Units and Participants"),
         default=timezone.now() + timezone.timedelta(days=365),
     )
 
     def __str__(self):
-        return "Event Settings"
+        return _("Event Settings")
 
     class Meta:
-        verbose_name = "Event Settings"
-        verbose_name_plural = "Event Settings"
+        verbose_name = _("Event Settings")
+        verbose_name_plural = _("Event Settings")
 
     @classmethod
     def is_registration_open(cls):
@@ -49,34 +50,38 @@ class Person(models.Model):
     """Represents a person in the system.
     """
     
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100, verbose_name=_("First name"))
+    last_name = models.CharField(max_length=100, verbose_name=_("Last name"))
     nickname = models.CharField(
-        max_length=100, blank=True, help_text="Optional nickname"
+        max_length=100, blank=True, help_text=_("Optional nickname"), verbose_name=_("Nickname")
     )
-    date_of_birth = models.DateField(help_text="Date of birth")
+    date_of_birth = models.DateField(help_text=_("Date of birth"), verbose_name=_("Date of birth"))
     
     class ScoutCategory(models.TextChoices):
-        ADULT = "ADULT", "Adult"
-        ROVER = "ROVER", "Rover"
-        SCOUT = "SCOUT", "Scout"
-        CUB = "CUB", "Cub"
+        ADULT = "ADULT", _("Adult")
+        ROVER = "ROVER", _("Rover")
+        SCOUT = "SCOUT", _("Scout")
+        CUB = "CUB", _("Cub")
         
     category = models.CharField(
         max_length=20,
         choices=ScoutCategory.choices,
         default=ScoutCategory.SCOUT,
-        help_text="Scout category",
+        help_text=_("Scout category"),
+        verbose_name=_("Category"),
     )
     
     health_restrictions = models.TextField(
-        blank=True, help_text="Any health restrictions or medical conditions"
+        blank=True, help_text=_("Any health restrictions or medical conditions"),
+        verbose_name=_("Health restrictions")
     )
     dietary_restrictions = models.TextField(
-        blank=True, help_text="Any dietary restrictions or preferences"
+        blank=True, help_text=_("Any dietary restrictions or preferences"),
+        verbose_name=_("Dietary restrictions")
     )
     relevant_information = models.TextField(
-        blank=True, help_text="Any relevant information about the person"
+        blank=True, help_text=_("Any relevant information about the person"),
+        verbose_name=_("Relevant information")
     )
     
     def __str__(self):
@@ -98,39 +103,56 @@ class Entity(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="%(class)ss",
-        help_text="User who created this entry",
+        help_text=_("User who created this entry"),
+        verbose_name=_("Created by"),
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     unlocked_for_editing = models.BooleanField(
         default=False,
-        help_text="Whether this unit is unlocked for editing after the deadline (set by privileged users only)",
+        help_text=_("Whether this unit is unlocked for editing after the deadline (set by privileged users only)"),
+        verbose_name=_("Unlocked for editing"),
     )
     
     scout_unit_name = models.CharField(
         max_length=200,
-        help_text="Name of the scout unit",
+        help_text=_("Name of the scout unit"),
+        verbose_name=_("Scout unit name"),
         blank=True,
     )
     scout_unit_evidence_id = models.CharField(
         max_length=50,
-        help_text="Unit evidence ID (e.g., 523.10, 816.08.001)",
+        help_text=_("Unit evidence ID (e.g., 523.10, 816.08.001)"),
+        verbose_name=_("Evidence ID"),
         blank=True,
     )
     
-    contact_email = models.EmailField(help_text="Contact email address")
-    contact_phone = models.CharField(max_length=20, help_text="Contact phone number")
+    contact_email = models.EmailField(
+        help_text=_("Contact email address"),
+        verbose_name=_("Contact email")
+    )
+    contact_phone = models.CharField(
+        max_length=20,
+        help_text=_("Contact phone number"),
+        verbose_name=_("Contact phone")
+    )
 
     # Event logistics fields
     expected_arrival = models.DateTimeField(
-        null=True, blank=True, help_text="Expected date and time of arrival"
+        null=True, blank=True,
+        help_text=_("Expected date and time of arrival"),
+        verbose_name=_("Expected arrival")
     )
     expected_departure = models.DateTimeField(
-        null=True, blank=True, help_text="Expected date and time of departure"
+        null=True, blank=True,
+        help_text=_("Expected date and time of departure"),
+        verbose_name=_("Expected departure")
     )
     home_town = models.CharField(
-        max_length=200, blank=True, help_text="Home town of the unit"
+        max_length=200, blank=True,
+        help_text=_("Home town of the unit"),
+        verbose_name=_("Home town")
     )
     
     def can_be_edited(self, user):
@@ -155,37 +177,54 @@ class Unit(models.Model):
         Entity,
         on_delete=models.CASCADE,
         related_name="unit_profile",
-        help_text="The registration entity associated with this unit",
+        help_text=_("The registration entity associated with this unit"),
+        verbose_name=_("Entity"),
     )
     
     contact_person_name = models.CharField(
-        max_length=200, help_text="Name of the contact person"
+        max_length=200,
+        help_text=_("Name of the contact person"),
+        verbose_name=_("Contact person name")
     )
 
     backup_contact_phone = models.CharField(
-        max_length=20, blank=True, help_text="Optional backup contact phone"
+        max_length=20, blank=True,
+        help_text=_("Optional backup contact phone"),
+        verbose_name=_("Backup contact phone")
     )
 
     # Boat estimates
     boats_p550 = models.PositiveIntegerField(
-        default=0, help_text="Estimated number of P550 boats"
+        default=0,
+        help_text=_("Estimated number of P550 boats"),
+        verbose_name=_("P550 boats")
     )
     boats_sail = models.PositiveIntegerField(
-        default=0, help_text="Estimated number of other sail-boats"
+        default=0,
+        help_text=_("Estimated number of other sail-boats"),
+        verbose_name=_("Sail boats")
     )
     boats_paddle = models.PositiveIntegerField(
-        default=0, help_text="Estimated number of paddle-powered boats"
+        default=0,
+        help_text=_("Estimated number of paddle-powered boats"),
+        verbose_name=_("Paddle boats")
     )
     boats_motor = models.PositiveIntegerField(
-        default=0, help_text="Estimated number of motor-powered boats"
+        default=0,
+        help_text=_("Estimated number of motor-powered boats"),
+        verbose_name=_("Motor boats")
     )
 
     # Accommodation fields
     accommodation_expectations = models.TextField(
-        blank=True, help_text="Accommodation expectations (small tents, large tent, caravan, ...)"
+        blank=True,
+        help_text=_("Accommodation expectations (small tents, large tent, caravan, ...)"),
+        verbose_name=_("Accommodation expectations")
     )
     estimated_accommodation_area = models.CharField(
-        max_length=100, blank=True, help_text="Estimated needed area for accommodation"
+        max_length=100, blank=True,
+        help_text=_("Estimated needed area for accommodation"),
+        verbose_name=_("Estimated accommodation area")
     )
 
 class RegularParticipant(Person):
@@ -198,7 +237,8 @@ class RegularParticipant(Person):
         Unit,
         on_delete=models.RESTRICT,
         related_name="regular_participants",
-        help_text="The unit this participant belongs to",
+        help_text=_("The unit this participant belongs to"),
+        verbose_name=_("Unit"),
     )
     
 class IndividualParticipant(Person):
@@ -213,7 +253,8 @@ class IndividualParticipant(Person):
         Entity,
         on_delete=models.CASCADE,
         related_name="individual_participant_profile",
-        help_text="The registration entity associated with this individual participant",
+        help_text=_("The registration entity associated with this individual participant"),
+        verbose_name=_("Entity"),
     )
     
     
@@ -230,66 +271,73 @@ class Organizer(Person):
         Entity,
         on_delete=models.CASCADE,
         related_name="organizer_profile",
-        help_text="The registration entity associated with this organizer",
+        help_text=_("The registration entity associated with this organizer"),
+        verbose_name=_("Entity"),
     )
     
     class Division(models.TextChoices):
-        MANAGEMENT = "MANAGEMENT", "Management"
-        RACING = "RACING", "Racing"
-        RESCUE = "RESCUE", "Rescue"
-        CRISIS = "CRISIS", "Crisis"
-        INFORMATION = "INFORMATION", "Information"
-        MATERIAL = "MATERIAL", "Material"
-        FOOD = "FOOD", "Food"
-        PROGRAM = "PROGRAM", "Program"
-        OTHERS = "OTHERS", "Others"
+        MANAGEMENT = "MANAGEMENT", _("Management")
+        RACING = "RACING", _("Racing")
+        RESCUE = "RESCUE", _("Rescue")
+        CRISIS = "CRISIS", _("Crisis")
+        INFORMATION = "INFORMATION", _("Information")
+        MATERIAL = "MATERIAL", _("Material")
+        FOOD = "FOOD", _("Food")
+        PROGRAM = "PROGRAM", _("Program")
+        OTHERS = "OTHERS", _("Others")
         
     division = models.CharField(
         max_length=20,
         choices=Division.choices,
         default=Division.OTHERS,
-        help_text="Division the organizer belongs to",
+        help_text=_("Division the organizer belongs to"),
+        verbose_name=_("Division"),
     )
     
     class TransportOptions(models.TextChoices):
-        PUBLIC = "PUBLIC", "Public Transport"
-        CAR = "CAR", "Car"
-        CAR_WITH_TRAILER = "CAR_WITH_TRAILER", "Car with Trailer"
+        PUBLIC = "PUBLIC", _("Public Transport")
+        CAR = "CAR", _("Car")
+        CAR_WITH_TRAILER = "CAR_WITH_TRAILER", _("Car with Trailer")
         
     transport = models.CharField(
         max_length=20,
         choices=TransportOptions.choices,
         default=TransportOptions.PUBLIC,
-        help_text="Transport method to the event",
+        help_text=_("Transport method to the event"),
+        verbose_name=_("Transport"),
     )
     
     need_lift = models.BooleanField(
         default=False,
-        help_text="Whether the organizer needs a lift from the nearest transport hub",
+        help_text=_("Whether the organizer needs a lift from the nearest transport hub"),
+        verbose_name=_("Need lift"),
     )
     
     want_travel_order = models.BooleanField(
         default=False,
-        help_text="Whether the organizer wants a travel order for reimbursement",
+        help_text=_("Whether the organizer wants a travel order for reimbursement"),
+        verbose_name=_("Want travel order"),
     )
     
     class AccomodationOptions(models.TextChoices):
-        WITH_UNIT = "WITH_UNIT", "With Unit"
-        OWN_TENT = "OWN_TENT", "Own Tent"
-        CARAVAN = "CARAVAN", "Caravan"
-        NEED_TENT = "NEED_TENT", "Need Tent"
-        INSIDE_BUILDING = "INSIDE_BUILDING", "Inside Building"
+        WITH_UNIT = "WITH_UNIT", _("With Unit")
+        OWN_TENT = "OWN_TENT", _("Own Tent")
+        CARAVAN = "CARAVAN", _("Caravan")
+        NEED_TENT = "NEED_TENT", _("Need Tent")
+        INSIDE_BUILDING = "INSIDE_BUILDING", _("Inside Building")
     
     accommodation = models.CharField(
         max_length=20,
         choices=AccomodationOptions.choices,
         default=AccomodationOptions.OWN_TENT,
-        help_text="Accommodation preference of the organizer",
+        help_text=_("Accommodation preference of the organizer"),
+        verbose_name=_("Accommodation"),
     )
     
     codex_agreement = models.BooleanField(
         default=False,
-        help_text="Whether the organizer agrees to follow the event codex",
+        help_text=_("Whether the organizer agrees to follow the event codex"),
+        verbose_name=_("Codex agreement"),
     )
 
     def __str__(self):

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.utils.translation import gettext_lazy as _
 from .models import Unit, RegularParticipant, IndividualParticipant, Organizer
 
 
@@ -51,40 +52,40 @@ class UnitRegistrationForm(forms.ModelForm):
         max_length=200,
         required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 5. oddíl Koráb'}),
-        label="Scout Unit Name"
+        label=_("Scout Unit Name")
     )
     scout_unit_evidence_id = forms.CharField(
         max_length=50,
         required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
-        label="Evidence ID"
+        label=_("Evidence ID")
     )
     
     # Entity fields
     contact_email = forms.EmailField(
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
-        label="Contact Email"
+        label=_("Contact Email")
     )
     contact_phone = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
-        label="Contact Phone"
+        label=_("Contact Phone")
     )
     expected_arrival = forms.DateTimeField(
         required=False,
         widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label="Expected Arrival"
+        label=_("Expected Arrival")
     )
     expected_departure = forms.DateTimeField(
         required=False,
         widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label="Expected Departure"
+        label=_("Expected Departure")
     )
     home_town = forms.CharField(
         max_length=200,
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}),
-        label="Home Town"
+        label=_("Home Town")
     )
     
     def __init__(self, *args, **kwargs):
@@ -172,28 +173,28 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
     # Entity fields
     contact_email = forms.EmailField(
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
-        label="Contact Email"
+        label=_("Contact Email")
     )
     contact_phone = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
-        label="Contact Phone"
+        label=_("Contact Phone")
     )
     expected_arrival = forms.DateTimeField(
         required=False,
         widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label="Expected Arrival"
+        label=_("Expected Arrival")
     )
     expected_departure = forms.DateTimeField(
         required=False,
         widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label="Expected Departure"
+        label=_("Expected Departure")
     )
     home_town = forms.CharField(
         max_length=200,
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}),
-        label="Home Town"
+        label=_("Home Town")
     )
     
     def __init__(self, *args, **kwargs):
@@ -236,28 +237,28 @@ class OrganizerRegistrationForm(forms.ModelForm):
     # Entity fields
     contact_email = forms.EmailField(
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
-        label="Contact Email"
+        label=_("Contact Email")
     )
     contact_phone = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
-        label="Contact Phone"
+        label=_("Contact Phone")
     )
     expected_arrival = forms.DateTimeField(
         required=False,
         widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label="Expected Arrival"
+        label=_("Expected Arrival")
     )
     expected_departure = forms.DateTimeField(
         required=False,
         widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label="Expected Departure"
+        label=_("Expected Departure")
     )
     home_town = forms.CharField(
         max_length=200,
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}),
-        label="Home Town"
+        label=_("Home Town")
     )
     
     def __init__(self, *args, **kwargs):
