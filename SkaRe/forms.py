@@ -46,7 +46,7 @@ class UserRegistrationForm(UserCreationForm):
 
 class UnitRegistrationForm(forms.ModelForm):
     """Form for registering a new Unit."""
-    
+
     # Scout Unit fields
     scout_unit_name = forms.CharField(
         max_length=200,
@@ -60,7 +60,7 @@ class UnitRegistrationForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
         label=_("Evidence ID")
     )
-    
+
     # Entity fields
     contact_email = forms.EmailField(
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
@@ -87,7 +87,7 @@ class UnitRegistrationForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         label=_("Home Town")
     )
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Add 'is-invalid' class to fields with errors
@@ -97,7 +97,7 @@ class UnitRegistrationForm(forms.ModelForm):
                     field.widget.attrs['class'] += ' is-invalid'
                 else:
                     field.widget.attrs['class'] = 'is-invalid'
-    
+
     class Meta:
         model = Unit
         fields = [
@@ -124,7 +124,7 @@ class UnitRegistrationForm(forms.ModelForm):
 
 class RegularParticipantForm(forms.ModelForm):
     """Form for adding a regular participant to a unit."""
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Add 'is-invalid' class to fields with errors
@@ -134,7 +134,7 @@ class RegularParticipantForm(forms.ModelForm):
                     field.widget.attrs['class'] += ' is-invalid'
                 else:
                     field.widget.attrs['class'] = 'is-invalid'
-    
+
     class Meta:
         model = RegularParticipant
         fields = [
@@ -153,9 +153,9 @@ class RegularParticipantForm(forms.ModelForm):
             'nickname': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Nickname'}),
             'date_of_birth': forms.DateInput(attrs={'class': 'form-control form-control-sm', 'type': 'date'}),
             'category': forms.Select(attrs={'class': 'form-control form-control-sm'}),
-            'health_restrictions': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': 'Health restrictions'}),
-            'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': 'Dietary restrictions'}),
-            'relevant_information': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': 'Relevant information'}),
+            'health_restrictions': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': _('e.g. Anxiety, asthma')}),
+            'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': _('e.g. Vegetarian, gluten-free')}),
+            'relevant_information': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': _('e.g. Special needs')}),
         }
 
 
@@ -169,7 +169,7 @@ RegularParticipantFormSet = forms.formset_factory(
 
 class IndividualParticipantRegistrationForm(forms.ModelForm):
     """Form for registering an individual participant."""
-    
+
     # Entity fields
     contact_email = forms.EmailField(
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
@@ -196,7 +196,7 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         label=_("Home Town")
     )
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Add 'is-invalid' class to fields with errors
@@ -206,7 +206,7 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
                     field.widget.attrs['class'] += ' is-invalid'
                 else:
                     field.widget.attrs['class'] = 'is-invalid'
-    
+
     class Meta:
         model = IndividualParticipant
         fields = [
@@ -233,7 +233,7 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
 
 class OrganizerRegistrationForm(forms.ModelForm):
     """Form for registering an organizer."""
-    
+
     # Entity fields
     contact_email = forms.EmailField(
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
@@ -260,7 +260,7 @@ class OrganizerRegistrationForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         label=_("Home Town")
     )
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Add 'is-invalid' class to fields with errors
@@ -270,7 +270,7 @@ class OrganizerRegistrationForm(forms.ModelForm):
                     field.widget.attrs['class'] += ' is-invalid'
                 else:
                     field.widget.attrs['class'] = 'is-invalid'
-    
+
     class Meta:
         model = Organizer
         fields = [
