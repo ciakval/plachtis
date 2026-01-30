@@ -7,7 +7,7 @@
 <div class="row">
     <div class="col-md-12">
         <h1 class="mb-4"><i class="bi bi-person"></i> {% trans "My Registered Individual Participants" %}</h1>
-        
+
         {% if participants %}
             <div class="row">
                 {% for participant in participants %}
@@ -46,7 +46,7 @@
                                 <strong>{% trans "Expected Departure" %}:</strong> {{ participant.entity.expected_departure|date:"d.m.Y H:i" }}
                             </p>
                             {% endif %}
-                            
+
                             {% if participant.health_restrictions %}
                             <hr>
                             <p class="mb-2">
@@ -54,14 +54,14 @@
                                 {{ participant.health_restrictions }}
                             </p>
                             {% endif %}
-                            
+
                             {% if participant.dietary_restrictions %}
                             <p class="mb-2">
-                                <strong>Dietary Restrictions:</strong><br>
+                                <strong>{% trans "Dietary Restrictions" %}:</strong><br>
                                 {{ participant.dietary_restrictions }}
                             </p>
                             {% endif %}
-                            
+
                             <div class="text-muted small mt-3">
                                 <i class="bi bi-calendar-check"></i> Registered: {{ participant.entity.created_at|date:"d.m.Y H:i" }}
                             </div>

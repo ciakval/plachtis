@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 23:07+0000\n"
+"POT-Creation-Date: 2026-01-30 15:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Scout Unit Name"
 msgstr "Název oddílu/střediska/přístavu"
 
-#: SkaRe/forms.py:61 SkaRe/models.py:127
+#: SkaRe/forms.py:61 SkaRe/models.py:129
 #: SkaRe/templates/SkaRe/list_units.html:23
 msgid "Evidence ID"
 msgstr "Evidenční číslo oddílu/střediska/přístavu"
@@ -54,357 +54,369 @@ msgstr "Očekávaný odjezd"
 msgid "Home Town"
 msgstr "Odkud/Kam jedete?"
 
-#: SkaRe/models.py:17
+#: SkaRe/forms.py:156
+msgid "e.g. Anxiety, asthma"
+msgstr "např. Srdeční nedostatečnost, užívá Oxazepam, úzkostná porucha"
+
+#: SkaRe/forms.py:157
+msgid "e.g. Vegetarian, gluten-free"
+msgstr "např. Alergie ořechy, vegetarián"
+
+#: SkaRe/forms.py:158
+msgid "e.g. Special needs"
+msgstr "Další informace"
+
+#: SkaRe/models.py:18
 msgid "Deadline for creating new Units and Participants"
 msgstr "Termín uzavření registrace"
 
-#: SkaRe/models.py:22 SkaRe/models.py:25 SkaRe/models.py:26
+#: SkaRe/models.py:26 SkaRe/models.py:27
 msgid "Event Settings"
 msgstr "Nastavení události"
 
-#: SkaRe/models.py:53
+#: SkaRe/models.py:54
 msgid "First name"
 msgstr "Jméno"
 
-#: SkaRe/models.py:54
+#: SkaRe/models.py:55
 msgid "Last name"
 msgstr "Příjmení"
 
-#: SkaRe/models.py:56
+#: SkaRe/models.py:57
 msgid "Optional nickname"
 msgstr "Přezdívka (volitelně)"
 
-#: SkaRe/models.py:56 SkaRe/templates/SkaRe/register_unit.html:209
+#: SkaRe/models.py:57 SkaRe/templates/SkaRe/register_unit.html:209
 msgid "Nickname"
 msgstr "Přezdívka"
 
-#: SkaRe/models.py:58
+#: SkaRe/models.py:59
 msgid "Date of birth"
 msgstr "Datum narození"
 
-#: SkaRe/models.py:61
+#: SkaRe/models.py:62
 msgid "Adult"
 msgstr "Dospělý (18+)"
 
-#: SkaRe/models.py:62
+#: SkaRe/models.py:63
 msgid "Rover"
 msgstr "Rover/Ranger (15-17)"
 
-#: SkaRe/models.py:63
+#: SkaRe/models.py:64
 msgid "Scout"
 msgstr "Skaut/Skautka (11-14)"
 
-#: SkaRe/models.py:64
+#: SkaRe/models.py:65
 msgid "Cub"
 msgstr "Vlče/Světluška (6-10)"
 
-#: SkaRe/models.py:70
+#: SkaRe/models.py:71
 msgid "Scout category"
 msgstr "Výchovná kategorie"
 
-#: SkaRe/models.py:71
+#: SkaRe/models.py:72
 #: SkaRe/templates/SkaRe/list_individual_participants.html:23
 #: SkaRe/templates/SkaRe/list_organizers.html:26
 #: SkaRe/templates/SkaRe/register_unit.html:211
 msgid "Category"
 msgstr "Výchovná kategorie"
 
-#: SkaRe/models.py:75
+#: SkaRe/models.py:77
 msgid "Any health restrictions or medical conditions"
 msgstr "Zdravotní omezení / Duševní stav"
 
-#: SkaRe/models.py:76
+#: SkaRe/models.py:78
 msgid "Health restrictions"
 msgstr "Zdravotní omezení / Duševní stav"
 
-#: SkaRe/models.py:79
+#: SkaRe/models.py:81
 msgid "Any dietary restrictions or preferences"
 msgstr "Stravovací omezení / preference"
 
-#: SkaRe/models.py:80
+#: SkaRe/models.py:82
 msgid "Dietary restrictions"
 msgstr "Stravovací omezení / preference"
 
-#: SkaRe/models.py:83
+#: SkaRe/models.py:85
 msgid "Any relevant information about the person"
 msgstr "Dalčí údaje"
 
-#: SkaRe/models.py:84
+#: SkaRe/models.py:86
 msgid "Relevant information"
 msgstr "Další údaje"
 
-#: SkaRe/models.py:106
+#: SkaRe/models.py:108
 msgid "User who created this entry"
 msgstr "Uživatel, který vytořil tuto položku"
 
-#: SkaRe/models.py:107
+#: SkaRe/models.py:109
 msgid "Created by"
 msgstr "Autor"
 
-#: SkaRe/models.py:114
+#: SkaRe/models.py:116
 msgid ""
 "Whether this unit is unlocked for editing after the deadline (set by "
 "privileged users only)"
 msgstr "Odemčeno k editaci"
 
-#: SkaRe/models.py:115
+#: SkaRe/models.py:117
 msgid "Unlocked for editing"
 msgstr "Odemčeno k editaci"
 
-#: SkaRe/models.py:120
+#: SkaRe/models.py:122
 msgid "Name of the scout unit"
 msgstr "Jméno oddílu/střediska/přístavu"
 
-#: SkaRe/models.py:121
+#: SkaRe/models.py:123
 msgid "Scout unit name"
 msgstr "Jméno oddílu/střediska/přístavu"
 
-#: SkaRe/models.py:126
+#: SkaRe/models.py:128
 msgid "Unit evidence ID (e.g., 523.10, 816.08.001)"
 msgstr "Evidenční číslo oddílu/střediska/přístavu (např. 523.10)"
 
-#: SkaRe/models.py:132
+#: SkaRe/models.py:134
 msgid "Contact email address"
 msgstr "Kontaktní e-mail"
 
-#: SkaRe/models.py:133
+#: SkaRe/models.py:135
 msgid "Contact email"
 msgstr "Kontaktní e-mail"
 
-#: SkaRe/models.py:137
+#: SkaRe/models.py:139
 msgid "Contact phone number"
 msgstr "Kontaktní telefon"
 
-#: SkaRe/models.py:138
+#: SkaRe/models.py:140
 msgid "Contact phone"
 msgstr "Kontaktní telefon"
 
-#: SkaRe/models.py:144
+#: SkaRe/models.py:146
 msgid "Expected date and time of arrival"
 msgstr "Očekávaný příjezd"
 
-#: SkaRe/models.py:145
+#: SkaRe/models.py:147
 msgid "Expected arrival"
 msgstr "Očekávaný příjezd"
 
-#: SkaRe/models.py:149
+#: SkaRe/models.py:151
 msgid "Expected date and time of departure"
 msgstr "Očekávaný odjezd"
 
-#: SkaRe/models.py:150
+#: SkaRe/models.py:152
 msgid "Expected departure"
 msgstr "Očekávaný odjezd"
 
-#: SkaRe/models.py:154
+#: SkaRe/models.py:156
 msgid "Home town of the unit"
 msgstr "Odkud/Kam jedete?"
 
-#: SkaRe/models.py:155
+#: SkaRe/models.py:157
 msgid "Home town"
 msgstr "Odkud/Kam jedete?"
 
-#: SkaRe/models.py:180
+#: SkaRe/models.py:182
 msgid "The registration entity associated with this unit"
 msgstr "Registrační entita přiřazená k této jednotce"
 
-#: SkaRe/models.py:181 SkaRe/models.py:257 SkaRe/models.py:275
+#: SkaRe/models.py:183 SkaRe/models.py:259 SkaRe/models.py:277
 msgid "Entity"
 msgstr "Entita"
 
-#: SkaRe/models.py:186
+#: SkaRe/models.py:188
 msgid "Name of the contact person"
 msgstr "Vedoucí"
 
-#: SkaRe/models.py:187
+#: SkaRe/models.py:189
 msgid "Contact person name"
 msgstr "Vedoucí"
 
-#: SkaRe/models.py:192
+#: SkaRe/models.py:194
 msgid "Optional backup contact phone"
 msgstr "Druhý kontaktní telefon"
 
-#: SkaRe/models.py:193
+#: SkaRe/models.py:195
 msgid "Backup contact phone"
 msgstr "Druhý kontaktní telefon"
 
-#: SkaRe/models.py:199
+#: SkaRe/models.py:201
 msgid "Estimated number of P550 boats"
 msgstr "Počet pramic P550"
 
-#: SkaRe/models.py:200
+#: SkaRe/models.py:202
 msgid "P550 boats"
 msgstr "Počet pramic P550"
 
-#: SkaRe/models.py:204
+#: SkaRe/models.py:206
 msgid "Estimated number of other sail-boats"
 msgstr "Počet jiných plachetnic"
 
-#: SkaRe/models.py:205
+#: SkaRe/models.py:207
 msgid "Sail boats"
 msgstr "Počet jiných plachetnic"
 
-#: SkaRe/models.py:209
+#: SkaRe/models.py:211
 msgid "Estimated number of paddle-powered boats"
 msgstr "Počet kánoí,kajaků,apod."
 
-#: SkaRe/models.py:210
+#: SkaRe/models.py:212
 msgid "Paddle boats"
 msgstr "Počet kánoí,kajaků,apod."
 
-#: SkaRe/models.py:214
+#: SkaRe/models.py:216
 msgid "Estimated number of motor-powered boats"
 msgstr "Počet motorových lodí"
 
-#: SkaRe/models.py:215
+#: SkaRe/models.py:217
 msgid "Motor boats"
 msgstr "Počet motorových lodí"
 
-#: SkaRe/models.py:221
+#: SkaRe/models.py:223
 msgid "Accommodation expectations (small tents, large tent, caravan, ...)"
 msgstr "V čem plánujete spát (malé stany, velký stan, karavan, ...)"
 
-#: SkaRe/models.py:222
+#: SkaRe/models.py:224
 msgid "Accommodation expectations"
 msgstr "V čem plánujete spát (malé stany, velký stan, karavan, ...)"
 
-#: SkaRe/models.py:226
+#: SkaRe/models.py:228
 msgid "Estimated needed area for accommodation"
 msgstr "Kolik potřebujete místa (m2)?"
 
-#: SkaRe/models.py:227
+#: SkaRe/models.py:229
 msgid "Estimated accommodation area"
 msgstr "Kolik potřebujete místa (m2)?"
 
-#: SkaRe/models.py:240
+#: SkaRe/models.py:242
 msgid "The unit this participant belongs to"
 msgstr "Jednotka, ke které účastník náleží"
 
-#: SkaRe/models.py:241
+#: SkaRe/models.py:243
 msgid "Unit"
 msgstr "Jednotka"
 
-#: SkaRe/models.py:256
+#: SkaRe/models.py:258
 msgid "The registration entity associated with this individual participant"
 msgstr "Registrační entita přiřazená k tomuto jednotlivci"
 
-#: SkaRe/models.py:274
+#: SkaRe/models.py:276
 msgid "The registration entity associated with this organizer"
 msgstr "Registrační entita přiřazená k tomuto pořadateli"
 
-#: SkaRe/models.py:279
+#: SkaRe/models.py:281
 msgid "Management"
 msgstr "Ředitelství"
 
-#: SkaRe/models.py:280
+#: SkaRe/models.py:282
 msgid "Racing"
 msgstr "Závodní"
 
-#: SkaRe/models.py:281
+#: SkaRe/models.py:283
 msgid "Rescue"
 msgstr "VZS"
 
-#: SkaRe/models.py:282
+#: SkaRe/models.py:284
 msgid "Crisis"
 msgstr "Krize"
 
-#: SkaRe/models.py:283
+#: SkaRe/models.py:285
 msgid "Information"
 msgstr "Informační"
 
-#: SkaRe/models.py:284
+#: SkaRe/models.py:286
 msgid "Material"
 msgstr "TMZ"
 
-#: SkaRe/models.py:285
+#: SkaRe/models.py:287
 msgid "Food"
 msgstr "Jídelna"
 
-#: SkaRe/models.py:286
+#: SkaRe/models.py:288
 msgid "Program"
 msgstr "Program"
 
-#: SkaRe/models.py:287
+#: SkaRe/models.py:289
 msgid "Others"
 msgstr "Ostatní"
 
-#: SkaRe/models.py:293
+#: SkaRe/models.py:295
 msgid "Division the organizer belongs to"
 msgstr "Divize SkaRe"
 
-#: SkaRe/models.py:294 SkaRe/templates/SkaRe/list_organizers.html:23
+#: SkaRe/models.py:296 SkaRe/templates/SkaRe/list_organizers.html:23
 msgid "Division"
 msgstr "Divize"
 
-#: SkaRe/models.py:298
+#: SkaRe/models.py:300
 msgid "Public Transport"
 msgstr "Veřejná doprava"
 
-#: SkaRe/models.py:299
+#: SkaRe/models.py:301
 msgid "Car"
 msgstr "Vlastní auto"
 
-#: SkaRe/models.py:300
+#: SkaRe/models.py:302
 msgid "Car with Trailer"
 msgstr "Auto s přívěsem"
 
-#: SkaRe/models.py:306
+#: SkaRe/models.py:308
 msgid "Transport method to the event"
 msgstr "Způsob dopravy na akci"
 
-#: SkaRe/models.py:307 SkaRe/templates/SkaRe/list_organizers.html:42
+#: SkaRe/models.py:309 SkaRe/templates/SkaRe/list_organizers.html:42
 msgid "Transport"
 msgstr "Způsob dopravy na akci"
 
-#: SkaRe/models.py:312
+#: SkaRe/models.py:314
 msgid "Whether the organizer needs a lift from the nearest transport hub"
 msgstr "Zda organizátor potřebuje odvoz"
 
-#: SkaRe/models.py:313
+#: SkaRe/models.py:315
 msgid "Need lift"
 msgstr "Potřebuji odvoz z autobusu/vlaku"
 
-#: SkaRe/models.py:318
+#: SkaRe/models.py:320
 msgid "Whether the organizer wants a travel order for reimbursement"
 msgstr "Zda organizátor chce vystavit cestovní příkaz"
 
-#: SkaRe/models.py:319
+#: SkaRe/models.py:321
 msgid "Want travel order"
 msgstr "Chci vystavit cestovní příkaz"
 
-#: SkaRe/models.py:323
+#: SkaRe/models.py:325
 msgid "With Unit"
 msgstr "Se svým oddílem"
 
-#: SkaRe/models.py:324
+#: SkaRe/models.py:326
 msgid "Own Tent"
 msgstr "Ve stanu"
 
-#: SkaRe/models.py:325
+#: SkaRe/models.py:327
 msgid "Caravan"
 msgstr "V karavanu"
 
-#: SkaRe/models.py:326
+#: SkaRe/models.py:328
 msgid "Need Tent"
 msgstr "Potřebuji půjčit stan"
 
-#: SkaRe/models.py:327
+#: SkaRe/models.py:329
 msgid "Inside Building"
 msgstr "Uvnitř v budově"
 
-#: SkaRe/models.py:333
+#: SkaRe/models.py:335
 msgid "Accommodation preference of the organizer"
 msgstr "Požadavky na ubytování organizátora"
 
-#: SkaRe/models.py:334 SkaRe/templates/SkaRe/list_organizers.html:45
+#: SkaRe/models.py:336 SkaRe/templates/SkaRe/list_organizers.html:45
 #: SkaRe/templates/SkaRe/register_unit.html:167
 msgid "Accommodation"
 msgstr "Způsob ubytování"
 
-#: SkaRe/models.py:339
+#: SkaRe/models.py:341
 msgid "Whether the organizer agrees to follow the event codex"
 msgstr "Zda se organizátor zavazuje dodržovat Kodex jednání dospělých"
 
-#: SkaRe/models.py:340
+#: SkaRe/models.py:342
 msgid "Codex agreement"
 msgstr "Zavazuji se dodržovat Kodex jednání dospělých"
 
@@ -514,6 +526,13 @@ msgstr "E-mail"
 #: SkaRe/templates/SkaRe/list_units.html:32
 msgid "Phone"
 msgstr "Telefon"
+
+#: SkaRe/templates/SkaRe/list_individual_participants.html:60
+#: SkaRe/templates/SkaRe/list_organizers.html:84
+#, fuzzy
+#| msgid "Dietary restrictions"
+msgid "Dietary Restrictions"
+msgstr "Stravovací omezení / preference"
 
 #: SkaRe/templates/SkaRe/list_organizers.html:9
 #, fuzzy
@@ -683,12 +702,16 @@ msgid ""
 "Click 'Add Participant' to add more rows. Fill in the participant "
 "information in each row."
 msgstr ""
-"Klikněte na 'Přidat účastníka' pro přidání dalších řádků. Vyplnëte informace o "
-"účastníkch v každém řádku."
+"Klikněte na 'Přidat účastníka' pro přidání dalších řádků. Vyplnëte informace "
+"o účastníkch v každém řádku."
 
 #: SkaRe/templates/SkaRe/register_unit.html:252
 msgid "Cancel"
 msgstr "Zrušit"
+
+#: SkaRe/views.py:36
+msgid "Welcome back, {user.first_name or user.username}!"
+msgstr ""
 
 #: SkaRe/views.py:40
 msgid "Invalid username or password."
@@ -698,6 +721,11 @@ msgstr "Neplatné uživatelské jméno nebo heslo"
 msgid "You have been logged out successfully."
 msgstr "Přihlášení úspěšné"
 
+#: SkaRe/views.py:63
+#, python-brace-format
+msgid "Welcome, {user.first_name}! Your account has been created successfully."
+msgstr ""
+
 #: SkaRe/views.py:66
 msgid "Please correct the errors below."
 msgstr "Prosím opravte chyby ve formuláři"
@@ -705,6 +733,17 @@ msgstr "Prosím opravte chyby ve formuláři"
 #: SkaRe/views.py:79 SkaRe/views.py:298 SkaRe/views.py:459
 msgid "Registration is currently closed."
 msgstr "Registrace je uzavřena"
+
+#: SkaRe/views.py:117
+#, python-brace-format
+msgid ""
+"Unit \"{entity.scout_unit_name}\" registered successfully with "
+"{participant_count} participant(s)!"
+msgstr ""
+
+#: SkaRe/views.py:122
+msgid "Error registering unit: {str(e)}"
+msgstr ""
 
 #: SkaRe/views.py:124 SkaRe/views.py:258 SkaRe/views.py:331 SkaRe/views.py:440
 #: SkaRe/views.py:492 SkaRe/views.py:613
@@ -719,6 +758,28 @@ msgstr "Nemáte oprávnění upravovat tuto jednotku."
 msgid "This unit cannot be edited after the registration deadline."
 msgstr "Nelze upravovat jednotku po uzavření registrace."
 
+#: SkaRe/views.py:253
+#, python-brace-format
+msgid ""
+"Unit \"{unit.entity.scout_unit_name}\" updated successfully with "
+"{participant_count} participant(s)!"
+msgstr ""
+
+#: SkaRe/views.py:256
+msgid "Error updating unit: {str(e)}"
+msgstr ""
+
+#: SkaRe/views.py:324
+#, python-brace-format
+msgid "Individual Participant \"{participant}\" registered successfully!"
+msgstr ""
+
+#: SkaRe/views.py:329
+#, fuzzy
+#| msgid "Register Individual Participant"
+msgid "Error registering individual participant: {str(e)}"
+msgstr "Registrovat jednotlivce"
+
 #: SkaRe/views.py:362
 msgid "You do not have permission to edit this participant."
 msgstr "Nemáte oprávnění upravovat tohoto účastníka."
@@ -727,6 +788,24 @@ msgstr "Nemáte oprávnění upravovat tohoto účastníka."
 msgid "This participant cannot be edited after the registration deadline."
 msgstr "Nelze upravovat účastníka po uzavření registrace."
 
+#: SkaRe/views.py:435
+#, python-brace-format
+msgid "Individual Participant \"{participant}\" updated successfully!"
+msgstr ""
+
+#: SkaRe/views.py:438
+msgid "Error updating participant: {str(e)}"
+msgstr ""
+
+#: SkaRe/views.py:485
+#, python-brace-format
+msgid "Organizer \"{organizer}\" registered successfully!"
+msgstr ""
+
+#: SkaRe/views.py:490
+msgid "Error registering organizer: {str(e)}"
+msgstr ""
+
 #: SkaRe/views.py:523
 msgid "You do not have permission to edit this organizer."
 msgstr "Nemáte oprávnění upravovat tohoto organizátora."
@@ -734,3 +813,12 @@ msgstr "Nemáte oprávnění upravovat tohoto organizátora."
 #: SkaRe/views.py:528
 msgid "This organizer cannot be edited after the registration deadline."
 msgstr "Nelze upravovat organizátora po uavření registrace."
+
+#: SkaRe/views.py:608
+#, python-brace-format
+msgid "Organizer \"{organizer}\" updated successfully!"
+msgstr ""
+
+#: SkaRe/views.py:611
+msgid "Error updating organizer: {str(e)}"
+msgstr ""

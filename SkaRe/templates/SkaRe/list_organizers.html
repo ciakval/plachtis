@@ -7,7 +7,7 @@
 <div class="row">
     <div class="col-md-12">
         <h1 class="mb-4"><i class="bi bi-star"></i> {% trans "My Registered Organizers" %}</h1>
-        
+
         {% if organizers %}
             <div class="row">
                 {% for organizer in organizers %}
@@ -34,9 +34,9 @@
                             <p class="mb-2">
                                 <strong>{% trans "Phone" %}:</strong> {{ organizer.entity.contact_phone }}
                             </p>
-                            
+
                             <hr>
-                            
+
                             <h6 class="mb-2">{% trans "Logistics" %}</h6>
                             <p class="mb-2">
                                 <strong>{% trans "Transport" %}:</strong> {{ organizer.get_transport_display }}
@@ -54,7 +54,7 @@
                                 <i class="bi bi-check-circle text-success"></i> Wants travel order
                             </p>
                             {% endif %}
-                            
+
                             {% if organizer.entity.home_town %}
                             <p class="mb-2">
                                 <strong>Home Town:</strong> {{ organizer.entity.home_town }}
@@ -70,7 +70,7 @@
                                 <strong>Expected Departure:</strong> {{ organizer.entity.expected_departure|date:"d.m.Y H:i" }}
                             </p>
                             {% endif %}
-                            
+
                             {% if organizer.health_restrictions %}
                             <hr>
                             <p class="mb-2">
@@ -78,23 +78,23 @@
                                 {{ organizer.health_restrictions }}
                             </p>
                             {% endif %}
-                            
+
                             {% if organizer.dietary_restrictions %}
                             <p class="mb-2">
-                                <strong>Dietary Restrictions:</strong><br>
+                                <strong>{% trans "Dietary Restrictions" %}:</strong><br>
                                 {{ organizer.dietary_restrictions }}
                             </p>
                             {% endif %}
-                            
+
                             <p class="mb-2">
-                                <strong>Codex Agreement:</strong> 
+                                <strong>Codex Agreement:</strong>
                                 {% if organizer.codex_agreement %}
                                     <span class="badge bg-success">Agreed</span>
                                 {% else %}
                                     <span class="badge bg-danger">Not Agreed</span>
                                 {% endif %}
                             </p>
-                            
+
                             <div class="text-muted small mt-3">
                                 <i class="bi bi-calendar-check"></i> Registered: {{ organizer.entity.created_at|date:"d.m.Y H:i" }}
                             </div>
