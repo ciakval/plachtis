@@ -389,6 +389,12 @@ def edit_individual_participant(request, participant_id):
                 'health_restrictions',
                 'dietary_restrictions',
                 'relevant_information',
+                'boats_p550',
+                'boats_sail',
+                'boats_paddle',
+                'boats_motor',
+                'accommodation_expectations',
+                'estimated_accommodation_area',
             ]
             widgets = {
                 'first_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -399,6 +405,12 @@ def edit_individual_participant(request, participant_id):
                 'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
                 'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
                 'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+                'boats_p550': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'boats_sail': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'boats_paddle': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+                'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control'}),
             }
     
     class EntityEditForm(forms.ModelForm):

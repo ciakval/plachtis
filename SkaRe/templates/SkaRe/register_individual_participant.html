@@ -126,6 +126,70 @@
                         </div>
                     </div>
 
+                    <!-- Boats -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0"><i class="bi bi-water"></i> Boats</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="{{ form.boats_p550.id_for_label }}" class="form-label">{{ form.boats_p550.label }}</label>
+                                    {{ form.boats_p550 }}
+                                    {% if form.boats_p550.errors %}
+                                        <div class="text-danger">{{ form.boats_p550.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="{{ form.boats_sail.id_for_label }}" class="form-label">{{ form.boats_sail.label }}</label>
+                                    {{ form.boats_sail }}
+                                    {% if form.boats_sail.errors %}
+                                        <div class="text-danger">{{ form.boats_sail.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="{{ form.boats_paddle.id_for_label }}" class="form-label">{{ form.boats_paddle.label }}</label>
+                                    {{ form.boats_paddle }}
+                                    {% if form.boats_paddle.errors %}
+                                        <div class="text-danger">{{ form.boats_paddle.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="{{ form.boats_motor.id_for_label }}" class="form-label">{{ form.boats_motor.label }}</label>
+                                    {{ form.boats_motor }}
+                                    {% if form.boats_motor.errors %}
+                                        <div class="text-danger">{{ form.boats_motor.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accommodation -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0"><i class="bi bi-house"></i> Accommodation</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label for="{{ form.accommodation_expectations.id_for_label }}" class="form-label">{{ form.accommodation_expectations.label }}</label>
+                                    {{ form.accommodation_expectations }}
+                                    {% if form.accommodation_expectations.errors %}
+                                        <div class="text-danger">{{ form.accommodation_expectations.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ form.estimated_accommodation_area.id_for_label }}" class="form-label">{{ form.estimated_accommodation_area.label }}</label>
+                                    {{ form.estimated_accommodation_area }}
+                                    {% if form.estimated_accommodation_area.errors %}
+                                        <div class="text-danger">{{ form.estimated_accommodation_area.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Health & Dietary Information -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
