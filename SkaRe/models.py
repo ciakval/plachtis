@@ -108,6 +108,13 @@ class Entity(models.Model):
         help_text=_("User who created this entry"),
         verbose_name=_("Created by"),
     )
+    editors = models.ManyToManyField(
+        User,
+        related_name="editable_entities",
+        blank=True,
+        help_text=_("Users who can edit this entry (in addition to the creator)"),
+        verbose_name=_("Editors"),
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -158,17 +165,28 @@ class Entity(models.Model):
     )
     
     def can_be_edited(self, user):
-        """Check if this unit can be edited by the given user"""
-        # User must be the owner
-        if self.created_by != user:
+        """Check if this entity can be edited by the given user"""
+        # User must be the owner or an editor
+        is_owner = self.created_by == user
+        is_editor = self.editors.filter(id=user.id).exists()
+        
+        if not (is_owner or is_editor):
             return False
 
         # If registration is still open, allow editing
         if EventSettings.is_registration_open():
             return True
 
-        # After deadline, only allow if unit is unlocked
+        # After deadline, only allow if entity is unlocked
         return self.unlocked_for_editing
+    
+    def is_owner(self, user):
+        """Check if the user is the owner (creator) of this entity"""
+        return self.created_by == user
+    
+    def can_manage_editors(self, user):
+        """Check if the user can add/remove editors (only owner can)"""
+        return self.created_by == user
 
 class Unit(models.Model):
     """
