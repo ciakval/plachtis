@@ -218,6 +218,12 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
             'health_restrictions',
             'dietary_restrictions',
             'relevant_information',
+            'boats_p550',
+            'boats_sail',
+            'boats_paddle',
+            'boats_motor',
+            'accommodation_expectations',
+            'estimated_accommodation_area',
         ]
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First name'}),
@@ -228,6 +234,12 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
             'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Any health restrictions or medical conditions'}),
             'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Any dietary restrictions or preferences'}),
             'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Any relevant information'}),
+            'boats_p550': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'boats_sail': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'boats_paddle': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'e.g., Small tent, caravan'}),
+            'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 20 m²'}),
         }
 
 
