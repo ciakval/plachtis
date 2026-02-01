@@ -1,0 +1,35 @@
+/* SkaRe Main Styles */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-logo {
+    height: 40px;
+    margin-right: 10px;
+}
+
+/* Validation error styling */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #dc3545;
+    border-width: 2px;
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
