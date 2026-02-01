@@ -147,11 +147,11 @@
             <table class="table table-striped table-hover" id="participantsTable">
                 <thead class="table-dark">
                     <tr>
-                        <th data-col="type" class="sortable" onclick="sortTable('type')">{% trans "Type" %} <i class="bi bi-arrow-down-up"></i></th>
-                        <th data-col="firstname" class="sortable" onclick="sortTable('firstname')">{% trans "First Name" %} <i class="bi bi-arrow-down-up"></i></th>
-                        <th data-col="lastname" class="sortable" onclick="sortTable('lastname')">{% trans "Last Name" %} <i class="bi bi-arrow-down-up"></i></th>
+                        <th data-col="type" class="sortable" onclick="sortTable('type')">{% trans "Type" %} <i class="sort-icon bi bi-arrow-down-up" data-col="type"></i></th>
+                        <th data-col="firstname" class="sortable" onclick="sortTable('firstname')">{% trans "First Name" %} <i class="sort-icon bi bi-arrow-down-up" data-col="firstname"></i></th>
+                        <th data-col="lastname" class="sortable" onclick="sortTable('lastname')">{% trans "Last Name" %} <i class="sort-icon bi bi-arrow-down-up" data-col="lastname"></i></th>
                         <th data-col="nickname">{% trans "Nickname" %}</th>
-                        <th data-col="dob" class="sortable" onclick="sortTable('dob')">{% trans "Date of Birth" %} <i class="bi bi-arrow-down-up"></i></th>
+                        <th data-col="dob" class="sortable" onclick="sortTable('dob')">{% trans "Date of Birth" %} <i class="sort-icon bi bi-arrow-down-up" data-col="dob"></i></th>
                         <th data-col="category">{% trans "Category" %}</th>
                         <th data-col="unit">{% trans "Unit" %}</th>
                         <th data-col="division">{% trans "Division" %}</th>
@@ -356,6 +356,7 @@ function setPreset(preset) {
 }
 
 let sortDirection = {};
+let currentSortColumn = null;
 
 function sortTable(column) {
     const table = document.getElementById('participantsTable');
@@ -365,6 +366,10 @@ function sortTable(column) {
     // Toggle direction
     sortDirection[column] = !sortDirection[column];
     const ascending = sortDirection[column];
+    currentSortColumn = column;
+    
+    // Update sort icons
+    updateSortIcons(column, ascending);
     
     rows.sort(function(a, b) {
         const aCell = a.querySelector('td[data-col="' + column + '"]');
@@ -395,6 +400,21 @@ function sortTable(column) {
     rows.forEach(function(row) {
         tbody.appendChild(row);
     });
+}
+
+function updateSortIcons(activeColumn, ascending) {
+    // Reset all icons to default
+    document.querySelectorAll('.sort-icon').forEach(function(icon) {
+        icon.classList.remove('bi-arrow-up', 'bi-arrow-down');
+        icon.classList.add('bi-arrow-down-up');
+    });
+    
+    // Set active column icon
+    const activeIcon = document.querySelector('.sort-icon[data-col="' + activeColumn + '"]');
+    if (activeIcon) {
+        activeIcon.classList.remove('bi-arrow-down-up');
+        activeIcon.classList.add(ascending ? 'bi-arrow-up' : 'bi-arrow-down');
+    }
 }
 </script>
 {% endblock %}
