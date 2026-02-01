@@ -514,6 +514,26 @@ def list_organizers(request):
 
 
 @login_required
+def list_all(request):
+    """View for listing all individual participants - staff only."""
+    if not request.user.is_staff:
+        messages.error(request, _('You do not have permission to view this page.'))
+        return redirect('SkaRe:home')
+    
+    participants = IndividualParticipant.objects.all().select_related('entity')
+    organizers = Organizer.objects.all().select_related('entity')
+    units = Unit.objects.all().select_related('entity')
+    regular_participants = RegularParticipant.objects.all().select_related('unit', 'unit__entity')
+    context = {
+        'participants': participants,
+        'organizers': organizers,
+        'units': units,
+        'regular_participants': regular_participants,
+    }
+    return render(request, 'SkaRe/list_all.html', context)
+
+
+@login_required
 def edit_organizer(request, organizer_id):
     """View for editing an existing Organizer."""
     organizer = get_object_or_404(Organizer, id=organizer_id)

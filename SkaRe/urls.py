@@ -17,5 +17,6 @@ urlpatterns = [
     path('organizer/register/', views.register_organizer, name='register_organizer'),
     path('organizer/list/', views.list_organizers, name='list_organizers'),
     path('organizer/edit/<int:organizer_id>/', views.edit_organizer, name='edit_organizer'),
+    path('all/list/', views.list_all, name='list_all'),
 ]
 

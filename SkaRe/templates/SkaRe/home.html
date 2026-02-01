@@ -46,6 +46,9 @@
                         <a class="btn btn-warning btn-lg me-2" href="/admin/" role="button">
                             <i class="bi bi-gear"></i> {% trans "Admin Panel" %}
                         </a>
+                        <a class="btn btn-warning btn-lg me-2" href="{% url 'SkaRe:list_all' %}" role="button">
+                            <i class="bi bi-gear"></i> {% trans "Show All Participants" %}
+                        </a>
                     {% endif %}
                     <a class="btn btn-secondary btn-lg" href="{% url 'SkaRe:logout' %}" role="button">
                         <i class="bi bi-box-arrow-right"></i> {% trans "Logout" %}
