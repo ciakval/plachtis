@@ -118,11 +118,26 @@
                     </div>
                 </div>
                 {% endfor %}
+                <div class="mt-4">
+                    <a class="btn btn-primary" href="{% url 'SkaRe:home' %}" role="button">
+                        <i class="bi bi-house"></i> {% trans "Back to Home" %}
+                    </a>
+
+                    <a class="btn btn-success" href="{% url 'SkaRe:register_organizer' %}" role="button">
+                        <i class="bi bi-plus-circle"></i> {% trans "Register Another Organizer" %}
+                    </a>
+                </div>
             </div>
         {% else %}
             <div class="alert alert-info">
                 <i class="bi bi-info-circle"></i> You haven't registered any organizers yet.
                 <a href="{% url 'SkaRe:register_organizer' %}" class="alert-link">Register as an organizer now!</a>
+            </div>
+
+            <div class="mt-4">
+                <a class="btn btn-primary" href="{% url 'SkaRe:home' %}" role="button">
+                    <i class="bi bi-house"></i> {% trans "Back to Home" %}
+                </a>
             </div>
         {% endif %}
     </div>

@@ -1,0 +1,420 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Show all participants" %} - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4"><i class="bi bi-people-fill"></i> {% trans "All Participants" %}</h1>
+        
+        {% if user.is_staff %}
+        
+        <!-- Controls Panel -->
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="bi bi-sliders"></i> {% trans "Display Options" %}</h5>
+            </div>
+            <div class="card-body">
+                <!-- Search Filter -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold"><i class="bi bi-search"></i> {% trans "Search" %}</label>
+                        <input type="text" id="searchFilter" class="form-control" placeholder="{% trans 'Filter by any value...' %}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold"><i class="bi bi-funnel"></i> {% trans "Filter by Type" %}</label>
+                        <select id="typeFilter" class="form-select">
+                            <option value="">{% trans "All Types" %}</option>
+                            <option value="individual">{% trans "Individual Participants" %}</option>
+                            <option value="regular">{% trans "Regular Participants (Units)" %}</option>
+                            <option value="organizer">{% trans "Organizers" %}</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Column Visibility -->
+                <div class="mb-2">
+                    <label class="form-label fw-bold"><i class="bi bi-layout-three-columns"></i> {% trans "Show Columns" %}</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-type" checked data-column="type">
+                            <label class="form-check-label" for="col-type">{% trans "Type" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-firstname" checked data-column="firstname">
+                            <label class="form-check-label" for="col-firstname">{% trans "First Name" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-lastname" checked data-column="lastname">
+                            <label class="form-check-label" for="col-lastname">{% trans "Last Name" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-nickname" data-column="nickname">
+                            <label class="form-check-label" for="col-nickname">{% trans "Nickname" %}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-dob" checked data-column="dob">
+                            <label class="form-check-label" for="col-dob">{% trans "Date of Birth" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-category" checked data-column="category">
+                            <label class="form-check-label" for="col-category">{% trans "Category" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-unit" data-column="unit">
+                            <label class="form-check-label" for="col-unit">{% trans "Unit" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-division" data-column="division">
+                            <label class="form-check-label" for="col-division">{% trans "Division" %}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-email" data-column="email">
+                            <label class="form-check-label" for="col-email">{% trans "Email" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-phone" data-column="phone">
+                            <label class="form-check-label" for="col-phone">{% trans "Phone" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-hometown" data-column="hometown">
+                            <label class="form-check-label" for="col-hometown">{% trans "Home Town" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-arrival" data-column="arrival">
+                            <label class="form-check-label" for="col-arrival">{% trans "Expected Arrival" %}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-dietary" checked data-column="dietary">
+                            <label class="form-check-label" for="col-dietary">{% trans "Dietary Restrictions" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-health" checked data-column="health">
+                            <label class="form-check-label" for="col-health">{% trans "Health Restrictions" %}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-info" data-column="info">
+                            <label class="form-check-label" for="col-info">{% trans "Relevant Info" %}</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Presets -->
+                <div class="mt-3">
+                    <label class="form-label fw-bold"><i class="bi bi-lightning"></i> {% trans "Quick Presets" %}</label>
+                    <div>
+                        <button type="button" class="btn btn-outline-primary btn-sm me-1" onclick="setPreset('basic')">
+                            {% trans "Basic Info" %}
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm me-1" onclick="setPreset('dietary')">
+                            {% trans "Dietary Only" %}
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm me-1" onclick="setPreset('health')">
+                            {% trans "Health Only" %}
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm me-1" onclick="setPreset('contact')">
+                            {% trans "Contact Info" %}
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="setPreset('all')">
+                            {% trans "Show All" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="alert alert-info mb-4">
+            <i class="bi bi-info-circle"></i>
+            <strong>{% trans "Total" %}:</strong>
+            <span id="visibleCount">0</span> / <span id="totalCount">0</span> {% trans "participants" %}
+            (<span class="text-primary">{{ participants|length }} {% trans "individual" %}</span>,
+             <span class="text-success">{{ regular_participants|length }} {% trans "regular" %}</span>,
+             <span class="text-warning">{{ organizers|length }} {% trans "organizers" %}</span>)
+        </div>
+        
+        <!-- Data Table -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover" id="participantsTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th data-col="type" class="sortable" onclick="sortTable('type')">{% trans "Type" %} <i class="sort-icon bi bi-arrow-down-up" data-col="type"></i></th>
+                        <th data-col="firstname" class="sortable" onclick="sortTable('firstname')">{% trans "First Name" %} <i class="sort-icon bi bi-arrow-down-up" data-col="firstname"></i></th>
+                        <th data-col="lastname" class="sortable" onclick="sortTable('lastname')">{% trans "Last Name" %} <i class="sort-icon bi bi-arrow-down-up" data-col="lastname"></i></th>
+                        <th data-col="nickname">{% trans "Nickname" %}</th>
+                        <th data-col="dob" class="sortable" onclick="sortTable('dob')">{% trans "Date of Birth" %} <i class="sort-icon bi bi-arrow-down-up" data-col="dob"></i></th>
+                        <th data-col="category">{% trans "Category" %}</th>
+                        <th data-col="unit">{% trans "Unit" %}</th>
+                        <th data-col="division">{% trans "Division" %}</th>
+                        <th data-col="email">{% trans "Email" %}</th>
+                        <th data-col="phone">{% trans "Phone" %}</th>
+                        <th data-col="hometown">{% trans "Home Town" %}</th>
+                        <th data-col="arrival">{% trans "Expected Arrival" %}</th>
+                        <th data-col="dietary">{% trans "Dietary Restrictions" %}</th>
+                        <th data-col="health">{% trans "Health Restrictions" %}</th>
+                        <th data-col="info">{% trans "Relevant Info" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in participants %}
+                    <tr data-type="individual">
+                        <td data-col="type"><span class="badge bg-primary">{% trans "Individual" %}</span></td>
+                        <td data-col="firstname">{{ p.first_name }}</td>
+                        <td data-col="lastname">{{ p.last_name }}</td>
+                        <td data-col="nickname">{{ p.nickname|default:"-" }}</td>
+                        <td data-col="dob">{{ p.date_of_birth|date:"d.m.Y" }}</td>
+                        <td data-col="category"><span class="badge bg-secondary">{{ p.get_category_display|default:"-" }}</span></td>
+                        <td data-col="unit">-</td>
+                        <td data-col="division">-</td>
+                        <td data-col="email">{{ p.entity.contact_email }}</td>
+                        <td data-col="phone">{{ p.entity.contact_phone }}</td>
+                        <td data-col="hometown">{{ p.entity.home_town|default:"-" }}</td>
+                        <td data-col="arrival">{{ p.entity.expected_arrival|date:"d.m.Y H:i"|default:"-" }}</td>
+                        <td data-col="dietary">{{ p.dietary_restrictions|default:"-"|truncatewords:10 }}</td>
+                        <td data-col="health">{{ p.health_restrictions|default:"-"|truncatewords:10 }}</td>
+                        <td data-col="info">{{ p.relevant_information|default:"-"|truncatewords:10 }}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                    {% for p in regular_participants %}
+                    <tr data-type="regular">
+                        <td data-col="type"><span class="badge bg-success">{% trans "Regular" %}</span></td>
+                        <td data-col="firstname">{{ p.first_name }}</td>
+                        <td data-col="lastname">{{ p.last_name }}</td>
+                        <td data-col="nickname">{{ p.nickname|default:"-" }}</td>
+                        <td data-col="dob">{{ p.date_of_birth|date:"d.m.Y" }}</td>
+                        <td data-col="category"><span class="badge bg-secondary">{{ p.get_category_display|default:"-" }}</span></td>
+                        <td data-col="unit">{{ p.unit.entity.scout_unit_name|default:"-" }}</td>
+                        <td data-col="division">-</td>
+                        <td data-col="email">{{ p.unit.entity.contact_email|default:"-" }}</td>
+                        <td data-col="phone">{{ p.unit.entity.contact_phone|default:"-" }}</td>
+                        <td data-col="hometown">{{ p.unit.entity.home_town|default:"-" }}</td>
+                        <td data-col="arrival">{{ p.unit.entity.expected_arrival|date:"d.m.Y H:i"|default:"-" }}</td>
+                        <td data-col="dietary">{{ p.dietary_restrictions|default:"-"|truncatewords:10 }}</td>
+                        <td data-col="health">{{ p.health_restrictions|default:"-"|truncatewords:10 }}</td>
+                        <td data-col="info">{{ p.relevant_information|default:"-"|truncatewords:10 }}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                    {% for p in organizers %}
+                    <tr data-type="organizer">
+                        <td data-col="type"><span class="badge bg-warning text-dark">{% trans "Organizer" %}</span></td>
+                        <td data-col="firstname">{{ p.first_name }}</td>
+                        <td data-col="lastname">{{ p.last_name }}</td>
+                        <td data-col="nickname">{{ p.nickname|default:"-" }}</td>
+                        <td data-col="dob">{{ p.date_of_birth|date:"d.m.Y" }}</td>
+                        <td data-col="category"><span class="badge bg-secondary">{{ p.get_category_display|default:"-" }}</span></td>
+                        <td data-col="unit">-</td>
+                        <td data-col="division"><span class="badge bg-info">{{ p.get_division_display }}</span></td>
+                        <td data-col="email">{{ p.entity.contact_email }}</td>
+                        <td data-col="phone">{{ p.entity.contact_phone }}</td>
+                        <td data-col="hometown">{{ p.entity.home_town|default:"-" }}</td>
+                        <td data-col="arrival">{{ p.entity.expected_arrival|date:"d.m.Y H:i"|default:"-" }}</td>
+                        <td data-col="dietary">{{ p.dietary_restrictions|default:"-"|truncatewords:10 }}</td>
+                        <td data-col="health">{{ p.health_restrictions|default:"-"|truncatewords:10 }}</td>
+                        <td data-col="info">{{ p.relevant_information|default:"-"|truncatewords:10 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if not participants and not regular_participants and not organizers %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> {% trans "No participants found." %}
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="alert alert-danger">
+            <i class="bi bi-shield-exclamation"></i> {% trans "You do not have permission to view this page." %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .sortable {
+        cursor: pointer;
+    }
+    .sortable:hover {
+        background-color: #495057;
+        color: #fff;
+    }
+    .table td {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .table td:hover {
+        white-space: normal;
+        overflow: visible;
+    }
+    .hidden-column {
+        display: none !important;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize column visibility
+    updateColumnVisibility();
+    updateCounts();
+    
+    // Column toggle event listeners
+    document.querySelectorAll('.column-toggle').forEach(function(checkbox) {
+        checkbox.addEventListener('change', updateColumnVisibility);
+    });
+    
+    // Search filter
+    document.getElementById('searchFilter').addEventListener('input', filterTable);
+    
+    // Type filter
+    document.getElementById('typeFilter').addEventListener('change', filterTable);
+});
+
+function updateColumnVisibility() {
+    document.querySelectorAll('.column-toggle').forEach(function(checkbox) {
+        const column = checkbox.dataset.column;
+        const isVisible = checkbox.checked;
+        
+        // Update header
+        document.querySelectorAll('th[data-col="' + column + '"]').forEach(function(th) {
+            th.classList.toggle('hidden-column', !isVisible);
+        });
+        
+        // Update cells
+        document.querySelectorAll('td[data-col="' + column + '"]').forEach(function(td) {
+            td.classList.toggle('hidden-column', !isVisible);
+        });
+    });
+}
+
+function filterTable() {
+    const searchText = document.getElementById('searchFilter').value.toLowerCase();
+    const typeFilter = document.getElementById('typeFilter').value;
+    
+    const rows = document.querySelectorAll('#participantsTable tbody tr');
+    let visibleCount = 0;
+    
+    rows.forEach(function(row) {
+        const rowType = row.dataset.type;
+        const rowText = row.textContent.toLowerCase();
+        
+        const matchesType = !typeFilter || rowType === typeFilter;
+        const matchesSearch = !searchText || rowText.includes(searchText);
+        
+        if (matchesType && matchesSearch) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    
+    document.getElementById('visibleCount').textContent = visibleCount;
+}
+
+function updateCounts() {
+    const totalRows = document.querySelectorAll('#participantsTable tbody tr').length;
+    document.getElementById('totalCount').textContent = totalRows;
+    document.getElementById('visibleCount').textContent = totalRows;
+}
+
+function setPreset(preset) {
+    // First, uncheck all
+    document.querySelectorAll('.column-toggle').forEach(function(cb) {
+        cb.checked = false;
+    });
+    
+    const presets = {
+        'basic': ['type', 'firstname', 'lastname', 'dob', 'category'],
+        'dietary': ['type', 'firstname', 'lastname', 'dietary'],
+        'health': ['type', 'firstname', 'lastname', 'health'],
+        'contact': ['type', 'firstname', 'lastname', 'email', 'phone', 'hometown'],
+        'all': ['type', 'firstname', 'lastname', 'nickname', 'dob', 'category', 'unit', 'division', 'email', 'phone', 'hometown', 'arrival', 'dietary', 'health', 'info']
+    };
+    
+    const columns = presets[preset] || presets['basic'];
+    
+    columns.forEach(function(col) {
+        const checkbox = document.querySelector('.column-toggle[data-column="' + col + '"]');
+        if (checkbox) checkbox.checked = true;
+    });
+    
+    updateColumnVisibility();
+}
+
+let sortDirection = {};
+let currentSortColumn = null;
+
+function sortTable(column) {
+    const table = document.getElementById('participantsTable');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // Toggle direction
+    sortDirection[column] = !sortDirection[column];
+    const ascending = sortDirection[column];
+    currentSortColumn = column;
+    
+    // Update sort icons
+    updateSortIcons(column, ascending);
+    
+    rows.sort(function(a, b) {
+        const aCell = a.querySelector('td[data-col="' + column + '"]');
+        const bCell = b.querySelector('td[data-col="' + column + '"]');
+        
+        let aVal = aCell ? aCell.textContent.trim() : '';
+        let bVal = bCell ? bCell.textContent.trim() : '';
+        
+        // Handle dates
+        if (column === 'dob') {
+            const parseDate = function(str) {
+                const parts = str.split('.');
+                if (parts.length === 3) {
+                    return new Date(parts[2], parts[1] - 1, parts[0]);
+                }
+                return new Date(0);
+            };
+            aVal = parseDate(aVal);
+            bVal = parseDate(bVal);
+            return ascending ? aVal - bVal : bVal - aVal;
+        }
+        
+        // String comparison
+        return ascending ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+    });
+    
+    // Re-append sorted rows
+    rows.forEach(function(row) {
+        tbody.appendChild(row);
+    });
+}
+
+function updateSortIcons(activeColumn, ascending) {
+    // Reset all icons to default
+    document.querySelectorAll('.sort-icon').forEach(function(icon) {
+        icon.classList.remove('bi-arrow-up', 'bi-arrow-down');
+        icon.classList.add('bi-arrow-down-up');
+    });
+    
+    // Set active column icon
+    const activeIcon = document.querySelector('.sort-icon[data-col="' + activeColumn + '"]');
+    if (activeIcon) {
+        activeIcon.classList.remove('bi-arrow-down-up');
+        activeIcon.classList.add(ascending ? 'bi-arrow-up' : 'bi-arrow-down');
+    }
+}
+</script>
+{% endblock %}

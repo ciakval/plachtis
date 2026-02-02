@@ -85,11 +85,25 @@
                     </div>
                 </div>
                 {% endfor %}
+                <div class="mt-4">
+                    <a class="btn btn-primary" href="{% url 'SkaRe:home' %}" role="button">
+                        <i class="bi bi-house"></i> {% trans "Back to Home" %}
+                    </a>
+                    <a class="btn btn-success" href="{% url 'SkaRe:register_individual_participant' %}" role="button">
+                        <i class="bi bi-plus-circle"></i> {% trans "Register Another Individual Participant" %}
+                    </a>
+                </div>
             </div>
         {% else %}
             <div class="alert alert-info">
                 <i class="bi bi-info-circle"></i> You haven't registered any individual participants yet.
                 <a href="{% url 'SkaRe:register_individual_participant' %}" class="alert-link">Register your first participant now!</a>
+            </div>
+
+            <div class="mt-4">
+                <a class="btn btn-primary" href="{% url 'SkaRe:home' %}" role="button">
+                    <i class="bi bi-house"></i> {% trans "Back to Home" %}
+                </a>
             </div>
         {% endif %}
     </div>

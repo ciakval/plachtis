@@ -276,6 +276,40 @@ class IndividualParticipant(Person):
         help_text=_("The registration entity associated with this individual participant"),
         verbose_name=_("Entity"),
     )
+
+    # Boat estimates
+    boats_p550 = models.PositiveIntegerField(
+        default=0,
+        help_text=_("Estimated number of P550 boats"),
+        verbose_name=_("P550 boats")
+    )
+    boats_sail = models.PositiveIntegerField(
+        default=0,
+        help_text=_("Estimated number of other sail-boats"),
+        verbose_name=_("Sail boats")
+    )
+    boats_paddle = models.PositiveIntegerField(
+        default=0,
+        help_text=_("Estimated number of paddle-powered boats"),
+        verbose_name=_("Paddle boats")
+    )
+    boats_motor = models.PositiveIntegerField(
+        default=0,
+        help_text=_("Estimated number of motor-powered boats"),
+        verbose_name=_("Motor boats")
+    )
+
+    # Accommodation fields
+    accommodation_expectations = models.TextField(
+        blank=True,
+        help_text=_("Accommodation expectations (small tents, large tent, caravan, ...)"),
+        verbose_name=_("Accommodation expectations")
+    )
+    estimated_accommodation_area = models.CharField(
+        max_length=100, blank=True,
+        help_text=_("Estimated needed area for accommodation"),
+        verbose_name=_("Estimated accommodation area")
+    )
     
     
 

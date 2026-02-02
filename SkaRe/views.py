@@ -222,8 +222,8 @@ def edit_unit(request, unit_id):
                 'scout_unit_evidence_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
                 'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
                 'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
-                'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-                'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+                'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+                'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'home_town': forms.TextInput(attrs={'class': 'form-control'}),
             }
     
@@ -272,7 +272,7 @@ def edit_unit(request, unit_id):
                 'first_name': participant.first_name,
                 'last_name': participant.last_name,
                 'nickname': participant.nickname,
-                'date_of_birth': participant.date_of_birth,
+                'date_of_birth': participant.date_of_birth.strftime('%Y-%m-%d') if participant.date_of_birth else '',
                 'category': participant.category,
                 'health_restrictions': participant.health_restrictions,
                 'dietary_restrictions': participant.dietary_restrictions,
@@ -396,16 +396,28 @@ def edit_individual_participant(request, participant_id):
                 'health_restrictions',
                 'dietary_restrictions',
                 'relevant_information',
+                'boats_p550',
+                'boats_sail',
+                'boats_paddle',
+                'boats_motor',
+                'accommodation_expectations',
+                'estimated_accommodation_area',
             ]
             widgets = {
                 'first_name': forms.TextInput(attrs={'class': 'form-control'}),
                 'last_name': forms.TextInput(attrs={'class': 'form-control'}),
                 'nickname': forms.TextInput(attrs={'class': 'form-control'}),
-                'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+                'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
                 'category': forms.Select(attrs={'class': 'form-control'}),
                 'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
                 'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
                 'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+                'boats_p550': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'boats_sail': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'boats_paddle': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+                'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control'}),
             }
     
     class EntityEditForm(forms.ModelForm):
@@ -424,8 +436,8 @@ def edit_individual_participant(request, participant_id):
             widgets = {
                 'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
                 'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
-                'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-                'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+                'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+                'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'home_town': forms.TextInput(attrs={'class': 'form-control'}),
             }
     
@@ -521,6 +533,26 @@ def list_organizers(request):
 
 
 @login_required
+def list_all(request):
+    """View for listing all individual participants - staff only."""
+    if not request.user.is_staff:
+        messages.error(request, _('You do not have permission to view this page.'))
+        return redirect('SkaRe:home')
+    
+    participants = IndividualParticipant.objects.all().select_related('entity')
+    organizers = Organizer.objects.all().select_related('entity')
+    units = Unit.objects.all().select_related('entity')
+    regular_participants = RegularParticipant.objects.all().select_related('unit', 'unit__entity')
+    context = {
+        'participants': participants,
+        'organizers': organizers,
+        'units': units,
+        'regular_participants': regular_participants,
+    }
+    return render(request, 'SkaRe/list_all.html', context)
+
+
+@login_required
 def edit_organizer(request, organizer_id):
     """View for editing an existing Organizer."""
     organizer = get_object_or_404(Organizer, id=organizer_id)
@@ -570,7 +602,7 @@ def edit_organizer(request, organizer_id):
                 'first_name': forms.TextInput(attrs={'class': 'form-control'}),
                 'last_name': forms.TextInput(attrs={'class': 'form-control'}),
                 'nickname': forms.TextInput(attrs={'class': 'form-control'}),
-                'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+                'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
                 'category': forms.Select(attrs={'class': 'form-control'}),
                 'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
                 'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
@@ -599,8 +631,8 @@ def edit_organizer(request, organizer_id):
             widgets = {
                 'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
                 'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
-                'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-                'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+                'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+                'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'home_town': forms.TextInput(attrs={'class': 'form-control'}),
             }
     
