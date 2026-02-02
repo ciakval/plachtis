@@ -15,6 +15,14 @@ main {
     align-items: center;
 }
 
+:root {
+    --brand-text-offset: -15px;  /* Negative = up, Positive = down */
+}
+
+.navbar-brand-text {
+    margin-top: var(--brand-text-offset);
+}
+
 .navbar-logo {
     height: 40px;
     margin-right: 10px;
