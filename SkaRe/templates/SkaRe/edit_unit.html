@@ -13,7 +13,7 @@
             
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Scout Unit Information</h5>
+                    <h5 class="mb-0">{% trans "Scout Unit Information" %}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -41,7 +41,7 @@
             
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Contact Information</h5>
+                    <h5 class="mb-0">{% trans "Contact Information" %}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -89,7 +89,7 @@
             
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Event Logistics</h5>
+                    <h5 class="mb-0">{% trans "Event Logistics" %}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -126,7 +126,7 @@
             
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Boat Estimates</h5>
+                    <h5 class="mb-0">{% trans "Boat Estimates" %}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -172,7 +172,7 @@
             
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-bag-fill"></i> Merchandise</h5>
+                    <h5 class="mb-0"><i class="bi bi-bag-fill"></i>{% trans "Merchandise" %}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -200,7 +200,7 @@
             
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Accommodation</h5>
+                    <h5 class="mb-0">{% trans "Accommodation" %}</h5>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
@@ -226,17 +226,17 @@
             
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-people-fill"></i> Participants</h5>
+                    <h5 class="mb-0"><i class="bi bi-people-fill"></i> {% trans "Participants" %}</h5>
                 </div>
                 <div class="card-body">
                     <p class="text-muted">
-                        <i class="bi bi-info-circle"></i> Edit existing participants below or add new ones using "Add Participant Row" button.
+                        <i class="bi bi-info-circle"></i> {% trans "Edit existing participants below or add new ones using \"Add Participant Row\" button." %}
                     </p>
                     
                     {{ participant_formset.management_form }}
                     
                     <button type="button" id="add-participant" class="btn btn-sm btn-success mb-3">
-                        <i class="bi bi-plus-circle"></i> Add Participant Row
+                        <i class="bi bi-plus-circle"></i> {% trans "Add Participant Row" %}
                     </button>
                     
                     <div id="participant-forms" class="table-responsive">
@@ -244,15 +244,15 @@
                             <thead class="table-light">
                                 <tr>
                                     <th style="width: 40px;">#</th>
-                                    <th>First Name <span class="text-danger">*</span></th>
-                                    <th>Last Name <span class="text-danger">*</span></th>
-                                    <th>Nickname</th>
-                                    <th>Date of Birth <span class="text-danger">*</span></th>
-                                    <th>Category <span class="text-danger">*</span></th>
-                                    <th>Health</th>
-                                    <th>Dietary</th>
-                                    <th>Info</th>
-                                    <th style="width: 60px;">Action</th>
+                                    <th>{% trans "First Name" %}<span class="text-danger">*</span></th>
+                                    <th>{% trans "Last Name" %} <span class="text-danger">*</span></th>
+                                    <th>{% trans "Nickname" %}</th>
+                                    <th>{% trans "Date of Birth" %} <span class="text-danger">*</span></th>
+                                    <th>{% trans "Category" %} <span class="text-danger">*</span></th>
+                                    <th>{% trans "Health" %}</th>
+                                    <th>{% trans "Dietary" %}</th>
+                                    <th>{% trans "Info" %}</th>
+                                    <th style="width: 60px;">{% trans "Action" %}</th>
                                 </tr>
                             </thead>
                             <tbody id="participant-table-body">
@@ -280,17 +280,17 @@
                     </div>
                     
                     <div class="text-muted mt-2">
-                        <small>Click "Add Participant Row" to add more rows. Click the trash icon to mark a participant for deletion.</small>
+                        <small>{% trans "Click 'Add Participant Row' to add more rows. Click the trash icon to mark a participant for deletion." %}</small>
                     </div>
                 </div>
             </div>
             
             <div class="d-flex justify-content-between mt-4">
                 <a href="{% url 'SkaRe:list_units' %}" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i> Cancel
+                    <i class="bi bi-arrow-left"></i> {% trans "Cancel" %}
                 </a>
                 <button type="submit" class="btn btn-success btn-lg">
-                    <i class="bi bi-check-circle"></i> Save Changes
+                    <i class="bi bi-check-circle"></i> {% trans "Save Changes" %}
                 </button>
             </div>
         </form>

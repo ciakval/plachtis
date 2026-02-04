@@ -1,18 +1,22 @@
 {% extends 'SkaRe/base.html' %}
 
-{% block title %}Register Organizer - SkaRe{% endblock %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Register Organizer" %} - SkaRe{% endblock %}
+
 
 {% block content %}
 <div class="row">
     <div class="col-md-10 mx-auto">
         <div class="card shadow">
             <div class="card-header bg-success text-white">
-                <h3 class="mb-0">Register Organizer</h3>
+                <h3 class="mb-0">{% trans "Register Organizer" %}</h3>
             </div>
             <div class="card-body">
                 {% if deadline %}
                 <div class="alert alert-info">
-                    <i class="bi bi-calendar-event"></i> Registration deadline: <strong>{{ deadline|date:"F j, Y, g:i a" }}</strong>
+                    <i class="bi bi-calendar-event"></i>{% trans "Registration deadline" %}<strong>{{ deadline|date:"F j, Y, g:i a" }}</strong>
                 </div>
                 {% endif %}
 
@@ -22,7 +26,7 @@
                     <!-- Personal Information -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Personal Information</h5>
+                            <h5 class="mb-0">{% trans "Personal Information" %}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -72,7 +76,7 @@
                     <!-- Contact Information -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Contact Information</h5>
+                            <h5 class="mb-0">{% trans "Contact Information" %}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -97,7 +101,7 @@
                     <!-- Organizer Details -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Organizer Details</h5>
+                            <h5 class="mb-0">{% trans "Organizer Details" %}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -153,8 +157,8 @@
                                 <div class="col-md-12 mb-3">
                                     <div class="form-check">
                                         {{ form.codex_agreement }}
-                                        <label class="form-check-label" for="{{ form.codex_agreement.id_for_label }}">
-                                            {{ form.codex_agreement.label }} <span class="text-danger">*</span>
+                                        <label class="form-check-label" for="{{ form.codex_agreement.id_for_label }}">{% trans "I agree to follow the" %}
+                                            <a href="https://krizovatka.skaut.cz/files/b63a20b8-1762-41c8-bfbc-1f9208a0442f">{{ form.codex_agreement.label }}</a><span class="text-danger">*</span>
                                         </label>
                                         {% if form.codex_agreement.errors %}
                                             <div class="text-danger">{{ form.codex_agreement.errors }}</div>
@@ -168,7 +172,7 @@
                     <!-- Event Logistics -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Event Logistics</h5>
+                            <h5 class="mb-0">{% trans "Event Logistics" %}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -200,7 +204,7 @@
                     <!-- Health & Dietary Information -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Health & Dietary Information</h5>
+                            <h5 class="mb-0">{% trans "Health & Dietary Information" %}</h5>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
@@ -229,10 +233,10 @@
 
                     <div class="d-flex justify-content-between">
                         <a href="{% url 'SkaRe:home' %}" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left"></i> Cancel
+                            <i class="bi bi-arrow-left"></i> {% trans "Cancel" %}
                         </a>
                         <button type="submit" class="btn btn-success">
-                            <i class="bi bi-check-circle"></i> Register Organizer
+                            <i class="bi bi-check-circle"></i> {% trans "Register Organizer" %}
                         </button>
                     </div>
                 </form>
