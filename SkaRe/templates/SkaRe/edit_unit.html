@@ -1,12 +1,13 @@
 {% extends 'SkaRe/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}Edit Unit - SkaRe{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <h1 class="mb-4"><i class="bi bi-pencil-square"></i> Edit Unit: {{ unit.entity.scout_unit_name }}</h1>
+        <h1 class="mb-4"><i class="bi bi-pencil-square"></i> {% trans "Edit Unit" %}: {{ unit.entity.scout_unit_name }}</h1>
         
         <form method="post" novalidate>
             {% csrf_token %}
@@ -230,7 +231,7 @@
                 </div>
                 <div class="card-body">
                     <p class="text-muted">
-                        <i class="bi bi-info-circle"></i> {% trans "Edit existing participants below or add new ones using \"Add Participant Row\" button." %}
+                        <i class="bi bi-info-circle"></i> {% trans "Edit existing participants below or add new ones" %}
                     </p>
                     
                     {{ participant_formset.management_form }}
