@@ -632,7 +632,7 @@ msgstr "Zrušit"
 
 #: SkaRe/templates/SkaRe/home.html:5
 msgid "Home"
-msgstr "Obec, odkud na SkaRe přijedete"
+msgstr "PlachtIS"
 
 #: SkaRe/templates/SkaRe/home.html:12
 msgid "Manage Units and Participants in the PlachtIS system."
@@ -665,7 +665,7 @@ msgstr "Registrovat pořadatele"
 
 #: SkaRe/templates/SkaRe/home.html:32
 msgid "My Registrations"
-msgstr "Stravovací omezení / preference"
+msgstr "Mé registrace"
 
 #: SkaRe/templates/SkaRe/home.html:34 SkaRe/templates/SkaRe/list_units.html:4
 msgid "My Units"
@@ -687,7 +687,7 @@ msgstr "Administrace"
 
 #: SkaRe/templates/SkaRe/home.html:50
 msgid "Show All Participants"
-msgstr "Účastníci"
+msgstr "Seznam všech účastníků"
 
 #: SkaRe/templates/SkaRe/home.html:58
 msgid "Please login or register to access the system."
