@@ -1,6 +1,8 @@
 {% extends 'SkaRe/base.html' %}
 
-{% block title %}Edit Organizer - SkaRe{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Edit Organizer" %} - SkaRe{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -16,7 +18,7 @@
                     <!-- Personal Information -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Personal Information</h5>
+                            <h5 class="mb-0">{% trans "Personal Information" %}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -66,7 +68,7 @@
                     <!-- Contact Information -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Contact Information</h5>
+                            <h5 class="mb-0">{% trans "Contact Information" %}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -91,7 +93,7 @@
                     <!-- Organizer Details -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Organizer Details</h5>
+                            <h5 class="mb-0">{% trans "Organizer Details" %}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -143,26 +145,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12 mb-3">
-                                    <div class="form-check">
-                                        {{ organizer_form.codex_agreement }}
-                                        <label class="form-check-label" for="{{ organizer_form.codex_agreement.id_for_label }}">
-                                            {{ organizer_form.codex_agreement.label }} <span class="text-danger">*</span>
-                                        </label>
-                                        {% if organizer_form.codex_agreement.errors %}
-                                            <div class="text-danger">{{ organizer_form.codex_agreement.errors }}</div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- Codex Agreement cannot be taken back -->
+                            
                         </div>
                     </div>
 
                     <!-- Event Logistics -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Event Logistics</h5>
+                            <h5 class="mb-0">{% trans "Event Logistics" %}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -194,7 +185,7 @@
                     <!-- Health & Dietary Information -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Health & Dietary Information</h5>
+                            <h5 class="mb-0">{% trans "Health & Dietary Information" %}</h5>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
@@ -223,10 +214,10 @@
 
                     <div class="d-flex justify-content-between">
                         <a href="{% url 'SkaRe:list_organizers' %}" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left"></i> Back to List
+                            <i class="bi bi-arrow-left"></i> {% trans "Back to List" %}
                         </a>
                         <button type="submit" class="btn btn-success">
-                            <i class="bi bi-save"></i> Save Changes
+                            <i class="bi bi-save"></i> {% trans "Save Changes" %}
                         </button>
                     </div>
                 </form>

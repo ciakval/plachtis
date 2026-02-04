@@ -51,30 +51,30 @@
                             {% endif %}
                             {% if organizer.want_travel_order %}
                             <p class="mb-2">
-                                <i class="bi bi-check-circle text-success"></i> Wants travel order
+                                <i class="bi bi-check-circle text-success"></i> {% trans "Wants travel order" %}
                             </p>
                             {% endif %}
 
                             {% if organizer.entity.home_town %}
                             <p class="mb-2">
-                                <strong>Home Town:</strong> {{ organizer.entity.home_town }}
+                                <strong>{% trans "Home Town" %}:</strong> {{ organizer.entity.home_town }}
                             </p>
                             {% endif %}
                             {% if organizer.entity.expected_arrival %}
                             <p class="mb-2">
-                                <strong>Expected Arrival:</strong> {{ organizer.entity.expected_arrival|date:"d.m.Y H:i" }}
+                                <strong>{% trans "Expected Arrival" %}:</strong> {{ organizer.entity.expected_arrival|date:"d.m.Y H:i" }}
                             </p>
                             {% endif %}
                             {% if organizer.entity.expected_departure %}
                             <p class="mb-2">
-                                <strong>Expected Departure:</strong> {{ organizer.entity.expected_departure|date:"d.m.Y H:i" }}
+                                <strong>{% trans "Expected Departure" %}:</strong> {{ organizer.entity.expected_departure|date:"d.m.Y H:i" }}
                             </p>
                             {% endif %}
 
                             {% if organizer.health_restrictions %}
                             <hr>
                             <p class="mb-2">
-                                <strong>Health Restrictions:</strong><br>
+                                <strong>{% trans "Health Restrictions" %}:</strong><br>
                                 {{ organizer.health_restrictions }}
                             </p>
                             {% endif %}
@@ -87,21 +87,22 @@
                             {% endif %}
 
                             <p class="mb-2">
-                                <strong>Codex Agreement:</strong>
+                                <strong>{% trans "Agrees to follow the" %}
+                                            <a href="https://krizovatka.skaut.cz/files/b63a20b8-1762-41c8-bfbc-1f9208a0442f">{% trans "Codex Agreement" %}</a></strong>
                                 {% if organizer.codex_agreement %}
-                                    <span class="badge bg-success">Agreed</span>
+                                    <span class="badge bg-success">{% trans "Agreed" %}</span>
                                 {% else %}
-                                    <span class="badge bg-danger">Not Agreed</span>
+                                    <span class="badge bg-danger">{% trans "Not Agreed" %}</span>
                                 {% endif %}
                             </p>
 
                             <div class="text-muted small mt-3">
-                                <i class="bi bi-calendar-check"></i> Registered: {{ organizer.entity.created_at|date:"d.m.Y H:i" }}
+                                <i class="bi bi-calendar-check"></i>{% trans "Registered" %}: {{ organizer.entity.created_at|date:"d.m.Y H:i" }}
                             </div>
                         </div>
                         <div class="card-footer">
                             <a href="{% url 'SkaRe:edit_organizer' organizer.id %}" class="btn btn-success btn-sm">
-                                <i class="bi bi-pencil"></i> Edit Organizer
+                                <i class="bi bi-pencil"></i> {% trans "Edit Organizer" %}
                             </a>
                         </div>
                     </div>
@@ -119,8 +120,8 @@
             </div>
         {% else %}
             <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> You haven't registered any organizers yet.
-                <a href="{% url 'SkaRe:register_organizer' %}" class="alert-link">Register as an organizer now!</a>
+                <i class="bi bi-info-circle"></i> {% trans "You haven't registered any organizers yet." %}
+                <a href="{% url 'SkaRe:register_organizer' %}" class="alert-link">{% trans "Register as an organizer now!" %}</a>
             </div>
 
             <div class="mt-4">
