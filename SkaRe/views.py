@@ -595,7 +595,6 @@ def edit_organizer(request, organizer_id):
                 'need_lift',
                 'want_travel_order',
                 'accommodation',
-                'codex_agreement',
             ]
             widgets = {
                 'first_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -611,7 +610,6 @@ def edit_organizer(request, organizer_id):
                 'need_lift': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
                 'want_travel_order': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
                 'accommodation': forms.Select(attrs={'class': 'form-control'}),
-                'codex_agreement': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             }
     
     class EntityEditForm(forms.ModelForm):
