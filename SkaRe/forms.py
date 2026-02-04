@@ -108,6 +108,7 @@ class UnitRegistrationForm(forms.ModelForm):
             'boats_paddle',
             'boats_motor',
             'scarf_count',
+            'hat_count',
             'accommodation_expectations',
             'estimated_accommodation_area',
         ]
@@ -119,6 +120,7 @@ class UnitRegistrationForm(forms.ModelForm):
             'boats_paddle': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'scarf_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'hat_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -225,6 +227,7 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
             'boats_paddle',
             'boats_motor',
             'scarf_count',
+            'hat_count',
             'accommodation_expectations',
             'estimated_accommodation_area',
         ]
@@ -242,6 +245,7 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
             'boats_paddle': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'scarf_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'hat_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'e.g., Small tent, caravan'}),
             'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 20 m²'}),
         }

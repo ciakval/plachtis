@@ -222,6 +222,12 @@ class Unit(models.Model):
         help_text=_("Number of scarves"),
         verbose_name=_("Scarf count")
     )
+    # Hat field
+    hat_count = models.PositiveBigIntegerField(
+        default=0,
+        help_text=_("Number of hats"),
+        verbose_name=_("Hat count")
+    )
 
     # Accommodation fields
     accommodation_expectations = models.TextField(
@@ -291,6 +297,12 @@ class IndividualParticipant(Person):
         default=0,
         help_text=_("Number of scarves"),
         verbose_name=_("Scarf count")
+    )
+    # Hat field
+    hat_count = models.PositiveBigIntegerField(
+        default=0,
+        help_text=_("Number of hats"),
+        verbose_name=_("Hat count")
     )
 
     # Accommodation fields

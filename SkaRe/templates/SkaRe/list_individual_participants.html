@@ -47,8 +47,12 @@
                             </p>
                             {% endif %}
 
+                            <h6 class="mb-2 mt-3">
+                                <i class="bi bi-bag-fill"></i> {% trans "Merchandise" %}
+                            </h6>
                             <p class="mb-2">
-                                <i class="bi"></i> <strong>{% trans "Scarves" %}:</strong> {{ participant.scarf_count }}
+                                {% trans "Scarves" %}: <strong>{{ participant.scarf_count }}</strong> | 
+                                {% trans "Hats" %}: <strong>{{ participant.hat_count }}</strong>
                             </p>
 
                             {% if participant.health_restrictions %}

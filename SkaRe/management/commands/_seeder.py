@@ -191,6 +191,7 @@ def create_unit(user, unit_name=None, num_participants=None):
         boats_paddle=random.randint(0, 5),
         boats_motor=random.randint(0, 1),
         scarf_count=random.randint(0, num_participants + 5),
+        hat_count=random.randint(0, num_participants + 5),
         accommodation_expectations=random.choice(ACCOMMODATION_EXPECTATIONS),
         estimated_accommodation_area=f"{random.randint(20, 100)} m²",
     )
@@ -224,6 +225,7 @@ def create_individual_participant(user):
         boats_paddle=random.randint(0, 2),
         boats_motor=0,
         scarf_count=random.randint(0, 3),
+        hat_count=random.randint(0, 3),
         accommodation_expectations=random.choice(ACCOMMODATION_EXPECTATIONS) if random.random() > 0.5 else "",
         estimated_accommodation_area=f"{random.randint(5, 20)} m²" if random.random() > 0.5 else "",
         **person_data
