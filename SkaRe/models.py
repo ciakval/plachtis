@@ -216,6 +216,12 @@ class Unit(models.Model):
         help_text=_("Estimated number of motor-powered boats"),
         verbose_name=_("Motor boats")
     )
+    # Scarf field
+    scarf_count = models.PositiveBigIntegerField(
+        default=0,
+        help_text=_("Number of scarves"),
+        verbose_name=_("Scarf count")
+    )
 
     # Accommodation fields
     accommodation_expectations = models.TextField(
@@ -279,6 +285,12 @@ class IndividualParticipant(Person):
         default=0,
         help_text=_("Estimated number of motor-powered boats"),
         verbose_name=_("Motor boats")
+    )
+    # Scarf field
+    scarf_count = models.PositiveBigIntegerField(
+        default=0,
+        help_text=_("Number of scarves"),
+        verbose_name=_("Scarf count")
     )
 
     # Accommodation fields
