@@ -172,17 +172,26 @@
             
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi"></i> Scarves</h5>
+                    <h5 class="mb-0"><i class="bi bi-bag-fill"></i> Merchandise</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="{{ unit_form.scarf_count.id_for_label }}" class="form-label">
                                 {{ unit_form.scarf_count.label }}
                             </label>
                             {{ unit_form.scarf_count }}
                             {% if unit_form.scarf_count.errors %}
                                 <div class="text-danger">{{ unit_form.scarf_count.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ unit_form.hat_count.id_for_label }}" class="form-label">
+                                {{ unit_form.hat_count.label }}
+                            </label>
+                            {{ unit_form.hat_count }}
+                            {% if unit_form.hat_count.errors %}
+                                <div class="text-danger">{{ unit_form.hat_count.errors }}</div>
                             {% endif %}
                         </div>
                     </div>

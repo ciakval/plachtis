@@ -67,8 +67,12 @@
                                 </div>
                             </div>
                             
+                            <h6 class="mb-2 mt-3">
+                                <i class="bi bi-bag-fill"></i> {% trans "Merchandise" %}
+                            </h6>
                             <p class="mb-2">
-                                <i class="bi"></i> <strong>{% trans "Scarves" %}:</strong> {{ unit.scarf_count }}
+                                {% trans "Scarves" %}: <strong>{{ unit.scarf_count }}</strong> | 
+                                {% trans "Hats" %}: <strong>{{ unit.hat_count }}</strong>
                             </p>
                             
                             <hr>

@@ -165,18 +165,25 @@
                         </div>
                     </div>
 
-                    <!-- Scarf -->
+                    <!-- Merchandise -->
                     <div class="card mb-4">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0"><i class="bi"></i> Scarves</h5>
+                            <h5 class="mb-0"><i class="bi bi-bag-fill"></i> Merchandise</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="{{ form.scarf_count.id_for_label }}" class="form-label">{{ form.scarf_count.label }}</label>
                                     {{ form.scarf_count }}
                                     {% if form.scarf_count.errors %}
                                         <div class="text-danger">{{ form.scarf_count.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.hat_count.id_for_label }}" class="form-label">{{ form.hat_count.label }}</label>
+                                    {{ form.hat_count }}
+                                    {% if form.hat_count.errors %}
+                                        <div class="text-danger">{{ form.hat_count.errors }}</div>
                                     {% endif %}
                                 </div>
                             </div>
