@@ -207,6 +207,20 @@ def edit_unit(request, unit_id):
             }
     
     class EntityEditForm(forms.ModelForm):
+        # Explicitly define required fields to match registration form
+        scout_unit_name = forms.CharField(
+            max_length=200,
+            required=True,
+            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 5. oddíl Koráb'}),
+            label=_("Scout Unit Name")
+        )
+        scout_unit_evidence_id = forms.CharField(
+            max_length=50,
+            required=True,
+            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
+            label=_("Evidence ID")
+        )
+        
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             # Add 'is-invalid' class to fields with errors (after form is bound and validated)
@@ -222,8 +236,6 @@ def edit_unit(request, unit_id):
             model = Entity
             fields = ['scout_unit_name', 'scout_unit_evidence_id', 'contact_email', 'contact_phone', 'expected_arrival', 'expected_departure', 'home_town']
             widgets = {
-                'scout_unit_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 5. oddíl Koráb'}),
-                'scout_unit_evidence_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
                 'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
                 'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
                 'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
