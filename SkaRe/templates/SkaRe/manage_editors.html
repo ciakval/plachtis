@@ -1,0 +1,96 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Manage Editors" %} - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="mb-4">
+            <i class="bi bi-people-fill"></i> {% trans "Manage Editors" %}
+        </h1>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    {% if unit %}
+                        {% trans "Unit" %}: {{ unit.entity.scout_unit_name }}
+                    {% elif participant %}
+                        {% trans "Individual Participant" %}: {{ participant }}
+                    {% elif organizer %}
+                        {% trans "Organizer" %}: {{ organizer }}
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    <i class="bi bi-info-circle"></i>
+                    {% trans "Editors can view and edit this registration, but only you (the owner) can manage editors." %}
+                </p>
+                
+                <h6 class="mb-3">{% trans "Current Editors" %}</h6>
+                
+                {% if editors %}
+                    <ul class="list-group mb-4">
+                        {% for editor in editors %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="bi bi-person"></i>
+                                    <strong>{{ editor.username }}</strong>
+                                    {% if editor.first_name or editor.last_name %}
+                                        <span class="text-muted">({{ editor.first_name }} {{ editor.last_name }})</span>
+                                    {% endif %}
+                                </div>
+                                <form method="post" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="remove">
+                                    <input type="hidden" name="user_id" value="{{ editor.id }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('{% trans "Remove this editor?" %}');">
+                                        <i class="bi bi-x-circle"></i> {% trans "Remove" %}
+                                    </button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle"></i> {% trans "No editors added yet." %}
+                    </div>
+                {% endif %}
+                
+                <h6 class="mb-3">{% trans "Add Editor" %}</h6>
+                <form method="post" class="row g-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+                    <div class="col-md-8">
+                        <input type="text" name="username" class="form-control" placeholder="{% trans 'Enter username' %}" required>
+                        <div class="form-text">{% trans "Enter the exact username of the user you want to add as editor." %}</div>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-plus-circle"></i> {% trans "Add Editor" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-start">
+            {% if unit %}
+                <a href="{% url 'SkaRe:list_units' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> {% trans "Back to Units" %}
+                </a>
+            {% elif participant %}
+                <a href="{% url 'SkaRe:list_individual_participants' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> {% trans "Back to Participants" %}
+                </a>
+            {% elif organizer %}
+                <a href="{% url 'SkaRe:list_organizers' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> {% trans "Back to Organizers" %}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

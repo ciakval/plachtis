@@ -13,10 +13,13 @@
                 {% for participant in participants %}
                 <div class="col-md-6 mb-4">
                     <div class="card">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">
                                 <i class="bi bi-person-fill"></i> {{ participant }}
                             </h5>
+                            {% if participant.entity.created_by != request.user %}
+                                <span class="badge bg-info"><i class="bi bi-pencil-square"></i> {% trans "Editor" %}</span>
+                            {% endif %}
                         </div>
                         <div class="card-body">
                             <p class="mb-2">
@@ -74,10 +77,18 @@
                                 <i class="bi bi-calendar-check"></i>{% trans "Registered" %}: {{ participant.entity.created_at|date:"d.m.Y H:i" }}
                             </div>
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer d-flex justify-content-between">
                             <a href="{% url 'SkaRe:edit_individual_participant' participant.id %}" class="btn btn-primary btn-sm">
                                 <i class="bi bi-pencil"></i> {% trans "Edit Participant" %}
                             </a>
+                            {% if participant.entity.created_by == request.user %}
+                                <a href="{% url 'SkaRe:manage_individual_participant_editors' participant.id %}" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-people"></i> {% trans "Editors" %}
+                                    {% if participant.entity.editors.count > 0 %}
+                                        <span class="badge bg-secondary">{{ participant.entity.editors.count }}</span>
+                                    {% endif %}
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db import transaction
+from django.db.models import Q
 from django import forms
 from django.utils.translation import gettext as _
 from .forms import (
@@ -140,11 +142,12 @@ def register_unit(request):
 
 @login_required
 def list_units(request):
-    """View for listing units created by the current user."""
-    # Get all entities created by the user that have a Unit associated
-    units = Unit.objects.filter(entity__created_by=request.user).select_related(
-        'entity'
-    ).prefetch_related('regular_participants')
+    """View for listing units owned by or editable by the current user."""
+    
+    # Get units where user is owner or editor
+    units = Unit.objects.filter(
+        Q(entity__created_by=request.user) | Q(entity__editors=request.user)
+    ).select_related('entity').prefetch_related('regular_participants', 'entity__editors').distinct()
     
     context = {
         'units': units,
@@ -157,8 +160,10 @@ def edit_unit(request, unit_id):
     """View for editing an existing Unit."""
     unit = get_object_or_404(Unit, id=unit_id)
     
-    # Check if user owns this unit
-    if unit.entity.created_by != request.user:
+    # Check if user has permission to edit this unit (owner or editor)
+    is_owner = unit.entity.created_by == request.user
+    is_editor = unit.entity.editors.filter(id=request.user.id).exists()
+    if not (is_owner or is_editor):
         messages.error(request, _('You do not have permission to edit this unit.'))
         return redirect('SkaRe:list_units')
     
@@ -366,10 +371,10 @@ def register_individual_participant(request):
 
 @login_required
 def list_individual_participants(request):
-    """View for listing individual participants created by the current user."""
+    """View for listing individual participants owned by or editable by the current user."""   
     participants = IndividualParticipant.objects.filter(
-        entity__created_by=request.user
-    ).select_related('entity')
+        Q(entity__created_by=request.user) | Q(entity__editors=request.user)
+    ).select_related('entity').prefetch_related('entity__editors').distinct()
     
     context = {
         'participants': participants,
@@ -382,8 +387,10 @@ def edit_individual_participant(request, participant_id):
     """View for editing an existing Individual Participant."""
     participant = get_object_or_404(IndividualParticipant, id=participant_id)
     
-    # Check if user owns this participant
-    if participant.entity.created_by != request.user:
+    # Check if user has permission to edit this participant (owner or editor)
+    is_owner = participant.entity.created_by == request.user
+    is_editor = participant.entity.editors.filter(id=request.user.id).exists()
+    if not (is_owner or is_editor):
         messages.error(request, _('You do not have permission to edit this participant.'))
         return redirect('SkaRe:list_individual_participants')
     
@@ -546,10 +553,10 @@ def register_organizer(request):
 
 @login_required
 def list_organizers(request):
-    """View for listing organizers created by the current user."""
+    """View for listing organizers owned by or editable by the current user."""   
     organizers = Organizer.objects.filter(
-        entity__created_by=request.user
-    ).select_related('entity')
+        Q(entity__created_by=request.user) | Q(entity__editors=request.user)
+    ).select_related('entity').prefetch_related('entity__editors').distinct()
     
     context = {
         'organizers': organizers,
@@ -582,8 +589,10 @@ def edit_organizer(request, organizer_id):
     """View for editing an existing Organizer."""
     organizer = get_object_or_404(Organizer, id=organizer_id)
     
-    # Check if user owns this organizer
-    if organizer.entity.created_by != request.user:
+    # Check if user has permission to edit this organizer (owner or editor)
+    is_owner = organizer.entity.created_by == request.user
+    is_editor = organizer.entity.editors.filter(id=request.user.id).exists()
+    if not (is_owner or is_editor):
         messages.error(request, _('You do not have permission to edit this organizer.'))
         return redirect('SkaRe:list_organizers')
     
@@ -686,3 +695,143 @@ def edit_organizer(request, organizer_id):
         'entity_form': entity_form,
     }
     return render(request, 'SkaRe/edit_organizer.html', context)
+
+
+@login_required
+def manage_unit_editors(request, unit_id):
+    """View for managing editors of a unit."""
+    unit = get_object_or_404(Unit, id=unit_id)
+    
+    # Only owner can manage editors
+    if unit.entity.created_by != request.user:
+        messages.error(request, _('Only the owner can manage editors.'))
+        return redirect('SkaRe:list_units')
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        username = request.POST.get('username', '').strip()
+        
+        if action == 'add' and username:
+            try:
+                user_to_add = User.objects.get(username=username)
+                if user_to_add == request.user:
+                    messages.warning(request, _('You cannot add yourself as an editor.'))
+                elif unit.entity.editors.filter(id=user_to_add.id).exists():
+                    messages.warning(request, _(f'User "{username}" is already an editor.'))
+                else:
+                    unit.entity.editors.add(user_to_add)
+                    messages.success(request, _(f'User "{username}" added as editor.'))
+            except User.DoesNotExist:
+                messages.error(request, _(f'User "{username}" not found.'))
+        
+        elif action == 'remove':
+            user_id = request.POST.get('user_id')
+            if user_id:
+                try:
+                    user_to_remove = User.objects.get(id=user_id)
+                    unit.entity.editors.remove(user_to_remove)
+                    messages.success(request, _(f'User "{user_to_remove.username}" removed from editors.'))
+                except User.DoesNotExist:
+                    messages.error(request, _('User not found.'))
+        
+        return redirect('SkaRe:manage_unit_editors', unit_id=unit_id)
+    
+    context = {
+        'unit': unit,
+        'editors': unit.entity.editors.all(),
+    }
+    return render(request, 'SkaRe/manage_editors.html', context)
+
+
+@login_required
+def manage_individual_participant_editors(request, participant_id):
+    """View for managing editors of an individual participant."""
+    participant = get_object_or_404(IndividualParticipant, id=participant_id)
+    
+    # Only owner can manage editors
+    if participant.entity.created_by != request.user:
+        messages.error(request, _('Only the owner can manage editors.'))
+        return redirect('SkaRe:list_individual_participants')
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        username = request.POST.get('username', '').strip()
+        
+        if action == 'add' and username:
+            try:
+                user_to_add = User.objects.get(username=username)
+                if user_to_add == request.user:
+                    messages.warning(request, _('You cannot add yourself as an editor.'))
+                elif participant.entity.editors.filter(id=user_to_add.id).exists():
+                    messages.warning(request, _(f'User "{username}" is already an editor.'))
+                else:
+                    participant.entity.editors.add(user_to_add)
+                    messages.success(request, _(f'User "{username}" added as editor.'))
+            except User.DoesNotExist:
+                messages.error(request, _(f'User "{username}" not found.'))
+        
+        elif action == 'remove':
+            user_id = request.POST.get('user_id')
+            if user_id:
+                try:
+                    user_to_remove = User.objects.get(id=user_id)
+                    participant.entity.editors.remove(user_to_remove)
+                    messages.success(request, _(f'User "{user_to_remove.username}" removed from editors.'))
+                except User.DoesNotExist:
+                    messages.error(request, _('User not found.'))
+        
+        return redirect('SkaRe:manage_individual_participant_editors', participant_id=participant_id)
+    
+    context = {
+        'participant': participant,
+        'editors': participant.entity.editors.all(),
+        'entity_type': 'individual_participant',
+    }
+    return render(request, 'SkaRe/manage_editors.html', context)
+
+
+@login_required
+def manage_organizer_editors(request, organizer_id):
+    """View for managing editors of an organizer."""
+    organizer = get_object_or_404(Organizer, id=organizer_id)
+    
+    # Only owner can manage editors
+    if organizer.entity.created_by != request.user:
+        messages.error(request, _('Only the owner can manage editors.'))
+        return redirect('SkaRe:list_organizers')
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        username = request.POST.get('username', '').strip()
+        
+        if action == 'add' and username:
+            try:
+                user_to_add = User.objects.get(username=username)
+                if user_to_add == request.user:
+                    messages.warning(request, _('You cannot add yourself as an editor.'))
+                elif organizer.entity.editors.filter(id=user_to_add.id).exists():
+                    messages.warning(request, _(f'User "{username}" is already an editor.'))
+                else:
+                    organizer.entity.editors.add(user_to_add)
+                    messages.success(request, _(f'User "{username}" added as editor.'))
+            except User.DoesNotExist:
+                messages.error(request, _(f'User "{username}" not found.'))
+        
+        elif action == 'remove':
+            user_id = request.POST.get('user_id')
+            if user_id:
+                try:
+                    user_to_remove = User.objects.get(id=user_id)
+                    organizer.entity.editors.remove(user_to_remove)
+                    messages.success(request, _(f'User "{user_to_remove.username}" removed from editors.'))
+                except User.DoesNotExist:
+                    messages.error(request, _('User not found.'))
+        
+        return redirect('SkaRe:manage_organizer_editors', organizer_id=organizer_id)
+    
+    context = {
+        'organizer': organizer,
+        'editors': organizer.entity.editors.all(),
+        'entity_type': 'organizer',
+    }
+    return render(request, 'SkaRe/manage_editors.html', context)
