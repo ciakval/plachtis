@@ -33,7 +33,7 @@ def user_login(request):
         
         if user is not None:
             login(request, user)
-            messages.success(request, _(f'Welcome back, {user.first_name or user.username}!'))
+            messages.success(request, _('Welcome back, {name}!').format(name=user.first_name or user.username))
             next_url = request.GET.get('next', 'SkaRe:home')
             return redirect(next_url)
         else:
@@ -60,7 +60,7 @@ def user_register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, _(f'Welcome, {user.first_name}! Your account has been created successfully.'))
+            messages.success(request, _('Welcome, {name}! Your account has been created successfully.').format(name=user.first_name))
             return redirect('SkaRe:home')
         else:
             messages.error(request, _('Please correct the errors below.'))
@@ -114,12 +114,15 @@ def register_unit(request):
                     
                     messages.success(
                         request,
-                        _(f'Unit "{entity.scout_unit_name}" registered successfully with {participant_count} participant(s)!')
+                        _('Unit "{unit_name}" registered successfully with {count} participant(s)!').format(
+                            unit_name=entity.scout_unit_name,
+                            count=participant_count
+                        )
                     )
                     return redirect('SkaRe:home')
                     
             except Exception as e:
-                messages.error(request, _(f'Error registering unit: {str(e)}'))
+                messages.error(request, _('Error registering unit: {error}').format(error=str(e)))
         else:
             messages.error(request, _('Please correct the errors in the form.'))
     else:
@@ -167,13 +170,14 @@ def edit_unit(request, unit_id):
     class UnitEditForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            # Add 'is-invalid' class to fields with errors
-            for field_name, field in self.fields.items():
-                if field_name in self.errors:
-                    if 'class' in field.widget.attrs:
-                        field.widget.attrs['class'] += ' is-invalid'
-                    else:
-                        field.widget.attrs['class'] = 'is-invalid'
+            # Add 'is-invalid' class to fields with errors (after form is bound and validated)
+            if self.is_bound:
+                for field_name, field in self.fields.items():
+                    if field_name in self.errors:
+                        if 'class' in field.widget.attrs:
+                            field.widget.attrs['class'] += ' is-invalid'
+                        else:
+                            field.widget.attrs['class'] = 'is-invalid'
         
         class Meta:
             model = Unit
@@ -205,13 +209,14 @@ def edit_unit(request, unit_id):
     class EntityEditForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            # Add 'is-invalid' class to fields with errors
-            for field_name, field in self.fields.items():
-                if field_name in self.errors:
-                    if 'class' in field.widget.attrs:
-                        field.widget.attrs['class'] += ' is-invalid'
-                    else:
-                        field.widget.attrs['class'] = 'is-invalid'
+            # Add 'is-invalid' class to fields with errors (after form is bound and validated)
+            if self.is_bound:
+                for field_name, field in self.fields.items():
+                    if field_name in self.errors:
+                        if 'class' in field.widget.attrs:
+                            field.widget.attrs['class'] += ' is-invalid'
+                        else:
+                            field.widget.attrs['class'] = 'is-invalid'
         
         class Meta:
             model = Entity
@@ -234,7 +239,12 @@ def edit_unit(request, unit_id):
         entity_form = EntityEditForm(request.POST, instance=unit.entity)
         participant_formset = RegularParticipantFormSet(request.POST, prefix='participants')
         
-        if unit_form.is_valid() and entity_form.is_valid() and participant_formset.is_valid():
+        # Validate all forms
+        unit_valid = unit_form.is_valid()
+        entity_valid = entity_form.is_valid()
+        formset_valid = participant_formset.is_valid()
+        
+        if unit_valid and entity_valid and formset_valid:
             try:
                 with transaction.atomic():
                     # Save entity and unit
@@ -254,12 +264,24 @@ def edit_unit(request, unit_id):
                             participant.save()
                             participant_count += 1
                     
-                    messages.success(request, _(f'Unit "{unit.entity.scout_unit_name}" updated successfully with {participant_count} participant(s)!'))
+                    messages.success(request, _('Unit "{unit_name}" updated successfully with {count} participant(s)!').format(
+                        unit_name=unit.entity.scout_unit_name,
+                        count=participant_count
+                    ))
                     return redirect('SkaRe:list_units')
             except Exception as e:
-                messages.error(request, _(f'Error updating unit: {str(e)}'))
+                messages.error(request, _('Error updating unit: {error}').format(error=str(e)))
         else:
-            messages.error(request, _('Please correct the errors in the form.'))
+            # Show specific error messages - each as a separate error alert
+            if not unit_valid or not entity_valid:
+                if not formset_valid:
+                    messages.error(request, _('Please correct the errors in the form of unit and participants'))
+                else:
+                    messages.error(request, _('Please correct the errors in the form of unit'))
+            elif not formset_valid:
+                messages.error(request, _('Please correct the errors in the form of participants'))
+            else:
+                messages.error(request, _('Please correct the errors in the form.'))
     else:
         unit_form = UnitEditForm(instance=unit)
         entity_form = EntityEditForm(instance=unit.entity)
@@ -325,12 +347,12 @@ def register_individual_participant(request):
                     
                     messages.success(
                         request,
-                        _(f'Individual Participant "{participant}" registered successfully!')
+                        _('Individual Participant "{name}" registered successfully!').format(name=str(participant))
                     )
                     return redirect('SkaRe:home')
                     
             except Exception as e:
-                messages.error(request, _(f'Error registering individual participant: {str(e)}'))
+                messages.error(request, _('Error registering individual participant: {error}').format(error=str(e)))
         else:
             messages.error(request, _('Please correct the errors in the form.'))
     else:
@@ -452,10 +474,10 @@ def edit_individual_participant(request, participant_id):
                     entity_form.save()
                     participant_form.save()
                     
-                    messages.success(request, _(f'Individual Participant "{participant}" updated successfully!'))
+                    messages.success(request, _('Individual Participant "{name}" updated successfully!').format(name=str(participant)))
                     return redirect('SkaRe:list_individual_participants')
             except Exception as e:
-                messages.error(request, _(f'Error updating participant: {str(e)}'))
+                messages.error(request, _('Error updating participant: {error}').format(error=str(e)))
         else:
             messages.error(request, _('Please correct the errors in the form.'))
     else:
@@ -502,12 +524,12 @@ def register_organizer(request):
                     
                     messages.success(
                         request,
-                        _(f'Organizer "{organizer}" registered successfully!')
+                        _('Organizer "{name}" registered successfully!').format(name=str(organizer))
                     )
                     return redirect('SkaRe:home')
                     
             except Exception as e:
-                messages.error(request, _(f'Error registering organizer: {str(e)}'))
+                messages.error(request, _('Error registering organizer: {error}').format(error=str(e)))
         else:
             messages.error(request, _('Please correct the errors in the form.'))
     else:
@@ -643,10 +665,10 @@ def edit_organizer(request, organizer_id):
                     entity_form.save()
                     organizer_form.save()
                     
-                    messages.success(request, _(f'Organizer "{organizer}" updated successfully!'))
+                    messages.success(request, _('Organizer "{name}" updated successfully!').format(name=str(organizer)))
                     return redirect('SkaRe:list_organizers')
             except Exception as e:
-                messages.error(request, _(f'Error updating organizer: {str(e)}'))
+                messages.error(request, _('Error updating organizer: {error}').format(error=str(e)))
         else:
             messages.error(request, _('Please correct the errors in the form.'))
     else:
