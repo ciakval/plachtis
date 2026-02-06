@@ -7,8 +7,9 @@ from django.db import transaction
 from django import forms
 from django.utils.translation import gettext as _
 from .forms import (
-    UserRegistrationForm, UnitRegistrationForm, RegularParticipantFormSet,
-    IndividualParticipantRegistrationForm, OrganizerRegistrationForm
+    UserRegistrationForm, UnitRegistrationForm,
+    IndividualParticipantRegistrationForm, OrganizerRegistrationForm,
+    validate_czech_phone, get_participant_formset
 )
 from .models import (
     Entity, Unit, RegularParticipant, EventSettings,
@@ -33,7 +34,7 @@ def user_login(request):
         
         if user is not None:
             login(request, user)
-            messages.success(request, _(f'Welcome back, {user.first_name or user.username}!'))
+            messages.success(request, _('Welcome back, {name}!').format(name=user.first_name or user.username))
             next_url = request.GET.get('next', 'SkaRe:home')
             return redirect(next_url)
         else:
@@ -60,7 +61,7 @@ def user_register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, _(f'Welcome, {user.first_name}! Your account has been created successfully.'))
+            messages.success(request, _('Welcome, {name}! Your account has been created successfully.').format(name=user.first_name))
             return redirect('SkaRe:home')
         else:
             messages.error(request, _('Please correct the errors below.'))
@@ -81,7 +82,7 @@ def register_unit(request):
     
     if request.method == 'POST':
         unit_form = UnitRegistrationForm(request.POST)
-        participant_formset = RegularParticipantFormSet(request.POST, prefix='participants')
+        participant_formset = get_participant_formset(extra=3)(request.POST, prefix='participants')
         
         if unit_form.is_valid() and participant_formset.is_valid():
             try:
@@ -114,17 +115,20 @@ def register_unit(request):
                     
                     messages.success(
                         request,
-                        _(f'Unit "{entity.scout_unit_name}" registered successfully with {participant_count} participant(s)!')
+                        _('Unit "{unit_name}" registered successfully with {count} participant(s)!').format(
+                            unit_name=entity.scout_unit_name,
+                            count=participant_count
+                        )
                     )
                     return redirect('SkaRe:home')
                     
             except Exception as e:
-                messages.error(request, _(f'Error registering unit: {str(e)}'))
+                messages.error(request, _('Error registering unit: {error}').format(error=str(e)))
         else:
             messages.error(request, _('Please correct the errors in the form.'))
     else:
         unit_form = UnitRegistrationForm()
-        participant_formset = RegularParticipantFormSet(prefix='participants')
+        participant_formset = get_participant_formset(extra=3)(prefix='participants')
     
     context = {
         'unit_form': unit_form,
@@ -167,13 +171,14 @@ def edit_unit(request, unit_id):
     class UnitEditForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            # Add 'is-invalid' class to fields with errors
-            for field_name, field in self.fields.items():
-                if field_name in self.errors:
-                    if 'class' in field.widget.attrs:
-                        field.widget.attrs['class'] += ' is-invalid'
-                    else:
-                        field.widget.attrs['class'] = 'is-invalid'
+            # Add 'is-invalid' class to fields with errors (after form is bound and validated)
+            if self.is_bound:
+                for field_name, field in self.fields.items():
+                    if field_name in self.errors:
+                        if 'class' in field.widget.attrs:
+                            field.widget.attrs['class'] += ' is-invalid'
+                        else:
+                            field.widget.attrs['class'] = 'is-invalid'
         
         class Meta:
             model = Unit
@@ -203,24 +208,40 @@ def edit_unit(request, unit_id):
             }
     
     class EntityEditForm(forms.ModelForm):
+        # Explicitly define required fields to match registration form
+        scout_unit_name = forms.CharField(
+            max_length=200,
+            required=True,
+            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 5. oddíl Koráb'}),
+            label=_("Scout Unit Name")
+        )
+        scout_unit_evidence_id = forms.CharField(
+            max_length=50,
+            required=True,
+            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
+            label=_("Evidence ID")
+        )
+        
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            # Add 'is-invalid' class to fields with errors
-            for field_name, field in self.fields.items():
-                if field_name in self.errors:
-                    if 'class' in field.widget.attrs:
-                        field.widget.attrs['class'] += ' is-invalid'
-                    else:
-                        field.widget.attrs['class'] = 'is-invalid'
+            # Add phone validator to contact_phone field
+            if 'contact_phone' in self.fields:
+                self.fields['contact_phone'].validators.append(validate_czech_phone)
+            # Add 'is-invalid' class to fields with errors (after form is bound and validated)
+            if self.is_bound:
+                for field_name, field in self.fields.items():
+                    if field_name in self.errors:
+                        if 'class' in field.widget.attrs:
+                            field.widget.attrs['class'] += ' is-invalid'
+                        else:
+                            field.widget.attrs['class'] = 'is-invalid'
         
         class Meta:
             model = Entity
             fields = ['scout_unit_name', 'scout_unit_evidence_id', 'contact_email', 'contact_phone', 'expected_arrival', 'expected_departure', 'home_town']
             widgets = {
-                'scout_unit_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 5. oddíl Koráb'}),
-                'scout_unit_evidence_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
                 'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
-                'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
+                'contact_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
                 'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'home_town': forms.TextInput(attrs={'class': 'form-control'}),
@@ -232,55 +253,55 @@ def edit_unit(request, unit_id):
     if request.method == 'POST':
         unit_form = UnitEditForm(request.POST, instance=unit)
         entity_form = EntityEditForm(request.POST, instance=unit.entity)
-        participant_formset = RegularParticipantFormSet(request.POST, prefix='participants')
+        participant_formset = get_participant_formset(extra=0)(
+            request.POST,
+            prefix='participants',
+            queryset=existing_participants
+        )
         
-        if unit_form.is_valid() and entity_form.is_valid() and participant_formset.is_valid():
+        unit_valid = unit_form.is_valid()
+        entity_valid = entity_form.is_valid()
+        formset_valid = participant_formset.is_valid()
+        
+        if unit_valid and entity_valid and formset_valid:
             try:
                 with transaction.atomic():
-                    # Save entity and unit
                     entity_form.save()
                     unit_form.save()
                     
-                    # Delete all existing participants and recreate from form
-                    # This avoids issues with multi-table inheritance updates
-                    existing_participants.delete()
+                    instances = participant_formset.save(commit=False)
+                    for instance in instances:
+                        instance.unit = unit
+                        instance.save()
                     
-                    # Create all participants from formset
-                    participant_count = 0
-                    for form in participant_formset:
-                        if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
-                            participant = form.save(commit=False)
-                            participant.unit = unit
-                            participant.save()
-                            participant_count += 1
+                    for form in participant_formset.deleted_forms:
+                        if form.instance and form.instance.pk:
+                            form.instance.delete()
                     
-                    messages.success(request, _(f'Unit "{unit.entity.scout_unit_name}" updated successfully with {participant_count} participant(s)!'))
+                    participant_count = len(instances)
+                    messages.success(request, _('Unit "{unit_name}" updated successfully with {count} participant(s)!').format(
+                        unit_name=unit.entity.scout_unit_name,
+                        count=participant_count
+                    ))
                     return redirect('SkaRe:list_units')
             except Exception as e:
-                messages.error(request, _(f'Error updating unit: {str(e)}'))
+                messages.error(request, _('Error updating unit: {error}').format(error=str(e)))
         else:
-            messages.error(request, _('Please correct the errors in the form.'))
+            if not unit_valid or not entity_valid:
+                if not formset_valid:
+                    messages.error(request, _('Please correct the errors in the form of unit and participants'))
+                else:
+                    messages.error(request, _('Please correct the errors in the form of unit'))
+            elif not formset_valid:
+                messages.error(request, _('Please correct the errors in the form of participants'))
+            else:
+                messages.error(request, _('Please correct the errors in the form.'))
     else:
         unit_form = UnitEditForm(instance=unit)
         entity_form = EntityEditForm(instance=unit.entity)
-        
-        # Pre-fill formset with existing participants
-        initial_data = []
-        for participant in existing_participants:
-            initial_data.append({
-                'first_name': participant.first_name,
-                'last_name': participant.last_name,
-                'nickname': participant.nickname,
-                'date_of_birth': participant.date_of_birth.strftime('%Y-%m-%d') if participant.date_of_birth else '',
-                'category': participant.category,
-                'health_restrictions': participant.health_restrictions,
-                'dietary_restrictions': participant.dietary_restrictions,
-                'relevant_information': participant.relevant_information,
-            })
-        
-        participant_formset = RegularParticipantFormSet(
+        participant_formset = get_participant_formset(extra=0)(
             prefix='participants',
-            initial=initial_data
+            queryset=existing_participants
         )
     
     context = {
@@ -288,7 +309,7 @@ def edit_unit(request, unit_id):
         'unit_form': unit_form,
         'entity_form': entity_form,
         'participant_formset': participant_formset,
-        'existing_participants': existing_participants,
+        'existing_participants': list(existing_participants),
     }
     return render(request, 'SkaRe/edit_unit.html', context)
 
@@ -325,12 +346,12 @@ def register_individual_participant(request):
                     
                     messages.success(
                         request,
-                        _(f'Individual Participant "{participant}" registered successfully!')
+                        _('Individual Participant "{name}" registered successfully!').format(name=str(participant))
                     )
                     return redirect('SkaRe:home')
                     
             except Exception as e:
-                messages.error(request, _(f'Error registering individual participant: {str(e)}'))
+                messages.error(request, _('Error registering individual participant: {error}').format(error=str(e)))
         else:
             messages.error(request, _('Please correct the errors in the form.'))
     else:
@@ -424,6 +445,9 @@ def edit_individual_participant(request, participant_id):
     class EntityEditForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+            # Add phone validator to contact_phone field
+            if 'contact_phone' in self.fields:
+                self.fields['contact_phone'].validators.append(validate_czech_phone)
             for field_name, field in self.fields.items():
                 if field_name in self.errors:
                     if 'class' in field.widget.attrs:
@@ -436,7 +460,7 @@ def edit_individual_participant(request, participant_id):
             fields = ['contact_email', 'contact_phone', 'expected_arrival', 'expected_departure', 'home_town']
             widgets = {
                 'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
-                'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
+                'contact_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
                 'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'home_town': forms.TextInput(attrs={'class': 'form-control'}),
@@ -452,10 +476,10 @@ def edit_individual_participant(request, participant_id):
                     entity_form.save()
                     participant_form.save()
                     
-                    messages.success(request, _(f'Individual Participant "{participant}" updated successfully!'))
+                    messages.success(request, _('Individual Participant "{name}" updated successfully!').format(name=str(participant)))
                     return redirect('SkaRe:list_individual_participants')
             except Exception as e:
-                messages.error(request, _(f'Error updating participant: {str(e)}'))
+                messages.error(request, _('Error updating participant: {error}').format(error=str(e)))
         else:
             messages.error(request, _('Please correct the errors in the form.'))
     else:
@@ -502,12 +526,12 @@ def register_organizer(request):
                     
                     messages.success(
                         request,
-                        _(f'Organizer "{organizer}" registered successfully!')
+                        _('Organizer "{name}" registered successfully!').format(name=str(organizer))
                     )
                     return redirect('SkaRe:home')
                     
             except Exception as e:
-                messages.error(request, _(f'Error registering organizer: {str(e)}'))
+                messages.error(request, _('Error registering organizer: {error}').format(error=str(e)))
         else:
             messages.error(request, _('Please correct the errors in the form.'))
     else:
@@ -615,6 +639,9 @@ def edit_organizer(request, organizer_id):
     class EntityEditForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+            # Add phone validator to contact_phone field
+            if 'contact_phone' in self.fields:
+                self.fields['contact_phone'].validators.append(validate_czech_phone)
             for field_name, field in self.fields.items():
                 if field_name in self.errors:
                     if 'class' in field.widget.attrs:
@@ -627,7 +654,7 @@ def edit_organizer(request, organizer_id):
             fields = ['contact_email', 'contact_phone', 'expected_arrival', 'expected_departure', 'home_town']
             widgets = {
                 'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
-                'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
+                'contact_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
                 'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'home_town': forms.TextInput(attrs={'class': 'form-control'}),
@@ -643,10 +670,10 @@ def edit_organizer(request, organizer_id):
                     entity_form.save()
                     organizer_form.save()
                     
-                    messages.success(request, _(f'Organizer "{organizer}" updated successfully!'))
+                    messages.success(request, _('Organizer "{name}" updated successfully!').format(name=str(organizer)))
                     return redirect('SkaRe:list_organizers')
             except Exception as e:
-                messages.error(request, _(f'Error updating organizer: {str(e)}'))
+                messages.error(request, _('Error updating organizer: {error}').format(error=str(e)))
         else:
             messages.error(request, _('Please correct the errors in the form.'))
     else:

@@ -15,7 +15,7 @@
             <div class="card-body">
                 {% if deadline %}
                 <div class="alert alert-info">
-                    <i class="bi bi-calendar-event"></i> {% trans "Registration deadline" %} <strong>{{ deadline|date:"F j, Y, g:i a" }}</strong>
+                    <i class="bi bi-calendar-event"></i> {% trans "Registration deadline" %}: <strong>{{ deadline|date:"F j, Y, g:i a" }}</strong>
                 </div>
                 {% endif %}
 

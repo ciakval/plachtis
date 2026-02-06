@@ -2,7 +2,28 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
+import re
 from .models import Unit, RegularParticipant, IndividualParticipant, Organizer
+
+
+def validate_czech_phone(value):
+    """Validate Czech phone number: must start with +420 and have 9 digits."""
+    # Remove spaces for validation
+    phone_clean = value.replace(' ', '').replace('-', '')
+    
+    # Check if it starts with +420
+    if not phone_clean.startswith('+420'):
+        raise ValidationError(_('Phone number must start with +420'))
+    
+    # Extract digits after +420
+    digits = phone_clean[4:]  # After '+420'
+    
+    # Check if there are exactly 9 digits
+    if not digits.isdigit() or len(digits) != 9:
+        raise ValidationError(_('Phone number must have exactly 9 digits after +420 (e.g., +420 123 456 789)'))
+    
+    return value
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -69,7 +90,8 @@ class UnitRegistrationForm(forms.ModelForm):
     contact_phone = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
-        label=_("Contact Phone")
+        label=_("Contact Phone"),
+        validators=[validate_czech_phone]
     )
     expected_arrival = forms.DateTimeField(
         required=False,
@@ -138,6 +160,29 @@ class RegularParticipantForm(forms.ModelForm):
                     field.widget.attrs['class'] += ' is-invalid'
                 else:
                     field.widget.attrs['class'] = 'is-invalid'
+    
+    def full_clean(self):
+        """Override to ensure DELETE field is processed.
+        
+        The DELETE field is added by the formset dynamically, so it might not be
+        in self.fields during full_clean(). We manually process it from POST data.
+        """
+        super().full_clean()
+        if not hasattr(self, 'cleaned_data') or self.cleaned_data is None:
+            self.cleaned_data = {}
+        
+        if 'DELETE' not in self.cleaned_data:
+            if hasattr(self, 'data') and self.data:
+                if hasattr(self, 'prefix') and self.prefix:
+                    delete_key = f'{self.prefix}-DELETE'
+                    delete_value = self.data.get(delete_key, False)
+                else:
+                    delete_keys = [k for k in self.data.keys() if k.endswith('-DELETE')]
+                    delete_value = self.data.get(delete_keys[0], False) if delete_keys else False
+                
+                self.cleaned_data['DELETE'] = (delete_value == 'on' or delete_value is True or delete_value == 'True')
+            else:
+                self.cleaned_data['DELETE'] = False
 
     class Meta:
         model = RegularParticipant
@@ -155,7 +200,7 @@ class RegularParticipantForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': _('First name')}),
             'last_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': _('Last name')}),
             'nickname': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': _('Nickname')}),
-            'date_of_birth': forms.DateInput(attrs={'class': 'form-control form-control-sm', 'type': 'date'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-control form-control-sm', 'type': 'date'}, format='%Y-%m-%d'),
             'category': forms.Select(attrs={'class': 'form-control form-control-sm'}),
             'health_restrictions': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': _('e.g. Anxiety, asthma')}),
             'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': _('e.g. Vegetarian, gluten-free')}),
@@ -163,12 +208,19 @@ class RegularParticipantForm(forms.ModelForm):
         }
 
 
-# Formset for handling multiple participants
-RegularParticipantFormSet = forms.formset_factory(
-    RegularParticipantForm,
-    extra=3,  # Start with 3 empty forms
-    can_delete=True
-)
+# Formset factory function for handling multiple participants
+def get_participant_formset(extra=3):
+    """Get a formset for participants with configurable number of empty forms.
+    
+    Args:
+        extra: Number of empty forms to show (default 3 for new registrations, 0 for editing)
+    """
+    return forms.modelformset_factory(
+        RegularParticipant,
+        form=RegularParticipantForm,
+        extra=extra,
+        can_delete=True
+    )
 
 
 class IndividualParticipantRegistrationForm(forms.ModelForm):
@@ -182,7 +234,8 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
     contact_phone = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
-        label=_("Contact Phone")
+        label=_("Contact Phone"),
+        validators=[validate_czech_phone]
     )
     expected_arrival = forms.DateTimeField(
         required=False,
@@ -262,7 +315,8 @@ class OrganizerRegistrationForm(forms.ModelForm):
     contact_phone = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
-        label=_("Contact Phone")
+        label=_("Contact Phone"),
+        validators=[validate_czech_phone]
     )
     expected_arrival = forms.DateTimeField(
         required=False,

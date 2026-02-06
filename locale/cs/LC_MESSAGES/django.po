@@ -1087,6 +1087,84 @@ msgstr "Nemáte oprávnění upravovat tohoto organizátora."
 msgid "This organizer cannot be edited after the registration deadline."
 msgstr "Nelze upravovat organizátora po uavření registrace."
 
+#: SkaRe/views.py:264
+msgid "Unit \"{unit_name}\" updated successfully with {count} participant(s)!"
+msgstr "Oddíl \"{unit_name}\" byl úspěšně aktualizován s {count} účastníkem/účastníky!"
+
+#: SkaRe/views.py:477
+msgid "Individual Participant \"{name}\" updated successfully!"
+msgstr "Jednotlivec \"{name}\" byl úspěšně aktualizován!"
+
+#: SkaRe/views.py:36
+msgid "Welcome back, {name}!"
+msgstr "Vítejte zpět, {name}!"
+
+#: SkaRe/views.py:63
+msgid "Welcome, {name}! Your account has been created successfully."
+msgstr "Vítejte, {name}! Váš účet byl úspěšně vytvořen."
+
+#: SkaRe/views.py:122
+msgid "Error registering unit: {error}"
+msgstr "Chyba při registraci oddílu: {error}"
+
+#: SkaRe/views.py:117
+msgid "Unit \"{unit_name}\" registered successfully with {count} participant(s)!"
+msgstr "Oddíl \"{unit_name}\" byl úspěšně registrován s {count} účastníkem/účastníky!"
+
+#: SkaRe/views.py:270
+msgid "Error updating unit: {error}"
+msgstr "Chyba při aktualizaci oddílu: {error}"
+
+#: SkaRe/views.py:355
+msgid "Error registering individual participant: {error}"
+msgstr "Chyba při registraci individuálního účastníka: {error}"
+
+#: SkaRe/views.py:350
+msgid "Individual Participant \"{name}\" registered successfully!"
+msgstr "Individuální účastník \"{name}\" byl úspěšně registrován!"
+
+#: SkaRe/views.py:480
+msgid "Error updating participant: {error}"
+msgstr "Chyba při aktualizaci účastníka: {error}"
+
+#: SkaRe/views.py:532
+msgid "Error registering organizer: {error}"
+msgstr "Chyba při registraci organizátora: {error}"
+
+#: SkaRe/views.py:530
+msgid "Organizer \"{name}\" registered successfully!"
+msgstr "Organizátor \"{name}\" byl úspěšně registrován!"
+
+#: SkaRe/views.py:668
+msgid "Organizer \"{name}\" updated successfully!"
+msgstr "Organizátor \"{name}\" byl úspěšně aktualizován!"
+
+#: SkaRe/views.py:671
+msgid "Error updating organizer: {error}"
+msgstr "Chyba při aktualizaci organizátora: {error}"
+
+#: SkaRe/views.py:287
+msgid "Please correct the errors in the form of participants"
+msgstr "Prosím opravte chyby ve formuláři účastníků"
+
+#: SkaRe/views.py:287
+msgid "Please correct the errors in the form of unit and participants"
+msgstr "Prosím opravte chyby ve formuláři jednotky a účastníků"
+
+#: SkaRe/views.py:287
+msgid "Please correct the errors in the form of unit"
+msgstr "Prosím opravte chyby ve formuláři jednotky"
+
+#: SkaRe/forms.py:17
+msgid "Phone number must start with +420"
+msgstr "Telefonní číslo musí začínat +420"
+
+#: SkaRe/forms.py:24
+msgid "Phone number must have exactly 9 digits after +420 (e.g., +420 123 456 789)"
+msgstr "Telefonní číslo musí mít přesně 9 číslic za +420 (např., +420 123 456 789)"
+
 #~| msgid "Register Individual Participant"
 #~ msgid "Error registering individual participant: {str(e)}"
 #~ msgstr "Registrovat jednotlivce"
+
+

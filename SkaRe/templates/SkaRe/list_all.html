@@ -234,6 +234,12 @@
         </div>
         {% endif %}
         
+        <div class="mt-4">
+            <a class="btn btn-primary" href="{% url 'SkaRe:home' %}" role="button">
+                <i class="bi bi-house"></i> {% trans "Back to Home" %}
+            </a>
+        </div>
+        
         {% else %}
         <div class="alert alert-danger">
             <i class="bi bi-shield-exclamation"></i> {% trans "You do not have permission to view this page." %}

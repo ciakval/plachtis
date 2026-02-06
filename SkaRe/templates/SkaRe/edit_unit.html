@@ -234,6 +234,14 @@
                         <i class="bi bi-info-circle"></i> {% trans "Edit existing participants below or add new ones" %}
                     </p>
                     
+                    {% if participant_formset.non_form_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in participant_formset.non_form_errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
                     {{ participant_formset.management_form }}
                     
                     <button type="button" id="add-participant" class="btn btn-sm btn-success mb-3">
@@ -258,21 +266,66 @@
                             </thead>
                             <tbody id="participant-table-body">
                                 {% for form in participant_formset %}
-                                <tr class="participant-row" data-form-index="{{ forloop.counter0 }}">
+                                <tr class="participant-row {% if form.errors %}table-danger{% endif %}" data-form-index="{{ forloop.counter0 }}">
+                                    {% if form.id %}{{ form.id }}{% endif %}
+                                    {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
                                     <td class="text-center participant-number">{{ forloop.counter }}</td>
-                                    <td>{{ form.first_name }}</td>
-                                    <td>{{ form.last_name }}</td>
-                                    <td>{{ form.nickname }}</td>
-                                    <td>{{ form.date_of_birth }}</td>
-                                    <td>{{ form.category }}</td>
-                                    <td>{{ form.health_restrictions }}</td>
-                                    <td>{{ form.dietary_restrictions }}</td>
-                                    <td>{{ form.relevant_information }}</td>
+                                    <td>
+                                        {{ form.first_name }}
+                                        {% if form.first_name.errors %}
+                                            <div class="text-danger small">{{ form.first_name.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.last_name }}
+                                        {% if form.last_name.errors %}
+                                            <div class="text-danger small">{{ form.last_name.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.nickname }}
+                                        {% if form.nickname.errors %}
+                                            <div class="text-danger small">{{ form.nickname.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.date_of_birth }}
+                                        {% if form.date_of_birth.errors %}
+                                            <div class="text-danger small">{{ form.date_of_birth.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.category }}
+                                        {% if form.category.errors %}
+                                            <div class="text-danger small">{{ form.category.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.health_restrictions }}
+                                        {% if form.health_restrictions.errors %}
+                                            <div class="text-danger small">{{ form.health_restrictions.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.dietary_restrictions }}
+                                        {% if form.dietary_restrictions.errors %}
+                                            <div class="text-danger small">{{ form.dietary_restrictions.errors }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ form.relevant_information }}
+                                        {% if form.relevant_information.errors %}
+                                            <div class="text-danger small">{{ form.relevant_information.errors }}</div>
+                                        {% endif %}
+                                    </td>
                                     <td class="text-center">
-                                        {{ form.DELETE }}
-                                        <button type="button" class="btn btn-sm btn-danger remove-participant">
+                                        <div style="display: none;">{{ form.DELETE }}</div>
+                                        <button type="button" class="btn btn-sm btn-danger remove-participant" title="{% trans 'Delete participant' %}">
                                             <i class="bi bi-trash"></i>
                                         </button>
+                                        {% if form.non_field_errors %}
+                                            <div class="text-danger small mt-1">{{ form.non_field_errors }}</div>
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -309,9 +362,10 @@
             <td><input type="date" name="participants-__prefix__-date_of_birth" class="form-control form-control-sm" id="id_participants-__prefix__-date_of_birth"></td>
             <td>
                 <select name="participants-__prefix__-category" class="form-control form-control-sm" id="id_participants-__prefix__-category">
+                    <option value="">---------</option>
                     <option value="ADULT">Adult</option>
                     <option value="ROVER">Rover</option>
-                    <option value="SCOUT" selected>Scout</option>
+                    <option value="SCOUT">Scout</option>
                     <option value="CUB">Cub</option>
                 </select>
             </td>
