@@ -7,9 +7,9 @@ from django.db import transaction
 from django import forms
 from django.utils.translation import gettext as _
 from .forms import (
-    UserRegistrationForm, UnitRegistrationForm, RegularParticipantFormSet,
+    UserRegistrationForm, UnitRegistrationForm,
     IndividualParticipantRegistrationForm, OrganizerRegistrationForm,
-    validate_czech_phone
+    validate_czech_phone, get_participant_formset
 )
 from .models import (
     Entity, Unit, RegularParticipant, EventSettings,
@@ -82,7 +82,7 @@ def register_unit(request):
     
     if request.method == 'POST':
         unit_form = UnitRegistrationForm(request.POST)
-        participant_formset = RegularParticipantFormSet(request.POST, prefix='participants')
+        participant_formset = get_participant_formset(extra=3)(request.POST, prefix='participants')
         
         if unit_form.is_valid() and participant_formset.is_valid():
             try:
@@ -128,7 +128,7 @@ def register_unit(request):
             messages.error(request, _('Please correct the errors in the form.'))
     else:
         unit_form = UnitRegistrationForm()
-        participant_formset = RegularParticipantFormSet(prefix='participants')
+        participant_formset = get_participant_formset(extra=3)(prefix='participants')
     
     context = {
         'unit_form': unit_form,
@@ -253,7 +253,8 @@ def edit_unit(request, unit_id):
     if request.method == 'POST':
         unit_form = UnitEditForm(request.POST, instance=unit)
         entity_form = EntityEditForm(request.POST, instance=unit.entity)
-        participant_formset = RegularParticipantFormSet(request.POST, prefix='participants')
+        # Use formset with 0 extra forms when editing
+        participant_formset = get_participant_formset(extra=0)(request.POST, prefix='participants')
         
         # Validate all forms
         unit_valid = unit_form.is_valid()
@@ -316,7 +317,8 @@ def edit_unit(request, unit_id):
                 'relevant_information': participant.relevant_information,
             })
         
-        participant_formset = RegularParticipantFormSet(
+        # Use formset with 0 extra forms when editing (existing participants are pre-filled)
+        participant_formset = get_participant_formset(extra=0)(
             prefix='participants',
             initial=initial_data
         )

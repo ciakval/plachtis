@@ -185,12 +185,18 @@ class RegularParticipantForm(forms.ModelForm):
         }
 
 
-# Formset for handling multiple participants
-RegularParticipantFormSet = forms.formset_factory(
-    RegularParticipantForm,
-    extra=3,  # Start with 3 empty forms
-    can_delete=True
-)
+# Formset factory function for handling multiple participants
+def get_participant_formset(extra=3):
+    """Get a formset for participants with configurable number of empty forms.
+    
+    Args:
+        extra: Number of empty forms to show (default 3 for new registrations, 0 for editing)
+    """
+    return forms.formset_factory(
+        RegularParticipantForm,
+        extra=extra,
+        can_delete=True
+    )
 
 
 class IndividualParticipantRegistrationForm(forms.ModelForm):
