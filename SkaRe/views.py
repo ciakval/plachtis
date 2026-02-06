@@ -253,10 +253,12 @@ def edit_unit(request, unit_id):
     if request.method == 'POST':
         unit_form = UnitEditForm(request.POST, instance=unit)
         entity_form = EntityEditForm(request.POST, instance=unit.entity)
-        # Use formset with 0 extra forms when editing
-        participant_formset = get_participant_formset(extra=0)(request.POST, prefix='participants')
+        participant_formset = get_participant_formset(extra=0)(
+            request.POST,
+            prefix='participants',
+            queryset=existing_participants
+        )
         
-        # Validate all forms
         unit_valid = unit_form.is_valid()
         entity_valid = entity_form.is_valid()
         formset_valid = participant_formset.is_valid()
@@ -264,23 +266,19 @@ def edit_unit(request, unit_id):
         if unit_valid and entity_valid and formset_valid:
             try:
                 with transaction.atomic():
-                    # Save entity and unit
                     entity_form.save()
                     unit_form.save()
                     
-                    # Delete all existing participants and recreate from form
-                    # This avoids issues with multi-table inheritance updates
-                    existing_participants.delete()
+                    instances = participant_formset.save(commit=False)
+                    for instance in instances:
+                        instance.unit = unit
+                        instance.save()
                     
-                    # Create all participants from formset
-                    participant_count = 0
-                    for form in participant_formset:
-                        if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
-                            participant = form.save(commit=False)
-                            participant.unit = unit
-                            participant.save()
-                            participant_count += 1
+                    for form in participant_formset.deleted_forms:
+                        if form.instance and form.instance.pk:
+                            form.instance.delete()
                     
+                    participant_count = len(instances)
                     messages.success(request, _('Unit "{unit_name}" updated successfully with {count} participant(s)!').format(
                         unit_name=unit.entity.scout_unit_name,
                         count=participant_count
@@ -289,7 +287,6 @@ def edit_unit(request, unit_id):
             except Exception as e:
                 messages.error(request, _('Error updating unit: {error}').format(error=str(e)))
         else:
-            # Show specific error messages - each as a separate error alert
             if not unit_valid or not entity_valid:
                 if not formset_valid:
                     messages.error(request, _('Please correct the errors in the form of unit and participants'))
@@ -302,25 +299,9 @@ def edit_unit(request, unit_id):
     else:
         unit_form = UnitEditForm(instance=unit)
         entity_form = EntityEditForm(instance=unit.entity)
-        
-        # Pre-fill formset with existing participants
-        initial_data = []
-        for participant in existing_participants:
-            initial_data.append({
-                'first_name': participant.first_name,
-                'last_name': participant.last_name,
-                'nickname': participant.nickname,
-                'date_of_birth': participant.date_of_birth.strftime('%Y-%m-%d') if participant.date_of_birth else '',
-                'category': participant.category,
-                'health_restrictions': participant.health_restrictions,
-                'dietary_restrictions': participant.dietary_restrictions,
-                'relevant_information': participant.relevant_information,
-            })
-        
-        # Use formset with 0 extra forms when editing (existing participants are pre-filled)
         participant_formset = get_participant_formset(extra=0)(
             prefix='participants',
-            initial=initial_data
+            queryset=existing_participants
         )
     
     context = {
@@ -328,7 +309,7 @@ def edit_unit(request, unit_id):
         'unit_form': unit_form,
         'entity_form': entity_form,
         'participant_formset': participant_formset,
-        'existing_participants': existing_participants,
+        'existing_participants': list(existing_participants),
     }
     return render(request, 'SkaRe/edit_unit.html', context)
 

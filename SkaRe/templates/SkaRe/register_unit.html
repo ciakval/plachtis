@@ -254,8 +254,8 @@
                                             <td>{{ form.dietary_restrictions }}</td>
                                             <td>{{ form.relevant_information }}</td>
                                             <td class="text-center">
-                                                {{ form.DELETE }}
-                                                <button type="button" class="btn btn-sm btn-danger remove-participant">
+                                                <div style="display: none;">{{ form.DELETE }}</div>
+                                                <button type="button" class="btn btn-sm btn-danger remove-participant" title="{% trans 'Delete participant' %}">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </td>

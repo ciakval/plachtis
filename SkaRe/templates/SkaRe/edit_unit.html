@@ -267,6 +267,8 @@
                             <tbody id="participant-table-body">
                                 {% for form in participant_formset %}
                                 <tr class="participant-row {% if form.errors %}table-danger{% endif %}" data-form-index="{{ forloop.counter0 }}">
+                                    {% if form.id %}{{ form.id }}{% endif %}
+                                    {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
                                     <td class="text-center participant-number">{{ forloop.counter }}</td>
                                     <td>
                                         {{ form.first_name }}
@@ -317,8 +319,8 @@
                                         {% endif %}
                                     </td>
                                     <td class="text-center">
-                                        {{ form.DELETE }}
-                                        <button type="button" class="btn btn-sm btn-danger remove-participant">
+                                        <div style="display: none;">{{ form.DELETE }}</div>
+                                        <button type="button" class="btn btn-sm btn-danger remove-participant" title="{% trans 'Delete participant' %}">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                         {% if form.non_field_errors %}
