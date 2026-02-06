@@ -2,7 +2,28 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
+import re
 from .models import Unit, RegularParticipant, IndividualParticipant, Organizer
+
+
+def validate_czech_phone(value):
+    """Validate Czech phone number: must start with +420 and have 9 digits."""
+    # Remove spaces for validation
+    phone_clean = value.replace(' ', '').replace('-', '')
+    
+    # Check if it starts with +420
+    if not phone_clean.startswith('+420'):
+        raise ValidationError(_('Phone number must start with +420'))
+    
+    # Extract digits after +420
+    digits = phone_clean[4:]  # After '+420'
+    
+    # Check if there are exactly 9 digits
+    if not digits.isdigit() or len(digits) != 9:
+        raise ValidationError(_('Phone number must have exactly 9 digits after +420 (e.g., +420 123 456 789)'))
+    
+    return value
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -69,7 +90,8 @@ class UnitRegistrationForm(forms.ModelForm):
     contact_phone = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
-        label=_("Contact Phone")
+        label=_("Contact Phone"),
+        validators=[validate_czech_phone]
     )
     expected_arrival = forms.DateTimeField(
         required=False,
@@ -182,7 +204,8 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
     contact_phone = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
-        label=_("Contact Phone")
+        label=_("Contact Phone"),
+        validators=[validate_czech_phone]
     )
     expected_arrival = forms.DateTimeField(
         required=False,
@@ -262,7 +285,8 @@ class OrganizerRegistrationForm(forms.ModelForm):
     contact_phone = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
-        label=_("Contact Phone")
+        label=_("Contact Phone"),
+        validators=[validate_czech_phone]
     )
     expected_arrival = forms.DateTimeField(
         required=False,

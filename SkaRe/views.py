@@ -8,7 +8,8 @@ from django import forms
 from django.utils.translation import gettext as _
 from .forms import (
     UserRegistrationForm, UnitRegistrationForm, RegularParticipantFormSet,
-    IndividualParticipantRegistrationForm, OrganizerRegistrationForm
+    IndividualParticipantRegistrationForm, OrganizerRegistrationForm,
+    validate_czech_phone
 )
 from .models import (
     Entity, Unit, RegularParticipant, EventSettings,
@@ -223,6 +224,9 @@ def edit_unit(request, unit_id):
         
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+            # Add phone validator to contact_phone field
+            if 'contact_phone' in self.fields:
+                self.fields['contact_phone'].validators.append(validate_czech_phone)
             # Add 'is-invalid' class to fields with errors (after form is bound and validated)
             if self.is_bound:
                 for field_name, field in self.fields.items():
@@ -237,7 +241,7 @@ def edit_unit(request, unit_id):
             fields = ['scout_unit_name', 'scout_unit_evidence_id', 'contact_email', 'contact_phone', 'expected_arrival', 'expected_departure', 'home_town']
             widgets = {
                 'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
-                'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
+                'contact_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
                 'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'home_town': forms.TextInput(attrs={'class': 'form-control'}),
@@ -458,6 +462,9 @@ def edit_individual_participant(request, participant_id):
     class EntityEditForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+            # Add phone validator to contact_phone field
+            if 'contact_phone' in self.fields:
+                self.fields['contact_phone'].validators.append(validate_czech_phone)
             for field_name, field in self.fields.items():
                 if field_name in self.errors:
                     if 'class' in field.widget.attrs:
@@ -470,7 +477,7 @@ def edit_individual_participant(request, participant_id):
             fields = ['contact_email', 'contact_phone', 'expected_arrival', 'expected_departure', 'home_town']
             widgets = {
                 'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
-                'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
+                'contact_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
                 'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'home_town': forms.TextInput(attrs={'class': 'form-control'}),
@@ -649,6 +656,9 @@ def edit_organizer(request, organizer_id):
     class EntityEditForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+            # Add phone validator to contact_phone field
+            if 'contact_phone' in self.fields:
+                self.fields['contact_phone'].validators.append(validate_czech_phone)
             for field_name, field in self.fields.items():
                 if field_name in self.errors:
                     if 'class' in field.widget.attrs:
@@ -661,7 +671,7 @@ def edit_organizer(request, organizer_id):
             fields = ['contact_email', 'contact_phone', 'expected_arrival', 'expected_departure', 'home_town']
             widgets = {
                 'contact_email': forms.EmailInput(attrs={'class': 'form-control'}),
-                'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
+                'contact_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+420 123 456 789'}),
                 'expected_arrival': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'expected_departure': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
                 'home_town': forms.TextInput(attrs={'class': 'form-control'}),

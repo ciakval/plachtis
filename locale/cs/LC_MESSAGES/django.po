@@ -1155,6 +1155,14 @@ msgstr "Prosím opravte chyby ve formuláři jednotky a účastníků"
 msgid "Please correct the errors in the form of unit"
 msgstr "Prosím opravte chyby ve formuláři jednotky"
 
+#: SkaRe/forms.py:17
+msgid "Phone number must start with +420"
+msgstr "Telefonní číslo musí začínat +420"
+
+#: SkaRe/forms.py:24
+msgid "Phone number must have exactly 9 digits after +420 (e.g., +420 123 456 789)"
+msgstr "Telefonní číslo musí mít přesně 9 číslic za +420 (např., +420 123 456 789)"
+
 #~| msgid "Register Individual Participant"
 #~ msgid "Error registering individual participant: {str(e)}"
 #~ msgstr "Registrovat jednotlivce"
