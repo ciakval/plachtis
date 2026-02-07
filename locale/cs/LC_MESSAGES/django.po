@@ -906,7 +906,7 @@ msgstr "Registrovat dalšího jednotlivce"
 
 #: SkaRe/templates/SkaRe/list_individual_participants.html:96
 msgid "You haven't registered any individual participants yet."
-msgstr "Nezaregistrovali jste žádného pořadatele"
+msgstr "Nezaregistrovali jste žádného jednotlivce"
 
 #: SkaRe/templates/SkaRe/list_individual_participants.html:97
 msgid "Register your first participant now!"
