@@ -6,7 +6,7 @@
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <h1 class="mb-4"><i class="bi bi-person"></i> {% trans "My Registered Individual Participants" %}</h1>
+        <h1 class="mb-4"><i class="bi bi-person-fill"></i> {% trans "My Registered Individual Participants" %}</h1>
 
         {% if participants %}
             <div class="row">
@@ -104,7 +104,7 @@
             </div>
         {% else %}
             <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i>{% trans "You haven't registered any individual participants yet." %}
+                <i class="bi bi-info-circle"></i> {% trans "You haven't registered any individual participants yet." %}
                 <a href="{% url 'SkaRe:register_individual_participant' %}" class="alert-link">{% trans "Register your first participant now!" %}</a>
             </div>
 

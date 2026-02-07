@@ -216,11 +216,6 @@
                     <div class="card mb-4">
                         <div class="card-header bg-light d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">{% trans "Unit Participants" %}</h5>
-                            <div>
-                                <button type="button" class="btn btn-sm btn-success" id="add-participant">
-                                    <i class="bi bi-plus-circle"></i> {% trans "Add Participant" %}
-                                </button>
-                            </div>
                         </div>
                         <div class="card-body">
                             {{ participant_formset.management_form }}
@@ -265,8 +260,11 @@
                                 </table>
                             </div>
                             
-                            <div class="text-muted mt-2">
+                            <div class="text-muted mt-2 d-flex justify-content-between align-items-center">
                                 <small>{% trans "Click 'Add Participant' to add more rows. Fill in the participant information in each row." %}</small>
+                                <button type="button" class="btn btn-sm btn-success" id="add-participant">
+                                    <i class="bi bi-plus-circle"></i> {% trans "Add Participant" %}
+                                </button>
                             </div>
                         </div>
                     </div>

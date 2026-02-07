@@ -420,5 +420,5 @@ class Organizer(Person):
 
     def __str__(self):
         person_name = super().__str__()
-        return f"Organizer {person_name} ({self.division})"
+        return _("{person_name}").format(person_name=person_name)
     
