@@ -244,10 +244,6 @@
                     
                     {{ participant_formset.management_form }}
                     
-                    <button type="button" id="add-participant" class="btn btn-sm btn-success mb-3">
-                        <i class="bi bi-plus-circle"></i> {% trans "Add Participant Row" %}
-                    </button>
-                    
                     <div id="participant-forms" class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="table-light">
@@ -333,8 +329,11 @@
                         </table>
                     </div>
                     
-                    <div class="text-muted mt-2">
+                    <div class="text-muted mt-2 d-flex justify-content-between align-items-center">
                         <small>{% trans "Click 'Add Participant Row' to add more rows. Click the trash icon to mark a participant for deletion." %}</small>
+                        <button type="button" id="add-participant" class="btn btn-sm btn-success mb-3">
+                            <i class="bi bi-plus-circle"></i> {% trans "Add Participant Row" %}
+                        </button>
                     </div>
                 </div>
             </div>

@@ -646,7 +646,7 @@ msgid ""
 "participant for deletion."
 msgstr ""
 "Klikněte na 'Přidat účastníka' pro přidání dalších řádků. Vyplňte informace "
-"o účastníkch v každém řádku."
+"o účastnících v každém řádku."
 
 #: SkaRe/templates/SkaRe/edit_unit.html:291
 #: SkaRe/templates/SkaRe/register_individual_participant.html:253
