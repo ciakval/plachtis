@@ -8,20 +8,26 @@ from .models import Unit, RegularParticipant, IndividualParticipant, Organizer
 
 
 def validate_czech_phone(value):
-    """Validate Czech phone number: must start with +420 and have 9 digits."""
+    """Validate Czech/Slovak phone number: must be +420/9 digits, +421/9 digits, or just 9 digits."""
     # Remove spaces for validation
     phone_clean = value.replace(' ', '').replace('-', '')
     
-    # Check if it starts with +420
-    if not phone_clean.startswith('+420'):
-        raise ValidationError(_('Phone number must start with +420'))
-    
-    # Extract digits after +420
-    digits = phone_clean[4:]  # After '+420'
-    
-    # Check if there are exactly 9 digits
-    if not digits.isdigit() or len(digits) != 9:
-        raise ValidationError(_('Phone number must have exactly 9 digits after +420 (e.g., +420 123 456 789)'))
+    # Check if it starts with +420 or +421
+    if phone_clean.startswith('+420'):
+        # Extract digits after +420
+        digits = phone_clean[4:]  # After '+420'
+        if not digits.isdigit() or len(digits) != 9:
+            raise ValidationError(_('Phone number must have exactly 9 digits after +420 (e.g., +420 123 456 789)'))
+    elif phone_clean.startswith('+421'):
+        # Extract digits after +421
+        digits = phone_clean[4:]  # After '+421'
+        if not digits.isdigit() or len(digits) != 9:
+            raise ValidationError(_('Phone number must have exactly 9 digits after +421 (e.g., +421 123 456 789)'))
+    elif phone_clean.isdigit() and len(phone_clean) == 9:
+        # Just 9 digits without country code
+        return value
+    else:
+        raise ValidationError(_('Phone number must be: +420 followed by 9 digits, +421 followed by 9 digits, or just 9 digits (e.g., +420 123 456 789, +421 123 456 789, or 123 456 789)'))
     
     return value
 

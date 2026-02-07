@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 21:11+0100\n"
+"POT-Creation-Date: 2026-02-07 21:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,34 +19,43 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
 "<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#: .\SkaRe\forms.py:17
-msgid "Phone number must start with +420"
-msgstr "Telefonní číslo musí začínat +420"
-
-#: .\SkaRe\forms.py:24
+#: .\SkaRe\forms.py:20
 msgid ""
 "Phone number must have exactly 9 digits after +420 (e.g., +420 123 456 789)"
 msgstr ""
 "Telefonní číslo musí mít přesně 9 číslic za +420 (např., +420 123 456 789)"
 
-#: .\SkaRe\forms.py:76 .\SkaRe\views.py:221
+#: .\SkaRe\forms.py:25
+msgid ""
+"Phone number must have exactly 9 digits after +421 (e.g., +421 123 456 789)"
+msgstr ""
+"Telefonní číslo musí mít přesně 9 číslic za +421 (např., +421 123 456 789)"
+
+#: .\SkaRe\forms.py:30
+msgid ""
+"Phone number must be: +420 followed by 9 digits, +421 followed by 9 digits, "
+"or just 9 digits (e.g., +420 123 456 789, +421 123 456 789, or 123 456 789)"
+msgstr ""
+"Telefonní číslo musí být: +420 následované 9 číslicemi, +421 následované 9 číslicemi, nebo pouze 9 číslic (např., +420 123 456 789, +421 123 456 789, nebo 123 456 789)"
+
+#: .\SkaRe\forms.py:82 .\SkaRe\views.py:221
 msgid "Scout Unit Name"
 msgstr "Název oddílu/střediska/přístavu"
 
-#: .\SkaRe\forms.py:82 .\SkaRe\models.py:136
+#: .\SkaRe\forms.py:88 .\SkaRe\models.py:136
 #: .\SkaRe\templates\SkaRe\list_units.html:26 .\SkaRe\views.py:227
 msgid "Evidence ID"
 msgstr "Evidenční číslo oddílu/střediska/přístavu"
 
-#: .\SkaRe\forms.py:88 .\SkaRe\forms.py:232 .\SkaRe\forms.py:313
+#: .\SkaRe\forms.py:94 .\SkaRe\forms.py:238 .\SkaRe\forms.py:319
 msgid "Contact Email"
 msgstr "Kontaktní e-mail"
 
-#: .\SkaRe\forms.py:93 .\SkaRe\forms.py:237 .\SkaRe\forms.py:318
+#: .\SkaRe\forms.py:99 .\SkaRe\forms.py:243 .\SkaRe\forms.py:324
 msgid "Contact Phone"
 msgstr "Kontaktní telefon"
 
-#: .\SkaRe\forms.py:99 .\SkaRe\forms.py:243 .\SkaRe\forms.py:324
+#: .\SkaRe\forms.py:105 .\SkaRe\forms.py:249 .\SkaRe\forms.py:330
 #: .\SkaRe\templates\SkaRe\list_all.html:92
 #: .\SkaRe\templates\SkaRe\list_all.html:161
 #: .\SkaRe\templates\SkaRe\list_individual_participants.html:44
@@ -55,14 +64,14 @@ msgstr "Kontaktní telefon"
 msgid "Expected Arrival"
 msgstr "Očekávaný příjezd"
 
-#: .\SkaRe\forms.py:104 .\SkaRe\forms.py:248 .\SkaRe\forms.py:329
+#: .\SkaRe\forms.py:110 .\SkaRe\forms.py:254 .\SkaRe\forms.py:335
 #: .\SkaRe\templates\SkaRe\list_individual_participants.html:49
 #: .\SkaRe\templates\SkaRe\list_organizers.html:73
 #: .\SkaRe\templates\SkaRe\list_units.html:49
 msgid "Expected Departure"
 msgstr "Očekávaný odjezd"
 
-#: .\SkaRe\forms.py:110 .\SkaRe\forms.py:254 .\SkaRe\forms.py:335
+#: .\SkaRe\forms.py:116 .\SkaRe\forms.py:260 .\SkaRe\forms.py:341
 #: .\SkaRe\templates\SkaRe\list_all.html:88
 #: .\SkaRe\templates\SkaRe\list_all.html:160
 #: .\SkaRe\templates\SkaRe\list_individual_participants.html:39
@@ -71,17 +80,17 @@ msgstr "Očekávaný odjezd"
 msgid "Home Town"
 msgstr "Obec, odkud na SkaRe přijedeš"
 
-#: .\SkaRe\forms.py:200 .\SkaRe\forms.py:288 .\SkaRe\forms.py:367
+#: .\SkaRe\forms.py:206 .\SkaRe\forms.py:294 .\SkaRe\forms.py:373
 #: .\SkaRe\models.py:54
 msgid "First name"
 msgstr "Jméno"
 
-#: .\SkaRe\forms.py:201 .\SkaRe\forms.py:289 .\SkaRe\forms.py:368
+#: .\SkaRe\forms.py:207 .\SkaRe\forms.py:295 .\SkaRe\forms.py:374
 #: .\SkaRe\models.py:55
 msgid "Last name"
 msgstr "Příjmení"
 
-#: .\SkaRe\forms.py:202 .\SkaRe\models.py:57
+#: .\SkaRe\forms.py:208 .\SkaRe\models.py:57
 #: .\SkaRe\templates\SkaRe\edit_unit.html:254
 #: .\SkaRe\templates\SkaRe\list_all.html:56
 #: .\SkaRe\templates\SkaRe\list_all.html:153
@@ -89,39 +98,39 @@ msgstr "Příjmení"
 msgid "Nickname"
 msgstr "Přezdívka"
 
-#: .\SkaRe\forms.py:205
+#: .\SkaRe\forms.py:211
 msgid "e.g. Anxiety, asthma"
 msgstr "např. Srdeční nedostatečnost, užívá Oxazepam, úzkostná porucha"
 
-#: .\SkaRe\forms.py:206
+#: .\SkaRe\forms.py:212
 msgid "e.g. Vegetarian, gluten-free"
 msgstr "např. Alergie ořechy, vegetarián"
 
-#: .\SkaRe\forms.py:207
+#: .\SkaRe\forms.py:213
 msgid "e.g. Special needs"
 msgstr "Další informace"
 
-#: .\SkaRe\forms.py:290 .\SkaRe\forms.py:369
+#: .\SkaRe\forms.py:296 .\SkaRe\forms.py:375
 msgid "Nickname (optional)"
 msgstr "Přezdívka (volitelně)"
 
-#: .\SkaRe\forms.py:293 .\SkaRe\forms.py:372 .\SkaRe\models.py:77
+#: .\SkaRe\forms.py:299 .\SkaRe\forms.py:378 .\SkaRe\models.py:77
 msgid "Any health restrictions or medical conditions"
 msgstr "Zdravotní omezení / Duševní stav"
 
-#: .\SkaRe\forms.py:294 .\SkaRe\forms.py:373 .\SkaRe\models.py:81
+#: .\SkaRe\forms.py:300 .\SkaRe\forms.py:379 .\SkaRe\models.py:81
 msgid "Any dietary restrictions or preferences"
 msgstr "Stravovací omezení / preference"
 
-#: .\SkaRe\forms.py:295 .\SkaRe\forms.py:374
+#: .\SkaRe\forms.py:301 .\SkaRe\forms.py:380
 msgid "Any relevant information"
 msgstr "Další údaje"
 
-#: .\SkaRe\forms.py:302
+#: .\SkaRe\forms.py:308
 msgid "e.g., Small tent, caravan"
 msgstr "např. Malý stan, Karavan, ..."
 
-#: .\SkaRe\forms.py:303
+#: .\SkaRe\forms.py:309
 msgid "e.g., 20 m²"
 msgstr "např. 20 m2"
 
@@ -497,9 +506,10 @@ msgid "Codex agreement"
 msgstr "Kodex jednání dospělých"
 
 #: .\SkaRe\models.py:423
-#, python-brace-format
-msgid "Organizer {person_name} ({division})"
-msgstr "Organizátor {person_name} ({division})"
+#, fuzzy, python-brace-format
+#| msgid "Contact person name"
+msgid "{person_name}"
+msgstr "Vedoucí"
 
 #: .\SkaRe\templates\SkaRe\base.html:32 .\SkaRe\templates\SkaRe\home.html:16
 msgid "Hello"
@@ -1296,7 +1306,3 @@ msgstr ""
 #: .\SkaRe\views.py:735 .\SkaRe\views.py:781 .\SkaRe\views.py:828
 msgid "User not found."
 msgstr ""
-
-#~| msgid "Register Individual Participant"
-#~ msgid "Error registering individual participant: {str(e)}"
-#~ msgstr "Registrovat jednotlivce"
