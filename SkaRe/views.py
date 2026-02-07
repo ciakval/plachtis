@@ -84,7 +84,7 @@ def register_unit(request):
     
     if request.method == 'POST':
         unit_form = UnitRegistrationForm(request.POST)
-        participant_formset = get_participant_formset(extra=3)(request.POST, prefix='participants')
+        participant_formset = get_participant_formset(extra=3)(request.POST, prefix='participants', queryset=RegularParticipant.objects.none())
         
         if unit_form.is_valid() and participant_formset.is_valid():
             try:
@@ -130,7 +130,7 @@ def register_unit(request):
             messages.error(request, _('Please correct the errors in the form.'))
     else:
         unit_form = UnitRegistrationForm()
-        participant_formset = get_participant_formset(extra=3)(prefix='participants')
+        participant_formset = get_participant_formset(extra=3)(prefix='participants', queryset=RegularParticipant.objects.none())
     
     context = {
         'unit_form': unit_form,
