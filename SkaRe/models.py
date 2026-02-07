@@ -3,7 +3,22 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 from solo.models import SingletonModel
+
+
+def validate_date_of_birth(value):
+    """
+    Validate that date of birth is not in the future and not before 1900.
+    """
+    today = date.today()
+    min_date = date(1900, 1, 1)
+    
+    if value > today:
+        raise ValidationError(_('Date of birth cannot be in the future.'))
+    
+    if value < min_date:
+        raise ValidationError(_('Date of birth cannot be before 1900.'))
 
 
 class EventSettings(SingletonModel):
@@ -56,7 +71,11 @@ class Person(models.Model):
     nickname = models.CharField(
         max_length=100, blank=True, help_text=_("Optional nickname"), verbose_name=_("Nickname")
     )
-    date_of_birth = models.DateField(help_text=_("Date of birth"), verbose_name=_("Date of birth"))
+    date_of_birth = models.DateField(
+        help_text=_("Date of birth"),
+        verbose_name=_("Date of birth"),
+        validators=[validate_date_of_birth]
+    )
     
     class ScoutCategory(models.TextChoices):
         ADULT = "ADULT", _("Adult")
