@@ -571,7 +571,7 @@ msgstr "Objednávky"
 #: .\SkaRe\templates\SkaRe\register_individual_participant.html:224
 #: .\SkaRe\templates\SkaRe\register_organizer.html:207
 msgid "Health & Dietary Information"
-msgstr "Informace o skautské jednotce"
+msgstr "Zdravotní a stravovací omezení"
 
 #: .\SkaRe\templates\SkaRe\edit_individual_participant.html:246
 #: .\SkaRe\templates\SkaRe\edit_organizer.html:217
