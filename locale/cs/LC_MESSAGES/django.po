@@ -214,7 +214,7 @@ msgstr ""
 #: .\SkaRe\templates\SkaRe\list_organizers.html:112
 #: .\SkaRe\templates\SkaRe\list_units.html:110
 msgid "Editors"
-msgstr ""
+msgstr "Editoři"
 
 #: .\SkaRe\models.py:123
 msgid ""
