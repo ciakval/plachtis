@@ -8,6 +8,7 @@ from django.db import transaction
 from django.db.models import Q
 from django import forms
 from django.utils.translation import gettext as _
+from django.utils.http import url_has_allowed_host_and_scheme
 from .forms import (
     UserRegistrationForm, UnitRegistrationForm,
     IndividualParticipantRegistrationForm, OrganizerRegistrationForm,
@@ -38,6 +39,15 @@ def user_login(request):
             login(request, user)
             messages.success(request, _('Welcome back, {name}!').format(name=user.first_name or user.username))
             next_url = request.GET.get('next', 'SkaRe:home')
+            
+            # Validate next_url to prevent open redirect vulnerability
+            # URL names (like 'SkaRe:home') are safe to use directly
+            # For actual URLs (absolute or relative), validate they're allowed
+            if '://' in next_url or next_url.startswith('/'):
+                # It's an actual URL (absolute or relative), validate it
+                if not url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
+                    next_url = 'SkaRe:home'
+            
             return redirect(next_url)
         else:
             messages.error(request, _('Invalid username or password.'))
