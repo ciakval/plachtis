@@ -727,12 +727,12 @@ def manage_unit_editors(request, unit_id):
                 if user_to_add == request.user:
                     messages.warning(request, _('You cannot add yourself as an editor.'))
                 elif unit.entity.editors.filter(id=user_to_add.id).exists():
-                    messages.warning(request, _(f'User "{username}" is already an editor.'))
+                    messages.warning(request, _('User "{username}" is already an editor.').format(username=username))
                 else:
                     unit.entity.editors.add(user_to_add)
-                    messages.success(request, _(f'User "{username}" added as editor.'))
+                    messages.success(request, _('User "{username}" added as editor.').format(username=username))
             except User.DoesNotExist:
-                messages.error(request, _(f'User "{username}" not found.'))
+                messages.error(request, _('User "{username}" not found.').format(username=username))
         
         elif action == 'remove':
             user_id = request.POST.get('user_id')
@@ -740,7 +740,7 @@ def manage_unit_editors(request, unit_id):
                 try:
                     user_to_remove = User.objects.get(id=user_id)
                     unit.entity.editors.remove(user_to_remove)
-                    messages.success(request, _(f'User "{user_to_remove.username}" removed from editors.'))
+                    messages.success(request, _('User "{username}" removed from editors.').format(username=user_to_remove.username))
                 except User.DoesNotExist:
                     messages.error(request, _('User not found.'))
         
@@ -773,12 +773,12 @@ def manage_individual_participant_editors(request, participant_id):
                 if user_to_add == request.user:
                     messages.warning(request, _('You cannot add yourself as an editor.'))
                 elif participant.entity.editors.filter(id=user_to_add.id).exists():
-                    messages.warning(request, _(f'User "{username}" is already an editor.'))
+                    messages.warning(request, _('User "{username}" is already an editor.').format(username=username))
                 else:
                     participant.entity.editors.add(user_to_add)
-                    messages.success(request, _(f'User "{username}" added as editor.'))
+                    messages.success(request, _('User "{username}" added as editor.').format(username=username))
             except User.DoesNotExist:
-                messages.error(request, _(f'User "{username}" not found.'))
+                messages.error(request, _('User "{username}" not found.').format(username=username))
         
         elif action == 'remove':
             user_id = request.POST.get('user_id')
@@ -786,7 +786,7 @@ def manage_individual_participant_editors(request, participant_id):
                 try:
                     user_to_remove = User.objects.get(id=user_id)
                     participant.entity.editors.remove(user_to_remove)
-                    messages.success(request, _(f'User "{user_to_remove.username}" removed from editors.'))
+                    messages.success(request, _('User "{username}" removed from editors.').format(username=user_to_remove.username))
                 except User.DoesNotExist:
                     messages.error(request, _('User not found.'))
         
@@ -820,12 +820,12 @@ def manage_organizer_editors(request, organizer_id):
                 if user_to_add == request.user:
                     messages.warning(request, _('You cannot add yourself as an editor.'))
                 elif organizer.entity.editors.filter(id=user_to_add.id).exists():
-                    messages.warning(request, _(f'User "{username}" is already an editor.'))
+                    messages.warning(request, _('User "{username}" is already an editor.').format(username=username))
                 else:
                     organizer.entity.editors.add(user_to_add)
-                    messages.success(request, _(f'User "{username}" added as editor.'))
+                    messages.success(request, _('User "{username}" added as editor.').format(username=username))
             except User.DoesNotExist:
-                messages.error(request, _(f'User "{username}" not found.'))
+                messages.error(request, _('User "{username}" not found.').format(username=username))
         
         elif action == 'remove':
             user_id = request.POST.get('user_id')
@@ -833,7 +833,7 @@ def manage_organizer_editors(request, organizer_id):
                 try:
                     user_to_remove = User.objects.get(id=user_id)
                     organizer.entity.editors.remove(user_to_remove)
-                    messages.success(request, _(f'User "{user_to_remove.username}" removed from editors.'))
+                    messages.success(request, _('User "{username}" removed from editors.').format(username=user_to_remove.username))
                 except User.DoesNotExist:
                     messages.error(request, _('User not found.'))
         
