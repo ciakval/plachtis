@@ -229,7 +229,6 @@
                                             <th>{% trans "Last Name" %} <span class="text-danger">*</span></th>
                                             <th>{% trans "Nickname" %}</th>
                                             <th>{% trans "Date of Birth" %} <span class="text-danger">*</span></th>
-                                            <th>{% trans "Category" %} <span class="text-danger">*</span></th>
                                             <th>{% trans "Health" %}</th>
                                             <th>{% trans "Dietary" %}</th>
                                             <th>{% trans "Info" %}</th>
@@ -244,7 +243,6 @@
                                             <td>{{ form.last_name }}</td>
                                             <td>{{ form.nickname }}</td>
                                             <td>{{ form.date_of_birth }}</td>
-                                            <td>{{ form.category }}</td>
                                             <td>{{ form.health_restrictions }}</td>
                                             <td>{{ form.dietary_restrictions }}</td>
                                             <td>{{ form.relevant_information }}</td>
@@ -290,15 +288,6 @@
             <td><input type="text" name="participants-__prefix__-last_name" class="form-control form-control-sm" placeholder="Last name" id="id_participants-__prefix__-last_name"></td>
             <td><input type="text" name="participants-__prefix__-nickname" class="form-control form-control-sm" placeholder="Nickname" id="id_participants-__prefix__-nickname"></td>
             <td><input type="date" name="participants-__prefix__-date_of_birth" class="form-control form-control-sm" id="id_participants-__prefix__-date_of_birth"></td>
-            <td>
-                <select name="participants-__prefix__-category" class="form-control form-control-sm" id="id_participants-__prefix__-category">
-                    <option value="">---------</option>
-                    <option value="ADULT">Adult</option>
-                    <option value="ROVER">Rover</option>
-                    <option value="SCOUT">Scout</option>
-                    <option value="CUB">Cub</option>
-                </select>
-            </td>
             <td><textarea name="participants-__prefix__-health_restrictions" class="form-control form-control-sm" rows="2" placeholder="Health restrictions" id="id_participants-__prefix__-health_restrictions"></textarea></td>
             <td><textarea name="participants-__prefix__-dietary_restrictions" class="form-control form-control-sm" rows="2" placeholder="Dietary restrictions" id="id_participants-__prefix__-dietary_restrictions"></textarea></td>
             <td><textarea name="participants-__prefix__-relevant_information" class="form-control form-control-sm" rows="2" placeholder="Relevant information" id="id_participants-__prefix__-relevant_information"></textarea></td>
