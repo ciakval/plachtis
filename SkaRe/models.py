@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -85,6 +85,67 @@ class Person(models.Model):
         blank=True, help_text=_("Any relevant information about the person"),
         verbose_name=_("Relevant information")
     )
+    
+    def calculate_category(self, reference_date=None):
+        """
+        Calculate scout category based on date of birth year only.
+        
+        Age groups (based on year only, not exact birthday):
+        - CUB: up to 12 years old (cannot have 13th birthday in reference year)
+        - SCOUT: up to 15 years old (cannot have 16th birthday in reference year)
+        - ROVER: up to 18 years old (cannot have 19th birthday in reference year)
+        - ADULT: 19 and over (can have 19th birthday or older in reference year)
+        
+        Args:
+            reference_date: Date to calculate age from (defaults to event date or current date)
+        
+        Returns:
+            ScoutCategory value or None if date_of_birth is not set
+        """
+        if not self.date_of_birth:
+            return None
+        
+        # Use event date if available, otherwise use current date
+        if reference_date is None:
+            try:
+                event_settings = EventSettings.get_solo()
+                if event_settings and event_settings.registration_deadline:
+                    reference_date = event_settings.registration_deadline.date()
+                else:
+                    reference_date = date.today()
+            except:
+                reference_date = date.today()
+        elif isinstance(reference_date, datetime):
+            reference_date = reference_date.date()
+        
+        # Calculate age based on year only (no month/day adjustment)
+        birth_year = self.date_of_birth.year
+        reference_year = reference_date.year
+        age = reference_year - birth_year
+        
+        # Determine category based on age (year-based only)
+        # CUB: up to 12 (age <= 12, so birth_year >= reference_year - 12)
+        # SCOUT: up to 15 (age <= 15, so birth_year >= reference_year - 15)
+        # ROVER: up to 18 (age <= 18, so birth_year >= reference_year - 18)
+        # ADULT: 19+ (age >= 19, so birth_year < reference_year - 18)
+        
+        if age <= 12:
+            return self.ScoutCategory.CUB
+        elif age <= 15:
+            return self.ScoutCategory.SCOUT
+        elif age <= 18:
+            return self.ScoutCategory.ROVER
+        else:
+            return self.ScoutCategory.ADULT
+    
+    def save(self, *args, **kwargs):
+        """Override save to auto-calculate category from date_of_birth."""
+        # Auto-calculate category if date_of_birth is set
+        if self.date_of_birth:
+            calculated_category = self.calculate_category()
+            if calculated_category:
+                self.category = calculated_category
+        super().save(*args, **kwargs)
     
     def __str__(self):
         if self.nickname:

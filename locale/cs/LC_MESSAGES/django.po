@@ -158,15 +158,15 @@ msgstr "Dospělý (18+)"
 
 #: .\SkaRe\models.py:63
 msgid "Rover"
-msgstr "Rover/Ranger (15-17)"
+msgstr "Rover/Ranger (16-18)"
 
 #: .\SkaRe\models.py:64
 msgid "Scout"
-msgstr "Skaut/Skautka (11-14)"
+msgstr "Skaut/Skautka (13-15)"
 
 #: .\SkaRe\models.py:65
 msgid "Cub"
-msgstr "Vlče/Světluška (6-10)"
+msgstr "Vlče/Světluška (6-12)"
 
 #: .\SkaRe\models.py:71
 msgid "Scout category"
