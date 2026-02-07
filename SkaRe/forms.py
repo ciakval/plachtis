@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
-import re
+from datetime import datetime
+from django.utils import timezone
 from .models import Unit, RegularParticipant, IndividualParticipant, Organizer
 
 
@@ -101,13 +102,15 @@ class UnitRegistrationForm(forms.ModelForm):
     )
     expected_arrival = forms.DateTimeField(
         required=False,
-        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label=_("Expected Arrival")
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        label=_("Expected Arrival"),
+        initial=datetime(2026, 4, 30, 16, 0, tzinfo=timezone.get_current_timezone())
     )
     expected_departure = forms.DateTimeField(
         required=False,
-        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label=_("Expected Departure")
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        label=_("Expected Departure"),
+        initial=datetime(2026, 5, 3, 11, 0, tzinfo=timezone.get_current_timezone())
     )
     home_town = forms.CharField(
         max_length=200,
@@ -245,13 +248,15 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
     )
     expected_arrival = forms.DateTimeField(
         required=False,
-        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label=_("Expected Arrival")
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        label=_("Expected Arrival"),
+        initial=datetime(2026, 4, 30, 16, 0, tzinfo=timezone.get_current_timezone())
     )
     expected_departure = forms.DateTimeField(
         required=False,
-        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label=_("Expected Departure")
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        label=_("Expected Departure"),
+        initial=datetime(2026, 5, 3, 11, 0, tzinfo=timezone.get_current_timezone())
     )
     home_town = forms.CharField(
         max_length=200,
@@ -326,13 +331,15 @@ class OrganizerRegistrationForm(forms.ModelForm):
     )
     expected_arrival = forms.DateTimeField(
         required=False,
-        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label=_("Expected Arrival")
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        label=_("Expected Arrival"),
+        initial=datetime(2026, 4, 30, 16, 0, tzinfo=timezone.get_current_timezone())
     )
     expected_departure = forms.DateTimeField(
         required=False,
-        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-        label=_("Expected Departure")
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        label=_("Expected Departure"),
+        initial=datetime(2026, 5, 3, 11, 0, tzinfo=timezone.get_current_timezone())
     )
     home_town = forms.CharField(
         max_length=200,
