@@ -63,6 +63,11 @@ def user_logout(request):
     return redirect('SkaRe:login')
 
 
+def forgot_password(request):
+    """View for forgot password page."""
+    return render(request, 'SkaRe/forgot_password.html')
+
+
 def user_register(request):
     """User registration view."""
     if request.user.is_authenticated:

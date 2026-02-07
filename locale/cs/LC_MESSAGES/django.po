@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 21:49+0100\n"
+"POT-Creation-Date: 2026-02-07 22:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,12 +40,12 @@ msgstr ""
 "číslicemi, nebo pouze 9 číslic (např., +420 123 456 789, +421 123 456 789, "
 "nebo 123 456 789)"
 
-#: .\SkaRe\forms.py:83 .\SkaRe\views.py:231
+#: .\SkaRe\forms.py:83 .\SkaRe\views.py:236
 msgid "Scout Unit Name"
 msgstr "Název oddílu/střediska/přístavu"
 
 #: .\SkaRe\forms.py:89 .\SkaRe\models.py:136
-#: .\SkaRe\templates\SkaRe\list_units.html:26 .\SkaRe\views.py:237
+#: .\SkaRe\templates\SkaRe\list_units.html:26 .\SkaRe\views.py:242
 msgid "Evidence ID"
 msgstr "Evidenční číslo oddílu/střediska/přístavu"
 
@@ -702,6 +702,33 @@ msgstr "Přidat účastníka"
 msgid "Cancel"
 msgstr "Zrušit"
 
+#: .\SkaRe\templates\SkaRe\forgot_password.html:4
+#: .\SkaRe\templates\SkaRe\forgot_password.html:11
+#, fuzzy
+msgid "Forgot Password"
+msgstr "Zapomenuté heslo"
+
+#: .\SkaRe\templates\SkaRe\forgot_password.html:17
+msgid "If you have forgotten your password, please send an email to"
+msgstr "Pokud jste zapomněli své heslo, pošlete prosím e-mail na"
+
+#: .\SkaRe\templates\SkaRe\forgot_password.html:19
+msgid "to request a password reset."
+msgstr "pro požádání o obnovení hesla."
+
+#: .\SkaRe\templates\SkaRe\forgot_password.html:23
+msgid ""
+"Please include your username in the email so we can help you reset your "
+"password."
+msgstr ""
+"Prosím uveďte ve vašem e-mailu vaše uživatelské jméno, abychom vám mohli pomoci obnovit vaše heslo."
+
+#: .\SkaRe\templates\SkaRe\forgot_password.html:26
+#, fuzzy
+#| msgid "Back to List"
+msgid "Back to login"
+msgstr "Zpět na seznam"
+
 #: .\SkaRe\templates\SkaRe\home.html:5
 msgid "Home"
 msgstr "PlachtIS"
@@ -923,7 +950,7 @@ msgstr "Zatím nejsou registrováni žádní účastníci."
 msgid "Back to Home"
 msgstr "Zpět na domovskou stránku"
 
-#: .\SkaRe\templates\SkaRe\list_all.html:245 .\SkaRe\views.py:581
+#: .\SkaRe\templates\SkaRe\list_all.html:245 .\SkaRe\views.py:586
 msgid "You do not have permission to view this page."
 msgstr "Nemáte oprávnění upravovat tuto jednotku."
 
@@ -1058,6 +1085,10 @@ msgstr "Nemáte účet?"
 msgid "Register here"
 msgstr "Registrujte se zde"
 
+#: .\SkaRe\templates\SkaRe\login.html:41
+msgid "Forgot password?"
+msgstr "Zapomněli jste heslo?"
+
 #: .\SkaRe\templates\SkaRe\manage_editors.html:4
 #: .\SkaRe\templates\SkaRe\manage_editors.html:10
 msgid "Manage Editors"
@@ -1074,8 +1105,8 @@ msgid ""
 "Editors can view and edit this registration, but only you (the owner) can "
 "manage editors."
 msgstr ""
-"Editoři mohou zobrazovat a upravovat tuto registraci, ale pouze vy (vlastník) "
-"můžete spravovat editory."
+"Editoři mohou zobrazovat a upravovat tuto registraci, ale pouze vy "
+"(vlastník) můžete spravovat editory."
 
 #: .\SkaRe\templates\SkaRe\manage_editors.html:31
 msgid "Current Editors"
@@ -1104,7 +1135,9 @@ msgstr "Zadejte uživatelské jméno"
 
 #: .\SkaRe\templates\SkaRe\manage_editors.html:67
 msgid "Enter the exact username of the user you want to add as editor."
-msgstr "Zadejte přesné uživatelské jméno uživatele, kterého chcete přidat jako editora."
+msgstr ""
+"Zadejte přesné uživatelské jméno uživatele, kterého chcete přidat jako "
+"editora."
 
 #: .\SkaRe\templates\SkaRe\manage_editors.html:81
 msgid "Back to Units"
@@ -1173,152 +1206,152 @@ msgstr "Neplatné uživatelské jméno nebo heslo"
 msgid "You have been logged out successfully."
 msgstr "Přihlášení úspěšné"
 
-#: .\SkaRe\views.py:76
+#: .\SkaRe\views.py:81
 #, python-brace-format
 msgid "Welcome, {name}! Your account has been created successfully."
 msgstr "Vítejte, {name}! Váš účet byl úspěšně vytvořen."
 
-#: .\SkaRe\views.py:79
+#: .\SkaRe\views.py:84
 msgid "Please correct the errors below."
 msgstr "Prosím opravte chyby ve formuláři"
 
-#: .\SkaRe\views.py:92 .\SkaRe\views.py:338 .\SkaRe\views.py:520
+#: .\SkaRe\views.py:97 .\SkaRe\views.py:343 .\SkaRe\views.py:525
 msgid "Registration is currently closed."
 msgstr "Registrace je uzavřena"
 
-#: .\SkaRe\views.py:130
+#: .\SkaRe\views.py:135
 #, python-brace-format
 msgid ""
 "Unit \"{unit_name}\" registered successfully with {count} participant(s)!"
 msgstr ""
 "Oddíl \"{unit_name}\" byl úspěšně registrován s {count} účastníkem/účastníky!"
 
-#: .\SkaRe\views.py:138
+#: .\SkaRe\views.py:143
 #, python-brace-format
 msgid "Error registering unit: {error}"
 msgstr "Chyba při registraci oddílu: {error}"
 
-#: .\SkaRe\views.py:140 .\SkaRe\views.py:313 .\SkaRe\views.py:371
-#: .\SkaRe\views.py:501 .\SkaRe\views.py:553 .\SkaRe\views.py:697
+#: .\SkaRe\views.py:145 .\SkaRe\views.py:318 .\SkaRe\views.py:376
+#: .\SkaRe\views.py:506 .\SkaRe\views.py:558 .\SkaRe\views.py:702
 msgid "Please correct the errors in the form."
 msgstr "Prosím opravte chyby ve formuláři"
 
-#: .\SkaRe\views.py:177
+#: .\SkaRe\views.py:182
 msgid "You do not have permission to edit this unit."
 msgstr "Nemáte oprávnění upravovat tuto jednotku."
 
-#: .\SkaRe\views.py:182
+#: .\SkaRe\views.py:187
 msgid "This unit cannot be edited after the registration deadline."
 msgstr "Nelze upravovat jednotku po uzavření registrace."
 
-#: .\SkaRe\views.py:297
+#: .\SkaRe\views.py:302
 #, python-brace-format
 msgid "Unit \"{unit_name}\" updated successfully with {count} participant(s)!"
 msgstr ""
 "Oddíl \"{unit_name}\" byl úspěšně aktualizován s {count} účastníkem/"
 "účastníky!"
 
-#: .\SkaRe\views.py:303
+#: .\SkaRe\views.py:308
 #, python-brace-format
 msgid "Error updating unit: {error}"
 msgstr "Chyba při aktualizaci oddílu: {error}"
 
-#: .\SkaRe\views.py:307
+#: .\SkaRe\views.py:312
 msgid "Please correct the errors in the form of unit and participants"
 msgstr "Prosím opravte chyby ve formuláři jednotky a účastníků"
 
-#: .\SkaRe\views.py:309
+#: .\SkaRe\views.py:314
 msgid "Please correct the errors in the form of unit"
 msgstr "Prosím opravte chyby ve formuláři jednotky"
 
-#: .\SkaRe\views.py:311
+#: .\SkaRe\views.py:316
 msgid "Please correct the errors in the form of participants"
 msgstr "Prosím opravte chyby ve formuláři účastníků"
 
-#: .\SkaRe\views.py:364
+#: .\SkaRe\views.py:369
 #, python-brace-format
 msgid "Individual Participant \"{name}\" registered successfully!"
 msgstr "Individuální účastník \"{name}\" byl úspěšně registrován!"
 
-#: .\SkaRe\views.py:369
+#: .\SkaRe\views.py:374
 #, python-brace-format
 msgid "Error registering individual participant: {error}"
 msgstr "Chyba při registraci individuálního účastníka: {error}"
 
-#: .\SkaRe\views.py:404
+#: .\SkaRe\views.py:409
 msgid "You do not have permission to edit this participant."
 msgstr "Nemáte oprávnění upravovat tohoto účastníka."
 
-#: .\SkaRe\views.py:409
+#: .\SkaRe\views.py:414
 msgid "This participant cannot be edited after the registration deadline."
 msgstr "Nelze upravovat účastníka po uzavření registrace."
 
-#: .\SkaRe\views.py:496
+#: .\SkaRe\views.py:501
 #, python-brace-format
 msgid "Individual Participant \"{name}\" updated successfully!"
 msgstr "Jednotlivec \"{name}\" byl úspěšně aktualizován!"
 
-#: .\SkaRe\views.py:499
+#: .\SkaRe\views.py:504
 #, python-brace-format
 msgid "Error updating participant: {error}"
 msgstr "Chyba při aktualizaci účastníka: {error}"
 
-#: .\SkaRe\views.py:546
+#: .\SkaRe\views.py:551
 #, python-brace-format
 msgid "Organizer \"{name}\" registered successfully!"
 msgstr "Organizátor \"{name}\" byl úspěšně registrován!"
 
-#: .\SkaRe\views.py:551
+#: .\SkaRe\views.py:556
 #, python-brace-format
 msgid "Error registering organizer: {error}"
 msgstr "Chyba při registraci organizátora: {error}"
 
-#: .\SkaRe\views.py:606
+#: .\SkaRe\views.py:611
 msgid "You do not have permission to edit this organizer."
 msgstr "Nemáte oprávnění upravovat tohoto organizátora."
 
-#: .\SkaRe\views.py:611
+#: .\SkaRe\views.py:616
 msgid "This organizer cannot be edited after the registration deadline."
 msgstr "Nelze upravovat organizátora po uavření registrace."
 
-#: .\SkaRe\views.py:692
+#: .\SkaRe\views.py:697
 #, python-brace-format
 msgid "Organizer \"{name}\" updated successfully!"
 msgstr "Organizátor \"{name}\" byl úspěšně aktualizován!"
 
-#: .\SkaRe\views.py:695
+#: .\SkaRe\views.py:700
 #, python-brace-format
 msgid "Error updating organizer: {error}"
 msgstr "Chyba při aktualizaci organizátora: {error}"
 
-#: .\SkaRe\views.py:717 .\SkaRe\views.py:763 .\SkaRe\views.py:810
+#: .\SkaRe\views.py:722 .\SkaRe\views.py:768 .\SkaRe\views.py:815
 msgid "Only the owner can manage editors."
 msgstr "Pouze vlastník může spravovat editory."
 
-#: .\SkaRe\views.py:728 .\SkaRe\views.py:774 .\SkaRe\views.py:821
+#: .\SkaRe\views.py:733 .\SkaRe\views.py:779 .\SkaRe\views.py:826
 msgid "You cannot add yourself as an editor."
 msgstr "Nemůžete se přidat jako editor."
 
-#: .\SkaRe\views.py:730 .\SkaRe\views.py:776 .\SkaRe\views.py:823
+#: .\SkaRe\views.py:735 .\SkaRe\views.py:781 .\SkaRe\views.py:828
 #, python-brace-format
 msgid "User \"{username}\" is already an editor."
 msgstr "Uživatel \"{username}\" je již editorem."
 
-#: .\SkaRe\views.py:733 .\SkaRe\views.py:779 .\SkaRe\views.py:826
+#: .\SkaRe\views.py:738 .\SkaRe\views.py:784 .\SkaRe\views.py:831
 #, python-brace-format
 msgid "User \"{username}\" added as editor."
 msgstr "Uživatel \"{username}\" byl přidán jako editor."
 
-#: .\SkaRe\views.py:735 .\SkaRe\views.py:781 .\SkaRe\views.py:828
+#: .\SkaRe\views.py:740 .\SkaRe\views.py:786 .\SkaRe\views.py:833
 #, python-brace-format
 msgid "User \"{username}\" not found."
 msgstr "Uživatel \"{username}\" nebyl nalezen."
 
-#: .\SkaRe\views.py:743 .\SkaRe\views.py:789 .\SkaRe\views.py:836
+#: .\SkaRe\views.py:748 .\SkaRe\views.py:794 .\SkaRe\views.py:841
 #, python-brace-format
 msgid "User \"{username}\" removed from editors."
 msgstr "Uživatel \"{username}\" byl odebrán z editorů."
 
-#: .\SkaRe\views.py:745 .\SkaRe\views.py:791 .\SkaRe\views.py:838
+#: .\SkaRe\views.py:750 .\SkaRe\views.py:796 .\SkaRe\views.py:843
 msgid "User not found."
 msgstr "Uživatel nebyl nalezen."
