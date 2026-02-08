@@ -14,7 +14,7 @@ from .forms import (
     IndividualParticipantRegistrationForm, OrganizerRegistrationForm,
     validate_czech_phone, get_participant_formset
 )
-from .form_utils import generate_form_token, is_duplicate_submission
+from .form_utils import generate_form_token, is_duplicate_submission, consume_form_token
 from .models import (
     Entity, Unit, RegularParticipant, EventSettings,
     IndividualParticipant, Organizer
@@ -80,6 +80,7 @@ def user_register(request):
             return redirect('SkaRe:home')
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
+            consume_form_token(request)  # Consume token only after successful validation
             user = form.save()
             login(request, user)
             messages.success(request, _('Welcome, {name}! Your account has been created successfully.').format(name=user.first_name))
@@ -141,6 +142,7 @@ def register_unit(request):
                             participant.save()
                             participant_count += 1
                     
+                    consume_form_token(request)  # Consume token only after successful processing
                     messages.success(
                         request,
                         _('Unit "{unit_name}" registered successfully with {count} participant(s)!').format(
@@ -380,6 +382,7 @@ def register_individual_participant(request):
                     participant.entity = entity
                     participant.save()
                     
+                    consume_form_token(request)  # Consume token only after successful processing
                     messages.success(
                         request,
                         _('Individual Participant "{name}" registered successfully!').format(name=str(participant))
@@ -566,6 +569,7 @@ def register_organizer(request):
                     organizer.entity = entity
                     organizer.save()
                     
+                    consume_form_token(request)  # Consume token only after successful processing
                     messages.success(
                         request,
                         _('Organizer "{name}" registered successfully!').format(name=str(organizer))
