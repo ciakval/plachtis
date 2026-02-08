@@ -14,6 +14,7 @@ from .forms import (
     IndividualParticipantRegistrationForm, OrganizerRegistrationForm,
     validate_czech_phone, get_participant_formset
 )
+from .form_utils import generate_form_token, is_duplicate_submission
 from .models import (
     Entity, Unit, RegularParticipant, EventSettings,
     IndividualParticipant, Organizer
@@ -74,6 +75,9 @@ def user_register(request):
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
+        if is_duplicate_submission(request):
+            messages.warning(request, _('This form was already submitted.'))
+            return redirect('SkaRe:home')
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
@@ -84,8 +88,9 @@ def user_register(request):
             messages.error(request, _('Please correct the errors below.'))
     else:
         form = UserRegistrationForm()
+        form_token = generate_form_token(request)
     
-    return render(request, 'SkaRe/register.html', {'form': form})
+    return render(request, 'SkaRe/register.html', {'form': form, 'form_token': request.session.get('form_token', '')})
 
 
 @login_required
@@ -98,6 +103,9 @@ def register_unit(request):
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
+        if is_duplicate_submission(request):
+            messages.warning(request, _('This form was already submitted.'))
+            return redirect('SkaRe:home')
         unit_form = UnitRegistrationForm(request.POST)
         participant_formset = get_participant_formset(extra=3)(request.POST, prefix='participants', queryset=RegularParticipant.objects.none())
         
@@ -149,11 +157,13 @@ def register_unit(request):
     else:
         unit_form = UnitRegistrationForm()
         participant_formset = get_participant_formset(extra=3)(prefix='participants', queryset=RegularParticipant.objects.none())
+        generate_form_token(request)
     
     context = {
         'unit_form': unit_form,
         'participant_formset': participant_formset,
         'deadline': EventSettings.get_deadline(),
+        'form_token': request.session.get('form_token', ''),
     }
     return render(request, 'SkaRe/register_unit.html', context)
 
@@ -347,6 +357,9 @@ def register_individual_participant(request):
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
+        if is_duplicate_submission(request):
+            messages.warning(request, _('This form was already submitted.'))
+            return redirect('SkaRe:home')
         form = IndividualParticipantRegistrationForm(request.POST)
         
         if form.is_valid():
@@ -379,10 +392,12 @@ def register_individual_participant(request):
             messages.error(request, _('Please correct the errors in the form.'))
     else:
         form = IndividualParticipantRegistrationForm()
+        generate_form_token(request)
     
     context = {
         'form': form,
         'deadline': EventSettings.get_deadline(),
+        'form_token': request.session.get('form_token', ''),
     }
     return render(request, 'SkaRe/register_individual_participant.html', context)
 
@@ -528,6 +543,9 @@ def register_organizer(request):
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
+        if is_duplicate_submission(request):
+            messages.warning(request, _('This form was already submitted.'))
+            return redirect('SkaRe:home')
         form = OrganizerRegistrationForm(request.POST)
         
         if form.is_valid():
@@ -560,10 +578,12 @@ def register_organizer(request):
             messages.error(request, _('Please correct the errors in the form.'))
     else:
         form = OrganizerRegistrationForm()
+        generate_form_token(request)
     
     context = {
         'form': form,
         'deadline': EventSettings.get_deadline(),
+        'form_token': request.session.get('form_token', ''),
     }
     return render(request, 'SkaRe/register_organizer.html', context)
 

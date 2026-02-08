@@ -20,6 +20,7 @@
 
                 <form method="post" id="unit-registration-form">
                     {% csrf_token %}
+                    <input type="hidden" name="form_token" value="{{ form_token }}">
                     
                     <!-- Scout Unit Selection -->
                     <div class="card mb-4">
