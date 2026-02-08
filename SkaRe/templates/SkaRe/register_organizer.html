@@ -22,6 +22,7 @@
 
                 <form method="post">
                     {% csrf_token %}
+                    <input type="hidden" name="form_token" value="{{ form_token }}">
                     
                     <!-- Personal Information -->
                     <div class="card mb-4">

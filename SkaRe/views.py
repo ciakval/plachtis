@@ -14,6 +14,7 @@ from .forms import (
     IndividualParticipantRegistrationForm, OrganizerRegistrationForm,
     validate_czech_phone, get_participant_formset
 )
+from .form_utils import generate_form_token, is_duplicate_submission, consume_form_token
 from .models import (
     Entity, Unit, RegularParticipant, EventSettings,
     IndividualParticipant, Organizer
@@ -74,8 +75,12 @@ def user_register(request):
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
+        if is_duplicate_submission(request):
+            messages.warning(request, _('This form was already submitted.'))
+            return redirect('SkaRe:home')
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
+            consume_form_token(request)  # Consume token only after successful validation
             user = form.save()
             login(request, user)
             messages.success(request, _('Welcome, {name}! Your account has been created successfully.').format(name=user.first_name))
@@ -84,8 +89,9 @@ def user_register(request):
             messages.error(request, _('Please correct the errors below.'))
     else:
         form = UserRegistrationForm()
+        form_token = generate_form_token(request)
     
-    return render(request, 'SkaRe/register.html', {'form': form})
+    return render(request, 'SkaRe/register.html', {'form': form, 'form_token': request.session.get('form_token', '')})
 
 
 @login_required
@@ -98,6 +104,9 @@ def register_unit(request):
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
+        if is_duplicate_submission(request):
+            messages.warning(request, _('This form was already submitted.'))
+            return redirect('SkaRe:home')
         unit_form = UnitRegistrationForm(request.POST)
         participant_formset = get_participant_formset(extra=3)(request.POST, prefix='participants', queryset=RegularParticipant.objects.none())
         
@@ -124,12 +133,16 @@ def register_unit(request):
                     # Create participants
                     participant_count = 0
                     for form in participant_formset:
-                        if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
+                        # Skip empty forms and deleted forms
+                        if (form.cleaned_data and 
+                            not form.cleaned_data.get('DELETE', False) and
+                            form.has_data()):
                             participant = form.save(commit=False)
                             participant.unit = unit
                             participant.save()
                             participant_count += 1
                     
+                    consume_form_token(request)  # Consume token only after successful processing
                     messages.success(
                         request,
                         _('Unit "{unit_name}" registered successfully with {count} participant(s)!').format(
@@ -146,11 +159,13 @@ def register_unit(request):
     else:
         unit_form = UnitRegistrationForm()
         participant_formset = get_participant_formset(extra=3)(prefix='participants', queryset=RegularParticipant.objects.none())
+        generate_form_token(request)
     
     context = {
         'unit_form': unit_form,
         'participant_formset': participant_formset,
         'deadline': EventSettings.get_deadline(),
+        'form_token': request.session.get('form_token', ''),
     }
     return render(request, 'SkaRe/register_unit.html', context)
 
@@ -344,6 +359,9 @@ def register_individual_participant(request):
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
+        if is_duplicate_submission(request):
+            messages.warning(request, _('This form was already submitted.'))
+            return redirect('SkaRe:home')
         form = IndividualParticipantRegistrationForm(request.POST)
         
         if form.is_valid():
@@ -364,6 +382,7 @@ def register_individual_participant(request):
                     participant.entity = entity
                     participant.save()
                     
+                    consume_form_token(request)  # Consume token only after successful processing
                     messages.success(
                         request,
                         _('Individual Participant "{name}" registered successfully!').format(name=str(participant))
@@ -376,10 +395,12 @@ def register_individual_participant(request):
             messages.error(request, _('Please correct the errors in the form.'))
     else:
         form = IndividualParticipantRegistrationForm()
+        generate_form_token(request)
     
     context = {
         'form': form,
         'deadline': EventSettings.get_deadline(),
+        'form_token': request.session.get('form_token', ''),
     }
     return render(request, 'SkaRe/register_individual_participant.html', context)
 
@@ -525,6 +546,9 @@ def register_organizer(request):
         return redirect('SkaRe:home')
     
     if request.method == 'POST':
+        if is_duplicate_submission(request):
+            messages.warning(request, _('This form was already submitted.'))
+            return redirect('SkaRe:home')
         form = OrganizerRegistrationForm(request.POST)
         
         if form.is_valid():
@@ -545,6 +569,7 @@ def register_organizer(request):
                     organizer.entity = entity
                     organizer.save()
                     
+                    consume_form_token(request)  # Consume token only after successful processing
                     messages.success(
                         request,
                         _('Organizer "{name}" registered successfully!').format(name=str(organizer))
@@ -557,10 +582,12 @@ def register_organizer(request):
             messages.error(request, _('Please correct the errors in the form.'))
     else:
         form = OrganizerRegistrationForm()
+        generate_form_token(request)
     
     context = {
         'form': form,
         'deadline': EventSettings.get_deadline(),
+        'form_token': request.session.get('form_token', ''),
     }
     return render(request, 'SkaRe/register_organizer.html', context)
 

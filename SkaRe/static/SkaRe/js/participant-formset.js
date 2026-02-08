@@ -50,7 +50,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Initial row numbering
+    // Hide rows that are marked for deletion (on page load, e.g., after validation errors)
+    function hideDeletedRows() {
+        const deleteCheckboxes = tableBody.querySelectorAll('input[name$="-DELETE"]');
+        deleteCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const row = checkbox.closest('.participant-row');
+                if (row) {
+                    row.style.display = 'none';
+                }
+            }
+        });
+    }
+    
+    // Initial row numbering and hide deleted rows
+    hideDeletedRows();
     updateRowNumbers();
 });
 

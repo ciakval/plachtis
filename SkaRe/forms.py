@@ -192,6 +192,22 @@ class RegularParticipantForm(forms.ModelForm):
                 self.cleaned_data['DELETE'] = (delete_value == 'on' or delete_value is True or delete_value == 'True')
             else:
                 self.cleaned_data['DELETE'] = False
+    
+    def has_data(self):
+        """Check if the form has any meaningful data filled in.
+        
+        Returns True if at least one of the required fields (first_name, last_name, date_of_birth) has a value.
+        This is used to skip empty forms in formsets.
+        """
+        if not hasattr(self, 'cleaned_data') or not self.cleaned_data:
+            return False
+        
+        # Check if at least one required field has a value
+        return bool(
+            self.cleaned_data.get('first_name') or
+            self.cleaned_data.get('last_name') or
+            self.cleaned_data.get('date_of_birth')
+        )
 
     class Meta:
         model = RegularParticipant
@@ -343,6 +359,12 @@ class OrganizerRegistrationForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         label=_("Home Town")
     )
+    codex_agreement = forms.BooleanField(
+        required=True,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        label=_("Codex agreement"),
+        error_messages={'required': _('You must agree to follow the event codex.')}
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -353,6 +375,13 @@ class OrganizerRegistrationForm(forms.ModelForm):
                     field.widget.attrs['class'] += ' is-invalid'
                 else:
                     field.widget.attrs['class'] = 'is-invalid'
+    
+    def clean_codex_agreement(self):
+        """Validate that codex_agreement is checked."""
+        codex_agreement = self.cleaned_data.get('codex_agreement')
+        if not codex_agreement:
+            raise ValidationError(_('You must agree to follow the event codex.'))
+        return codex_agreement
 
     class Meta:
         model = Organizer
@@ -384,5 +413,4 @@ class OrganizerRegistrationForm(forms.ModelForm):
             'need_lift': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'want_travel_order': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'accommodation': forms.Select(attrs={'class': 'form-control'}),
-            'codex_agreement': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
