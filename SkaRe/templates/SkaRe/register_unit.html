@@ -284,13 +284,13 @@
     <tbody id="empty-participant-form">
         <tr class="participant-row">
             <td class="text-center participant-number"></td>
-            <td><input type="text" name="participants-__prefix__-first_name" class="form-control form-control-sm" placeholder="First name" id="id_participants-__prefix__-first_name"></td>
-            <td><input type="text" name="participants-__prefix__-last_name" class="form-control form-control-sm" placeholder="Last name" id="id_participants-__prefix__-last_name"></td>
-            <td><input type="text" name="participants-__prefix__-nickname" class="form-control form-control-sm" placeholder="Nickname" id="id_participants-__prefix__-nickname"></td>
+            <td><input type="text" name="participants-__prefix__-first_name" class="form-control form-control-sm" placeholder="{% trans 'First name' %}" id="id_participants-__prefix__-first_name"></td>
+            <td><input type="text" name="participants-__prefix__-last_name" class="form-control form-control-sm" placeholder="{% trans 'Last name' %}" id="id_participants-__prefix__-last_name"></td>
+            <td><input type="text" name="participants-__prefix__-nickname" class="form-control form-control-sm" placeholder="{% trans 'Nickname' %}" id="id_participants-__prefix__-nickname"></td>
             <td><input type="date" name="participants-__prefix__-date_of_birth" class="form-control form-control-sm" id="id_participants-__prefix__-date_of_birth"></td>
-            <td><textarea name="participants-__prefix__-health_restrictions" class="form-control form-control-sm" rows="2" placeholder="Health restrictions" id="id_participants-__prefix__-health_restrictions"></textarea></td>
-            <td><textarea name="participants-__prefix__-dietary_restrictions" class="form-control form-control-sm" rows="2" placeholder="Dietary restrictions" id="id_participants-__prefix__-dietary_restrictions"></textarea></td>
-            <td><textarea name="participants-__prefix__-relevant_information" class="form-control form-control-sm" rows="2" placeholder="Relevant information" id="id_participants-__prefix__-relevant_information"></textarea></td>
+            <td><textarea name="participants-__prefix__-health_restrictions" class="form-control form-control-sm" rows="2" placeholder="{% trans 'e.g. Anxiety, asthma' %}" id="id_participants-__prefix__-health_restrictions"></textarea></td>
+            <td><textarea name="participants-__prefix__-dietary_restrictions" class="form-control form-control-sm" rows="2" placeholder="{% trans 'e.g. Vegetarian, gluten-free' %}" id="id_participants-__prefix__-dietary_restrictions"></textarea></td>
+            <td><textarea name="participants-__prefix__-relevant_information" class="form-control form-control-sm" rows="2" placeholder="{% trans 'e.g. Special needs' %}" id="id_participants-__prefix__-relevant_information"></textarea></td>
             <td class="text-center">
                 <input type="checkbox" name="participants-__prefix__-DELETE" id="id_participants-__prefix__-DELETE" style="display: none;">
                 <button type="button" class="btn btn-sm btn-danger remove-participant">
