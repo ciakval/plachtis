@@ -124,7 +124,10 @@ def register_unit(request):
                     # Create participants
                     participant_count = 0
                     for form in participant_formset:
-                        if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
+                        # Skip empty forms and deleted forms
+                        if (form.cleaned_data and 
+                            not form.cleaned_data.get('DELETE', False) and
+                            form.has_data()):
                             participant = form.save(commit=False)
                             participant.unit = unit
                             participant.save()

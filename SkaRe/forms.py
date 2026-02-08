@@ -192,6 +192,22 @@ class RegularParticipantForm(forms.ModelForm):
                 self.cleaned_data['DELETE'] = (delete_value == 'on' or delete_value is True or delete_value == 'True')
             else:
                 self.cleaned_data['DELETE'] = False
+    
+    def has_data(self):
+        """Check if the form has any meaningful data filled in.
+        
+        Returns True if at least one of the required fields (first_name, last_name, date_of_birth) has a value.
+        This is used to skip empty forms in formsets.
+        """
+        if not hasattr(self, 'cleaned_data') or not self.cleaned_data:
+            return False
+        
+        # Check if at least one required field has a value
+        return bool(
+            self.cleaned_data.get('first_name') or
+            self.cleaned_data.get('last_name') or
+            self.cleaned_data.get('date_of_birth')
+        )
 
     class Meta:
         model = RegularParticipant
