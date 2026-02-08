@@ -343,6 +343,12 @@ class OrganizerRegistrationForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         label=_("Home Town")
     )
+    codex_agreement = forms.BooleanField(
+        required=True,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        label=_("Codex agreement"),
+        error_messages={'required': _('You must agree to follow the event codex.')}
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -353,6 +359,13 @@ class OrganizerRegistrationForm(forms.ModelForm):
                     field.widget.attrs['class'] += ' is-invalid'
                 else:
                     field.widget.attrs['class'] = 'is-invalid'
+    
+    def clean_codex_agreement(self):
+        """Validate that codex_agreement is checked."""
+        codex_agreement = self.cleaned_data.get('codex_agreement')
+        if not codex_agreement:
+            raise ValidationError(_('You must agree to follow the event codex.'))
+        return codex_agreement
 
     class Meta:
         model = Organizer
@@ -384,5 +397,4 @@ class OrganizerRegistrationForm(forms.ModelForm):
             'need_lift': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'want_travel_order': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'accommodation': forms.Select(attrs={'class': 'form-control'}),
-            'codex_agreement': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
