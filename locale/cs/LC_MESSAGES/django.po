@@ -1362,3 +1362,7 @@ msgstr "Uživatel \"{username}\" byl odebrán z editorů."
 #: .\SkaRe\views.py:748 .\SkaRe\views.py:794 .\SkaRe\views.py:841
 msgid "User not found."
 msgstr "Uživatel nebyl nalezen."
+
+#: .\SkaRe\views.py:79 .\SkaRe\views.py:107 .\SkaRe\views.py:361 .\SkaRe\views.py:547
+msgid "This form was already submitted."
+msgstr "Tento formulář byl již odeslán."
