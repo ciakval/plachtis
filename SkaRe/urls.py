@@ -22,5 +22,6 @@ urlpatterns = [
     path('organizer/edit/<int:organizer_id>/', views.edit_organizer, name='edit_organizer'),
     path('organizer/editors/<int:organizer_id>/', views.manage_organizer_editors, name='manage_organizer_editors'),
     path('all/list/', views.list_all, name='list_all'),
+    path('merchandise/list/', views.list_merchandise, name='list_merchandise'),
 ]
 

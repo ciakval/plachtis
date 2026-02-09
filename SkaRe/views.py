@@ -626,6 +626,73 @@ def list_all(request):
 
 
 @login_required
+def list_merchandise(request):
+    """View for listing scarves and hats for units, individual participants, and organizers."""
+    if not request.user.is_staff:
+        messages.error(request, _('You do not have permission to view this page.'))
+        return redirect('SkaRe:home')
+    
+    # Get filter parameters
+    search_query = request.GET.get('search', '').strip()
+    type_filter = request.GET.get('type', '').strip()
+    
+    # Initialize querysets based on type filter
+    if type_filter == 'unit':
+        units = Unit.objects.all().select_related('entity')
+        individual_participants = IndividualParticipant.objects.none()
+        organizers = Organizer.objects.none()
+    elif type_filter == 'individual_participant':
+        units = Unit.objects.none()
+        individual_participants = IndividualParticipant.objects.all().select_related('entity')
+        organizers = Organizer.objects.none()
+    elif type_filter == 'organizer':
+        units = Unit.objects.none()
+        individual_participants = IndividualParticipant.objects.none()
+        organizers = Organizer.objects.all().select_related('entity')
+    else:
+        # Get all units, individual participants, and organizers
+        units = Unit.objects.all().select_related('entity')
+        individual_participants = IndividualParticipant.objects.all().select_related('entity')
+        organizers = Organizer.objects.all().select_related('entity')
+    
+    # Filter by name if search query is provided
+    if search_query:
+        # Filter units by scout_unit_name
+        if type_filter == '' or type_filter == 'unit':
+            units = units.filter(entity__scout_unit_name__icontains=search_query)
+        # Filter individual participants by first_name or last_name
+        if type_filter == '' or type_filter == 'individual_participant':
+            individual_participants = individual_participants.filter(
+                Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query)
+            )
+        # Filter organizers by first_name or last_name
+        if type_filter == '' or type_filter == 'organizer':
+            organizers = organizers.filter(
+                Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query)
+            )
+    
+    # Calculate totals
+    total_scarves = sum(unit.scarf_count for unit in units)
+    total_scarves += sum(participant.scarf_count for participant in individual_participants)
+    total_scarves += len(organizers)  # Each organizer gets 1 scarf
+    
+    total_hats = sum(unit.hat_count for unit in units)
+    total_hats += sum(participant.hat_count for participant in individual_participants)
+    total_hats += len(organizers)  # Each organizer gets 1 hat
+    
+    context = {
+        'units': units,
+        'individual_participants': individual_participants,
+        'organizers': organizers,
+        'search_query': search_query,
+        'type_filter': type_filter,
+        'total_scarves': total_scarves,
+        'total_hats': total_hats,
+    }
+    return render(request, 'SkaRe/list_merchandise.html', context)
+
+
+@login_required
 def edit_organizer(request, organizer_id):
     """View for editing an existing Organizer."""
     organizer = get_object_or_404(Organizer, id=organizer_id)

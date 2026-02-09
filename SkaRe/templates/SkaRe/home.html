@@ -41,15 +41,22 @@
                     </a>
                 </div>
                 
+                {% if user.is_staff %}
                 <div class="mb-3">
-                    {% if user.is_staff %}
-                        <a class="btn btn-warning btn-lg me-2" href="/admin/" role="button">
-                            <i class="bi bi-gear"></i> {% trans "Admin Panel" %}
-                        </a>
-                        <a class="btn btn-warning btn-lg me-2" href="{% url 'SkaRe:list_all' %}" role="button">
-                            <i class="bi bi-gear"></i> {% trans "Show All Participants" %}
-                        </a>
-                    {% endif %}
+                    <h5>{% trans "Administrator options" %}</h5>
+                    <a class="btn btn-warning btn-lg me-2 mb-2" href="/admin/" role="button">
+                        <i class="bi bi-gear"></i> {% trans "Admin Panel" %}
+                    </a>
+                    <a class="btn btn-warning btn-lg me-2 mb-2" href="{% url 'SkaRe:list_all' %}" role="button">
+                        <i class="bi bi-gear"></i> {% trans "Show All Participants" %}
+                    </a>
+                    <a class="btn btn-warning btn-lg mb-2" href="{% url 'SkaRe:list_merchandise' %}" role="button">
+                        <i class="bi bi-bag-fill"></i> {% trans "Scarves and Hats" %}
+                    </a>
+                </div>
+                {% endif %}
+
+                <div class="mb-3">
                     <a class="btn btn-secondary btn-lg" href="{% url 'SkaRe:logout' %}" role="button">
                         <i class="bi bi-box-arrow-right"></i> {% trans "Logout" %}
                     </a>
