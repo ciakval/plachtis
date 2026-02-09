@@ -789,6 +789,10 @@ msgstr "Moji jednotlivci"
 msgid "My Organizers"
 msgstr "Moji organizátoři"
 
+#: .\SkaRe\templates\SkaRe\home.html:46
+msgid "Administrator options"
+msgstr "Administrační možnosti"
+
 #: .\SkaRe\templates\SkaRe\home.html:47
 msgid "Admin Panel"
 msgstr "Administrace"
