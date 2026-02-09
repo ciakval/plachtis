@@ -1,0 +1,132 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Merchandise" %} - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4"><i class="bi bi-bag-fill"></i> {% trans "Scarves and Hats" %}</h1>
+        
+        {% if user.is_staff %}
+        
+        <!-- Search Filter -->
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="bi bi-funnel"></i> {% trans "Filters" %}</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" action="{% url 'SkaRe:list_merchandise' %}">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold"><i class="bi bi-search"></i> {% trans "Search" %}</label>
+                            <input type="text" name="search" class="form-control" 
+                                   placeholder="{% trans 'Filter by name...' %}" 
+                                   value="{{ search_query }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold"><i class="bi bi-funnel"></i> {% trans "Filter by Type" %}</label>
+                            <select name="type" class="form-select">
+                                <option value="">{% trans "All Types" %}</option>
+                                <option value="unit" {% if type_filter == 'unit' %}selected{% endif %}>{% trans "Units" %}</option>
+                                <option value="individual_participant" {% if type_filter == 'individual_participant' %}selected{% endif %}>{% trans "Individual Participants" %}</option>
+                                <option value="organizer" {% if type_filter == 'organizer' %}selected{% endif %}>{% trans "Organizers" %}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="bi bi-search"></i> {% trans "Apply Filters" %}
+                            </button>
+                            {% if search_query or type_filter %}
+                            <a href="{% url 'SkaRe:list_merchandise' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i> {% trans "Clear filters" %}
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="alert alert-info mb-4">
+            <i class="bi bi-info-circle"></i>
+            <strong>{% trans "Total" %}:</strong>
+            <span id="totalCount">{{ units|length|add:individual_participants|length|add:organizers|length }}</span>
+            (<span class="text-success">{{ units|length }} {% trans "units" %}</span>,
+             <span class="text-primary">{{ individual_participants|length }} {% trans "individual participants" %}</span>,
+             <span class="text-warning">{{ organizers|length }} {% trans "organizers" %}</span>)
+        </div>
+        
+        <!-- Data Table -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>{% trans "Type" %}</th>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Scarves" %}</th>
+                        <th>{% trans "Hats" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for unit in units %}
+                    <tr>
+                        <td><span class="badge bg-success">{% trans "Unit" %}</span></td>
+                        <td>{{ unit.entity.scout_unit_name }}</td>
+                        <td><strong>{{ unit.scarf_count }}</strong></td>
+                        <td><strong>{{ unit.hat_count }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                    
+                    {% for participant in individual_participants %}
+                    <tr>
+                        <td><span class="badge bg-primary">{% trans "Individual Participant" %}</span></td>
+                        <td>{{ participant.first_name }} {{ participant.last_name }}</td>
+                        <td><strong>{{ participant.scarf_count }}</strong></td>
+                        <td><strong>{{ participant.hat_count }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                    
+                    {% for organizer in organizers %}
+                    <tr>
+                        <td><span class="badge bg-warning text-dark">{% trans "Organizer" %}</span></td>
+                        <td>{{ organizer.first_name }} {{ organizer.last_name }}</td>
+                        <td><strong>1</strong></td>
+                        <td><strong>1</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot class="table-secondary">
+                    <tr>
+                        <th colspan="2">{% trans "Total" %}</th>
+                        <th><strong>{{ total_scarves }}</strong></th>
+                        <th><strong>{{ total_hats }}</strong></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        {% if not units and not individual_participants and not organizers %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> {% trans "No results found." %}
+        </div>
+        {% endif %}
+        
+        <div class="mt-4">
+            <a class="btn btn-primary" href="{% url 'SkaRe:home' %}" role="button">
+                <i class="bi bi-house"></i> {% trans "Back to Home" %}
+            </a>
+        </div>
+        
+        {% else %}
+        <div class="alert alert-danger">
+            <i class="bi bi-shield-exclamation"></i> {% trans "You do not have permission to view this page." %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

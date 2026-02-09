@@ -1370,3 +1370,43 @@ msgstr "Uživatel nebyl nalezen."
 #: .\SkaRe\views.py:79 .\SkaRe\views.py:107 .\SkaRe\views.py:361 .\SkaRe\views.py:547
 msgid "This form was already submitted."
 msgstr "Tento formulář byl již odeslán."
+
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:5
+msgid "Scarves and Hats"
+msgstr "Šátky a čepice"
+
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:20
+msgid "Filter by name..."
+msgstr "Filtrovat podle jména..."
+
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:25
+msgid "Clear filter"
+msgstr "Zrušit filtr"
+
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:33
+msgid "units"
+msgstr "jednotky"
+
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:33
+msgid "individual participants"
+msgstr "jednotlivci"
+
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:70
+msgid "No results found."
+msgstr "Nebyly nalezeny žádné výsledky."
+
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:16
+msgid "Filters"
+msgstr "Filtry"
+
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:28
+msgid "Units"
+msgstr "Jednotky"
+
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:36
+msgid "Apply Filters"
+msgstr "Použít filtry"
+
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:39
+msgid "Clear filters"
+msgstr "Zrušit filtry"

@@ -47,8 +47,11 @@
                     <a class="btn btn-warning btn-lg me-2 mb-2" href="/admin/" role="button">
                         <i class="bi bi-gear"></i> {% trans "Admin Panel" %}
                     </a>
-                    <a class="btn btn-warning btn-lg mb-2" href="{% url 'SkaRe:list_all' %}" role="button">
+                    <a class="btn btn-warning btn-lg me-2 mb-2" href="{% url 'SkaRe:list_all' %}" role="button">
                         <i class="bi bi-gear"></i> {% trans "Show All Participants" %}
+                    </a>
+                    <a class="btn btn-warning btn-lg mb-2" href="{% url 'SkaRe:list_merchandise' %}" role="button">
+                        <i class="bi bi-bag-fill"></i> {% trans "Scarves and Hats" %}
                     </a>
                 </div>
                 {% endif %}
