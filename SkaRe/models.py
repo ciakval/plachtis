@@ -497,6 +497,17 @@ class Organizer(Person):
         help_text=_("Whether the organizer agrees to follow the event codex"),
         verbose_name=_("Codex agreement"),
     )
+    
+    wants_scarf = models.BooleanField(
+        default=True,
+        help_text=_("Whether the organizer wants a scarf"),
+        verbose_name=_("Wants scarf"),
+    )
+    wants_hat = models.BooleanField(
+        default=True,
+        help_text=_("Whether the organizer wants a hat"),
+        verbose_name=_("Wants hat"),
+    )
 
     def __str__(self):
         person_name = super().__str__()

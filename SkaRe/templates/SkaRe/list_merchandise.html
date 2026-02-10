@@ -94,8 +94,8 @@
                     <tr>
                         <td><span class="badge bg-warning text-dark">{% trans "Organizer" %}</span></td>
                         <td>{{ organizer.first_name }} {{ organizer.last_name }}</td>
-                        <td><strong>1</strong></td>
-                        <td><strong>1</strong></td>
+                        <td><strong>{% if organizer.wants_scarf %}1{% else %}0{% endif %}</strong></td>
+                        <td><strong>{% if organizer.wants_hat %}1{% else %}0{% endif %}</strong></td>
                     </tr>
                     {% endfor %}
                 </tbody>

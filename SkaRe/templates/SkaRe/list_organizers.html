@@ -47,6 +47,18 @@
                             <p class="mb-2">
                                 <strong>{% trans "Accommodation" %}:</strong> {{ organizer.get_accommodation_display }}
                             </p>
+                            <p class="mb-2">
+                                <i class="bi bi-bag-fill"></i> <strong>{% trans "Merchandise" %}:</strong>
+                                {% if organizer.wants_scarf %}
+                                    <span class="badge bg-info">{% trans "Scarf" %}</span>
+                                {% endif %}
+                                {% if organizer.wants_hat %}
+                                    <span class="badge bg-info">{% trans "Hat" %}</span>
+                                {% endif %}
+                                {% if not organizer.wants_scarf and not organizer.wants_hat %}
+                                    <span class="text-muted">{% trans "None" %}</span>
+                                {% endif %}
+                            </p>
                             {% if organizer.need_lift %}
                             <p class="mb-2">
                                 <i class="bi bi-check-circle text-success"></i> {% trans "Needs lift from transport hub" %}

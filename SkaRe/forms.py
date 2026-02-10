@@ -399,6 +399,8 @@ class OrganizerRegistrationForm(forms.ModelForm):
             'want_travel_order',
             'accommodation',
             'codex_agreement',
+            'wants_scarf',
+            'wants_hat',
         ]
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('First name')}),
@@ -413,4 +415,6 @@ class OrganizerRegistrationForm(forms.ModelForm):
             'need_lift': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'want_travel_order': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'accommodation': forms.Select(attrs={'class': 'form-control'}),
+            'wants_scarf': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'wants_hat': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

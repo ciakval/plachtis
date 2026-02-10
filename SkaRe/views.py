@@ -674,11 +674,11 @@ def list_merchandise(request):
     # Calculate totals
     total_scarves = sum(unit.scarf_count for unit in units)
     total_scarves += sum(participant.scarf_count for participant in individual_participants)
-    total_scarves += len(organizers)  # Each organizer gets 1 scarf
+    total_scarves += sum(1 for o in organizers if o.wants_scarf)
     
     total_hats = sum(unit.hat_count for unit in units)
     total_hats += sum(participant.hat_count for participant in individual_participants)
-    total_hats += len(organizers)  # Each organizer gets 1 hat
+    total_hats += sum(1 for o in organizers if o.wants_hat)
     
     context = {
         'units': units,
@@ -735,6 +735,8 @@ def edit_organizer(request, organizer_id):
                 'need_lift',
                 'want_travel_order',
                 'accommodation',
+                'wants_scarf',
+                'wants_hat',
             ]
             widgets = {
                 'first_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -750,6 +752,8 @@ def edit_organizer(request, organizer_id):
                 'need_lift': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
                 'want_travel_order': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
                 'accommodation': forms.Select(attrs={'class': 'form-control'}),
+                'wants_scarf': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+                'wants_hat': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             }
     
     class EntityEditForm(forms.ModelForm):
