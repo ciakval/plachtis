@@ -674,11 +674,11 @@ def list_merchandise(request):
     # Calculate totals
     total_scarves = sum(unit.scarf_count for unit in units)
     total_scarves += sum(participant.scarf_count for participant in individual_participants)
-    total_scarves += len(organizers)  # Each organizer gets 1 scarf
+    total_scarves += sum(1 for o in organizers if o.wants_scarf)
     
     total_hats = sum(unit.hat_count for unit in units)
     total_hats += sum(participant.hat_count for participant in individual_participants)
-    total_hats += len(organizers)  # Each organizer gets 1 hat
+    total_hats += sum(1 for o in organizers if o.wants_hat)
     
     context = {
         'units': units,
@@ -735,6 +735,8 @@ def edit_organizer(request, organizer_id):
                 'need_lift',
                 'want_travel_order',
                 'accommodation',
+                'wants_scarf',
+                'wants_hat',
             ]
             widgets = {
                 'first_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -750,6 +752,8 @@ def edit_organizer(request, organizer_id):
                 'need_lift': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
                 'want_travel_order': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
                 'accommodation': forms.Select(attrs={'class': 'form-control'}),
+                'wants_scarf': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+                'wants_hat': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             }
     
     class EntityEditForm(forms.ModelForm):
@@ -802,6 +806,163 @@ def edit_organizer(request, organizer_id):
         'entity_form': entity_form,
     }
     return render(request, 'SkaRe/edit_organizer.html', context)
+
+
+@login_required
+def manage_entities(request):
+    """Admin view for managing entity payment and confirmation status."""
+    if not request.user.is_staff:
+        messages.error(request, _('You do not have permission to view this page.'))
+        return redirect('SkaRe:home')
+    
+    # Handle form submission
+    if request.method == 'POST':
+        # Get all entity IDs from the form
+        entity_ids = request.POST.getlist('entity_ids')
+        paid_entities = set(request.POST.getlist('paid'))
+        confirmed_entities = set(request.POST.getlist('confirmed'))
+        
+        updated_count = 0
+        try:
+            for entity_id in entity_ids:
+                try:
+                    entity = Entity.objects.get(id=entity_id)
+                    entity_updated = False
+                    
+                    # Update paid status
+                    should_be_paid = entity_id in paid_entities
+                    if entity.paid != should_be_paid:
+                        entity.paid = should_be_paid
+                        entity_updated = True
+                    
+                    # Update confirmed status
+                    should_be_confirmed = entity_id in confirmed_entities
+                    if entity.confirmed != should_be_confirmed:
+                        entity.confirmed = should_be_confirmed
+                        entity_updated = True
+                    
+                    if entity_updated:
+                        entity.save()
+                        updated_count += 1
+                except Entity.DoesNotExist:
+                    continue
+            
+            if updated_count > 0:
+                messages.success(request, _('Updated {count} entities.').format(count=updated_count))
+            else:
+                messages.info(request, _('No changes made.'))
+        except Exception as e:
+            messages.error(request, _('Error updating entities: {error}').format(error=str(e)))
+        
+        # Preserve filter parameters
+        from django.http import HttpResponseRedirect
+        from django.urls import reverse
+        from urllib.parse import urlencode
+        
+        params = {}
+        for key in ['search', 'type', 'status']:
+            value = request.POST.get(key, '').strip()
+            if value:
+                params[key] = value
+        
+        url = reverse('SkaRe:manage_entities')
+        if params:
+            url += '?' + urlencode(params)
+        
+        return HttpResponseRedirect(url)
+    
+    # Get filter parameters
+    search_query = request.GET.get('search', '').strip()
+    type_filter = request.GET.get('type', '').strip()
+    status_filter = request.GET.get('status', '').strip()  # 'paid', 'unpaid', 'confirmed', 'unconfirmed', 'all'
+    
+    # Get all entities with their related objects
+    units = Unit.objects.all().select_related('entity', 'entity__created_by')
+    individual_participants = IndividualParticipant.objects.all().select_related('entity', 'entity__created_by')
+    organizers = Organizer.objects.all().select_related('entity', 'entity__created_by')
+    
+    # Filter by type
+    if type_filter == 'unit':
+        individual_participants = IndividualParticipant.objects.none()
+        organizers = Organizer.objects.none()
+    elif type_filter == 'individual_participant':
+        units = Unit.objects.none()
+        organizers = Organizer.objects.none()
+    elif type_filter == 'organizer':
+        units = Unit.objects.none()
+        individual_participants = IndividualParticipant.objects.none()
+    
+    # Filter by search query
+    if search_query:
+        if type_filter == '' or type_filter == 'unit':
+            units = units.filter(entity__scout_unit_name__icontains=search_query)
+        if type_filter == '' or type_filter == 'individual_participant':
+            individual_participants = individual_participants.filter(
+                Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query)
+            )
+        if type_filter == '' or type_filter == 'organizer':
+            organizers = organizers.filter(
+                Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query)
+            )
+    
+    # Filter by status
+    if status_filter == 'paid':
+        units = units.filter(entity__paid=True)
+        individual_participants = individual_participants.filter(entity__paid=True)
+        organizers = organizers.filter(entity__paid=True)
+    elif status_filter == 'unpaid':
+        units = units.filter(entity__paid=False)
+        individual_participants = individual_participants.filter(entity__paid=False)
+        organizers = organizers.filter(entity__paid=False)
+    elif status_filter == 'confirmed':
+        units = units.filter(entity__confirmed=True)
+        individual_participants = individual_participants.filter(entity__confirmed=True)
+        organizers = organizers.filter(entity__confirmed=True)
+    elif status_filter == 'unconfirmed':
+        units = units.filter(entity__confirmed=False)
+        individual_participants = individual_participants.filter(entity__confirmed=False)
+        organizers = organizers.filter(entity__confirmed=False)
+    
+    # Prepare entity list with type information
+    entities_data = []
+    
+    for unit in units:
+        entities_data.append({
+            'entity': unit.entity,
+            'type': 'unit',
+            'type_display': _('Unit'),
+            'name': unit.entity.scout_unit_name or _('Unnamed Unit'),
+            'unit': unit,
+        })
+    
+    for participant in individual_participants:
+        entities_data.append({
+            'entity': participant.entity,
+            'type': 'individual_participant',
+            'type_display': _('Individual Participant'),
+            'name': f"{participant.first_name} {participant.last_name}",
+            'participant': participant,
+        })
+    
+    for organizer in organizers:
+        entities_data.append({
+            'entity': organizer.entity,
+            'type': 'organizer',
+            'type_display': _('Organizer'),
+            'name': f"{organizer.first_name} {organizer.last_name}",
+            'organizer': organizer,
+        })
+    
+    # Sort by created_at (newest first)
+    entities_data.sort(key=lambda x: x['entity'].created_at, reverse=True)
+    
+    context = {
+        'entities_data': entities_data,
+        'search_query': search_query,
+        'type_filter': type_filter,
+        'status_filter': status_filter,
+    }
+    return render(request, 'SkaRe/manage_entities.html', context)
 
 
 @login_required

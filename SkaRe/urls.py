@@ -23,5 +23,6 @@ urlpatterns = [
     path('organizer/editors/<int:organizer_id>/', views.manage_organizer_editors, name='manage_organizer_editors'),
     path('all/list/', views.list_all, name='list_all'),
     path('merchandise/list/', views.list_merchandise, name='list_merchandise'),
+    path('entities/manage/', views.manage_entities, name='manage_entities'),
 ]
 

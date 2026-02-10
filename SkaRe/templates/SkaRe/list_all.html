@@ -187,7 +187,7 @@
                     
                     {% for p in regular_participants %}
                     <tr data-type="regular">
-                        <td data-col="type"><span class="badge bg-success">{% trans "Regular" %}</span></td>
+                        <td data-col="type"><span class="badge bg-success">{% trans "Regular participant" %}</span></td>
                         <td data-col="firstname">{{ p.first_name }}</td>
                         <td data-col="lastname">{{ p.last_name }}</td>
                         <td data-col="nickname">{{ p.nickname|default:"-" }}</td>

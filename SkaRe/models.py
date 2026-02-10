@@ -204,6 +204,18 @@ class Entity(models.Model):
         verbose_name=_("Unlocked for editing"),
     )
     
+    paid = models.BooleanField(
+        default=False,
+        help_text=_("Whether payment has been received for this entity"),
+        verbose_name=_("Paid"),
+    )
+    
+    confirmed = models.BooleanField(
+        default=False,
+        help_text=_("Whether this entity has been confirmed"),
+        verbose_name=_("Confirmed"),
+    )
+    
     scout_unit_name = models.CharField(
         max_length=200,
         help_text=_("Name of the scout unit"),
@@ -496,6 +508,17 @@ class Organizer(Person):
         default=False,
         help_text=_("Whether the organizer agrees to follow the event codex"),
         verbose_name=_("Codex agreement"),
+    )
+    
+    wants_scarf = models.BooleanField(
+        default=True,
+        help_text=_("Whether the organizer wants a scarf"),
+        verbose_name=_("Wants scarf"),
+    )
+    wants_hat = models.BooleanField(
+        default=True,
+        help_text=_("Whether the organizer wants a hat"),
+        verbose_name=_("Wants hat"),
     )
 
     def __str__(self):
