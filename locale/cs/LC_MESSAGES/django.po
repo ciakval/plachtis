@@ -174,7 +174,7 @@ msgstr "Skaut/Skautka (13-15)"
 
 #: .\SkaRe\models.py:84
 msgid "Cub"
-msgstr "Vlče/Světluška (6-12)"
+msgstr "Vlče/Světluška (0-12)"
 
 #: .\SkaRe\models.py:90
 msgid "Scout category"
