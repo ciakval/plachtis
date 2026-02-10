@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-10 20:22+0100\n"
+"POT-Creation-Date: 2026-02-10 20:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgstr ""
 msgid "Scout Unit Name"
 msgstr "Název oddílu/střediska/přístavu"
 
-#: .\SkaRe\forms.py:89 .\SkaRe\models.py:216
+#: .\SkaRe\forms.py:89 .\SkaRe\models.py:228
 #: .\SkaRe\templates\SkaRe\list_units.html:26 .\SkaRe\views.py:257
 msgid "Evidence ID"
 msgstr "Evidenční číslo oddílu/střediska/přístavu"
@@ -143,7 +143,7 @@ msgstr "např. Malý stan, Karavan, ..."
 msgid "e.g., 20 m²"
 msgstr "např. 20 m2"
 
-#: .\SkaRe\forms.py:365 .\SkaRe\models.py:498
+#: .\SkaRe\forms.py:365 .\SkaRe\models.py:510
 msgid "Codex agreement"
 msgstr "Kodex jednání dospělých"
 
@@ -250,271 +250,292 @@ msgid "Unlocked for editing"
 msgstr "Odemčeno k editaci"
 
 #: .\SkaRe\models.py:209
+msgid "Whether payment has been received for this entity"
+msgstr "Zda byla zaplacena platba za tuto registraci"
+
+#: .\SkaRe\models.py:210 .\SkaRe\templates\SkaRe\manage_entities.html:40
+#: .\SkaRe\templates\SkaRe\manage_entities.html:84
+#: .\SkaRe\templates\SkaRe\manage_entities.html:110
+msgid "Paid"
+msgstr "Zaplaceno"
+
+#: .\SkaRe\models.py:215
+msgid "Whether this entity has been confirmed"
+msgstr "Zda byla tato registrace potvrzena"
+
+#: .\SkaRe\models.py:216 .\SkaRe\templates\SkaRe\manage_entities.html:42
+#: .\SkaRe\templates\SkaRe\manage_entities.html:85
+#: .\SkaRe\templates\SkaRe\manage_entities.html:121
+msgid "Confirmed"
+msgstr "Potvrzeno"
+
+#: .\SkaRe\models.py:221
 msgid "Name of the scout unit"
 msgstr "Jméno oddílu/střediska/přístavu"
 
-#: .\SkaRe\models.py:210
+#: .\SkaRe\models.py:222
 msgid "Scout unit name"
 msgstr "Jméno oddílu/střediska/přístavu"
 
-#: .\SkaRe\models.py:215
+#: .\SkaRe\models.py:227
 msgid "Unit evidence ID (e.g., 523.10, 816.08.001)"
 msgstr "Evidenční číslo oddílu/střediska/přístavu (např. 523.10)"
 
-#: .\SkaRe\models.py:221
+#: .\SkaRe\models.py:233
 msgid "Contact email address"
 msgstr "Kontaktní e-mail"
 
-#: .\SkaRe\models.py:222
+#: .\SkaRe\models.py:234
 msgid "Contact email"
 msgstr "Kontaktní e-mail"
 
-#: .\SkaRe\models.py:226
+#: .\SkaRe\models.py:238
 msgid "Contact phone number"
 msgstr "Kontaktní telefon"
 
-#: .\SkaRe\models.py:227
+#: .\SkaRe\models.py:239
 msgid "Contact phone"
 msgstr "Kontaktní telefon"
 
-#: .\SkaRe\models.py:233
+#: .\SkaRe\models.py:245
 msgid "Expected date and time of arrival"
 msgstr "Očekávaný příjezd"
 
-#: .\SkaRe\models.py:234
+#: .\SkaRe\models.py:246
 msgid "Expected arrival"
 msgstr "Očekávaný příjezd"
 
-#: .\SkaRe\models.py:238
+#: .\SkaRe\models.py:250
 msgid "Expected date and time of departure"
 msgstr "Očekávaný odjezd"
 
-#: .\SkaRe\models.py:239
+#: .\SkaRe\models.py:251
 msgid "Expected departure"
 msgstr "Očekávaný odjezd"
 
-#: .\SkaRe\models.py:243
+#: .\SkaRe\models.py:255
 msgid "Home town of the unit"
 msgstr "Obec, odkud na SkaRe přijedete"
 
-#: .\SkaRe\models.py:244
+#: .\SkaRe\models.py:256
 msgid "Home town"
 msgstr "Obec, odkud na SkaRe přijedete"
 
-#: .\SkaRe\models.py:280
+#: .\SkaRe\models.py:292
 msgid "The registration entity associated with this unit"
 msgstr "Registrační entita přiřazená k této jednotce"
 
-#: .\SkaRe\models.py:281 .\SkaRe\models.py:369 .\SkaRe\models.py:433
+#: .\SkaRe\models.py:293 .\SkaRe\models.py:381 .\SkaRe\models.py:445
 msgid "Entity"
 msgstr "Entita"
 
-#: .\SkaRe\models.py:286
+#: .\SkaRe\models.py:298
 msgid "Name of the contact person"
 msgstr "Vedoucí"
 
-#: .\SkaRe\models.py:287
+#: .\SkaRe\models.py:299
 msgid "Contact person name"
 msgstr "Vedoucí"
 
-#: .\SkaRe\models.py:292
+#: .\SkaRe\models.py:304
 msgid "Optional backup contact phone"
 msgstr "Druhý kontaktní telefon"
 
-#: .\SkaRe\models.py:293
+#: .\SkaRe\models.py:305
 msgid "Backup contact phone"
 msgstr "Druhý kontaktní telefon"
 
-#: .\SkaRe\models.py:299 .\SkaRe\models.py:375
+#: .\SkaRe\models.py:311 .\SkaRe\models.py:387
 msgid "Estimated number of P550 boats"
 msgstr "Počet pramic P550"
 
-#: .\SkaRe\models.py:300 .\SkaRe\models.py:376
+#: .\SkaRe\models.py:312 .\SkaRe\models.py:388
 msgid "P550 boats"
 msgstr "Počet pramic P550"
 
-#: .\SkaRe\models.py:304 .\SkaRe\models.py:380
+#: .\SkaRe\models.py:316 .\SkaRe\models.py:392
 msgid "Estimated number of other sail-boats"
 msgstr "Počet jiných plachetnic"
 
-#: .\SkaRe\models.py:305 .\SkaRe\models.py:381
+#: .\SkaRe\models.py:317 .\SkaRe\models.py:393
 msgid "Sail boats"
 msgstr "Počet jiných plachetnic"
 
-#: .\SkaRe\models.py:309 .\SkaRe\models.py:385
+#: .\SkaRe\models.py:321 .\SkaRe\models.py:397
 msgid "Estimated number of paddle-powered boats"
 msgstr "Počet kánoí,kajaků,apod."
 
-#: .\SkaRe\models.py:310 .\SkaRe\models.py:386
+#: .\SkaRe\models.py:322 .\SkaRe\models.py:398
 msgid "Paddle boats"
 msgstr "Počet kánoí,kajaků,apod."
 
-#: .\SkaRe\models.py:314 .\SkaRe\models.py:390
+#: .\SkaRe\models.py:326 .\SkaRe\models.py:402
 msgid "Estimated number of motor-powered boats"
 msgstr "Počet motorových lodí"
 
-#: .\SkaRe\models.py:315 .\SkaRe\models.py:391
+#: .\SkaRe\models.py:327 .\SkaRe\models.py:403
 msgid "Motor boats"
 msgstr "Počet motorových lodí"
 
-#: .\SkaRe\models.py:320 .\SkaRe\models.py:396
+#: .\SkaRe\models.py:332 .\SkaRe\models.py:408
 msgid "Number of scarves"
 msgstr "Počet šátků"
 
-#: .\SkaRe\models.py:321 .\SkaRe\models.py:397
+#: .\SkaRe\models.py:333 .\SkaRe\models.py:409
 msgid "Scarf count"
 msgstr "Počet šátků"
 
-#: .\SkaRe\models.py:326 .\SkaRe\models.py:402
+#: .\SkaRe\models.py:338 .\SkaRe\models.py:414
 msgid "Number of hats"
 msgstr "Počet čepic"
 
-#: .\SkaRe\models.py:327 .\SkaRe\models.py:403
+#: .\SkaRe\models.py:339 .\SkaRe\models.py:415
 msgid "Hat count"
 msgstr "Počet čepic"
 
-#: .\SkaRe\models.py:333 .\SkaRe\models.py:409
+#: .\SkaRe\models.py:345 .\SkaRe\models.py:421
 msgid "Accommodation expectations (small tents, large tent, caravan, ...)"
 msgstr "V čem plánujete spát (malé stany, velký stan, karavan, ...)"
 
-#: .\SkaRe\models.py:334 .\SkaRe\models.py:410
+#: .\SkaRe\models.py:346 .\SkaRe\models.py:422
 msgid "Accommodation expectations"
 msgstr "V čem plánujete spát (malé stany, velký stan, karavan, ...)"
 
-#: .\SkaRe\models.py:338 .\SkaRe\models.py:414
+#: .\SkaRe\models.py:350 .\SkaRe\models.py:426
 msgid "Estimated needed area for accommodation"
 msgstr "Kolik potřebujete místa (m2)?"
 
-#: .\SkaRe\models.py:339 .\SkaRe\models.py:415
+#: .\SkaRe\models.py:351 .\SkaRe\models.py:427
 msgid "Estimated accommodation area"
 msgstr "Kolik potřebujete místa (m2)?"
 
-#: .\SkaRe\models.py:352
+#: .\SkaRe\models.py:364
 msgid "The unit this participant belongs to"
 msgstr "Jednotka, ke které účastník náleží"
 
-#: .\SkaRe\models.py:353 .\SkaRe\templates\SkaRe\list_all.html:70
+#: .\SkaRe\models.py:365 .\SkaRe\templates\SkaRe\list_all.html:70
 #: .\SkaRe\templates\SkaRe\list_all.html:156
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:77
 #: .\SkaRe\templates\SkaRe\manage_editors.html:17
+#: .\SkaRe\templates\SkaRe\manage_entities.html:93 .\SkaRe\views.py:936
 msgid "Unit"
 msgstr "Jednotka"
 
-#: .\SkaRe\models.py:368
+#: .\SkaRe\models.py:380
 msgid "The registration entity associated with this individual participant"
 msgstr "Registrační entita přiřazená k tomuto jednotlivci"
 
-#: .\SkaRe\models.py:432
+#: .\SkaRe\models.py:444
 msgid "The registration entity associated with this organizer"
 msgstr "Registrační entita přiřazená k tomuto organizátorovi"
 
-#: .\SkaRe\models.py:437
+#: .\SkaRe\models.py:449
 msgid "Management"
 msgstr "Ředitelství"
 
-#: .\SkaRe\models.py:438
+#: .\SkaRe\models.py:450
 msgid "Racing"
 msgstr "Závodní"
 
-#: .\SkaRe\models.py:439
+#: .\SkaRe\models.py:451
 msgid "Rescue"
 msgstr "VZS"
 
-#: .\SkaRe\models.py:440
+#: .\SkaRe\models.py:452
 msgid "Crisis"
 msgstr "Krize"
 
-#: .\SkaRe\models.py:441
+#: .\SkaRe\models.py:453
 msgid "Information"
 msgstr "Informační"
 
-#: .\SkaRe\models.py:442
+#: .\SkaRe\models.py:454
 msgid "Material"
 msgstr "TMZ"
 
-#: .\SkaRe\models.py:443
+#: .\SkaRe\models.py:455
 msgid "Food"
 msgstr "Jídelna"
 
-#: .\SkaRe\models.py:444
+#: .\SkaRe\models.py:456
 msgid "Program"
 msgstr "Program"
 
-#: .\SkaRe\models.py:445
+#: .\SkaRe\models.py:457
 msgid "Others"
 msgstr "Ostatní"
 
-#: .\SkaRe\models.py:451
+#: .\SkaRe\models.py:463
 msgid "Division the organizer belongs to"
 msgstr "Divize SkaRe"
 
-#: .\SkaRe\models.py:452 .\SkaRe\templates\SkaRe\list_all.html:74
+#: .\SkaRe\models.py:464 .\SkaRe\templates\SkaRe\list_all.html:74
 #: .\SkaRe\templates\SkaRe\list_all.html:157
 #: .\SkaRe\templates\SkaRe\list_organizers.html:26
 msgid "Division"
 msgstr "Divize"
 
-#: .\SkaRe\models.py:456
+#: .\SkaRe\models.py:468
 msgid "Public Transport"
 msgstr "Veřejná doprava"
 
-#: .\SkaRe\models.py:457
+#: .\SkaRe\models.py:469
 msgid "Car"
 msgstr "Vlastní auto"
 
-#: .\SkaRe\models.py:458
+#: .\SkaRe\models.py:470
 msgid "Car with Trailer"
 msgstr "Auto s přívěsem"
 
-#: .\SkaRe\models.py:464
+#: .\SkaRe\models.py:476
 msgid "Transport method to the event"
 msgstr "Způsob dopravy na akci"
 
-#: .\SkaRe\models.py:465 .\SkaRe\templates\SkaRe\list_organizers.html:45
+#: .\SkaRe\models.py:477 .\SkaRe\templates\SkaRe\list_organizers.html:45
 msgid "Transport"
 msgstr "Způsob dopravy na akci"
 
-#: .\SkaRe\models.py:470
+#: .\SkaRe\models.py:482
 msgid "Whether the organizer needs a lift from the nearest transport hub"
 msgstr "Zda organizátor potřebuje odvoz"
 
-#: .\SkaRe\models.py:471
+#: .\SkaRe\models.py:483
 msgid "Need lift"
 msgstr "Potřebuji odvoz z autobusu/vlaku"
 
-#: .\SkaRe\models.py:476
+#: .\SkaRe\models.py:488
 msgid "Whether the organizer wants a travel order for reimbursement"
 msgstr "Zda organizátor chce vystavit cestovní příkaz"
 
-#: .\SkaRe\models.py:477
+#: .\SkaRe\models.py:489
 msgid "Want travel order"
 msgstr "Chci vystavit cestovní příkaz"
 
-#: .\SkaRe\models.py:481
+#: .\SkaRe\models.py:493
 msgid "With Unit"
 msgstr "Se svým oddílem"
 
-#: .\SkaRe\models.py:482
+#: .\SkaRe\models.py:494
 msgid "Own Tent"
 msgstr "Ve stanu"
 
-#: .\SkaRe\models.py:483
+#: .\SkaRe\models.py:495
 msgid "Caravan"
 msgstr "V karavanu"
 
-#: .\SkaRe\models.py:484
+#: .\SkaRe\models.py:496
 msgid "Need Tent"
 msgstr "Potřebuji půjčit stan"
 
-#: .\SkaRe\models.py:485
+#: .\SkaRe\models.py:497
 msgid "Inside Building"
 msgstr "Uvnitř v budově"
 
-#: .\SkaRe\models.py:491
+#: .\SkaRe\models.py:503
 msgid "Accommodation preference of the organizer"
 msgstr "Požadavky na ubytování organizátora"
 
-#: .\SkaRe\models.py:492
+#: .\SkaRe\models.py:504
 #: .\SkaRe\templates\SkaRe\edit_individual_participant.html:185
 #: .\SkaRe\templates\SkaRe\edit_unit.html:204
 #: .\SkaRe\templates\SkaRe\list_organizers.html:48
@@ -523,27 +544,27 @@ msgstr "Požadavky na ubytování organizátora"
 msgid "Accommodation"
 msgstr "Způsob ubytování"
 
-#: .\SkaRe\models.py:497
+#: .\SkaRe\models.py:509
 msgid "Whether the organizer agrees to follow the event codex"
 msgstr "Zda se organizátor zavazuje dodržovat Kodex jednání dospělých"
 
-#: .\SkaRe\models.py:503
+#: .\SkaRe\models.py:515
 msgid "Whether the organizer wants a scarf"
 msgstr "Zda organizátor chce šátek"
 
-#: .\SkaRe\models.py:504
+#: .\SkaRe\models.py:516
 msgid "Wants scarf"
 msgstr "Chci šátek"
 
-#: .\SkaRe\models.py:508
+#: .\SkaRe\models.py:520
 msgid "Whether the organizer wants a hat"
 msgstr "Zda organizátor chce čepici"
 
-#: .\SkaRe\models.py:509
+#: .\SkaRe\models.py:521
 msgid "Wants hat"
 msgstr "Chci čepici"
 
-#: .\SkaRe\models.py:514
+#: .\SkaRe\models.py:526
 #, fuzzy, python-brace-format
 #| msgid "Contact person name"
 msgid "{person_name}"
@@ -553,18 +574,18 @@ msgstr "Vedoucí"
 msgid "Hello"
 msgstr "Ahoj"
 
-#: .\SkaRe\templates\SkaRe\base.html:35 .\SkaRe\templates\SkaRe\home.html:61
+#: .\SkaRe\templates\SkaRe\base.html:35 .\SkaRe\templates\SkaRe\home.html:64
 msgid "Logout"
 msgstr "Odhlásit se"
 
-#: .\SkaRe\templates\SkaRe\base.html:39 .\SkaRe\templates\SkaRe\home.html:67
+#: .\SkaRe\templates\SkaRe\base.html:39 .\SkaRe\templates\SkaRe\home.html:70
 #: .\SkaRe\templates\SkaRe\login.html:4 .\SkaRe\templates\SkaRe\login.html:11
 #: .\SkaRe\templates\SkaRe\login.html:33
 msgid "Login"
 msgstr "Přihlásit se"
 
 #: .\SkaRe\templates\SkaRe\base.html:42 .\SkaRe\templates\SkaRe\home.html:19
-#: .\SkaRe\templates\SkaRe\home.html:68 .\SkaRe\templates\SkaRe\register.html:4
+#: .\SkaRe\templates\SkaRe\home.html:71 .\SkaRe\templates\SkaRe\register.html:4
 #: .\SkaRe\templates\SkaRe\register.html:11
 #: .\SkaRe\templates\SkaRe\register.html:68
 msgid "Register"
@@ -633,6 +654,7 @@ msgstr "Zpět na seznam"
 #: .\SkaRe\templates\SkaRe\edit_individual_participant.html:242
 #: .\SkaRe\templates\SkaRe\edit_organizer.html:246
 #: .\SkaRe\templates\SkaRe\edit_unit.html:339
+#: .\SkaRe\templates\SkaRe\manage_entities.html:142
 msgid "Save Changes"
 msgstr "Uložit změny"
 
@@ -840,7 +862,13 @@ msgstr "Seznam všech účastníků"
 msgid "Scarves and Hats"
 msgstr "Šátky a čepice"
 
-#: .\SkaRe\templates\SkaRe\home.html:65
+#: .\SkaRe\templates\SkaRe\home.html:57
+#: .\SkaRe\templates\SkaRe\manage_entities.html:4
+#: .\SkaRe\templates\SkaRe\manage_entities.html:9
+msgid "Manage Entities"
+msgstr "Správa registrací"
+
+#: .\SkaRe\templates\SkaRe\home.html:68
 msgid "Please login or register to access the system."
 msgstr "Pro přístup do systému se prosím přihlaste nebo zaregistrujte."
 
@@ -858,6 +886,7 @@ msgstr "Možnosti zobrazení"
 
 #: .\SkaRe\templates\SkaRe\list_all.html:22
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:22
+#: .\SkaRe\templates\SkaRe\manage_entities.html:22
 msgid "Search"
 msgstr "Hledat"
 
@@ -867,16 +896,19 @@ msgstr "Libovolná hodnota..."
 
 #: .\SkaRe\templates\SkaRe\list_all.html:26
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:28
+#: .\SkaRe\templates\SkaRe\manage_entities.html:28
 msgid "Filter by Type"
 msgstr "Filtrovat podle typu"
 
 #: .\SkaRe\templates\SkaRe\list_all.html:28
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:30
+#: .\SkaRe\templates\SkaRe\manage_entities.html:30
 msgid "All Types"
 msgstr "Všechny typy"
 
 #: .\SkaRe\templates\SkaRe\list_all.html:29
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:32
+#: .\SkaRe\templates\SkaRe\manage_entities.html:32
 msgid "Individual Participants"
 msgstr "Jednotlivci"
 
@@ -886,6 +918,7 @@ msgstr "Účastníci v oddílech"
 
 #: .\SkaRe\templates\SkaRe\list_all.html:31
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:33
+#: .\SkaRe\templates\SkaRe\manage_entities.html:33
 msgid "Organizers"
 msgstr "Organizátoři"
 
@@ -896,6 +929,7 @@ msgstr "Zobrazit tyto sloupce"
 #: .\SkaRe\templates\SkaRe\list_all.html:44
 #: .\SkaRe\templates\SkaRe\list_all.html:150
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:68
+#: .\SkaRe\templates\SkaRe\manage_entities.html:81
 msgid "Type"
 msgstr "Typ"
 
@@ -987,12 +1021,13 @@ msgid "Individual"
 msgstr "Jednotlivec"
 
 #: .\SkaRe\templates\SkaRe\list_all.html:190
-msgid "Regular"
-msgstr "Obyčejný"
+msgid "Regular participant"
+msgstr "Obyčejný účastník"
 
 #: .\SkaRe\templates\SkaRe\list_all.html:210
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:95
 #: .\SkaRe\templates\SkaRe\manage_editors.html:21
+#: .\SkaRe\templates\SkaRe\manage_entities.html:97 .\SkaRe\views.py:954
 msgid "Organizer"
 msgstr "Organizátor"
 
@@ -1008,12 +1043,14 @@ msgstr "Zatím nejsou registrováni žádní účastníci."
 #: .\SkaRe\templates\SkaRe\list_organizers.html:152
 #: .\SkaRe\templates\SkaRe\list_units.html:122
 #: .\SkaRe\templates\SkaRe\list_units.html:144
+#: .\SkaRe\templates\SkaRe\manage_entities.html:150
 msgid "Back to Home"
 msgstr "Zpět na domovskou stránku"
 
 #: .\SkaRe\templates\SkaRe\list_all.html:245
-#: .\SkaRe\templates\SkaRe\list_merchandise.html:126 .\SkaRe\views.py:612
-#: .\SkaRe\views.py:632
+#: .\SkaRe\templates\SkaRe\list_merchandise.html:126
+#: .\SkaRe\templates\SkaRe\manage_entities.html:156 .\SkaRe\views.py:612
+#: .\SkaRe\views.py:632 .\SkaRe\views.py:815
 msgid "You do not have permission to view this page."
 msgstr "Nemáte oprávnění upravovat tuto jednotku."
 
@@ -1062,22 +1099,27 @@ msgid "Register your first participant now!"
 msgstr "Registrovat dalšího jednotlivce"
 
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:16
+#: .\SkaRe\templates\SkaRe\manage_entities.html:16
 msgid "Filters"
 msgstr "Filtry"
 
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:24
+#: .\SkaRe\templates\SkaRe\manage_entities.html:24
 msgid "Filter by name..."
 msgstr "Filtrovat podle jména..."
 
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:31
+#: .\SkaRe\templates\SkaRe\manage_entities.html:31
 msgid "Units"
 msgstr "Jednotky"
 
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:40
+#: .\SkaRe\templates\SkaRe\manage_entities.html:50
 msgid "Apply Filters"
 msgstr "Použít filtry"
 
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:44
+#: .\SkaRe\templates\SkaRe\manage_entities.html:54
 msgid "Clear filters"
 msgstr "Zrušit filtry"
 
@@ -1090,19 +1132,18 @@ msgid "individual participants"
 msgstr "jednotlivci"
 
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:69
-#, fuzzy
-#| msgid "Last Name"
+#: .\SkaRe\templates\SkaRe\manage_entities.html:82
 msgid "Name"
-msgstr "Příjmení"
+msgstr "Název"
 
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:86
 #: .\SkaRe\templates\SkaRe\manage_editors.html:19
-#, fuzzy
-#| msgid "Individual Participants"
+#: .\SkaRe\templates\SkaRe\manage_entities.html:95 .\SkaRe\views.py:945
 msgid "Individual Participant"
-msgstr "Jednotlivci"
+msgstr "Jednotlivec"
 
 #: .\SkaRe\templates\SkaRe\list_merchandise.html:114
+#: .\SkaRe\templates\SkaRe\manage_entities.html:130
 msgid "No results found."
 msgstr "Nebyly nalezeny žádné výsledky."
 
@@ -1266,6 +1307,30 @@ msgstr "Zpět na účastníky"
 #: .\SkaRe\templates\SkaRe\manage_editors.html:89
 msgid "Back to Organizers"
 msgstr "Zpět na organizátory"
+
+#: .\SkaRe\templates\SkaRe\manage_entities.html:37
+msgid "Filter by Status"
+msgstr "Filtrovat podle stavu"
+
+#: .\SkaRe\templates\SkaRe\manage_entities.html:39
+msgid "All"
+msgstr ""
+
+#: .\SkaRe\templates\SkaRe\manage_entities.html:41
+msgid "Unpaid"
+msgstr "Nezaplaceno"
+
+#: .\SkaRe\templates\SkaRe\manage_entities.html:43
+msgid "Unconfirmed"
+msgstr "Nepotvrzeno"
+
+#: .\SkaRe\templates\SkaRe\manage_entities.html:66
+msgid "Total Entities"
+msgstr "Celkem registrací"
+
+#: .\SkaRe\templates\SkaRe\manage_entities.html:83
+msgid "Created By"
+msgstr "Vytvořil"
 
 #: .\SkaRe\templates\SkaRe\register.html:19
 msgid "Username (Login)"
@@ -1445,35 +1510,53 @@ msgstr "Organizátor \"{name}\" byl úspěšně aktualizován!"
 msgid "Error updating organizer: {error}"
 msgstr "Chyba při aktualizaci organizátora: {error}"
 
-#: .\SkaRe\views.py:818 .\SkaRe\views.py:864 .\SkaRe\views.py:911
+#: .\SkaRe\views.py:851
+#, python-brace-format
+msgid "Updated {count} entities."
+msgstr "Aktualizováno {count} registrací."
+
+#: .\SkaRe\views.py:856
+msgid "No changes made."
+msgstr "Žádné změny nebyly provedeny."
+
+#: .\SkaRe\views.py:858
+#, python-brace-format
+msgid "Error updating entities: {error}"
+msgstr "Chyba při aktualizaci registrací: {error}"
+
+#: .\SkaRe\views.py:937
+msgid "Unnamed Unit"
+msgstr ""
+
+#: .\SkaRe\views.py:978 .\SkaRe\views.py:1024 .\SkaRe\views.py:1071
 msgid "Only the owner can manage editors."
 msgstr "Pouze vlastník může spravovat editory."
 
-#: .\SkaRe\views.py:829 .\SkaRe\views.py:875 .\SkaRe\views.py:922
+#: .\SkaRe\views.py:989 .\SkaRe\views.py:1035 .\SkaRe\views.py:1082
 msgid "You cannot add yourself as an editor."
 msgstr "Nemůžete se přidat jako editor."
 
-#: .\SkaRe\views.py:831 .\SkaRe\views.py:877 .\SkaRe\views.py:924
+#: .\SkaRe\views.py:991 .\SkaRe\views.py:1037 .\SkaRe\views.py:1084
 #, python-brace-format
 msgid "User \"{username}\" is already an editor."
 msgstr "Uživatel \"{username}\" je již editorem."
 
-#: .\SkaRe\views.py:834 .\SkaRe\views.py:880 .\SkaRe\views.py:927
+#: .\SkaRe\views.py:994 .\SkaRe\views.py:1040 .\SkaRe\views.py:1087
 #, python-brace-format
 msgid "User \"{username}\" added as editor."
 msgstr "Uživatel \"{username}\" byl přidán jako editor."
 
-#: .\SkaRe\views.py:836 .\SkaRe\views.py:882 .\SkaRe\views.py:929
+#: .\SkaRe\views.py:996 .\SkaRe\views.py:1042 .\SkaRe\views.py:1089
 #, python-brace-format
 msgid "User \"{username}\" not found."
 msgstr "Uživatel \"{username}\" nebyl nalezen."
 
-#: .\SkaRe\views.py:844 .\SkaRe\views.py:890 .\SkaRe\views.py:937
+#: .\SkaRe\views.py:1004 .\SkaRe\views.py:1050 .\SkaRe\views.py:1097
 #, python-brace-format
 msgid "User \"{username}\" removed from editors."
 msgstr "Uživatel \"{username}\" byl odebrán z editorů."
 
-#: .\SkaRe\views.py:846 .\SkaRe\views.py:892 .\SkaRe\views.py:939
+#: .\SkaRe\views.py:1006 .\SkaRe\views.py:1052 .\SkaRe\views.py:1099
 msgid "User not found."
 msgstr "Uživatel nebyl nalezen."
 

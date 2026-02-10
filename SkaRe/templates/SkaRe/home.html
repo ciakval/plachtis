@@ -50,8 +50,11 @@
                     <a class="btn btn-warning btn-lg me-2 mb-2" href="{% url 'SkaRe:list_all' %}" role="button">
                         <i class="bi bi-gear"></i> {% trans "Show All Participants" %}
                     </a>
-                    <a class="btn btn-warning btn-lg mb-2" href="{% url 'SkaRe:list_merchandise' %}" role="button">
+                    <a class="btn btn-warning btn-lg me-2 mb-2" href="{% url 'SkaRe:list_merchandise' %}" role="button">
                         <i class="bi bi-bag-fill"></i> {% trans "Scarves and Hats" %}
+                    </a>
+                    <a class="btn btn-warning btn-lg mb-2" href="{% url 'SkaRe:manage_entities' %}" role="button">
+                        <i class="bi bi-check-circle"></i> {% trans "Manage Entities" %}
                     </a>
                 </div>
                 {% endif %}
