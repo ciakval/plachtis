@@ -1354,6 +1354,12 @@ msgstr "Přihlaste se zde"
 msgid "Registration deadline"
 msgstr "Termín uzavření registrace"
 
+#: .\SkaRe\templates\SkaRe\list_individual_participants.html:13
+#: .\SkaRe\templates\SkaRe\list_organizers.html:13
+#: .\SkaRe\templates\SkaRe\list_units.html:13
+msgid "Editing deadline"
+msgstr "Úpravy možné do"
+
 #: .\SkaRe\templates\SkaRe\register_organizer.html:154
 msgid "I agree to follow the"
 msgstr "Zavazuji se dodržovat"
