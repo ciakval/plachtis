@@ -164,7 +164,7 @@ def register_unit(request):
     context = {
         'unit_form': unit_form,
         'participant_formset': participant_formset,
-        'deadline': EventSettings.get_deadline(),
+        'deadline': EventSettings.get_registration_deadline(),
         'form_token': request.session.get('form_token', ''),
     }
     return render(request, 'SkaRe/register_unit.html', context)
@@ -199,7 +199,7 @@ def edit_unit(request, unit_id):
     
     # Check if unit can be edited
     if not unit.entity.can_be_edited(request.user):
-        messages.error(request, _('This unit cannot be edited after the registration deadline.'))
+        messages.error(request, _('This unit cannot be edited after the editing deadline.'))
         return redirect('SkaRe:list_units')
     
     # Define forms inline
@@ -399,7 +399,7 @@ def register_individual_participant(request):
     
     context = {
         'form': form,
-        'deadline': EventSettings.get_deadline(),
+        'deadline': EventSettings.get_registration_deadline(),
         'form_token': request.session.get('form_token', ''),
     }
     return render(request, 'SkaRe/register_individual_participant.html', context)
@@ -432,7 +432,7 @@ def edit_individual_participant(request, participant_id):
     
     # Check if participant can be edited
     if not participant.entity.can_be_edited(request.user):
-        messages.error(request, _('This participant cannot be edited after the registration deadline.'))
+        messages.error(request, _('This participant cannot be edited after the editing deadline.'))
         return redirect('SkaRe:list_individual_participants')
     
     # Define forms inline
@@ -586,7 +586,7 @@ def register_organizer(request):
     
     context = {
         'form': form,
-        'deadline': EventSettings.get_deadline(),
+        'deadline': EventSettings.get_registration_deadline(),
         'form_token': request.session.get('form_token', ''),
     }
     return render(request, 'SkaRe/register_organizer.html', context)
@@ -706,7 +706,7 @@ def edit_organizer(request, organizer_id):
     
     # Check if organizer can be edited
     if not organizer.entity.can_be_edited(request.user):
-        messages.error(request, _('This organizer cannot be edited after the registration deadline.'))
+        messages.error(request, _('This organizer cannot be edited after the editing deadline.'))
         return redirect('SkaRe:list_organizers')
     
     # Define forms inline
@@ -974,6 +974,11 @@ def manage_unit_editors(request, unit_id):
     if unit.entity.created_by != request.user:
         messages.error(request, _('Only the owner can manage editors.'))
         return redirect('SkaRe:list_units')
+
+    # Check if unit can be edited
+    if not unit.entity.can_be_edited(request.user):
+        messages.error(request, _('This unit\'s editors cannot be edited after the editing deadline.'))
+        return redirect('SkaRe:list_units')
     
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -1019,6 +1024,11 @@ def manage_individual_participant_editors(request, participant_id):
     # Only owner can manage editors
     if participant.entity.created_by != request.user:
         messages.error(request, _('Only the owner can manage editors.'))
+        return redirect('SkaRe:list_individual_participants')
+
+    # Check if participant can be edited
+    if not participant.entity.can_be_edited(request.user):
+        messages.error(request, _('This participant\'s editors cannot be edited after the editing deadline.'))
         return redirect('SkaRe:list_individual_participants')
     
     if request.method == 'POST':
@@ -1066,6 +1076,11 @@ def manage_organizer_editors(request, organizer_id):
     # Only owner can manage editors
     if organizer.entity.created_by != request.user:
         messages.error(request, _('Only the owner can manage editors.'))
+        return redirect('SkaRe:list_organizers')
+    
+    # Check if organizer can be edited
+    if not organizer.entity.can_be_edited(request.user):
+        messages.error(request, _('This organizer\'s editors cannot be edited after the editing deadline.'))
         return redirect('SkaRe:list_organizers')
     
     if request.method == 'POST':

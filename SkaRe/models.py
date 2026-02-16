@@ -34,6 +34,11 @@ class EventSettings(SingletonModel):
         default=datetime(2026, 4, 1, 23, 59, 59, tzinfo=timezone.get_current_timezone()),
     )
 
+    editing_deadline = models.DateTimeField(
+        help_text=_("Deadline for editing Units and Participants"),
+        default=datetime(2026, 4, 1, 23, 59, 59, tzinfo=timezone.get_current_timezone()),
+    )
+
     def __str__(self):
         return "Event Settings"
 
@@ -53,11 +58,31 @@ class EventSettings(SingletonModel):
             return True
 
     @classmethod
-    def get_deadline(cls):
+    def get_registration_deadline(cls):
         """Get the registration deadline"""
         try:
             settings = cls.get_solo()
             return settings.registration_deadline if settings else None
+        except Exception:
+            return None
+
+    @classmethod
+    def is_editing_open(cls):
+        """Check if editing is still open"""
+        try:
+            settings = cls.get_solo()
+            if settings:
+                return timezone.now() < settings.editing_deadline
+            return True  # If no settings exist, allow registration
+        except Exception:
+            return True
+
+    @classmethod
+    def get_editing_deadline(cls):
+        """Get the editing deadline"""
+        try:
+            settings = cls.get_solo()
+            return settings.editing_deadline if settings else None
         except Exception:
             return None
 
@@ -266,7 +291,7 @@ class Entity(models.Model):
             return False
 
         # If registration is still open, allow editing
-        if EventSettings.is_registration_open():
+        if EventSettings.is_editing_open():
             return True
 
         # After deadline, only allow if entity is unlocked

@@ -1427,8 +1427,8 @@ msgid "You do not have permission to edit this unit."
 msgstr "Nemáte oprávnění upravovat tuto jednotku."
 
 #: .\SkaRe\views.py:202
-msgid "This unit cannot be edited after the registration deadline."
-msgstr "Nelze upravovat jednotku po uzavření registrace."
+msgid "This unit cannot be edited after the editing deadline."
+msgstr "Nelze upravovat jednotku po uzavření editace."
 
 #: .\SkaRe\views.py:317
 #, python-brace-format
@@ -1469,8 +1469,8 @@ msgid "You do not have permission to edit this participant."
 msgstr "Nemáte oprávnění upravovat tohoto účastníka."
 
 #: .\SkaRe\views.py:435
-msgid "This participant cannot be edited after the registration deadline."
-msgstr "Nelze upravovat účastníka po uzavření registrace."
+msgid "This participant cannot be edited after the editing deadline."
+msgstr "Nelze upravovat účastníka po uzavření editace."
 
 #: .\SkaRe\views.py:521
 #, python-brace-format
@@ -1497,8 +1497,8 @@ msgid "You do not have permission to edit this organizer."
 msgstr "Nemáte oprávnění upravovat tohoto organizátora."
 
 #: .\SkaRe\views.py:709
-msgid "This organizer cannot be edited after the registration deadline."
-msgstr "Nelze upravovat organizátora po uavření registrace."
+msgid "This organizer cannot be edited after the editing deadline."
+msgstr "Nelze upravovat organizátora po uzavření editace."
 
 #: .\SkaRe\views.py:793
 #, python-brace-format
@@ -1531,6 +1531,18 @@ msgstr ""
 #: .\SkaRe\views.py:978 .\SkaRe\views.py:1024 .\SkaRe\views.py:1071
 msgid "Only the owner can manage editors."
 msgstr "Pouze vlastník může spravovat editory."
+
+#: .\SkaRe\views.py:980
+msgid "This unit's editors cannot be edited after the editing deadline."
+msgstr "Editoři jednotky nemohou být upravování po uzavření editace."
+
+#: .\SkaRe\views.py:1031
+msgid "This participant's editors cannot be edited after the editing deadline."
+msgstr "Editoři účastníka nemohou být upravování po uzavření editace."
+
+#: .\SkaRe\views.py:1083
+msgid "This organizer's editors cannot be edited after the editing deadline."
+msgstr "Editoři organizátora nemohou být upravování po uzavření editace."
 
 #: .\SkaRe\views.py:989 .\SkaRe\views.py:1035 .\SkaRe\views.py:1082
 msgid "You cannot add yourself as an editor."

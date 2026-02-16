@@ -29,7 +29,9 @@ Three key security features have been implemented to manage user access and regi
 - Added `EventSettings` model to store event configuration, including the registration deadline
 - The `EventSettings` model should have only one instance (enforced in admin)
 - All creation views check if registration is still open before allowing new Units/Participants
-- Helper methods `EventSettings.is_registration_open()` and `EventSettings.get_deadline()` provide easy access
+- Helper methods `EventSettings.is_registration_open()` and `EventSettings.get_registration_deadline()` provide easy access
+- All editing views check if editing is still open before allowing edits
+- Helper methods `EventSettings.is_editing_open()` and `EventSettings.get_editing_deadline()` provide easy access
 
 **User Experience:**
 - Users attempting to create new Units/Participants after the deadline will see an error message
