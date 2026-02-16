@@ -10,6 +10,21 @@
         <div class="jumbotron bg-light p-5 rounded text-center">
 <img src="{% static 'SkaRe/images/logo-transparent.png' %}" alt="SkaRe Logo" class="home-logo">
             <p class="lead">{% trans "Manage Units and Participants in the PlachtIS system." %}</p>
+            
+            {% if registration_deadline or editing_deadline %}
+                <div class="alert alert-info">
+                    {% if registration_deadline %}
+                    <i class="bi bi-calendar-event"></i> {% trans "Registration deadline" %}: <strong>{{ registration_deadline|date:"F j, Y, g:i a" }}</strong>
+                    {% endif %}
+                    {% if registration_deadline and editing_deadline %}
+                    <br>
+                    {% endif %}
+                    {% if editing_deadline %}
+                    <i class="bi bi-calendar-event"></i> {% trans "Editing deadline" %}: <strong>{{ editing_deadline|date:"F j, Y, g:i a" }}</strong>
+                    {% endif %}
+                </div>
+            {% endif %}
+            
             <hr class="my-4">
             
             {% if user.is_authenticated %}

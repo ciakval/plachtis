@@ -23,7 +23,11 @@ from .models import (
 
 def home(request):
     """Homepage view."""
-    return render(request, 'SkaRe/home.html')
+    context = {
+        'registration_deadline': EventSettings.get_registration_deadline(),
+        'editing_deadline': EventSettings.get_editing_deadline(),
+    }
+    return render(request, 'SkaRe/home.html', context)
 
 
 def user_login(request):
@@ -181,6 +185,7 @@ def list_units(request):
     
     context = {
         'units': units,
+        'editing_deadline': EventSettings.get_editing_deadline(),
     }
     return render(request, 'SkaRe/list_units.html', context)
 
@@ -414,6 +419,7 @@ def list_individual_participants(request):
     
     context = {
         'participants': participants,
+        'editing_deadline': EventSettings.get_editing_deadline(),
     }
     return render(request, 'SkaRe/list_individual_participants.html', context)
 
@@ -601,6 +607,7 @@ def list_organizers(request):
     
     context = {
         'organizers': organizers,
+        'editing_deadline': EventSettings.get_editing_deadline(),
     }
     return render(request, 'SkaRe/list_organizers.html', context)
 

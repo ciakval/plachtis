@@ -8,6 +8,12 @@
     <div class="col-md-12">
         <h1 class="mb-4"><i class="bi bi-people-fill"></i> {% trans "My Registered Units" %}</h1>
         
+        {% if editing_deadline %}
+        <div class="alert alert-info">
+            <i class="bi bi-calendar-event"></i> {% trans "Editing deadline" %}: <strong>{{ editing_deadline|date:"F j, Y, g:i a" }}</strong>
+        </div>
+        {% endif %}
+        
         {% if units %}
             <div class="row">
                 {% for unit in units %}
