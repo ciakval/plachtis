@@ -53,8 +53,8 @@ Volitelné / doplňkové funkcionality:
   * MS (Modrá stuha)
 * posádka se registruje vždy s konkrétní zaregistrovanou lodí (přičemž jedna loď v jedné kategorii může být použita jen pro jednu posádku)
 * posádka má členy (Kormidelník + až 4 Lodníci), kteří jsou v PlachtISu zaregistrování jako Účastníci akce
-* pro registraci posádky musí mít daný uživatel PlachtISu oprávnění k dané Lodi (což mají všichni) a k daným Účastníkům (což má aktuálně pouze ten kdo je zaregistroval a jeho Editoři)
-  * z důvodu možnosti "půjčování" členů posádek zavedeme do PlachtISu možnost "půjčit / zviditelnit" daného Účastníka jinému uživateli
+* pro registraci posádky musí mít daný uživatel PlachtISu oprávnění k dané Lodi a k daným Účastníkům (což má aktuálně pouze ten kdo je zaregistroval a jeho Editoři)
+  * z důvodu možnosti "půjčování" členů posádek a lodí zavedeme do PlachtISu možnost "půjčit / zviditelnit" daného Účastníka nebo Loď jinému uživateli
 
 Volitelné funkcionality:
 * PlachtIS bude kontrolovat platnost registrace dané Posádky vůči pravidlům (plocha plachet, počet a věk účastníkům) a bude zvýrazňovat problémy; nesmí ale registraci Posádky odmítat
@@ -85,7 +85,7 @@ PlachtIS umožní administrátorům vytvářet, editovat a mazat plavenky, včet
 Plavenka bude obsahovat pouze svůj kód (a volitelně UID své RFID karty); volitelně může být přiřazena k určité lodi. Jedna loď může mít i více plavenek (ztráta).
 
 PlachtIS umožní jednoduše vytvořit plavenky pro celou akci, což bude zahrnovat:
-* plavenky pro všechny registrované lodě (vytvoření plavenky a přiřazení); do kódu se použije plachetní číslo, existuje-li (musí být volné, jinak chyba!) 
+* plavenky pro všechny registrované lodě (vytvoření plavenky a přiřazení); do kódu se použije plachetní číslo, existuje-li (musí být volné, jinak chyba!)
 * rezervní plavenky pro každou kategorii (počet se zadá při vytváření); do kódu se použije vyšší číslo
 * náhradní plavenky (počet se zadá při vytváření)
 
@@ -140,5 +140,3 @@ PlachtIS také na správně formovaný API požadavek odešle odpověď s inform
 
 Při vytvoření plavenek v PlachtISu nebude známé jejich UID; při načtení plavenky čtečkou zase nelze zjistit jiné informace.
 PlachtIS tedy umožní spárovat UID plavenek s jejich daty v PlachtISu, a to uživatelsky přívětivou formou (například kliknutí na tlačítko "Spárovat" u plavenky způsobí, že příští přiložení plavenky ke čtečce nezmění její stav, ale spáruje její UID s danou plavenkou).
-
-
