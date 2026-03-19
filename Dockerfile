@@ -50,5 +50,5 @@ CMD mkdir -p /app/db_data && \
     exec gunicorn PlachtIS.wsgi:application \
         --bind 0.0.0.0:8000 \
         --workers 3 \
-        --timeout 30 \
+        --timeout 120 \
         --graceful-timeout 30
