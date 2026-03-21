@@ -11,6 +11,8 @@ jobs:
   build-and-push:
     name: Build & Push
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.git_info.outputs.sha }}
     permissions:
       contents: read
       packages: write
@@ -40,6 +42,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
+            type=raw,value=${{ steps.git_info.outputs.sha }}
             type=raw,value=latest,enable=${{ github.ref_type == 'branch' }}
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -65,14 +68,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
       
-      - name: Copy docker-compose.test.yml to VPS
+      - name: Copy compose.yaml to VPS
         uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           port: ${{ secrets.VPS_SSH_PORT }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          source: "docker-compose.test.yml"
+          source: "compose.yaml"
           target: "/home/plachtis/DOCKER/plachtis-test"
       
       - name: Deploy to test VPS
@@ -84,9 +87,35 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /home/plachtis/DOCKER/plachtis-test
-            docker pull ghcr.io/${{ github.repository }}:latest
-            docker compose -f docker-compose.test.yml down
-            docker compose -f docker-compose.test.yml up -d
+            IMAGE_TAG=${{ needs.build-and-push.outputs.image_tag }}
+            IMAGE_REPO=ghcr.io/${{ github.repository }}
+            docker pull ${IMAGE_REPO}:${IMAGE_TAG}
+
+            # Persist image selection for compose variable substitution.
+            touch .env
+            if grep -q '^GITHUB_REPOSITORY=' .env; then
+              sed -i "s|^GITHUB_REPOSITORY=.*|GITHUB_REPOSITORY=${{ github.repository }}|" .env
+            else
+              echo "GITHUB_REPOSITORY=${{ github.repository }}" >> .env
+            fi
+            if grep -q '^IMAGE_TAG=' .env; then
+              sed -i "s|^IMAGE_TAG=.*|IMAGE_TAG=${IMAGE_TAG}|" .env
+            else
+              echo "IMAGE_TAG=${IMAGE_TAG}" >> .env
+            fi
+            if grep -q '^CONTAINER_NAME=' .env; then
+              sed -i "s|^CONTAINER_NAME=.*|CONTAINER_NAME=plachtis-test-web|" .env
+            else
+              echo "CONTAINER_NAME=plachtis-test-web" >> .env
+            fi
+            if grep -q '^DJANGO_ALLOWED_HOSTS=' .env; then
+              sed -i "s|^DJANGO_ALLOWED_HOSTS=.*|DJANGO_ALLOWED_HOSTS=plachtis-test.remesh.cz|" .env
+            else
+              echo "DJANGO_ALLOWED_HOSTS=plachtis-test.remesh.cz" >> .env
+            fi
+
+            docker compose down
+            docker compose up -d
             docker system prune -f
 
   deploy-production:
@@ -99,14 +128,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
       
-      - name: Copy docker-compose.yml to VPS
+      - name: Copy compose.yaml to VPS
         uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           port: ${{ secrets.VPS_SSH_PORT }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          source: "docker-compose.yml"
+          source: "compose.yaml"
           target: "/home/plachtis/DOCKER/plachtis"
       
       - name: Deploy to production VPS
@@ -118,7 +147,33 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /home/plachtis/DOCKER/plachtis
-            docker pull ghcr.io/${{ github.repository }}:${{ github.ref_name }}
-            IMAGE_TAG=${{ github.ref_name }} docker compose down
-            IMAGE_TAG=${{ github.ref_name }} docker compose up -d
+            IMAGE_TAG=${{ needs.build-and-push.outputs.image_tag }}
+            IMAGE_REPO=ghcr.io/${{ github.repository }}
+            docker pull ${IMAGE_REPO}:${IMAGE_TAG}
+
+            # Persist image selection for compose variable substitution.
+            touch .env
+            if grep -q '^GITHUB_REPOSITORY=' .env; then
+              sed -i "s|^GITHUB_REPOSITORY=.*|GITHUB_REPOSITORY=${{ github.repository }}|" .env
+            else
+              echo "GITHUB_REPOSITORY=${{ github.repository }}" >> .env
+            fi
+            if grep -q '^IMAGE_TAG=' .env; then
+              sed -i "s|^IMAGE_TAG=.*|IMAGE_TAG=${IMAGE_TAG}|" .env
+            else
+              echo "IMAGE_TAG=${IMAGE_TAG}" >> .env
+            fi
+            if grep -q '^CONTAINER_NAME=' .env; then
+              sed -i "s|^CONTAINER_NAME=.*|CONTAINER_NAME=plachtis-web|" .env
+            else
+              echo "CONTAINER_NAME=plachtis-web" >> .env
+            fi
+            if grep -q '^DJANGO_ALLOWED_HOSTS=' .env; then
+              sed -i "s|^DJANGO_ALLOWED_HOSTS=.*|DJANGO_ALLOWED_HOSTS=plachtis.remesh.cz,plachtis.skare.cz|" .env
+            else
+              echo "DJANGO_ALLOWED_HOSTS=plachtis.remesh.cz,plachtis.skare.cz" >> .env
+            fi
+
+            docker compose down
+            docker compose up -d
             docker system prune -f
