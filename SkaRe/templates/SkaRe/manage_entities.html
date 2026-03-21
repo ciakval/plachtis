@@ -63,7 +63,8 @@
         <!-- Statistics -->
         <div class="alert alert-info mb-4">
             <i class="bi bi-info-circle"></i>
-            <strong>{% trans "Total Entities" %}:</strong> {{ entities_data|length }}
+            <strong>{% trans "Total Entities" %}:</strong> {{ page_obj.paginator.count }}
+            <span class="ms-2 text-muted">{% blocktrans with page=page_obj.number pages=page_obj.paginator.num_pages %}(page {{ page }} of {{ pages }}){% endblocktrans %}</span>
         </div>
         
         <!-- Form for updating entities -->
@@ -72,6 +73,7 @@
             <input type="hidden" name="search" value="{{ search_query|default:'' }}">
             <input type="hidden" name="type" value="{{ type_filter|default:'' }}">
             <input type="hidden" name="status" value="{{ status_filter|default:'' }}">
+            <input type="hidden" name="page" value="{{ page_obj.number }}">
             
             <!-- Data Table -->
             <div class="table-responsive">
@@ -144,6 +146,28 @@
             </div>
             {% endif %}
         </form>
+
+            {% if page_obj.paginator.num_pages > 1 %}
+            <nav aria-label="{% trans 'Entity pages' %}" class="mb-4">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?search={{ search_query|urlencode }}&type={{ type_filter|urlencode }}&status={{ status_filter|urlencode }}&page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">{% trans "Previous" %}</span></li>
+                    {% endif %}
+                    <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?search={{ search_query|urlencode }}&type={{ type_filter|urlencode }}&status={{ status_filter|urlencode }}&page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">{% trans "Next" %}</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
         
         <div class="mt-4">
             <a class="btn btn-primary" href="{% url 'SkaRe:home' %}" role="button">

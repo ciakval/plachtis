@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, Sum
+from django.core.paginator import Paginator
 from django import forms
 from django.utils.translation import gettext as _
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -19,6 +20,10 @@ from .models import (
     Entity, Unit, RegularParticipant, EventSettings,
     IndividualParticipant, Organizer
 )
+
+
+ADMIN_RESULTS_LIMIT = 500
+MANAGE_ENTITIES_PAGE_SIZE = 100
 
 
 def home(request):
@@ -619,15 +624,31 @@ def list_all(request):
         messages.error(request, _('You do not have permission to view this page.'))
         return redirect('SkaRe:home')
     
-    participants = IndividualParticipant.objects.all().select_related('entity')
-    organizers = Organizer.objects.all().select_related('entity')
-    units = Unit.objects.all().select_related('entity')
-    regular_participants = RegularParticipant.objects.all().select_related('unit', 'unit__entity')
+    participant_total = IndividualParticipant.objects.count()
+    organizer_total = Organizer.objects.count()
+    regular_participant_total = RegularParticipant.objects.count()
+
+    participants = IndividualParticipant.objects.select_related('entity').order_by('-id')[:ADMIN_RESULTS_LIMIT]
+    organizers = Organizer.objects.select_related('entity').order_by('-id')[:ADMIN_RESULTS_LIMIT]
+    units = Unit.objects.select_related('entity').order_by('-id')[:ADMIN_RESULTS_LIMIT]
+    regular_participants = RegularParticipant.objects.select_related('unit', 'unit__entity').order_by('-id')[:ADMIN_RESULTS_LIMIT]
+
+    results_limited = (
+        participant_total > ADMIN_RESULTS_LIMIT
+        or organizer_total > ADMIN_RESULTS_LIMIT
+        or regular_participant_total > ADMIN_RESULTS_LIMIT
+    )
+
     context = {
         'participants': participants,
         'organizers': organizers,
         'units': units,
         'regular_participants': regular_participants,
+        'participant_total': participant_total,
+        'organizer_total': organizer_total,
+        'regular_participant_total': regular_participant_total,
+        'results_limited': results_limited,
+        'results_limit': ADMIN_RESULTS_LIMIT,
     }
     return render(request, 'SkaRe/list_all.html', context)
 
@@ -645,22 +666,22 @@ def list_merchandise(request):
     
     # Initialize querysets based on type filter
     if type_filter == 'unit':
-        units = Unit.objects.all().select_related('entity')
+        units = Unit.objects.select_related('entity')
         individual_participants = IndividualParticipant.objects.none()
         organizers = Organizer.objects.none()
     elif type_filter == 'individual_participant':
         units = Unit.objects.none()
-        individual_participants = IndividualParticipant.objects.all().select_related('entity')
+        individual_participants = IndividualParticipant.objects.select_related('entity')
         organizers = Organizer.objects.none()
     elif type_filter == 'organizer':
         units = Unit.objects.none()
         individual_participants = IndividualParticipant.objects.none()
-        organizers = Organizer.objects.all().select_related('entity')
+        organizers = Organizer.objects.select_related('entity')
     else:
         # Get all units, individual participants, and organizers
-        units = Unit.objects.all().select_related('entity')
-        individual_participants = IndividualParticipant.objects.all().select_related('entity')
-        organizers = Organizer.objects.all().select_related('entity')
+        units = Unit.objects.select_related('entity')
+        individual_participants = IndividualParticipant.objects.select_related('entity')
+        organizers = Organizer.objects.select_related('entity')
     
     # Filter by name if search query is provided
     if search_query:
@@ -678,14 +699,32 @@ def list_merchandise(request):
                 Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query)
             )
     
-    # Calculate totals
-    total_scarves = sum(unit.scarf_count for unit in units)
-    total_scarves += sum(participant.scarf_count for participant in individual_participants)
-    total_scarves += sum(1 for o in organizers if o.wants_scarf)
-    
-    total_hats = sum(unit.hat_count for unit in units)
-    total_hats += sum(participant.hat_count for participant in individual_participants)
-    total_hats += sum(1 for o in organizers if o.wants_hat)
+    unit_total = units.count()
+    individual_total = individual_participants.count()
+    organizer_total = organizers.count()
+
+    # Calculate totals from the full filtered querysets in SQL.
+    total_scarves = sum(item or 0 for item in [
+        units.aggregate(total=Sum('scarf_count'))['total'],
+        individual_participants.aggregate(total=Sum('scarf_count'))['total'],
+        organizers.filter(wants_scarf=True).count(),
+    ])
+    total_hats = sum(item or 0 for item in [
+        units.aggregate(total=Sum('hat_count'))['total'],
+        individual_participants.aggregate(total=Sum('hat_count'))['total'],
+        organizers.filter(wants_hat=True).count(),
+    ])
+
+    results_limited = (
+        unit_total > ADMIN_RESULTS_LIMIT
+        or individual_total > ADMIN_RESULTS_LIMIT
+        or organizer_total > ADMIN_RESULTS_LIMIT
+    )
+
+    # Guard against rendering massive tables in a single request.
+    units = units.order_by('-id')[:ADMIN_RESULTS_LIMIT]
+    individual_participants = individual_participants.order_by('-id')[:ADMIN_RESULTS_LIMIT]
+    organizers = organizers.order_by('-id')[:ADMIN_RESULTS_LIMIT]
     
     context = {
         'units': units,
@@ -695,6 +734,11 @@ def list_merchandise(request):
         'type_filter': type_filter,
         'total_scarves': total_scarves,
         'total_hats': total_hats,
+        'unit_total': unit_total,
+        'individual_total': individual_total,
+        'organizer_total': organizer_total,
+        'results_limited': results_limited,
+        'results_limit': ADMIN_RESULTS_LIMIT,
     }
     return render(request, 'SkaRe/list_merchandise.html', context)
 
@@ -867,7 +911,7 @@ def manage_entities(request):
         from urllib.parse import urlencode
         
         params = {}
-        for key in ['search', 'type', 'status']:
+        for key in ['search', 'type', 'status', 'page']:
             value = request.POST.get(key, '').strip()
             if value:
                 params[key] = value
@@ -882,92 +926,94 @@ def manage_entities(request):
     search_query = request.GET.get('search', '').strip()
     type_filter = request.GET.get('type', '').strip()
     status_filter = request.GET.get('status', '').strip()  # 'paid', 'unpaid', 'confirmed', 'unconfirmed', 'all'
+    page_number = request.GET.get('page', '1')
     
-    # Get all entities with their related objects
-    units = Unit.objects.all().select_related('entity', 'entity__created_by')
-    individual_participants = IndividualParticipant.objects.all().select_related('entity', 'entity__created_by')
-    organizers = Organizer.objects.all().select_related('entity', 'entity__created_by')
-    
+    entities_qs = Entity.objects.select_related(
+        'created_by',
+        'unit_profile',
+        'individual_participant_profile',
+        'organizer_profile',
+    )
+
     # Filter by type
     if type_filter == 'unit':
-        individual_participants = IndividualParticipant.objects.none()
-        organizers = Organizer.objects.none()
+        entities_qs = entities_qs.filter(unit_profile__isnull=False)
     elif type_filter == 'individual_participant':
-        units = Unit.objects.none()
-        organizers = Organizer.objects.none()
+        entities_qs = entities_qs.filter(individual_participant_profile__isnull=False)
     elif type_filter == 'organizer':
-        units = Unit.objects.none()
-        individual_participants = IndividualParticipant.objects.none()
-    
+        entities_qs = entities_qs.filter(organizer_profile__isnull=False)
+    else:
+        entities_qs = entities_qs.filter(
+            Q(unit_profile__isnull=False)
+            | Q(individual_participant_profile__isnull=False)
+            | Q(organizer_profile__isnull=False)
+        )
+
     # Filter by search query
     if search_query:
-        if type_filter == '' or type_filter == 'unit':
-            units = units.filter(entity__scout_unit_name__icontains=search_query)
-        if type_filter == '' or type_filter == 'individual_participant':
-            individual_participants = individual_participants.filter(
-                Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query)
-            )
-        if type_filter == '' or type_filter == 'organizer':
-            organizers = organizers.filter(
-                Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query)
-            )
-    
+        entities_qs = entities_qs.filter(
+            Q(scout_unit_name__icontains=search_query)
+            | Q(individual_participant_profile__first_name__icontains=search_query)
+            | Q(individual_participant_profile__last_name__icontains=search_query)
+            | Q(organizer_profile__first_name__icontains=search_query)
+            | Q(organizer_profile__last_name__icontains=search_query)
+        )
+
     # Filter by status
     if status_filter == 'paid':
-        units = units.filter(entity__paid=True)
-        individual_participants = individual_participants.filter(entity__paid=True)
-        organizers = organizers.filter(entity__paid=True)
+        entities_qs = entities_qs.filter(paid=True)
     elif status_filter == 'unpaid':
-        units = units.filter(entity__paid=False)
-        individual_participants = individual_participants.filter(entity__paid=False)
-        organizers = organizers.filter(entity__paid=False)
+        entities_qs = entities_qs.filter(paid=False)
     elif status_filter == 'confirmed':
-        units = units.filter(entity__confirmed=True)
-        individual_participants = individual_participants.filter(entity__confirmed=True)
-        organizers = organizers.filter(entity__confirmed=True)
+        entities_qs = entities_qs.filter(confirmed=True)
     elif status_filter == 'unconfirmed':
-        units = units.filter(entity__confirmed=False)
-        individual_participants = individual_participants.filter(entity__confirmed=False)
-        organizers = organizers.filter(entity__confirmed=False)
-    
-    # Prepare entity list with type information
+        entities_qs = entities_qs.filter(confirmed=False)
+
+    entities_qs = entities_qs.order_by('-created_at')
+    paginator = Paginator(entities_qs, MANAGE_ENTITIES_PAGE_SIZE)
+    page_obj = paginator.get_page(page_number)
+
+    # Prepare current page data with type information.
     entities_data = []
-    
-    for unit in units:
-        entities_data.append({
-            'entity': unit.entity,
-            'type': 'unit',
-            'type_display': _('Unit'),
-            'name': unit.entity.scout_unit_name or _('Unnamed Unit'),
-            'unit': unit,
-        })
-    
-    for participant in individual_participants:
-        entities_data.append({
-            'entity': participant.entity,
-            'type': 'individual_participant',
-            'type_display': _('Individual Participant'),
-            'name': f"{participant.first_name} {participant.last_name}",
-            'participant': participant,
-        })
-    
-    for organizer in organizers:
-        entities_data.append({
-            'entity': organizer.entity,
-            'type': 'organizer',
-            'type_display': _('Organizer'),
-            'name': f"{organizer.first_name} {organizer.last_name}",
-            'organizer': organizer,
-        })
-    
-    # Sort by created_at (newest first)
-    entities_data.sort(key=lambda x: x['entity'].created_at, reverse=True)
+    for entity in page_obj.object_list:
+        if hasattr(entity, 'unit_profile'):
+            entities_data.append({
+                'entity': entity,
+                'type': 'unit',
+                'type_display': _('Unit'),
+                'name': entity.scout_unit_name or _('Unnamed Unit'),
+                'unit': entity.unit_profile,
+            })
+            continue
+
+        if hasattr(entity, 'individual_participant_profile'):
+            participant = entity.individual_participant_profile
+            entities_data.append({
+                'entity': entity,
+                'type': 'individual_participant',
+                'type_display': _('Individual Participant'),
+                'name': f"{participant.first_name} {participant.last_name}",
+                'participant': participant,
+            })
+            continue
+
+        if hasattr(entity, 'organizer_profile'):
+            organizer = entity.organizer_profile
+            entities_data.append({
+                'entity': entity,
+                'type': 'organizer',
+                'type_display': _('Organizer'),
+                'name': f"{organizer.first_name} {organizer.last_name}",
+                'organizer': organizer,
+            })
     
     context = {
         'entities_data': entities_data,
         'search_query': search_query,
         'type_filter': type_filter,
         'status_filter': status_filter,
+        'page_obj': page_obj,
+        'manage_entities_page_size': MANAGE_ENTITIES_PAGE_SIZE,
     }
     return render(request, 'SkaRe/manage_entities.html', context)
 
