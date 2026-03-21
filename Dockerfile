@@ -1,10 +1,16 @@
 # Use Python 3.12 slim image as base
 FROM python:3.12-slim
 
+# Build-time arguments for version info derived from Git
+ARG VERSION=dev
+ARG BUILD_ID=unknown
+
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    DJANGO_SETTINGS_MODULE=PlachtIS.settings
+    DJANGO_SETTINGS_MODULE=PlachtIS.settings \
+    VERSION=${VERSION} \
+    BUILD_ID=${BUILD_ID}
 
 # Set work directory
 WORKDIR /app
