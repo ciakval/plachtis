@@ -27,15 +27,19 @@ The application now uses environment variables for sensitive configuration, ensu
 2. **Create environment file** at `/home/plachtis/DOCKER/plachtis/.env`:
    ```bash
    cd /home/plachtis/DOCKER/plachtis
-   cat > .env << 'EOF'
-   DJANGO_SECRET_KEY=<your-generated-secret-key-here>
-   DJANGO_ALLOWED_HOSTS=plachtis.remesh.cz,plachtis.skare.cz
-   EOF
+   cp /path/to/repo/.env.example .env
+   # Edit .env and set at minimum:
+   # - DJANGO_SECRET_KEY
+   # - DJANGO_ALLOWED_HOSTS (production hosts)
    ```
 
-3. **Update docker-compose.yml** to use the .env file:
+   For test deployment at `/home/plachtis/DOCKER/plachtis-test`, copy the same template and use test values:
+   - `CONTAINER_NAME=plachtis-test-web`
+   - `DJANGO_ALLOWED_HOSTS=plachtis-test.remesh.cz`
+
+3. **Use compose.yaml** with the .env file:
    ```bash
-   # The docker-compose.yml already references the variables
+   # The compose.yaml already references the variables
    # Just ensure your .env file exists in the same directory
    ```
 
@@ -51,11 +55,12 @@ You need these secrets in your GitHub repository (Settings → Secrets and varia
 ### Automatic Deployment
 
 Every push to `main` branch will:
-1. Build a new Docker image
+1. Build a new Docker image tagged with the Git commit SHA
 2. Push to GitHub Container Registry
-3. Copy docker-compose.yml to VPS
-4. Pull the new image on VPS
-5. Restart containers with new code
+3. Copy compose.yaml to VPS
+4. Pull the exact same commit-SHA image on VPS
+5. Store `GITHUB_REPOSITORY`, `IMAGE_TAG`, and environment-specific values in the target directory `.env`
+6. Restart containers with new code using plain `docker compose up -d`
 
 ## Caddy Configuration
 
