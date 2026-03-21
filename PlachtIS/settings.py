@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'PlachtIS.middleware.StaticFilesExpiresMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -144,8 +145,18 @@ LOCALE_PATHS = [
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Whitenoise configuration for serving static files in production
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Whitenoise configuration for serving static files in production.
+# Uses STORAGES (the Django 4.2+ replacement for the deprecated
+# STATICFILES_STORAGE setting) so the configuration is actually applied
+# in Django 6.0+.
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Login redirect settings
 LOGIN_URL = 'SkaRe:login'
