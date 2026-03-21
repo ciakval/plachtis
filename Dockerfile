@@ -44,10 +44,6 @@ USER appuser
 # Expose port
 EXPOSE 8000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000')" || exit 1
-
 # Run migrations and start gunicorn
 # Use exec to replace shell process so signals are properly forwarded
 # Ensure db_data directory is writable
