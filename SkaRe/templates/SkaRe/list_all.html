@@ -137,10 +137,17 @@
             <i class="bi bi-info-circle"></i>
             <strong>{% trans "Total" %}:</strong>
             <span id="visibleCount">0</span> / <span id="totalCount">0</span> {% trans "participants" %}
-            (<span class="text-primary">{{ participants|length }} {% trans "individual" %}</span>,
-             <span class="text-success">{{ regular_participants|length }} {% trans "regular" %}</span>,
-             <span class="text-warning">{{ organizers|length }} {% trans "organizers" %}</span>)
+            (<span class="text-primary">{{ participant_total }} {% trans "individual" %}</span>,
+             <span class="text-success">{{ regular_participant_total }} {% trans "regular" %}</span>,
+             <span class="text-warning">{{ organizer_total }} {% trans "organizers" %}</span>)
         </div>
+
+        {% if results_limited %}
+        <div class="alert alert-warning mb-4">
+            <i class="bi bi-exclamation-triangle"></i>
+            {% blocktrans with limit=results_limit %}Displaying only the newest {{ limit }} records in each section to keep the page responsive.{% endblocktrans %}
+        </div>
+        {% endif %}
         
         <!-- Data Table -->
         <div class="table-responsive">
