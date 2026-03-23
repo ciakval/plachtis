@@ -1252,7 +1252,7 @@ def boat_register(request):
 
 @login_required
 def boat_edit(request, boat_id):
-    boat = get_object_or_404(Boat, id=boat_id)
+    boat = get_object_or_404(Boat.objects.select_related('boat_class', 'created_by'), id=boat_id)
     if not boat.can_be_edited(request.user):
         messages.error(request, _('You do not have permission to edit this boat.'))
         return redirect('SkaRe:boat_detail', boat_id=boat_id)
