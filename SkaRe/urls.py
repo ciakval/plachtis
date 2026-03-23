@@ -24,6 +24,11 @@ urlpatterns = [
     path('all/list/', views.list_all, name='list_all'),
     path('merchandise/list/', views.list_merchandise, name='list_merchandise'),
     path('entities/manage/', views.manage_entities, name='manage_entities'),
+    path('boats/', views.boat_list, name='boat_list'),
+    path('boats/register/', views.boat_register, name='boat_register'),
+    path('boats/<int:boat_id>/', views.boat_detail, name='boat_detail'),
+    path('boats/<int:boat_id>/edit/', views.boat_edit, name='boat_edit'),
+    path('boats/<int:boat_id>/delete/', views.boat_delete, name='boat_delete'),
     path('boats/api/sail-lookup/', views.boat_sail_lookup, name='boat_sail_lookup'),
     path('boats/api/my-unit/', views.boat_my_unit, name='boat_my_unit'),
 ]

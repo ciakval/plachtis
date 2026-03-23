@@ -1,8 +1,9 @@
 import json
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from SkaRe.models import BoatClass, SailRegistryEntry, Boat, Entity, Unit
+from SkaRe.forms import BoatForm
 
 
 class SailLookupViewTest(TestCase):
@@ -99,3 +100,164 @@ class MyUnitViewTest(TestCase):
         url = reverse('SkaRe:boat_my_unit')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+
+
+class BoatListViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='user', password='pw')
+        self.client.login(username='user', password='pw')
+
+    def test_list_accessible_to_authenticated(self):
+        response = self.client.get(reverse('SkaRe:boat_list'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_list_redirects_anonymous(self):
+        self.client.logout()
+        response = self.client.get(reverse('SkaRe:boat_list'))
+        self.assertEqual(response.status_code, 302)
+
+
+class BoatRegisterViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='user', password='pw')
+        self.client.login(username='user', password='pw')
+        self.boat_class = BoatClass.objects.create(
+            name='TestClass', category=BoatClass.Category.SAIL, order=99
+        )
+
+    def _post_data(self, **overrides):
+        data = {
+            'boat_class': self.boat_class.pk,
+            'class_supplement': '',
+            'sail_number': 'CZE 42',
+            'name': 'My Boat',
+            'description': '',
+            'sail_area': '',
+            'harbor_number': '523.10',
+            'harbor_name': '5. oddíl Koráb',
+            'contact_person': 'Jan Novák',
+            'contact_phone': '+420123456789',
+        }
+        data.update(overrides)
+        return data
+
+    def test_get_register_form(self):
+        response = self.client.get(reverse('SkaRe:boat_register'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.context['form'], BoatForm)
+
+    def test_post_creates_boat_with_creator(self):
+        response = self.client.post(reverse('SkaRe:boat_register'), self._post_data())
+        self.assertEqual(Boat.objects.count(), 1)
+        boat = Boat.objects.first()
+        self.assertEqual(boat.created_by, self.user)
+        self.assertRedirects(response, reverse('SkaRe:boat_detail', kwargs={'boat_id': boat.pk}))
+
+    def test_post_invalid_shows_errors(self):
+        response = self.client.post(reverse('SkaRe:boat_register'), self._post_data(name=''))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Boat.objects.count(), 0)
+
+    def test_has_unit_context_false_when_no_unit(self):
+        response = self.client.get(reverse('SkaRe:boat_register'))
+        self.assertFalse(response.context['has_unit'])
+
+
+class BoatEditViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.owner = User.objects.create_user(username='owner', password='pw')
+        self.stranger = User.objects.create_user(username='stranger', password='pw')
+        self.infodesk_user = User.objects.create_user(username='infodesk', password='pw')
+        infodesk_group, _ = Group.objects.get_or_create(name='InfoDesk')
+        self.infodesk_user.groups.add(infodesk_group)
+        self.boat_class = BoatClass.objects.create(
+            name='TestClass', category=BoatClass.Category.SAIL, order=99
+        )
+        self.boat = Boat.objects.create(
+            created_by=self.owner, boat_class=self.boat_class,
+            name='My Boat', contact_person='Jan', contact_phone='+420111222333',
+        )
+
+    def _post_data(self, **overrides):
+        data = {
+            'boat_class': self.boat_class.pk,
+            'class_supplement': '',
+            'sail_number': '',
+            'name': 'Updated Boat',
+            'description': '',
+            'sail_area': '',
+            'harbor_number': '',
+            'harbor_name': '',
+            'contact_person': 'Jan',
+            'contact_phone': '+420111222333',
+        }
+        data.update(overrides)
+        return data
+
+    def test_owner_can_edit(self):
+        self.client.login(username='owner', password='pw')
+        self.client.post(
+            reverse('SkaRe:boat_edit', kwargs={'boat_id': self.boat.pk}),
+            self._post_data()
+        )
+        self.boat.refresh_from_db()
+        self.assertEqual(self.boat.name, 'Updated Boat')
+
+    def test_stranger_cannot_edit(self):
+        self.client.login(username='stranger', password='pw')
+        self.client.post(
+            reverse('SkaRe:boat_edit', kwargs={'boat_id': self.boat.pk}),
+            self._post_data()
+        )
+        self.boat.refresh_from_db()
+        self.assertEqual(self.boat.name, 'My Boat')
+
+    def test_infodesk_can_edit(self):
+        self.client.login(username='infodesk', password='pw')
+        self.client.post(
+            reverse('SkaRe:boat_edit', kwargs={'boat_id': self.boat.pk}),
+            self._post_data()
+        )
+        self.boat.refresh_from_db()
+        self.assertEqual(self.boat.name, 'Updated Boat')
+
+
+class BoatDeleteViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.owner = User.objects.create_user(username='owner', password='pw')
+        self.stranger = User.objects.create_user(username='stranger', password='pw')
+        self.infodesk_user = User.objects.create_user(username='infodesk', password='pw')
+        infodesk_group, _ = Group.objects.get_or_create(name='InfoDesk')
+        self.infodesk_user.groups.add(infodesk_group)
+        self.boat_class = BoatClass.objects.create(
+            name='TestClass', category=BoatClass.Category.SAIL, order=99
+        )
+        self.boat = Boat.objects.create(
+            created_by=self.owner, boat_class=self.boat_class,
+            name='My Boat', contact_person='Jan', contact_phone='+420111222333',
+        )
+
+    def test_owner_can_delete(self):
+        self.client.login(username='owner', password='pw')
+        self.client.post(reverse('SkaRe:boat_delete', kwargs={'boat_id': self.boat.pk}))
+        self.assertFalse(Boat.objects.filter(pk=self.boat.pk).exists())
+
+    def test_stranger_cannot_delete(self):
+        self.client.login(username='stranger', password='pw')
+        self.client.post(reverse('SkaRe:boat_delete', kwargs={'boat_id': self.boat.pk}))
+        self.assertTrue(Boat.objects.filter(pk=self.boat.pk).exists())
+
+    def test_infodesk_cannot_delete(self):
+        self.client.login(username='infodesk', password='pw')
+        self.client.post(reverse('SkaRe:boat_delete', kwargs={'boat_id': self.boat.pk}))
+        self.assertTrue(Boat.objects.filter(pk=self.boat.pk).exists())
+
+    def test_get_shows_confirm_page(self):
+        self.client.login(username='owner', password='pw')
+        response = self.client.get(reverse('SkaRe:boat_delete', kwargs={'boat_id': self.boat.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'My Boat')
