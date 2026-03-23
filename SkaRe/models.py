@@ -549,4 +549,115 @@ class Organizer(Person):
     def __str__(self):
         person_name = super().__str__()
         return _("{person_name}").format(person_name=person_name)
-    
+
+
+class BoatClass(models.Model):
+    class Category(models.TextChoices):
+        SAIL = "SAIL", _("Sail")
+        OTHER = "OTHER", _("Other")
+
+    name = models.CharField(max_length=100, verbose_name=_("Name"))
+    category = models.CharField(
+        max_length=10,
+        choices=Category.choices,
+        verbose_name=_("Category"),
+    )
+    is_other = models.BooleanField(
+        default=False,
+        help_text=_("Marks the catch-all 'Other' entry for this category. Convention only — no DB constraint."),
+        verbose_name=_("Is other"),
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        help_text=_("Controls display order in dropdowns."),
+        verbose_name=_("Order"),
+    )
+
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = _("Boat class")
+        verbose_name_plural = _("Boat classes")
+
+    def __str__(self):
+        return self.name
+
+
+class SailRegistryEntry(models.Model):
+    """
+    One row per entry in the imported sail number registry CSV.
+    Fully replaced on each CSV import (atomic delete + bulk_create).
+    CSV column mapping must be confirmed with Erik before implementation.
+    """
+    sail_number = models.CharField(max_length=50, unique=True, verbose_name=_("Sail number"))
+    boat_name = models.CharField(max_length=200, blank=True, verbose_name=_("Boat name"))
+    class_name = models.CharField(max_length=100, blank=True, verbose_name=_("Class name"))
+    subtype = models.CharField(
+        max_length=200, blank=True,
+        help_text=_("Prefilled into class_supplement on the boat form."),
+        verbose_name=_("Subtype"),
+    )
+    sail_area = models.DecimalField(
+        max_digits=8, decimal_places=2, null=True, blank=True, verbose_name=_("Sail area")
+    )
+    harbor_number = models.CharField(max_length=100, blank=True, verbose_name=_("Harbor number"))
+    harbor_name = models.CharField(max_length=200, blank=True, verbose_name=_("Harbor name"))
+    contact_person = models.CharField(max_length=200, blank=True, verbose_name=_("Contact person"))
+
+    class Meta:
+        verbose_name = _("Sail registry entry")
+        verbose_name_plural = _("Sail registry entries")
+
+    def __str__(self):
+        return self.sail_number
+
+
+class Boat(models.Model):
+    """
+    A boat registered for the event.
+    Owner (created_by) or InfoDesk group members can edit.
+    Only the creator can delete.
+    No editing deadline in Phase 1.
+    """
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='boats',
+        help_text=_("Deleting the user also deletes their boats — consistent with Entity.created_by."),
+        verbose_name=_("Created by"),
+    )
+    boat_class = models.ForeignKey(
+        BoatClass,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_("Boat class"),
+    )
+    class_supplement = models.CharField(
+        max_length=200, blank=True,
+        verbose_name=_("Class supplement"),
+    )
+    sail_number = models.CharField(max_length=50, blank=True, verbose_name=_("Sail number"))
+    name = models.CharField(max_length=200, verbose_name=_("Name"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
+    sail_area = models.DecimalField(
+        max_digits=8, decimal_places=2, null=True, blank=True, verbose_name=_("Sail area")
+    )
+    harbor_number = models.CharField(max_length=100, blank=True, verbose_name=_("Harbor number"))
+    harbor_name = models.CharField(max_length=200, blank=True, verbose_name=_("Harbor name"))
+    contact_person = models.CharField(max_length=200, verbose_name=_("Contact person"))
+    contact_phone = models.CharField(max_length=50, verbose_name=_("Contact phone"))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Boat")
+        verbose_name_plural = _("Boats")
+
+    def __str__(self):
+        if self.sail_number:
+            return f"{self.sail_number} {self.name}"
+        return self.name
+
+    def can_be_edited(self, user):
+        """Creator or InfoDesk group member can edit. No deadline check in Phase 1."""
+        return self.created_by == user or user.groups.filter(name='InfoDesk').exists()
