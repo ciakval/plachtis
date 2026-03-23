@@ -15,7 +15,7 @@ class BoatClassModelTest(TestCase):
     def test_default_ordering_by_order_then_name(self):
         BoatClass.objects.create(name='Zeta', category=BoatClass.Category.SAIL, order=2)
         BoatClass.objects.create(name='Alpha', category=BoatClass.Category.SAIL, order=1)
-        names = list(BoatClass.objects.values_list('name', flat=True))
+        names = list(BoatClass.objects.filter(name__in=['Alpha', 'Zeta']).values_list('name', flat=True))
         self.assertEqual(names, ['Alpha', 'Zeta'])
 
 
@@ -68,7 +68,7 @@ class BoatModelTest(TestCase):
 
     def test_can_be_edited_by_infodesk_member(self):
         from django.contrib.auth.models import Group
-        infodesk = Group.objects.create(name='InfoDesk')
+        infodesk, _ = Group.objects.get_or_create(name='InfoDesk')
         infodesk_user = User.objects.create_user(username='infodesk', password='pw')
         infodesk_user.groups.add(infodesk)
         boat = self._make_boat()
