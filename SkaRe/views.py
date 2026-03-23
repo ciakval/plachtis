@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from django import forms
 from django.utils.translation import gettext as _
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.http import JsonResponse
 from .forms import (
     UserRegistrationForm, UnitRegistrationForm,
     IndividualParticipantRegistrationForm, OrganizerRegistrationForm,
@@ -18,7 +19,7 @@ from .forms import (
 from .form_utils import generate_form_token, is_duplicate_submission, consume_form_token
 from .models import (
     Entity, Unit, RegularParticipant, EventSettings,
-    IndividualParticipant, Organizer
+    IndividualParticipant, Organizer, BoatClass, SailRegistryEntry, Boat
 )
 
 
@@ -1171,3 +1172,43 @@ def manage_organizer_editors(request, organizer_id):
         'entity_type': 'organizer',
     }
     return render(request, 'SkaRe/manage_editors.html', context)
+
+
+@login_required
+def boat_sail_lookup(request):
+    """AJAX: look up sail registry by ?q=<sail_number>. Returns JSON."""
+    q = request.GET.get('q', '').strip()
+    if not q:
+        return JsonResponse({}, status=400)
+    try:
+        entry = SailRegistryEntry.objects.get(sail_number__iexact=q)
+        return JsonResponse({
+            'boat_name': entry.boat_name,
+            'class_name': entry.class_name,
+            'subtype': entry.subtype,
+            'sail_area': str(entry.sail_area) if entry.sail_area is not None else '',
+            'harbor_number': entry.harbor_number,
+            'harbor_name': entry.harbor_name,
+            'contact_person': entry.contact_person,
+        })
+    except SailRegistryEntry.DoesNotExist:
+        return JsonResponse({}, status=404)
+
+
+@login_required
+def boat_my_unit(request):
+    """AJAX: return the most recently created Unit for the current user."""
+    unit = (
+        Unit.objects
+        .filter(entity__created_by=request.user)
+        .select_related('entity')
+        .order_by('-entity__created_at')
+        .first()
+    )
+    if not unit:
+        return JsonResponse({}, status=404)
+    return JsonResponse({
+        'harbor_number': unit.entity.scout_unit_evidence_id,
+        'harbor_name': unit.entity.scout_unit_name,
+        'contact_person': unit.contact_person_name,
+    })

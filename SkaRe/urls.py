@@ -24,5 +24,7 @@ urlpatterns = [
     path('all/list/', views.list_all, name='list_all'),
     path('merchandise/list/', views.list_merchandise, name='list_merchandise'),
     path('entities/manage/', views.manage_entities, name='manage_entities'),
+    path('boats/api/sail-lookup/', views.boat_sail_lookup, name='boat_sail_lookup'),
+    path('boats/api/my-unit/', views.boat_my_unit, name='boat_my_unit'),
 ]
 
