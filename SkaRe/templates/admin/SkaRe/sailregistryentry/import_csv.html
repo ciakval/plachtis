@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Import sail registry CSV" %}</h1>
+<p>{% trans "Upload a CSV file to replace the sail registry. The file must have a header row with these columns:" %}</p>
+<code>sail_number, boat_name, class_name, subtype, sail_area, harbor_number, harbor_name, contact_person</code>
+<br><br>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="csv_file" accept=".csv" required>
+    <br><br>
+    <input type="submit" value="{% trans 'Import' %}" class="button">
+</form>
+{% endblock %}
