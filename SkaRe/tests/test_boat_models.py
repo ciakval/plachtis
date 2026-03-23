@@ -1,5 +1,6 @@
 from django.test import TestCase
-from SkaRe.models import BoatClass, SailRegistryEntry
+from django.contrib.auth.models import User
+from SkaRe.models import BoatClass, SailRegistryEntry, Boat
 
 
 class BoatClassModelTest(TestCase):
@@ -28,3 +29,59 @@ class SailRegistryEntryModelTest(TestCase):
         from django.db import IntegrityError
         with self.assertRaises(IntegrityError):
             SailRegistryEntry.objects.create(sail_number='CZE 1234')
+
+
+class BoatModelTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='owner', password='pw')
+        self.boat_class = BoatClass.objects.create(
+            name='P550', category=BoatClass.Category.SAIL, order=1
+        )
+
+    def _make_boat(self, **kwargs):
+        defaults = dict(
+            created_by=self.user,
+            boat_class=self.boat_class,
+            name='My Boat',
+            contact_person='Jan Novák',
+            contact_phone='+420123456789',
+        )
+        defaults.update(kwargs)
+        return Boat.objects.create(**defaults)
+
+    def test_str_with_sail_number(self):
+        boat = self._make_boat(sail_number='CZE 42')
+        self.assertEqual(str(boat), 'CZE 42 My Boat')
+
+    def test_str_without_sail_number(self):
+        boat = self._make_boat(sail_number='')
+        self.assertEqual(str(boat), 'My Boat')
+
+    def test_can_be_edited_by_creator(self):
+        boat = self._make_boat()
+        self.assertTrue(boat.can_be_edited(self.user))
+
+    def test_cannot_be_edited_by_stranger(self):
+        stranger = User.objects.create_user(username='stranger', password='pw')
+        boat = self._make_boat()
+        self.assertFalse(boat.can_be_edited(stranger))
+
+    def test_can_be_edited_by_infodesk_member(self):
+        from django.contrib.auth.models import Group
+        infodesk = Group.objects.create(name='InfoDesk')
+        infodesk_user = User.objects.create_user(username='infodesk', password='pw')
+        infodesk_user.groups.add(infodesk)
+        boat = self._make_boat()
+        self.assertTrue(boat.can_be_edited(infodesk_user))
+
+    def test_cascade_delete_with_user(self):
+        boat = self._make_boat()
+        boat_id = boat.id
+        self.user.delete()
+        self.assertFalse(Boat.objects.filter(id=boat_id).exists())
+
+    def test_boat_class_set_null_on_class_delete(self):
+        boat = self._make_boat()
+        self.boat_class.delete()
+        boat.refresh_from_db()
+        self.assertIsNone(boat.boat_class)
