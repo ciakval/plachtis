@@ -67,14 +67,16 @@
                             <div class="text-danger">{{ form.description.errors }}</div>
                         {% endif %}
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="{{ form.sail_area.id_for_label }}" class="form-label">
-                            {{ form.sail_area.label }}
-                        </label>
-                        {{ form.sail_area }}
-                        {% if form.sail_area.errors %}
-                            <div class="text-danger">{{ form.sail_area.errors }}</div>
-                        {% endif %}
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="{{ form.sail_area.id_for_label }}" class="form-label">
+                                {{ form.sail_area.label }}
+                            </label>
+                            {{ form.sail_area }}
+                            {% if form.sail_area.errors %}
+                                <div class="text-danger">{{ form.sail_area.errors }}</div>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
