@@ -118,6 +118,57 @@ class BoatListViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
+class BoatDetailViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.owner = User.objects.create_user(username='owner', password='pw')
+        self.stranger = User.objects.create_user(username='stranger', password='pw')
+        self.infodesk_user = User.objects.create_user(username='infodesk', password='pw')
+        infodesk_group, _ = Group.objects.get_or_create(name='InfoDesk')
+        self.infodesk_user.groups.add(infodesk_group)
+        self.boat_class = BoatClass.objects.create(
+            name='TestClass', category=BoatClass.Category.SAIL, order=99
+        )
+        self.boat = Boat.objects.create(
+            created_by=self.owner, boat_class=self.boat_class,
+            name='My Boat', contact_person='Jan', contact_phone='+420111222333',
+        )
+
+    def test_authenticated_user_can_view(self):
+        self.client.login(username='stranger', password='pw')
+        response = self.client.get(reverse('SkaRe:boat_detail', kwargs={'boat_id': self.boat.pk}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_anonymous_redirected(self):
+        response = self.client.get(reverse('SkaRe:boat_detail', kwargs={'boat_id': self.boat.pk}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_can_edit_true_for_creator(self):
+        self.client.login(username='owner', password='pw')
+        response = self.client.get(reverse('SkaRe:boat_detail', kwargs={'boat_id': self.boat.pk}))
+        self.assertTrue(response.context['can_edit'])
+
+    def test_can_edit_false_for_stranger(self):
+        self.client.login(username='stranger', password='pw')
+        response = self.client.get(reverse('SkaRe:boat_detail', kwargs={'boat_id': self.boat.pk}))
+        self.assertFalse(response.context['can_edit'])
+
+    def test_can_edit_true_for_infodesk(self):
+        self.client.login(username='infodesk', password='pw')
+        response = self.client.get(reverse('SkaRe:boat_detail', kwargs={'boat_id': self.boat.pk}))
+        self.assertTrue(response.context['can_edit'])
+
+    def test_is_creator_true_for_owner(self):
+        self.client.login(username='owner', password='pw')
+        response = self.client.get(reverse('SkaRe:boat_detail', kwargs={'boat_id': self.boat.pk}))
+        self.assertTrue(response.context['is_creator'])
+
+    def test_is_creator_false_for_stranger(self):
+        self.client.login(username='stranger', password='pw')
+        response = self.client.get(reverse('SkaRe:boat_detail', kwargs={'boat_id': self.boat.pk}))
+        self.assertFalse(response.context['is_creator'])
+
+
 class BoatRegisterViewTest(TestCase):
     def setUp(self):
         self.client = Client()
