@@ -460,7 +460,7 @@ class BoatForm(forms.ModelForm):
             + [(_('Plachetnice'), [(str(pk), name) for pk, name in sail_pks])]
             + [(_('Ostatní'), [(str(pk), name) for pk, name in other_pks])]
         )
-        self.fields['boat_class'].queryset = BoatClass.objects.all()
+        self.fields['boat_class'].queryset = BoatClass.objects.order_by('order', 'name')
         self.fields['boat_class'].required = False
         # Note: accessing self.errors here is intentional — Django's errors property
         # calls full_clean() on demand for bound forms, which is the same pattern
