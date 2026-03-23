@@ -312,3 +312,53 @@ class BoatDeleteViewTest(TestCase):
         response = self.client.get(reverse('SkaRe:boat_delete', kwargs={'boat_id': self.boat.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'My Boat')
+
+
+class BoatRegisterTemplateTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='user', password='pw')
+        self.client.login(username='user', password='pw')
+
+    def test_fill_from_unit_button_hidden_when_no_unit(self):
+        response = self.client.get(reverse('SkaRe:boat_register'))
+        # The button should not appear when has_unit=False
+        self.assertNotContains(response, 'btn-fill-from-unit')
+
+    def test_fill_from_unit_button_shown_when_unit_exists(self):
+        entity = Entity.objects.create(
+            created_by=self.user,
+            scout_unit_name='5. oddíl',
+            scout_unit_evidence_id='123',
+            contact_email='t@t.cz',
+            contact_phone='+420111222333',
+        )
+        Unit.objects.create(entity=entity, contact_person_name='Vedoucí')
+        response = self.client.get(reverse('SkaRe:boat_register'))
+        self.assertContains(response, 'btn-fill-from-unit')
+
+
+class BoatDetailTemplateTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.owner = User.objects.create_user(username='owner', password='pw')
+        self.stranger = User.objects.create_user(username='stranger', password='pw')
+        self.boat_class = BoatClass.objects.create(
+            name='P550', category=BoatClass.Category.SAIL, order=1
+        )
+        self.boat = Boat.objects.create(
+            created_by=self.owner, boat_class=self.boat_class,
+            name='My Boat', contact_person='Jan', contact_phone='+420111222333',
+        )
+
+    def test_owner_sees_edit_and_delete_buttons(self):
+        self.client.login(username='owner', password='pw')
+        response = self.client.get(reverse('SkaRe:boat_detail', kwargs={'boat_id': self.boat.pk}))
+        self.assertContains(response, reverse('SkaRe:boat_edit', kwargs={'boat_id': self.boat.pk}))
+        self.assertContains(response, reverse('SkaRe:boat_delete', kwargs={'boat_id': self.boat.pk}))
+
+    def test_stranger_does_not_see_edit_or_delete(self):
+        self.client.login(username='stranger', password='pw')
+        response = self.client.get(reverse('SkaRe:boat_detail', kwargs={'boat_id': self.boat.pk}))
+        self.assertNotContains(response, reverse('SkaRe:boat_edit', kwargs={'boat_id': self.boat.pk}))
+        self.assertNotContains(response, reverse('SkaRe:boat_delete', kwargs={'boat_id': self.boat.pk}))
