@@ -48,10 +48,6 @@ class BoatFormTest(TestCase):
         form = BoatForm(data=self._valid_data(sail_number=''))
         self.assertTrue(form.is_valid(), form.errors)
 
-    def test_boat_class_optional(self):
-        form = BoatForm(data=self._valid_data(boat_class=''))
-        self.assertTrue(form.is_valid(), form.errors)
-
     def test_boat_class_queryset_ordered_by_order(self):
         BoatClass.objects.create(name='ZClass', category=BoatClass.Category.SAIL, order=100)
         form = BoatForm()
@@ -61,3 +57,89 @@ class BoatFormTest(TestCase):
         zclass = BoatClass.objects.get(name='ZClass')
         idx_z = pks.index(zclass.pk)
         self.assertLess(idx_test, idx_z)
+
+
+class ValidateEventPhoneTest(TestCase):
+    def _valid(self, number):
+        from SkaRe.forms import validate_event_phone
+        from django.core.exceptions import ValidationError
+        try:
+            validate_event_phone(number)
+            return True
+        except ValidationError:
+            return False
+
+    def test_czech_with_prefix(self):
+        self.assertTrue(self._valid('+420 123 456 789'))
+
+    def test_czech_local_nine_digits(self):
+        self.assertTrue(self._valid('123456789'))
+
+    def test_slovak_prefix(self):
+        self.assertTrue(self._valid('+421 900 123 456'))
+
+    def test_german_prefix(self):
+        self.assertTrue(self._valid('+49 30 12345678'))
+
+    def test_austrian_prefix(self):
+        self.assertTrue(self._valid('+43 1 58858'))
+
+    def test_polish_prefix(self):
+        self.assertTrue(self._valid('+48 600 123 456'))
+
+    def test_hungarian_prefix(self):
+        self.assertTrue(self._valid('+36 20 123 4567'))
+
+    def test_too_short_rejected(self):
+        self.assertFalse(self._valid('12345'))
+
+    def test_letters_rejected(self):
+        self.assertFalse(self._valid('abc def'))
+
+    def test_eight_digits_without_prefix_rejected(self):
+        self.assertFalse(self._valid('12345678'))
+
+
+class BoatFormNewFieldsTest(TestCase):
+    def _base_data(self):
+        bc = BoatClass.objects.create(
+            name='FormTestClass', category=BoatClass.Category.SAIL, order=99
+        )
+        return {
+            'boat_class': bc.pk,
+            'sail_number': '14',
+            'name': 'Albatros',
+            'contact_person': 'Jan Novák',
+            'contact_phone': '+420 123 456 789',
+        }
+
+    def test_form_valid_with_hull_and_sail_color(self):
+        data = self._base_data()
+        data['hull_color'] = 'bila'
+        data['sail_color'] = 'modra'
+        form = BoatForm(data=data)
+        self.assertTrue(form.is_valid(), form.errors)
+
+    def test_form_valid_without_optional_new_fields(self):
+        form = BoatForm(data=self._base_data())
+        self.assertTrue(form.is_valid(), form.errors)
+
+    def test_boat_class_now_required(self):
+        data = self._base_data()
+        data['boat_class'] = ''
+        form = BoatForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('boat_class', form.errors)
+
+    def test_contact_phone_validated_with_event_validator(self):
+        data = self._base_data()
+        data['contact_phone'] = '12345'  # too short
+        form = BoatForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('contact_phone', form.errors)
+
+    def test_german_phone_accepted(self):
+        data = self._base_data()
+        data['contact_phone'] = '+49 30 12345678'
+        form = BoatForm(data=data)
+        self.assertTrue(form.is_valid(), form.errors)

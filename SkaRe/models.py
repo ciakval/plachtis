@@ -589,6 +589,18 @@ class Boat(models.Model):
     Only the creator can delete.
     No editing deadline in Phase 1.
     """
+    class Color(models.TextChoices):
+        WHITE  = 'bila',     'Bílá'
+        BLACK  = 'cerna',    'Černá'
+        RED    = 'cervena',  'Červená'
+        BLUE   = 'modra',    'Modrá'
+        GREEN  = 'zelena',   'Zelená'
+        YELLOW = 'zluta',    'Žlutá'
+        ORANGE = 'oranzova', 'Oranžová'
+        GRAY   = 'seda',     'Šedá'
+        BROWN  = 'hneda',    'Hnědá'
+        OTHER  = 'jina',     'Jiná'
+
     created_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -613,10 +625,14 @@ class Boat(models.Model):
     sail_area = models.DecimalField(
         max_digits=8, decimal_places=2, null=True, blank=True, verbose_name=_("Sail area")
     )
+    hull_color             = models.CharField(max_length=20, choices=Color.choices, blank=True)
+    sail_color             = models.CharField(max_length=20, choices=Color.choices, blank=True)
     harbor_number = models.CharField(max_length=100, blank=True, verbose_name=_("Harbor number"))
     harbor_name = models.CharField(max_length=200, blank=True, verbose_name=_("Harbor name"))
     contact_person = models.CharField(max_length=200, verbose_name=_("Contact person"))
     contact_phone = models.CharField(max_length=50, verbose_name=_("Contact phone"))
+    vessel_registry_number = models.CharField(max_length=50, blank=True)
+    engine_power_hp        = models.PositiveSmallIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -25,6 +25,8 @@ class BoatClassAdmin(admin.ModelAdmin):
 
 @admin.register(Boat)
 class BoatAdmin(admin.ModelAdmin):
-    list_display = ['name', 'sail_number', 'boat_class', 'created_by']
+    list_display = ['__str__', 'boat_class', 'hull_color', 'sail_color',
+                    'contact_person', 'created_by', 'created_at']
+    list_filter = ['boat_class', 'hull_color']
     search_fields = ['name', 'sail_number']
     raw_id_fields = ['created_by']
