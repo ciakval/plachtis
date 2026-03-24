@@ -1,9 +1,15 @@
+import csv
+import io
+import urllib.request
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.conf import settings
+from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Q, Sum
 from django.core.paginator import Paginator
@@ -19,7 +25,7 @@ from .forms import (
 from .form_utils import generate_form_token, is_duplicate_submission, consume_form_token
 from .models import (
     Entity, Unit, RegularParticipant, EventSettings,
-    IndividualParticipant, Organizer, BoatClass, SailRegistryEntry, Boat
+    IndividualParticipant, Organizer, BoatClass, Boat
 )
 
 
@@ -1174,25 +1180,80 @@ def manage_organizer_editors(request, organizer_id):
     return render(request, 'SkaRe/manage_editors.html', context)
 
 
+_SAIL_REGISTRY_CACHE_KEY = "sail_registry_rows"
+
+
+def _fetch_sheet_csv(url):
+    """Fetch the published Google Sheets CSV and return raw text.
+
+    Decodes as UTF-8-sig to strip any BOM. Raises on network errors.
+    """
+    req = urllib.request.Request(url)
+    with urllib.request.urlopen(req, timeout=10) as response:
+        return response.read().decode('utf-8-sig')
+
+
+def _get_registry_rows():
+    """Return parsed registry rows from cache, fetching if needed."""
+    rows = cache.get(_SAIL_REGISTRY_CACHE_KEY)
+    if rows is None:
+        raw = _fetch_sheet_csv(settings.SAIL_REGISTRY_SHEET_URL)
+        reader = csv.DictReader(io.StringIO(raw))
+        rows = list(reader)
+        cache.set(_SAIL_REGISTRY_CACHE_KEY, rows, settings.SAIL_REGISTRY_CACHE_TTL)
+    return rows
+
+
 @login_required
 def boat_sail_lookup(request):
-    """AJAX: look up sail registry by ?q=<sail_number>. Returns JSON."""
+    """AJAX: look up a sail number in the Google Sheets registry."""
     q = request.GET.get('q', '').strip()
     if not q:
-        return JsonResponse({}, status=400)
+        return JsonResponse({'error': 'missing q'}, status=400)
+
     try:
-        entry = SailRegistryEntry.objects.get(sail_number__iexact=q)
-        return JsonResponse({
-            'boat_name': entry.boat_name,
-            'class_name': entry.class_name,
-            'subtype': entry.subtype,
-            'sail_area': str(entry.sail_area) if entry.sail_area is not None else '',
-            'harbor_number': entry.harbor_number,
-            'harbor_name': entry.harbor_name,
-            'contact_person': entry.contact_person,
-        })
-    except SailRegistryEntry.DoesNotExist:
-        return JsonResponse({}, status=404)
+        rows = _get_registry_rows()
+    except Exception:
+        return JsonResponse({'error': 'registry unavailable'}, status=503)
+
+    match = None
+    q_lower = q.lower()
+    for row in rows:
+        sail_num = row.get('plach. číslo', '').strip()
+        if sail_num.lower() == q_lower:
+            match = row
+            break
+        # Numeric normalisation: "14" matches "014", etc.
+        try:
+            if int(sail_num) == int(q):
+                match = row
+                break
+        except (ValueError, TypeError):
+            pass
+
+    if match is None:
+        return JsonResponse({'error': 'not found'}, status=404)
+
+    # Parse compound 'typ' field: "šalupa - P550 - Černá Eskadra"
+    typ = match.get('typ', '').strip()
+    typ_parts = [p.strip() for p in typ.split(' - ')] if typ else []
+    subtype = typ_parts[0] if len(typ_parts) > 0 else ''
+    class_name = typ_parts[1] if len(typ_parts) > 1 else ''
+
+    # Sail area: Czech decimal comma → dot
+    sail_area_raw = match.get('plocha dle Certifikátu (m2)', '').strip()
+    sail_area = sail_area_raw.replace(',', '.') if sail_area_raw else ''
+
+    return JsonResponse({
+        'sail_number': match.get('plach. číslo', '').strip(),
+        'boat_name': match.get('Jméno', '').strip(),
+        'class_name': class_name,
+        'subtype': subtype,
+        'sail_area': sail_area,
+        'harbor_number': match.get('ev. č.', '').strip(),
+        'harbor_name': match.get('přístav', '').strip(),
+        'contact_person': match.get('oddíl', '').strip(),
+    })
 
 
 @login_required

@@ -166,3 +166,10 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SAIL_REGISTRY_SHEET_URL = (
+    "https://docs.google.com/spreadsheets/d/e/"
+    "2PACX-1vR3AYk5tYLbTke5J3yM8hhQHPSejpc7C9rCAsQ-ftmS-pTC2P2BN0xlGioeo_R8ttKMeQV_bbj_jC4m/"
+    "pub?gid=1327431256&single=true&output=csv"
+)
+SAIL_REGISTRY_CACHE_TTL = 3600  # seconds

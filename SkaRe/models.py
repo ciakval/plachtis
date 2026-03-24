@@ -582,35 +582,6 @@ class BoatClass(models.Model):
         return self.name
 
 
-class SailRegistryEntry(models.Model):
-    """
-    One row per entry in the imported sail number registry CSV.
-    Fully replaced on each CSV import (atomic delete + bulk_create).
-    CSV column mapping must be confirmed with Erik before implementation.
-    """
-    sail_number = models.CharField(max_length=50, unique=True, verbose_name=_("Sail number"))
-    boat_name = models.CharField(max_length=200, blank=True, verbose_name=_("Boat name"))
-    class_name = models.CharField(max_length=100, blank=True, verbose_name=_("Class name"))
-    subtype = models.CharField(
-        max_length=200, blank=True,
-        help_text=_("Prefilled into class_supplement on the boat form."),
-        verbose_name=_("Subtype"),
-    )
-    sail_area = models.DecimalField(
-        max_digits=8, decimal_places=2, null=True, blank=True, verbose_name=_("Sail area")
-    )
-    harbor_number = models.CharField(max_length=100, blank=True, verbose_name=_("Harbor number"))
-    harbor_name = models.CharField(max_length=200, blank=True, verbose_name=_("Harbor name"))
-    contact_person = models.CharField(max_length=200, blank=True, verbose_name=_("Contact person"))
-
-    class Meta:
-        verbose_name = _("Sail registry entry")
-        verbose_name_plural = _("Sail registry entries")
-
-    def __str__(self):
-        return self.sail_number
-
-
 class Boat(models.Model):
     """
     A boat registered for the event.

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from SkaRe.models import BoatClass, SailRegistryEntry, Boat
+from SkaRe.models import BoatClass, Boat
 
 
 class BoatClassModelTest(TestCase):
@@ -17,18 +17,6 @@ class BoatClassModelTest(TestCase):
         BoatClass.objects.create(name='Alpha', category=BoatClass.Category.SAIL, order=1)
         names = list(BoatClass.objects.filter(name__in=['Alpha', 'Zeta']).values_list('name', flat=True))
         self.assertEqual(names, ['Alpha', 'Zeta'])
-
-
-class SailRegistryEntryModelTest(TestCase):
-    def test_str_returns_sail_number(self):
-        entry = SailRegistryEntry(sail_number='CZE 1234')
-        self.assertEqual(str(entry), 'CZE 1234')
-
-    def test_sail_number_unique(self):
-        SailRegistryEntry.objects.create(sail_number='CZE 1234')
-        from django.db import IntegrityError
-        with self.assertRaises(IntegrityError):
-            SailRegistryEntry.objects.create(sail_number='CZE 1234')
 
 
 class BoatModelTest(TestCase):
