@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from SkaRe.models import BoatClass, SailRegistryEntry, Boat
+from SkaRe.models import BoatClass, Boat
 
 
 class BoatClassModelTest(TestCase):
@@ -17,18 +17,6 @@ class BoatClassModelTest(TestCase):
         BoatClass.objects.create(name='Alpha', category=BoatClass.Category.SAIL, order=1)
         names = list(BoatClass.objects.filter(name__in=['Alpha', 'Zeta']).values_list('name', flat=True))
         self.assertEqual(names, ['Alpha', 'Zeta'])
-
-
-class SailRegistryEntryModelTest(TestCase):
-    def test_str_returns_sail_number(self):
-        entry = SailRegistryEntry(sail_number='CZE 1234')
-        self.assertEqual(str(entry), 'CZE 1234')
-
-    def test_sail_number_unique(self):
-        SailRegistryEntry.objects.create(sail_number='CZE 1234')
-        from django.db import IntegrityError
-        with self.assertRaises(IntegrityError):
-            SailRegistryEntry.objects.create(sail_number='CZE 1234')
 
 
 class BoatModelTest(TestCase):
@@ -85,3 +73,44 @@ class BoatModelTest(TestCase):
         self.boat_class.delete()
         boat.refresh_from_db()
         self.assertIsNone(boat.boat_class)
+
+
+class BoatColorFieldTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='colortest', password='pw')
+        self.bc = BoatClass.objects.create(
+            name='TestClass', category=BoatClass.Category.SAIL, order=99
+        )
+
+    def _make_boat(self, **kw):
+        return Boat.objects.create(
+            created_by=self.user, boat_class=self.bc,
+            name='Test', contact_person='J', contact_phone='123456789',
+            **kw
+        )
+
+    def test_hull_color_blank_by_default(self):
+        boat = self._make_boat()
+        self.assertEqual(boat.hull_color, '')
+
+    def test_sail_color_blank_by_default(self):
+        boat = self._make_boat()
+        self.assertEqual(boat.sail_color, '')
+
+    def test_hull_color_accepts_valid_choice(self):
+        boat = self._make_boat(hull_color=Boat.Color.WHITE)
+        boat.refresh_from_db()
+        self.assertEqual(boat.hull_color, 'bila')
+
+    def test_vessel_registry_number_blank_by_default(self):
+        boat = self._make_boat()
+        self.assertEqual(boat.vessel_registry_number, '')
+
+    def test_engine_power_hp_null_by_default(self):
+        boat = self._make_boat()
+        self.assertIsNone(boat.engine_power_hp)
+
+    def test_engine_power_hp_stores_integer(self):
+        boat = self._make_boat(engine_power_hp=15)
+        boat.refresh_from_db()
+        self.assertEqual(boat.engine_power_hp, 15)

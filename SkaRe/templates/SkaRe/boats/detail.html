@@ -53,12 +53,22 @@
                     <dd class="col-sm-9">{{ boat.sail_area }} m²</dd>
                     {% endif %}
                 </dl>
+                {% if boat.hull_color %}
+                <p class="mb-2">
+                    <strong>Barva trupu:</strong> {{ boat.get_hull_color_display }}
+                </p>
+                {% endif %}
+                {% if boat.sail_color %}
+                <p class="mb-2">
+                    <strong>Barva plachet:</strong> {{ boat.get_sail_color_display }}
+                </p>
+                {% endif %}
             </div>
         </div>
 
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0"><i class="bi bi-person-fill"></i> Vlastník</h5>
+                <h5 class="mb-0"><i class="bi bi-person-fill"></i> Vlastník / správce</h5>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
@@ -78,6 +88,16 @@
                     <dt class="col-sm-3">Telefon</dt>
                     <dd class="col-sm-9">{{ boat.contact_phone }}</dd>
                 </dl>
+                {% if boat.vessel_registry_number %}
+                <p class="mb-2">
+                    <strong>Registrační číslo (rejstřík malých plavidel):</strong> {{ boat.vessel_registry_number }}
+                </p>
+                {% endif %}
+                {% if boat.engine_power_hp %}
+                <p class="mb-2">
+                    <strong>Výkon motoru:</strong> {{ boat.engine_power_hp }} hp
+                </p>
+                {% endif %}
             </div>
         </div>
 

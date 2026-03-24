@@ -1,9 +1,19 @@
 import json
+from unittest.mock import patch
+from django.core.cache import cache
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User, Group
-from SkaRe.models import BoatClass, SailRegistryEntry, Boat, Entity, Unit
+from SkaRe.models import BoatClass, Boat, Entity, Unit
 from SkaRe.forms import BoatForm
+
+
+_SAMPLE_SHEET_CSV = (
+    "plach. číslo,Jméno,typ,oddíl,přístav,ev. č.,"
+    "plocha dle Certifikátu (m2),datum měření\r\n"
+    '14,ALBATROS,šalupa - P550 - Černá Eskadra,,4. Jana Nerudy Praha,113.04,"7,02",28.9.2022\r\n'
+    "42,RYCHLÍK,ketový keč - Cadet - ,Jan Novák,5. oddíl Koráb,523.10,,15.3.2023\r\n"
+)
 
 
 class SailLookupViewTest(TestCase):
@@ -11,33 +21,30 @@ class SailLookupViewTest(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(username='user', password='pw')
         self.client.login(username='user', password='pw')
-        SailRegistryEntry.objects.create(
-            sail_number='CZE 42',
-            boat_name='Rychlík',
-            class_name='Cadet',
-            subtype='Dřevěný',
-            sail_area='7.50',
-            harbor_number='523.10',
-            harbor_name='5. oddíl Koráb',
-            contact_person='Jan Novák',
-        )
+        cache.clear()
 
     def test_found_returns_json(self):
         url = reverse('SkaRe:boat_sail_lookup')
-        response = self.client.get(url, {'q': 'CZE 42'})
+        with patch('SkaRe.views._fetch_sheet_csv', return_value=_SAMPLE_SHEET_CSV):
+            response = self.client.get(url, {'q': '14'})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
-        self.assertEqual(data['boat_name'], 'Rychlík')
-        self.assertEqual(data['subtype'], 'Dřevěný')
+        self.assertEqual(data['boat_name'], 'ALBATROS')
+        self.assertEqual(data['class_name'], 'P550')
+        self.assertEqual(data['subtype'], 'šalupa')
+        self.assertEqual(data['sail_area'], '7.02')
+        self.assertEqual(data['harbor_name'], '4. Jana Nerudy Praha')
 
     def test_case_insensitive_lookup(self):
         url = reverse('SkaRe:boat_sail_lookup')
-        response = self.client.get(url, {'q': 'cze 42'})
+        with patch('SkaRe.views._fetch_sheet_csv', return_value=_SAMPLE_SHEET_CSV):
+            response = self.client.get(url, {'q': '14'})
         self.assertEqual(response.status_code, 200)
 
     def test_not_found_returns_404(self):
         url = reverse('SkaRe:boat_sail_lookup')
-        response = self.client.get(url, {'q': 'ZZZ 999'})
+        with patch('SkaRe.views._fetch_sheet_csv', return_value=_SAMPLE_SHEET_CSV):
+            response = self.client.get(url, {'q': '999'})
         self.assertEqual(response.status_code, 404)
 
     def test_missing_q_returns_400(self):
@@ -45,10 +52,23 @@ class SailLookupViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 400)
 
+    def test_fetch_failure_returns_503(self):
+        url = reverse('SkaRe:boat_sail_lookup')
+        with patch('SkaRe.views._fetch_sheet_csv', side_effect=Exception('network error')):
+            response = self.client.get(url, {'q': '14'})
+        self.assertEqual(response.status_code, 503)
+
+    def test_cache_prevents_second_fetch(self):
+        url = reverse('SkaRe:boat_sail_lookup')
+        with patch('SkaRe.views._fetch_sheet_csv', return_value=_SAMPLE_SHEET_CSV) as mock_fetch:
+            self.client.get(url, {'q': '14'})
+            self.client.get(url, {'q': '42'})
+        self.assertEqual(mock_fetch.call_count, 1)
+
     def test_requires_login(self):
         self.client.logout()
         url = reverse('SkaRe:boat_sail_lookup')
-        response = self.client.get(url, {'q': 'CZE 42'})
+        response = self.client.get(url, {'q': '14'})
         self.assertEqual(response.status_code, 302)
 
 
