@@ -21,7 +21,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="{{ form.boat_class.id_for_label }}" class="form-label">
-                                {{ form.boat_class.label }}
+                                {{ form.boat_class.label }} <span class="text-danger">*</span>
                             </label>
                             {{ form.boat_class }}
                             {% if form.boat_class.errors %}
@@ -78,12 +78,38 @@
                             {% endif %}
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.hull_color.id_for_label }}" class="form-label">
+                                {{ form.hull_color.label }}
+                            </label>
+                            {{ form.hull_color }}
+                            {% if form.hull_color.help_text %}
+                                <div class="form-text text-muted">{{ form.hull_color.help_text }}</div>
+                            {% endif %}
+                            {% if form.hull_color.errors %}
+                                <div class="text-danger">{{ form.hull_color.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.sail_color.id_for_label }}" class="form-label">
+                                {{ form.sail_color.label }}
+                            </label>
+                            {{ form.sail_color }}
+                            {% if form.sail_color.help_text %}
+                                <div class="form-text text-muted">{{ form.sail_color.help_text }}</div>
+                            {% endif %}
+                            {% if form.sail_color.errors %}
+                                <div class="text-danger">{{ form.sail_color.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-person-fill"></i> Vlastník</h5>
+                    <h5 class="mb-0"><i class="bi bi-person-fill"></i> Vlastník / správce</h5>
                 </div>
                 <div class="card-body">
                     {% if has_unit %}
@@ -130,6 +156,26 @@
                             {{ form.contact_phone }}
                             {% if form.contact_phone.errors %}
                                 <div class="text-danger">{{ form.contact_phone.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.vessel_registry_number.id_for_label }}" class="form-label">
+                                {{ form.vessel_registry_number.label }}
+                            </label>
+                            {{ form.vessel_registry_number }}
+                            {% if form.vessel_registry_number.errors %}
+                                <div class="text-danger">{{ form.vessel_registry_number.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.engine_power_hp.id_for_label }}" class="form-label">
+                                {{ form.engine_power_hp.label }}
+                            </label>
+                            {{ form.engine_power_hp }}
+                            {% if form.engine_power_hp.errors %}
+                                <div class="text-danger">{{ form.engine_power_hp.errors }}</div>
                             {% endif %}
                         </div>
                     </div>
