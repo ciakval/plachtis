@@ -9,10 +9,12 @@ from SkaRe.forms import BoatForm
 
 
 _SAMPLE_SHEET_CSV = (
-    "plach. číslo,Jméno,typ,oddíl,přístav,ev. č.,"
-    "plocha dle Certifikátu (m2),datum měření\r\n"
-    '14,ALBATROS,šalupa - P550 - Černá Eskadra,,4. Jana Nerudy Praha,113.04,"7,02",28.9.2022\r\n'
-    "42,RYCHLÍK,ketový keč - Cadet - ,Jan Novák,5. oddíl Koráb,523.10,,15.3.2023\r\n"
+    "PLACHETNÍ REGISTR,,,,,,,\r\n"
+    ",metadata,,,,,,,\r\n"
+    ",plach. číslo,Jméno,typ,oddíl,přístav,ev. č.,\"plocha dle Certifikátu (m2), datum měření\",\r\n"
+    ",,,typ - trup - plachta,,,,,\r\n"
+    ',14,ALBATROS,šalupa - P550 - Černá Eskadra,,4. Jana Nerudy Praha,113.04,"7,02",\r\n'
+    ",42,RYCHLÍK,ketový keč - Cadet - ,Jan Novák,5. oddíl Koráb,523.10,,\r\n"
 )
 
 
