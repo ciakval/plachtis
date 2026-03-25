@@ -205,3 +205,67 @@ class CrewListViewTest(TestCase):
         response = self.client.get(reverse('SkaRe:crew_list'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['crews']), 1)
+
+
+class CrewEditDeleteViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = _make_user('editowner')
+        self.stranger = _make_user('editstranger')
+        self.unit = _make_unit(self.user)
+        self.helmsman = _make_person(self.unit)
+        self.new_helm = _make_person(self.unit, 'New', 'Helm')
+        self.boat = _make_boat(self.user)
+        self.crew = Crew.objects.create(
+            boat=self.boat, category=Crew.CATEGORY_S, created_by=self.user
+        )
+        CrewMember.objects.create(
+            crew=self.crew, role=CrewMember.ROLE_HELMSMAN,
+            participant=Person.objects.get(pk=self.helmsman.pk)
+        )
+
+    def test_edit_requires_login(self):
+        url = reverse('SkaRe:crew_edit', kwargs={'crew_id': self.crew.pk})
+        self.assertRedirects(self.client.get(url), f'/user/login/?next={url}', fetch_redirect_response=False)
+
+    def test_edit_forbidden_for_stranger(self):
+        self.client.login(username='editstranger', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_edit', kwargs={'crew_id': self.crew.pk}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_edit_get_renders_form(self):
+        self.client.login(username='editowner', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_edit', kwargs={'crew_id': self.crew.pk}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_post_updates_crew(self):
+        self.client.login(username='editowner', password='pw')
+        response = self.client.post(
+            reverse('SkaRe:crew_edit', kwargs={'crew_id': self.crew.pk}),
+            {
+                'boat': self.boat.pk,
+                'category': Crew.CATEGORY_R,
+                'helmsman': self.new_helm.pk,
+            }
+        )
+        self.crew.refresh_from_db()
+        self.assertEqual(self.crew.category, Crew.CATEGORY_R)
+        self.assertRedirects(
+            response,
+            reverse('SkaRe:crew_detail', kwargs={'crew_id': self.crew.pk}),
+            fetch_redirect_response=False,
+        )
+
+    def test_delete_requires_login(self):
+        url = reverse('SkaRe:crew_delete', kwargs={'crew_id': self.crew.pk})
+        self.assertRedirects(self.client.get(url), f'/user/login/?next={url}', fetch_redirect_response=False)
+
+    def test_delete_removes_crew(self):
+        self.client.login(username='editowner', password='pw')
+        self.client.post(reverse('SkaRe:crew_delete', kwargs={'crew_id': self.crew.pk}))
+        self.assertFalse(Crew.objects.filter(pk=self.crew.pk).exists())
+
+    def test_delete_forbidden_for_stranger(self):
+        self.client.login(username='editstranger', password='pw')
+        self.client.post(reverse('SkaRe:crew_delete', kwargs={'crew_id': self.crew.pk}))
+        self.assertTrue(Crew.objects.filter(pk=self.crew.pk).exists())
