@@ -25,26 +25,62 @@ function selectBoatClassByName(className) {
     }
 }
 
-// Sail number lookup on blur
-const sailNumberField = document.getElementById('id_sail_number');
-if (sailNumberField) {
-    sailNumberField.addEventListener('blur', function () {
-        const q = this.value.trim();
-        if (!q) return;
+// Sail number registry lookup button
+const sailLookupBtn = document.getElementById('btn-sail-lookup');
+const sailLookupError = document.getElementById('sail-lookup-error');
+
+if (sailLookupBtn) {
+    sailLookupBtn.addEventListener('click', function () {
+        const q = document.getElementById('id_sail_number').value.trim();
+
+        // Reset error state
+        sailLookupError.textContent = '';
+        sailLookupError.style.display = 'none';
+
+        sailLookupBtn.disabled = true;
+
         fetch(`/boats/api/sail-lookup/?q=${encodeURIComponent(q)}`)
             .then(response => {
-                if (!response.ok) return;
+                if (response.status === 404) {
+                    sailLookupError.textContent = 'Plachetní číslo nebylo v registru nalezeno.';
+                    sailLookupError.style.display = '';
+                    return null;
+                }
+                if (!response.ok) {
+                    sailLookupError.textContent = 'Registr plachet je nedostupný.';
+                    sailLookupError.style.display = '';
+                    return null;
+                }
                 return response.json();
             })
             .then(data => {
                 if (!data) return;
-                fillIfEmpty('id_name', data.boat_name);
-                fillIfEmpty('id_class_supplement', data.subtype);
-                fillIfEmpty('id_sail_area', data.sail_area);
-                fillIfEmpty('id_harbor_number', data.harbor_number);
-                fillIfEmpty('id_harbor_name', data.harbor_name);
-                fillIfEmpty('id_contact_person', data.contact_person);
-                selectBoatClassByName(data.class_name);
+
+                // Overwrite boat fields regardless of current content
+                document.getElementById('id_name').value = data.boat_name || '';
+                document.getElementById('id_class_supplement').value = data.subtype || '';
+                document.getElementById('id_sail_area').value = data.sail_area || '';
+
+                // Overwrite boat class select
+                const select = document.getElementById('id_boat_class');
+                if (select && data.class_name) {
+                    select.value = '';
+                    const lower = data.class_name.toLowerCase();
+                    for (const option of select.options) {
+                        if (option.text.toLowerCase().includes(lower)) {
+                            select.value = option.value;
+                            break;
+                        }
+                    }
+                }
+                // Do NOT fill harbor_number, harbor_name, contact_person — owner fields
+            })
+            .catch(() => {
+                sailLookupError.textContent = 'Registr plachet je nedostupný.';
+                sailLookupError.style.display = '';
+            })
+            .finally(() => {
+                sailLookupBtn.disabled = false;
             });
     });
 }
