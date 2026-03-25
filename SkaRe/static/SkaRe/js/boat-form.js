@@ -10,21 +10,6 @@ function fillIfEmpty(fieldId, value) {
     }
 }
 
-function selectBoatClassByName(className) {
-    if (!className) return;
-    const select = document.getElementById('id_boat_class');
-    if (!select) return;
-    const lower = className.toLowerCase();
-    for (const option of select.options) {
-        if (option.text.toLowerCase().includes(lower)) {
-            if (!select.value) {  // only if nothing selected yet
-                select.value = option.value;
-            }
-            return;
-        }
-    }
-}
-
 // Sail number registry lookup button
 const sailLookupBtn = document.getElementById('btn-sail-lookup');
 const sailLookupError = document.getElementById('sail-lookup-error');
@@ -32,6 +17,7 @@ const sailLookupError = document.getElementById('sail-lookup-error');
 if (sailLookupBtn) {
     sailLookupBtn.addEventListener('click', function () {
         const q = document.getElementById('id_sail_number').value.trim();
+        if (!q) return;  // don't fetch with empty query
 
         // Reset error state
         sailLookupError.textContent = '';
