@@ -176,11 +176,22 @@
                                         <div class="text-danger">{{ form.scarf_count.errors }}</div>
                                     {% endif %}
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="{{ form.hat_count.id_for_label }}" class="form-label">{{ form.hat_count.label }}</label>
                                     {{ form.hat_count }}
                                     {% if form.hat_count.errors %}
                                         <div class="text-danger">{{ form.hat_count.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.small_hat_count.id_for_label }}" class="form-label">
+                                        {{ form.small_hat_count.label }}
+                                    </label>
+                                    {{ form.small_hat_count }}
+                                    {% if form.small_hat_count.errors %}
+                                        <div class="text-danger">{{ form.small_hat_count.errors }}</div>
                                     {% endif %}
                                 </div>
                             </div>
