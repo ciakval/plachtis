@@ -1,7 +1,7 @@
 # Crew Registration — Design Spec
 
 **Date:** 2026-03-25
-**Scope:** Crew registration for the race — new `Crew`/`CrewMember` models, participant/boat lending, crew deadline, and CSV export.
+**Scope:** Crew registration for the race — `Person` MTI conversion, new `Crew`/`CrewMember` models, participant/boat lending, crew deadline, and CSV export.
 **App:** `SkaRe` (existing Django app)
 **Branch base:** `main`
 
@@ -9,11 +9,77 @@
 
 ## Overview
 
-This spec covers the implementation of crew registration in PlachtIS. Crews link a registered boat, a race category, and up to five participants (one helmsman + up to four crew members). The feature also introduces a lending mechanism so that boat owners and unit leaders can make their boats and participants visible to other users for crew assembly.
+This spec covers two related changes:
+
+1. **`Person` MTI conversion** — convert the existing abstract `Person` base class to a concrete model using Django multi-table inheritance, so that any participant subtype can be referenced by a single FK.
+2. **Crew registration** — new `Crew` and `CrewMember` models linking a boat, a category, and up to five participants. Includes a lending mechanism, a separate registration deadline, and a CSV export.
 
 ---
 
-## 1. Data Model
+## 1. `Person` MTI Conversion
+
+### Current state
+
+`Person` is an abstract model. Its fields (`first_name`, `last_name`, `nickname`, `date_of_birth`, `category`, `health_restrictions`, `dietary_restrictions`, `relevant_information`) are duplicated into each concrete subtype table (`RegularParticipant`, `IndividualParticipant`, `Organizer`).
+
+### After conversion
+
+`Person` becomes a concrete model with its own DB table. Each subtype retains only its subtype-specific fields plus a `person_ptr_id` PK/FK to `Person`.
+
+```python
+class Person(models.Model):
+    # Common fields (same as before):
+    first_name             = CharField(...)
+    last_name              = CharField(...)
+    nickname               = CharField(...)
+    date_of_birth          = DateField(...)
+    category               = CharField(...)   # auto-calculated scout category
+    health_restrictions    = TextField(...)
+    dietary_restrictions   = TextField(...)
+    relevant_information   = TextField(...)
+
+    # New field (moved here from RegularParticipant):
+    visible_to = ManyToManyField(User, blank=True, related_name='borrowed_persons')
+
+    class Meta:
+        # validators and auto-category logic stay here
+
+class RegularParticipant(Person):
+    unit = FK(Unit, ...)
+    # No longer has first_name, last_name, etc.
+
+class IndividualParticipant(Person):
+    entity     = OneToOneField(Entity, ...)
+    boats_p550 = ...
+    # etc.
+
+class Organizer(Person):
+    entity   = OneToOneField(Entity, ...)
+    division = ...
+    # etc.
+```
+
+### Data migration
+
+A single data migration:
+1. Create the `person` table.
+2. For each existing row in `regularparticipant`, `individualparticipant`, `organizer`:
+   - Insert a `Person` row with the common field values.
+   - Set `person_ptr_id` on the subtype row to the new `Person` id.
+3. Drop the common columns from each subtype table.
+
+This migration must run before any crew-related migrations.
+
+### Impact on existing code
+
+- **Models:** Remove common field declarations from the three subtype classes; keep subtype-specific fields only.
+- **Forms:** Field declarations that reference `first_name`, `last_name`, etc. now resolve through MTI — no form changes required as long as forms use `instance` correctly. Check `ModelForm` field lists to ensure common fields are still included.
+- **Views:** Queries like `RegularParticipant.objects.all()` continue to work; Django MTI returns subtype instances with `person_ptr` populated. `select_related('person_ptr')` may be needed in performance-sensitive list views.
+- **Admin:** `list_display` entries referencing common fields continue to work via MTI.
+
+---
+
+## 2. Data Model — Crew Registration
 
 ### New model: `Crew`
 
@@ -41,11 +107,11 @@ class Crew(models.Model):
         (CATEGORY_MS, 'MS – Modrá stuha'),
     ]
 
-    boat       = models.ForeignKey(Boat, on_delete=models.PROTECT)
-    category   = models.CharField(max_length=3, choices=CATEGORY_CHOICES)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    boat       = FK(Boat, on_delete=PROTECT)
+    category   = CharField(max_length=3, choices=CATEGORY_CHOICES)
+    created_by = FK(User, on_delete=PROTECT)
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('boat', 'category')
@@ -64,72 +130,70 @@ class CrewMember(models.Model):
         (ROLE_CREW,     'Lodník'),
     ]
 
-    crew        = models.ForeignKey(Crew, on_delete=models.CASCADE, related_name='members')
-    role        = models.CharField(max_length=10, choices=ROLE_CHOICES)
-    participant = models.ForeignKey(RegularParticipant, on_delete=models.PROTECT)
+    crew        = FK(Crew, on_delete=CASCADE, related_name='members')
+    role        = CharField(max_length=10, choices=ROLE_CHOICES)
+    participant = FK(Person, on_delete=PROTECT)
 ```
 
 Constraints enforced at the form/view level (not DB-level):
 - Exactly one `ROLE_HELMSMAN` per crew.
 - At most 4 `ROLE_CREW` members per crew (total max 5 including helmsman).
 - A participant may not appear more than once in the same crew.
-- A participant may appear in multiple crews (different boats or categories) — this is intentional and not restricted.
+- A participant may appear in multiple crews (different boats or categories) — intentional, not restricted.
 
 ### Changes to `Boat`
 
 Add two fields:
 
 ```python
-willing_to_lend = models.BooleanField(default=False)
-visible_to      = models.ManyToManyField(User, blank=True, related_name='borrowed_boats')
+willing_to_lend = BooleanField(default=False)
+visible_to      = ManyToManyField(User, blank=True, related_name='borrowed_boats')
 ```
 
 - `willing_to_lend`: public signal that the owner is open to lending; shown on the boat list.
 - `visible_to`: users who can see and select this boat when registering a crew.
 
-### Changes to `RegularParticipant`
-
-```python
-visible_to = models.ManyToManyField(User, blank=True, related_name='borrowed_participants')
-```
-
-Users in `visible_to` can see and select this participant when registering a crew.
-
 ### Changes to `EventSettings`
 
 ```python
-crew_registration_deadline = models.DateTimeField(null=True, blank=True)
+crew_registration_deadline = DateTimeField(null=True, blank=True)
 ```
 
-When set, crew registration and editing is closed after this datetime. The existing `is_registration_open()` / `is_editing_open()` pattern is followed: add `is_crew_registration_open()` and `get_crew_registration_deadline()` methods.
+Add `is_crew_registration_open()` and `get_crew_registration_deadline()` methods following the existing `is_registration_open()` / `is_editing_open()` pattern.
 
 ---
 
-## 2. Permissions & Visibility
+## 3. Permissions & Visibility
 
-### What a user can see when registering a crew
+### Participants visible to a user
 
-**Boats visible to user:**
-- Boats the user created (`boat.created_by == request.user`), OR
-- Boats where the user is in `boat.visible_to`.
+A `Person` is visible to a user if:
+- The person is a `RegularParticipant` whose Unit's Entity the user owns or is an editor of, OR
+- The person is an `IndividualParticipant` or `Organizer` whose Entity the user owns or is an editor of, OR
+- The user is in `person.visible_to`.
 
-InfoDesk group members can see all boats (same as existing boat edit permission).
+### Boats visible to a user
 
-**Participants visible to user:**
-- `RegularParticipant`s whose Unit's Entity the user owns or is an editor of, OR
-- `RegularParticipant`s where the user is in `participant.visible_to`.
+A boat is visible to a user if:
+- The user is `boat.created_by`, OR
+- The user is in `boat.visible_to`.
+
+InfoDesk group members can see all boats.
 
 ### Crew edit/delete
-Only the crew's `created_by` or InfoDesk group members can edit or delete a crew.
+
+Only the crew's `created_by` or InfoDesk group members.
 
 ### Lending pages
-Access to the lending management pages is restricted to:
-- **`boats/<id>/lend/`**: the boat's `created_by` or InfoDesk group members.
-- **`participants/<id>/lend/`**: owners/editors of the participant's Unit's Entity.
+
+- **`boats/<id>/lend/`**: accessible to `boat.created_by` or InfoDesk group members.
+- **`persons/<id>/lend/`**: accessible to the owner/editors of the Person's underlying registration:
+  - `RegularParticipant` → unit's Entity owner/editors
+  - `IndividualParticipant` / `Organizer` → their own Entity owner/editors
 
 ---
 
-## 3. Views & URLs
+## 4. Views & URLs
 
 ```
 crews/register/          crew_register()        — create a new crew
@@ -139,67 +203,63 @@ crews/<id>/edit/         crew_edit()            — edit crew (creator or InfoDe
 crews/<id>/delete/       crew_delete()          — delete crew (creator or InfoDesk)
 
 boats/<id>/lend/         boat_lend()            — manage boat.visible_to
-participants/<id>/lend/  participant_lend()      — manage participant.visible_to
+persons/<id>/lend/       person_lend()          — manage person.visible_to
 
 crews/export/csv/        crew_export_csv()      — staff-only CSV export
 ```
 
-All crew views check `is_crew_registration_open()` before allowing create/edit (InfoDesk group is exempt from the deadline check, matching boat behaviour).
+All crew views check `is_crew_registration_open()` before allowing create/edit. InfoDesk is exempt (matching boat behaviour).
 
 ---
 
-## 4. Forms
+## 5. Forms
 
 ### `CrewForm`
 
-Top-level form fields:
-- `boat` — `ModelChoiceField` filtered to boats visible to the current user; `willing_to_lend=True` boats are visually grouped/noted in the dropdown.
+- `boat` — `ModelChoiceField` filtered to boats visible to the current user; `willing_to_lend=True` boats noted in the dropdown.
 - `category` — `ChoiceField` using `Crew.CATEGORY_CHOICES`.
 
 ### `CrewMemberForm`
 
-Used in an inline formset (one form per member):
-- `role` — `ChoiceField`; the helmsman row renders role as read-only text, not an editable dropdown.
-- `participant` — `ModelChoiceField` filtered to participants visible to the current user; borrowed participants labeled "(zapůjčen)".
+Used in an inline formset:
+- `role` — `ChoiceField`; helmsman row renders role as read-only text.
+- `participant` — `ModelChoiceField` over `Person`, filtered to persons visible to the current user; borrowed persons labeled "(zapůjčen)".
 
 ### Formset behaviour
 
 - The helmsman row is always present and cannot be deleted.
-- Up to 4 crew member rows can be added via "+ Přidat lodníka" (JS-driven extra form reveal, same pattern as participant formset in unit registration).
-- Validation checks: exactly one helmsman, no duplicate participants, max 4 crew members.
+- Up to 4 crew member rows, added via "+ Přidat lodníka" (JS-driven, same pattern as unit registration participant formset).
+- Validation: exactly one helmsman, no duplicate participants, max 4 crew members.
 
 ### Language
 
-All form labels, help texts, button labels, and validation messages are wrapped in `gettext_lazy()` / `{% trans %}`. Model `verbose_name` and `verbose_name_plural` use `gettext_lazy()`.
+All labels, help texts, and validation messages use `gettext_lazy()` / `{% trans %}`.
 
 ---
 
-## 5. Templates
+## 6. Templates
 
 ```
-crews/register.html     — crew registration form
-crews/list.html         — list of user's crews
-crews/detail.html       — crew detail view
-crews/edit.html         — crew edit form (same form as register, pre-filled)
+crews/register.html       — crew registration form
+crews/list.html           — list of user's crews
+crews/detail.html         — crew detail
+crews/edit.html           — crew edit (same form, pre-filled)
 crews/confirm_delete.html
-boats/lend.html         — manage boat.visible_to (follows manage_editors.html pattern)
-participants/lend.html  — manage participant.visible_to (same pattern)
+boats/lend.html           — manage boat.visible_to (follows manage_editors.html pattern)
+persons/lend.html         — manage person.visible_to (same pattern)
 ```
 
-**Boat list changes (`boats/list.html`):**
-- Add a "Willing to lend" column showing a checkmark or icon for `willing_to_lend=True` boats.
+**Boat list (`boats/list.html`):** add "Willing to lend" column.
 
-**Boat form changes (`boats/form.html`):**
-- Add `willing_to_lend` checkbox field to the existing boat form.
+**Boat form (`boats/form.html`):** add `willing_to_lend` checkbox.
 
-**Home page (`home.html`):**
-- Add "Register crew" and "My Crews" buttons in the authenticated section. All strings use `{% trans %}` — unlike boat registration (which is intentionally Czech-only), crews follow the standard i18n pattern.
+**Home page (`home.html`):** add "Register crew" and "My Crews" buttons. All strings use `{% trans %}` — unlike boat registration (intentionally Czech-only), crews follow the standard i18n pattern.
 
 ---
 
-## 6. CSV Export
+## 7. CSV Export
 
-Staff-only view at `crews/export/csv/`. One row per crew member. Exact columns to be confirmed with race organizers; minimum fields:
+Staff-only, `crews/export/csv/`. One row per crew member. Exact columns to be confirmed with race organizers; minimum fields:
 
 | Column | Source |
 |---|---|
@@ -210,35 +270,38 @@ Staff-only view at `crews/export/csv/`. One row per crew member. Exact columns t
 | Boat class | `crew.boat.boat_class.name` |
 | Sail area | `crew.boat.sail_area` |
 | Role | `crew_member.role` |
-| Participant first name | `participant.first_name` |
-| Participant last name | `participant.last_name` |
-| Date of birth | `participant.date_of_birth` |
-| Scout category | `participant.category` |
-| Unit name | `participant.unit.scout_unit_name` |
+| Participant first name | `person.first_name` |
+| Participant last name | `person.last_name` |
+| Date of birth | `person.date_of_birth` |
+| Scout category | `person.category` |
+| Participant type | subtype name (RegularParticipant / IndividualParticipant / Organizer) |
+| Unit name | unit name if RegularParticipant, else blank |
 
 ---
 
-## 7. Admin
+## 8. Admin
 
 - `CrewAdmin`: list display shows boat, category, created_by, member count; inline `CrewMemberInline`.
 - `Boat` admin: add `willing_to_lend` to `list_display` and fieldsets.
+- `Person` admin (new): base admin for common fields; subtype admins inherit.
 
 ---
 
-## 8. Migrations
+## 9. Migrations
 
 | # | Content |
 |---|---|
-| N   | Add `willing_to_lend`, `visible_to` to `Boat` |
-| N+1 | Add `visible_to` to `RegularParticipant` |
+| N   | **Data migration:** convert `Person` abstract → concrete MTI; backfill `person` table from all three subtype tables; move `visible_to` M2M to `Person` |
+| N+1 | Add `willing_to_lend`, `visible_to` to `Boat` |
 | N+2 | Add `crew_registration_deadline` to `EventSettings` |
 | N+3 | Create `Crew` and `CrewMember` tables |
 
+Migration N is the critical one. It must be written and tested carefully against existing data.
+
 ---
 
-## 9. Out of Scope
+## 10. Out of Scope
 
 - Crew rule validation (sail area, participant age/count vs. category rules) — deferred.
-- IndividualParticipant and Organizer as crew members — RegularParticipant only for now.
-- Lending for boats beyond `visible_to` (e.g., time-limited loans, loan requests) — not needed.
+- Lending beyond `visible_to` (time-limited loans, loan requests) — not needed.
 - RFID / plavenky integration — separate module.
