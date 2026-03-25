@@ -412,13 +412,17 @@ msgstr "Počet šátků"
 msgid "Scarf count"
 msgstr "Počet šátků"
 
-#: SkaRe/models.py:363 SkaRe/models.py:439
-msgid "Number of hats"
-msgstr "Počet čepic"
+msgid "Number of large hats (L/XL)"
+msgstr "Počet čepic L/XL"
 
-#: SkaRe/models.py:364 SkaRe/models.py:440
-msgid "Hat count"
-msgstr "Počet čepic"
+msgid "Hat count (L/XL)"
+msgstr "Počet čepic L/XL"
+
+msgid "Number of small hats (S/M)"
+msgstr "Počet čepic S/M"
+
+msgid "Hat count (S/M)"
+msgstr "Počet čepic S/M"
 
 #: SkaRe/models.py:370 SkaRe/models.py:446
 msgid "Accommodation expectations (small tents, large tent, caravan, ...)"
