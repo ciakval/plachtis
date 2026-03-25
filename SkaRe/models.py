@@ -590,16 +590,16 @@ class Boat(models.Model):
     No editing deadline in Phase 1.
     """
     class Color(models.TextChoices):
-        WHITE  = 'bila',     'Bílá'
-        BLACK  = 'cerna',    'Černá'
-        RED    = 'cervena',  'Červená'
-        BLUE   = 'modra',    'Modrá'
-        GREEN  = 'zelena',   'Zelená'
-        YELLOW = 'zluta',    'Žlutá'
-        ORANGE = 'oranzova', 'Oranžová'
-        GRAY   = 'seda',     'Šedá'
-        BROWN  = 'hneda',    'Hnědá'
-        OTHER  = 'jina',     'Jiná'
+        WHITE  = 'bila',     _('White')
+        BLACK  = 'cerna',    _('Black')
+        RED    = 'cervena',  _('Red')
+        BLUE   = 'modra',    _('Blue')
+        GREEN  = 'zelena',   _('Green')
+        YELLOW = 'zluta',    _('Yellow')
+        ORANGE = 'oranzova', _('Orange')
+        GRAY   = 'seda',     _('Gray')
+        BROWN  = 'hneda',    _('Brown')
+        OTHER  = 'jina',     _('Other')
 
     created_by = models.ForeignKey(
         User,
@@ -613,26 +613,27 @@ class Boat(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name=_("Boat class"),
+        verbose_name=_('boat class'),
     )
     class_supplement = models.CharField(
+        verbose_name=_('class supplement'),
         max_length=200, blank=True,
-        verbose_name=_("Class supplement"),
     )
-    sail_number = models.CharField(max_length=50, blank=True, verbose_name=_("Sail number"))
-    name = models.CharField(max_length=200, verbose_name=_("Name"))
-    description = models.TextField(blank=True, verbose_name=_("Description"))
+    sail_number = models.CharField(verbose_name=_('sail number'), max_length=50, blank=True)
+    name = models.CharField(verbose_name=_('name'), max_length=200)
+    description = models.TextField(verbose_name=_('description'), blank=True)
     sail_area = models.DecimalField(
-        max_digits=8, decimal_places=2, null=True, blank=True, verbose_name=_("Sail area")
+        verbose_name=_('sail area'),
+        max_digits=8, decimal_places=2, null=True, blank=True,
     )
-    hull_color             = models.CharField(max_length=20, choices=Color.choices, blank=True)
-    sail_color             = models.CharField(max_length=20, choices=Color.choices, blank=True)
-    harbor_number = models.CharField(max_length=100, blank=True, verbose_name=_("Harbor number"))
-    harbor_name = models.CharField(max_length=200, blank=True, verbose_name=_("Harbor name"))
-    contact_person = models.CharField(max_length=200, verbose_name=_("Contact person"))
-    contact_phone = models.CharField(max_length=50, verbose_name=_("Contact phone"))
-    vessel_registry_number = models.CharField(max_length=50, blank=True)
-    engine_power_hp        = models.PositiveSmallIntegerField(null=True, blank=True)
+    hull_color             = models.CharField(verbose_name=_('hull color'), max_length=20, choices=Color.choices, blank=True)
+    sail_color             = models.CharField(verbose_name=_('sail color'), max_length=20, choices=Color.choices, blank=True)
+    harbor_number = models.CharField(verbose_name=_('harbor number'), max_length=100, blank=True)
+    harbor_name = models.CharField(verbose_name=_('harbor name'), max_length=200, blank=True)
+    contact_person = models.CharField(verbose_name=_('contact person'), max_length=200)
+    contact_phone = models.CharField(verbose_name=_('contact phone'), max_length=50)
+    vessel_registry_number = models.CharField(verbose_name=_('vessel registry number'), max_length=50, blank=True)
+    engine_power_hp        = models.PositiveSmallIntegerField(verbose_name=_('engine power (hp)'), null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

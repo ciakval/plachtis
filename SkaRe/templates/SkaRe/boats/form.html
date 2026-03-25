@@ -1,13 +1,14 @@
 {% extends 'SkaRe/base.html' %}
+{% load i18n %}
 
-{% block title %}{% if action == 'register' %}Registrovat loď{% else %}Upravit loď{% endif %} - SkaRe{% endblock %}
+{% block title %}{% if action == 'register' %}{% trans "Register a Boat" %}{% else %}{% trans "Edit Boat" %}{% endif %} - SkaRe{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-12">
         <h1 class="mb-4">
             <i class="bi bi-sailboat"></i>
-            {% if action == 'register' %}Registrovat loď{% else %}Upravit loď: {{ boat.name }}{% endif %}
+            {% if action == 'register' %}{% trans "Register a Boat" %}{% else %}{% trans "Edit Boat" %}: {{ boat.name }}{% endif %}
         </h1>
 
         <form method="post" novalidate>
@@ -15,7 +16,7 @@
 
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-sailboat"></i> Loď</h5>
+                    <h5 class="mb-0"><i class="bi bi-sailboat"></i> {% trans "Boat" %}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -109,13 +110,13 @@
 
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-person-fill"></i> Vlastník / správce</h5>
+                    <h5 class="mb-0"><i class="bi bi-person-fill"></i> {% trans "Owner / Manager" %}</h5>
                 </div>
                 <div class="card-body">
                     {% if has_unit %}
                     <div class="mb-3">
                         <button type="button" id="btn-fill-from-unit" class="btn btn-secondary">
-                            <i class="bi bi-arrow-down-circle"></i> Vyplnit z mé jednotky
+                            <i class="bi bi-arrow-down-circle"></i> {% trans "Fill from My Unit" %}
                         </button>
                     </div>
                     {% endif %}
@@ -185,16 +186,16 @@
             <div class="d-flex justify-content-between mt-4">
                 {% if action == 'edit' %}
                     <a href="{% url 'SkaRe:boat_detail' boat_id=boat.pk %}" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> Zrušit
+                        <i class="bi bi-arrow-left"></i> {% trans "Cancel" %}
                     </a>
                 {% else %}
                     <a href="{% url 'SkaRe:boat_list' %}" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> Zrušit
+                        <i class="bi bi-arrow-left"></i> {% trans "Cancel" %}
                     </a>
                 {% endif %}
                 <button type="submit" class="btn btn-success btn-lg">
                     <i class="bi bi-check-circle"></i>
-                    {% if action == 'register' %}Registrovat{% else %}Uložit změny{% endif %}
+                    {% if action == 'register' %}{% trans "Register" %}{% else %}{% trans "Save Changes" %}{% endif %}
                 </button>
             </div>
         </form>

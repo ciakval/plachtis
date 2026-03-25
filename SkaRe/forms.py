@@ -45,10 +45,10 @@ def validate_event_phone(value):
             return value
     elif clean.isdigit() and len(clean) == 9:
         return value
-    raise ValidationError(
-        'Zadejte platné telefonní číslo '
-        '(např. +420 123 456 789, +49 30 12345678 nebo 123456789)'
-    )
+    raise ValidationError(_(
+        'Enter a valid phone number '
+        '(e.g. +420 123 456 789, +49 30 12345678 or 123456789)'
+    ))
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -480,14 +480,14 @@ class BoatForm(forms.ModelForm):
         )
         self.fields['boat_class'].widget.choices = (
             [('', '---------')]
-            + [(_('Plachetnice'), [(str(pk), name) for pk, name in sail_pks])]
-            + [(_('Ostatní'), [(str(pk), name) for pk, name in other_pks])]
+            + [(_('Sailboats'), [(str(pk), name) for pk, name in sail_pks])]
+            + [(_('Other'), [(str(pk), name) for pk, name in other_pks])]
         )
         self.fields['boat_class'].queryset = BoatClass.objects.order_by('order', 'name')
         self.fields['boat_class'].required = True
         self.fields['contact_phone'].validators = [validate_event_phone]
-        self.fields['hull_color'].help_text = 'Barva je při identifikaci lodi na vodě zásadní.'
-        self.fields['sail_color'].help_text = 'Barva je při identifikaci lodi na vodě zásadní.'
+        self.fields['hull_color'].help_text = _('Colour is critical for identifying the boat on the water.')
+        self.fields['sail_color'].help_text = _('Colour is critical for identifying the boat on the water.')
         # Note: accessing self.errors here is intentional — Django's errors property
         # calls full_clean() on demand for bound forms, which is the same pattern
         # used by UnitRegistrationForm and others in this codebase.
