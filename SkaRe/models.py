@@ -95,7 +95,11 @@ class EventSettings(SingletonModel):
 
     @classmethod
     def is_crew_registration_open(cls):
-        """Check if crew registration is still open"""
+        """Check if crew registration is still open.
+
+        Unlike registration_deadline and editing_deadline, crew_registration_deadline
+        is optional — when None, crew registration is considered open.
+        """
         try:
             settings = cls.get_solo()
             if settings and settings.crew_registration_deadline:

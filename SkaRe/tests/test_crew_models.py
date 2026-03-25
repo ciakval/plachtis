@@ -1,5 +1,9 @@
+from datetime import date, timedelta
+
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 from SkaRe.models import Person, EventSettings, Unit, Entity, RegularParticipant
 
 
@@ -21,7 +25,6 @@ def _make_unit(user):
 
 
 def _make_person(unit, first_name='Jan', last_name='Novák'):
-    from datetime import date
     return RegularParticipant.objects.create(
         first_name=first_name,
         last_name=last_name,
@@ -46,7 +49,10 @@ class PersonVisibleToTest(TestCase):
 
     def test_borrowed_persons_reverse_relation(self):
         self.person.visible_to.add(self.borrower)
-        self.assertIn(self.person.person_ptr, self.borrower.borrowed_persons.all())
+        self.assertIn(
+            self.person.pk,
+            self.borrower.borrowed_persons.values_list('pk', flat=True),
+        )
 
 
 class CrewRegistrationDeadlineTest(TestCase):
@@ -63,16 +69,12 @@ class CrewRegistrationDeadlineTest(TestCase):
         self.assertIsNone(EventSettings.get_crew_registration_deadline())
 
     def test_is_crew_registration_open_before_deadline(self):
-        from django.utils import timezone
-        from datetime import timedelta
         settings = EventSettings.get_solo()
         settings.crew_registration_deadline = timezone.now() + timedelta(days=1)
         settings.save()
         self.assertTrue(EventSettings.is_crew_registration_open())
 
     def test_is_crew_registration_closed_after_deadline(self):
-        from django.utils import timezone
-        from datetime import timedelta
         settings = EventSettings.get_solo()
         settings.crew_registration_deadline = timezone.now() - timedelta(days=1)
         settings.save()
