@@ -25,12 +25,33 @@ from .forms import (
 from .form_utils import generate_form_token, is_duplicate_submission, consume_form_token
 from .models import (
     Entity, Unit, RegularParticipant, EventSettings,
-    IndividualParticipant, Organizer, BoatClass, Boat
+    IndividualParticipant, Organizer, BoatClass, Boat,
+    Person, Crew, CrewMember
 )
 
 
 ADMIN_RESULTS_LIMIT = 500
 MANAGE_ENTITIES_PAGE_SIZE = 100
+
+
+def _visible_persons(user):
+    """Return all Persons visible to a user for crew registration."""
+    return Person.objects.filter(
+        Q(regularparticipant__unit__entity__created_by=user) |
+        Q(regularparticipant__unit__entity__editors=user) |
+        Q(individualparticipant__entity__created_by=user) |
+        Q(individualparticipant__entity__editors=user) |
+        Q(organizer__entity__created_by=user) |
+        Q(organizer__entity__editors=user) |
+        Q(visible_to=user)
+    ).distinct()
+
+
+def _visible_boats(user):
+    """Return all Boats visible to a user for crew registration."""
+    return Boat.objects.filter(
+        Q(created_by=user) | Q(visible_to=user)
+    ).distinct()
 
 
 def home(request):
@@ -1352,3 +1373,93 @@ def boat_delete(request, boat_id):
         messages.success(request, _('Boat deleted successfully.'))
         return redirect('SkaRe:boat_list')
     return render(request, 'SkaRe/boats/confirm_delete.html', {'boat': boat})
+
+
+@login_required
+def boat_lend(request, boat_id):
+    """Manage which users can see and use this boat in crew registration."""
+    boat = get_object_or_404(Boat, id=boat_id)
+
+    if not boat.can_be_edited(request.user):
+        messages.error(request, _('You do not have permission to manage lending for this boat.'))
+        return redirect('SkaRe:boat_detail', boat_id=boat_id)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'add':
+            username = request.POST.get('username', '').strip()
+            try:
+                user_to_add = User.objects.get(username=username)
+                if user_to_add == request.user:
+                    messages.warning(request, _('You cannot lend to yourself.'))
+                elif boat.visible_to.filter(id=user_to_add.id).exists():
+                    messages.warning(request, _('User "{username}" already has access.').format(username=username))
+                else:
+                    boat.visible_to.add(user_to_add)
+                    messages.success(request, _('User "{username}" can now see this boat.').format(username=username))
+            except User.DoesNotExist:
+                messages.error(request, _('User "{username}" not found.').format(username=username))
+        elif action == 'remove':
+            user_id = request.POST.get('user_id')
+            try:
+                user_to_remove = User.objects.get(id=user_id)
+                boat.visible_to.remove(user_to_remove)
+                messages.success(request, _('Access removed for user "{username}".').format(username=user_to_remove.username))
+            except User.DoesNotExist:
+                pass
+        return redirect('SkaRe:boat_lend', boat_id=boat_id)
+
+    return render(request, 'SkaRe/boats/lend.html', {
+        'boat': boat,
+        'lent_to': boat.visible_to.all(),
+    })
+
+
+@login_required
+def person_lend(request, person_id):
+    """Manage which users can see and use this person in crew registration."""
+    person = get_object_or_404(Person, id=person_id)
+
+    # Determine if request.user can manage lending for this person
+    can_manage = False
+    if hasattr(person, 'regularparticipant'):
+        entity = person.regularparticipant.unit.entity
+        can_manage = entity.created_by == request.user or entity.editors.filter(id=request.user.id).exists()
+    elif hasattr(person, 'individualparticipant'):
+        entity = person.individualparticipant.entity
+        can_manage = entity.created_by == request.user or entity.editors.filter(id=request.user.id).exists()
+    elif hasattr(person, 'organizer'):
+        entity = person.organizer.entity
+        can_manage = entity.created_by == request.user or entity.editors.filter(id=request.user.id).exists()
+
+    if not can_manage:
+        messages.error(request, _('You do not have permission to manage lending for this person.'))
+        return redirect('SkaRe:home')
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'add':
+            username = request.POST.get('username', '').strip()
+            try:
+                user_to_add = User.objects.get(username=username)
+                if person.visible_to.filter(id=user_to_add.id).exists():
+                    messages.warning(request, _('User "{username}" already has access.').format(username=username))
+                else:
+                    person.visible_to.add(user_to_add)
+                    messages.success(request, _('User "{username}" can now see this person.').format(username=username))
+            except User.DoesNotExist:
+                messages.error(request, _('User "{username}" not found.').format(username=username))
+        elif action == 'remove':
+            user_id = request.POST.get('user_id')
+            try:
+                user_to_remove = User.objects.get(id=user_id)
+                person.visible_to.remove(user_to_remove)
+                messages.success(request, _('Access removed for user "{username}".').format(username=user_to_remove.username))
+            except User.DoesNotExist:
+                pass
+        return redirect('SkaRe:person_lend', person_id=person_id)
+
+    return render(request, 'SkaRe/persons/lend.html', {
+        'person': person,
+        'lent_to': person.visible_to.all(),
+    })
