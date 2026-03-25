@@ -19,7 +19,7 @@
                         <i class="bi bi-trash"></i> {% trans "Delete" %}
                     </a>
                 {% endif %}
-                {% if boat.created_by == request.user or request.user.groups.filter(name='InfoDesk').exists %}
+                {% if can_edit %}
                     <a href="{% url 'SkaRe:boat_lend' boat_id=boat.pk %}" class="btn btn-outline-secondary">
                         <i class="bi bi-people"></i> {% trans "Manage lending" %}
                     </a>
