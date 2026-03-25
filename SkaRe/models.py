@@ -396,11 +396,16 @@ class Unit(models.Model):
         help_text=_("Number of scarves"),
         verbose_name=_("Scarf count")
     )
-    # Hat field
+    # Hat fields
     hat_count = models.PositiveBigIntegerField(
         default=0,
-        help_text=_("Number of hats"),
-        verbose_name=_("Hat count")
+        help_text=_("Number of large hats (L/XL)"),
+        verbose_name=_("Hat count (L/XL)"),
+    )
+    small_hat_count = models.PositiveBigIntegerField(
+        default=0,
+        help_text=_("Number of small hats (S/M)"),
+        verbose_name=_("Hat count (S/M)"),
     )
 
     # Accommodation fields
@@ -472,11 +477,16 @@ class IndividualParticipant(Person):
         help_text=_("Number of scarves"),
         verbose_name=_("Scarf count")
     )
-    # Hat field
+    # Hat fields
     hat_count = models.PositiveBigIntegerField(
         default=0,
-        help_text=_("Number of hats"),
-        verbose_name=_("Hat count")
+        help_text=_("Number of large hats (L/XL)"),
+        verbose_name=_("Hat count (L/XL)"),
+    )
+    small_hat_count = models.PositiveBigIntegerField(
+        default=0,
+        help_text=_("Number of small hats (S/M)"),
+        verbose_name=_("Hat count (S/M)"),
     )
 
     # Accommodation fields
@@ -490,7 +500,7 @@ class IndividualParticipant(Person):
         help_text=_("Estimated needed area for accommodation"),
         verbose_name=_("Estimated accommodation area")
     )
-    
+
     
 
 class Organizer(Person):

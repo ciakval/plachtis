@@ -1,6 +1,7 @@
+import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
-from SkaRe.models import BoatClass, Boat
+from SkaRe.models import BoatClass, Boat, Entity, Unit, IndividualParticipant
 
 
 class BoatClassModelTest(TestCase):
@@ -152,3 +153,43 @@ class BoatLendingFieldsTest(TestCase):
         boat = self._make_boat()
         boat.visible_to.add(self.borrower)
         self.assertIn(boat, self.borrower.borrowed_boats.all())
+
+
+class HatSizeSplitTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='htest', password='pw')
+        self.entity = Entity.objects.create(
+            created_by=self.user,
+            contact_email='h@test.cz',
+            contact_phone='123456789',
+        )
+        self.unit = Unit.objects.create(entity=self.entity, contact_person_name='Test')
+
+    def test_unit_small_hat_count_defaults_to_zero(self):
+        self.assertEqual(self.unit.small_hat_count, 0)
+
+    def test_unit_hat_count_verbose_name(self):
+        field = Unit._meta.get_field('hat_count')
+        self.assertIn('L/XL', str(field.verbose_name))
+
+    def test_unit_small_hat_count_verbose_name(self):
+        field = Unit._meta.get_field('small_hat_count')
+        self.assertIn('S/M', str(field.verbose_name))
+
+    def test_unit_small_hat_count_stores_value(self):
+        self.unit.small_hat_count = 3
+        self.unit.save()
+        self.unit.refresh_from_db()
+        self.assertEqual(self.unit.small_hat_count, 3)
+
+    def test_individual_participant_small_hat_count_defaults_to_zero(self):
+        ip = IndividualParticipant.objects.create(
+            entity=Entity.objects.create(
+                created_by=self.user,
+                contact_email='ip@test.cz',
+                contact_phone='123456789',
+            ),
+            first_name='A', last_name='B',
+            date_of_birth=datetime.date(2000, 1, 1),
+        )
+        self.assertEqual(ip.small_hat_count, 0)
