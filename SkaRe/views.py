@@ -722,10 +722,15 @@ def list_merchandise(request):
         individual_participants.aggregate(total=Sum('scarf_count'))['total'],
         organizers.filter(wants_scarf=True).count(),
     ])
-    total_hats = sum(item or 0 for item in [
+    total_hats_large = sum(item or 0 for item in [
         units.aggregate(total=Sum('hat_count'))['total'],
         individual_participants.aggregate(total=Sum('hat_count'))['total'],
         organizers.filter(wants_hat=True).count(),
+    ])
+    total_hats_small = sum(item or 0 for item in [
+        units.aggregate(total=Sum('small_hat_count'))['total'],
+        individual_participants.aggregate(total=Sum('small_hat_count'))['total'],
+        # organizers intentionally excluded — no small hat for organizers
     ])
 
     results_limited = (
@@ -746,7 +751,8 @@ def list_merchandise(request):
         'search_query': search_query,
         'type_filter': type_filter,
         'total_scarves': total_scarves,
-        'total_hats': total_hats,
+        'total_hats_large': total_hats_large,
+        'total_hats_small': total_hats_small,
         'unit_total': unit_total,
         'individual_total': individual_total,
         'organizer_total': organizer_total,

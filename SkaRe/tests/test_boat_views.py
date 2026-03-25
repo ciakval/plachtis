@@ -4,7 +4,8 @@ from django.core.cache import cache
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User, Group
-from SkaRe.models import BoatClass, Boat, Entity, Unit
+import datetime
+from SkaRe.models import BoatClass, Boat, Entity, Unit, Organizer
 from SkaRe.forms import BoatForm
 
 
@@ -393,3 +394,57 @@ class BoatDetailTemplateTest(TestCase):
         response = self.client.get(reverse('SkaRe:boat_detail', kwargs={'boat_id': self.boat.pk}))
         self.assertNotContains(response, reverse('SkaRe:boat_edit', kwargs={'boat_id': self.boat.pk}))
         self.assertNotContains(response, reverse('SkaRe:boat_delete', kwargs={'boat_id': self.boat.pk}))
+
+
+class MerchandiseViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.staff = User.objects.create_user(username='staff', password='pw', is_staff=True)
+        self.client.login(username='staff', password='pw')
+
+    def _make_entity(self, user):
+        return Entity.objects.create(
+            created_by=user,
+            contact_email='x@x.cz',
+            contact_phone='123456789',
+        )
+
+    def test_total_hats_large_in_context(self):
+        entity = self._make_entity(self.staff)
+        Unit.objects.create(entity=entity, contact_person_name='A', hat_count=3, small_hat_count=1)
+        url = reverse('SkaRe:list_merchandise')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('total_hats_large', response.context)
+        self.assertNotIn('total_hats', response.context)
+
+    def test_total_hats_small_in_context(self):
+        entity = self._make_entity(self.staff)
+        Unit.objects.create(entity=entity, contact_person_name='A', hat_count=3, small_hat_count=2)
+        url = reverse('SkaRe:list_merchandise')
+        response = self.client.get(url)
+        self.assertEqual(response.context['total_hats_small'], 2)
+
+    def test_total_hats_large_includes_organizer_wants_hat(self):
+        entity = self._make_entity(self.staff)
+        Organizer.objects.create(
+            entity=entity,
+            first_name='O', last_name='R',
+            date_of_birth=datetime.date(1990, 1, 1),
+            wants_hat=True,
+        )
+        url = reverse('SkaRe:list_merchandise')
+        response = self.client.get(url)
+        self.assertGreaterEqual(response.context['total_hats_large'], 1)
+
+    def test_organizers_not_in_total_hats_small(self):
+        entity = self._make_entity(self.staff)
+        Organizer.objects.create(
+            entity=entity,
+            first_name='O', last_name='R',
+            date_of_birth=datetime.date(1990, 1, 1),
+            wants_hat=True,
+        )
+        url = reverse('SkaRe:list_merchandise')
+        response = self.client.get(url)
+        self.assertEqual(response.context['total_hats_small'], 0)
