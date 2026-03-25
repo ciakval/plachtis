@@ -700,3 +700,89 @@ class Boat(models.Model):
     def can_be_edited(self, user):
         """Creator or InfoDesk group member can edit. No deadline check in Phase 1."""
         return self.created_by == user or user.groups.filter(name='InfoDesk').exists()
+
+
+class Crew(models.Model):
+    CATEGORY_Q  = 'Q'
+    CATEGORY_S  = 'S'
+    CATEGORY_R  = 'R'
+    CATEGORY_D  = 'D'
+    CATEGORY_SN = 'SN'
+    CATEGORY_DN = 'DN'
+    CATEGORY_OZ = 'OZ'
+    CATEGORY_OD = 'OD'
+    CATEGORY_MS = 'MS'
+
+    CATEGORY_CHOICES = [
+        (CATEGORY_Q,  _('Q – Žabičky a vlčata')),
+        (CATEGORY_S,  _('S – Skautky a skauti')),
+        (CATEGORY_R,  _('R – Rangers a roveři')),
+        (CATEGORY_D,  _('D – Dospělí')),
+        (CATEGORY_SN, _('SN – Skautští námořníci')),
+        (CATEGORY_DN, _('DN – Dospělí námořníci')),
+        (CATEGORY_OZ, _('OŽ – Open Žáci')),
+        (CATEGORY_OD, _('OD – Open Dospělí')),
+        (CATEGORY_MS, _('MS – Modrá stuha')),
+    ]
+
+    boat = models.ForeignKey(
+        Boat,
+        on_delete=models.PROTECT,
+        verbose_name=_('boat'),
+    )
+    category = models.CharField(
+        max_length=3,
+        choices=CATEGORY_CHOICES,
+        verbose_name=_('category'),
+    )
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        verbose_name=_('created by'),
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('boat', 'category')
+        verbose_name = _('crew')
+        verbose_name_plural = _('crews')
+
+    def __str__(self):
+        return f"{self.boat} – {self.get_category_display()}"
+
+    def can_be_edited(self, user):
+        return self.created_by == user or user.groups.filter(name='InfoDesk').exists()
+
+
+class CrewMember(models.Model):
+    ROLE_HELMSMAN = 'helmsman'
+    ROLE_CREW     = 'crew'
+    ROLE_CHOICES  = [
+        (ROLE_HELMSMAN, _('helmsman')),
+        (ROLE_CREW,     _('crew member')),
+    ]
+
+    crew = models.ForeignKey(
+        Crew,
+        on_delete=models.CASCADE,
+        related_name='members',
+        verbose_name=_('crew'),
+    )
+    role = models.CharField(
+        max_length=10,
+        choices=ROLE_CHOICES,
+        verbose_name=_('role'),
+    )
+    participant = models.ForeignKey(
+        Person,
+        on_delete=models.PROTECT,
+        verbose_name=_('participant'),
+    )
+
+    class Meta:
+        verbose_name = _('crew member')
+        verbose_name_plural = _('crew members')
+
+    def __str__(self):
+        return f"{self.get_role_display()}: {self.participant}"
