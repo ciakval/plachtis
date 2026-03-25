@@ -39,6 +39,13 @@ class EventSettings(SingletonModel):
         default=datetime(2026, 4, 1, 23, 59, 59, tzinfo=timezone.get_current_timezone()),
     )
 
+    crew_registration_deadline = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text=_("Deadline for creating and editing crew registrations"),
+        verbose_name=_("Crew registration deadline"),
+    )
+
     def __str__(self):
         return "Event Settings"
 
@@ -86,6 +93,26 @@ class EventSettings(SingletonModel):
         except Exception:
             return None
 
+    @classmethod
+    def is_crew_registration_open(cls):
+        """Check if crew registration is still open"""
+        try:
+            settings = cls.get_solo()
+            if settings and settings.crew_registration_deadline:
+                return timezone.now() < settings.crew_registration_deadline
+            return True  # No deadline set — open
+        except Exception:
+            return True
+
+    @classmethod
+    def get_crew_registration_deadline(cls):
+        """Get the crew registration deadline"""
+        try:
+            settings = cls.get_solo()
+            return settings.crew_registration_deadline if settings else None
+        except Exception:
+            return None
+
 
 class Person(models.Model):
     """Represents a person in the system.
@@ -129,7 +156,15 @@ class Person(models.Model):
         blank=True, help_text=_("Any relevant information about the person"),
         verbose_name=_("Relevant information")
     )
-    
+
+    visible_to = models.ManyToManyField(
+        User,
+        blank=True,
+        related_name='borrowed_persons',
+        verbose_name=_('Visible to'),
+        help_text=_('Users who can see this person when registering a crew'),
+    )
+
     def calculate_category(self, reference_date=None):
         """
         Calculate scout category based on date of birth year only.
