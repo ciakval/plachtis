@@ -15,11 +15,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='boat',
             name='visible_to',
-            field=models.ManyToManyField(blank=True, help_text='Users who can see and select this boat when registering a crew', related_name='borrowed_boats', to=settings.AUTH_USER_MODEL, verbose_name='Visible to'),
+            field=models.ManyToManyField(blank=True, help_text='Users who can see and select this boat when registering a crew', related_name='borrowed_boats', to=settings.AUTH_USER_MODEL, verbose_name='visible to'),
         ),
         migrations.AddField(
             model_name='boat',
             name='willing_to_lend',
-            field=models.BooleanField(default=False, help_text='Check if you are willing to lend this boat for the race', verbose_name='Willing to lend'),
+            field=models.BooleanField(default=False, help_text='Check if you are willing to lend this boat for the race', verbose_name='willing to lend'),
         ),
     ]

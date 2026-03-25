@@ -165,7 +165,7 @@ class Person(models.Model):
         User,
         blank=True,
         related_name='borrowed_persons',
-        verbose_name=_('Visible to'),
+        verbose_name=_('visible to'),
         help_text=_('Users who can see this person when registering a crew'),
     )
 
@@ -675,14 +675,14 @@ class Boat(models.Model):
     engine_power_hp        = models.PositiveSmallIntegerField(verbose_name=_('engine power (hp)'), null=True, blank=True)
     willing_to_lend = models.BooleanField(
         default=False,
-        verbose_name=_('Willing to lend'),
+        verbose_name=_('willing to lend'),
         help_text=_('Check if you are willing to lend this boat for the race'),
     )
     visible_to = models.ManyToManyField(
         User,
         blank=True,
         related_name='borrowed_boats',
-        verbose_name=_('Visible to'),
+        verbose_name=_('visible to'),
         help_text=_('Users who can see and select this boat when registering a crew'),
     )
     created_at = models.DateTimeField(auto_now_add=True)

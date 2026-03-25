@@ -131,6 +131,7 @@ class BoatLendingFieldsTest(TestCase):
 
     def test_willing_to_lend_defaults_false(self):
         boat = self._make_boat()
+        boat.refresh_from_db()
         self.assertFalse(boat.willing_to_lend)
 
     def test_willing_to_lend_can_be_set_true(self):
