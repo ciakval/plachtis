@@ -558,6 +558,9 @@ class CrewRegistrationForm(forms.Form):
         self.fields['boat'].queryset = visible_boats
         for field in ['helmsman', 'crew_member_1', 'crew_member_2', 'crew_member_3', 'crew_member_4']:
             self.fields[field].queryset = visible_persons
+        for fname in ['boat', 'helmsman', 'crew_member_1', 'crew_member_2', 'crew_member_3', 'crew_member_4']:
+            self.fields[fname].widget.attrs.update({'class': 'form-select'})
+        self.fields['category'].widget.attrs.update({'class': 'form-select'})
 
     def clean(self):
         cleaned_data = super().clean()

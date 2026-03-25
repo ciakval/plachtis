@@ -3,7 +3,7 @@ from datetime import date
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User, Group
-from SkaRe.models import BoatClass, Boat, Entity, Unit, Person, RegularParticipant
+from SkaRe.models import BoatClass, Boat, Entity, Unit, Person, RegularParticipant, Crew, CrewMember
 
 
 def _make_user(username):
@@ -127,3 +127,81 @@ class PersonLendViewTest(TestCase):
         self.client.post(url, {'action': 'remove', 'user_id': self.borrower.pk})
         person_base.refresh_from_db()
         self.assertNotIn(self.borrower, person_base.visible_to.all())
+
+
+class CrewRegisterViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = _make_user('crewreg')
+        self.unit = _make_unit(self.user)
+        self.helmsman = _make_person(self.unit)
+        self.boat = _make_boat(self.user)
+
+    def test_register_requires_login(self):
+        url = reverse('SkaRe:crew_register')
+        self.assertRedirects(
+            self.client.get(url),
+            f'/user/login/?next={url}',
+            fetch_redirect_response=False,
+        )
+
+    def test_register_get_renders_form(self):
+        self.client.login(username='crewreg', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_register'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.context)
+
+    def test_register_creates_crew_and_members(self):
+        self.client.login(username='crewreg', password='pw')
+        response = self.client.post(reverse('SkaRe:crew_register'), {
+            'boat': self.boat.pk,
+            'category': Crew.CATEGORY_S,
+            'helmsman': self.helmsman.pk,
+        })
+        self.assertEqual(Crew.objects.count(), 1)
+        crew = Crew.objects.first()
+        self.assertEqual(crew.members.count(), 1)
+        self.assertEqual(crew.members.first().role, CrewMember.ROLE_HELMSMAN)
+        self.assertRedirects(
+            response,
+            reverse('SkaRe:crew_detail', kwargs={'crew_id': crew.pk}),
+            fetch_redirect_response=False,
+        )
+
+    def test_duplicate_boat_category_shows_error(self):
+        self.client.login(username='crewreg', password='pw')
+        Crew.objects.create(boat=self.boat, category=Crew.CATEGORY_S, created_by=self.user)
+        response = self.client.post(reverse('SkaRe:crew_register'), {
+            'boat': self.boat.pk,
+            'category': Crew.CATEGORY_S,
+            'helmsman': self.helmsman.pk,
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Crew.objects.count(), 1)  # no new crew created
+
+
+class CrewListViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = _make_user('crewlist')
+
+    def test_list_requires_login(self):
+        url = reverse('SkaRe:crew_list')
+        self.assertRedirects(
+            self.client.get(url),
+            f'/user/login/?next={url}',
+            fetch_redirect_response=False,
+        )
+
+    def test_list_shows_only_user_crews(self):
+        unit = _make_unit(self.user)
+        helmsman = _make_person(unit)
+        boat = _make_boat(self.user)
+        other_user = _make_user('crewother')
+        Crew.objects.create(boat=boat, category=Crew.CATEGORY_S, created_by=self.user)
+        other_boat = _make_boat(other_user)
+        Crew.objects.create(boat=other_boat, category=Crew.CATEGORY_S, created_by=other_user)
+        self.client.login(username='crewlist', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['crews']), 1)
