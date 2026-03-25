@@ -464,6 +464,7 @@ class BoatForm(forms.ModelForm):
             'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
             'vessel_registry_number': forms.TextInput(attrs={'class': 'form-control'}),
             'engine_power_hp': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'willing_to_lend': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
     def __init__(self, *args, **kwargs):
