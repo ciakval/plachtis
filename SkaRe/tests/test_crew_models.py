@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 
+from django.db import IntegrityError
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -101,7 +102,6 @@ class CrewModelTest(TestCase):
         self.assertEqual(crew.boat, self.boat)
 
     def test_unique_boat_category(self):
-        from django.db import IntegrityError
         Crew.objects.create(boat=self.boat, category=Crew.CATEGORY_S, created_by=self.user)
         with self.assertRaises(IntegrityError):
             Crew.objects.create(boat=self.boat, category=Crew.CATEGORY_S, created_by=self.user)

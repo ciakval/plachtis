@@ -752,6 +752,7 @@ class Crew(models.Model):
         return f"{self.boat} – {self.get_category_display()}"
 
     def can_be_edited(self, user):
+        """Creator or InfoDesk group member can edit. No deadline check in Phase 1."""
         return self.created_by == user or user.groups.filter(name='InfoDesk').exists()
 
 
