@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from datetime import datetime
@@ -542,7 +543,6 @@ class CrewRegistrationForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        from django.db.models import Q
         visible_boats = Boat.objects.filter(
             Q(created_by=user) | Q(visible_to=user)
         ).distinct()
