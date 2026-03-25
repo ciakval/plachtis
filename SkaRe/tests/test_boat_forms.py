@@ -143,3 +143,34 @@ class BoatFormNewFieldsTest(TestCase):
         data['contact_phone'] = '+49 30 12345678'
         form = BoatForm(data=data)
         self.assertTrue(form.is_valid(), form.errors)
+
+
+class BoatFormWillingToLendTest(TestCase):
+    def setUp(self):
+        from SkaRe.forms import BoatForm
+        self.BoatForm = BoatForm
+        BoatClass.objects.create(name='P550', category=BoatClass.Category.SAIL, order=1)
+
+    def _valid_data(self, **overrides):
+        bc = BoatClass.objects.first()
+        data = {
+            'boat_class': bc.pk,
+            'name': 'Test Boat',
+            'contact_person': 'Jan',
+            'contact_phone': '123456789',
+            'willing_to_lend': False,
+        }
+        data.update(overrides)
+        return data
+
+    def test_willing_to_lend_in_form(self):
+        form = self.BoatForm(data=self._valid_data(willing_to_lend=True))
+        self.assertIn('willing_to_lend', form.fields)
+
+    def test_form_valid_with_willing_to_lend_true(self):
+        form = self.BoatForm(data=self._valid_data(willing_to_lend=True))
+        self.assertTrue(form.is_valid(), form.errors)
+
+    def test_form_valid_with_willing_to_lend_false(self):
+        form = self.BoatForm(data=self._valid_data())
+        self.assertTrue(form.is_valid(), form.errors)

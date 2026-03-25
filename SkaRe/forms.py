@@ -447,7 +447,7 @@ class BoatForm(forms.ModelForm):
             'boat_class', 'class_supplement', 'sail_number', 'name',
             'description', 'sail_area', 'hull_color', 'sail_color',
             'harbor_number', 'harbor_name', 'contact_person', 'contact_phone',
-            'vessel_registry_number', 'engine_power_hp',
+            'vessel_registry_number', 'engine_power_hp', 'willing_to_lend',
         ]
         widgets = {
             'boat_class': forms.Select(attrs={'class': 'form-control'}),

@@ -27,6 +27,7 @@
                                     <th>{% trans "Name" %}</th>
                                     <th>{% trans "Class" %}</th>
                                     <th>{% trans "Contact Person" %}</th>
+                                    <th>{% trans "Willing to lend" %}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -44,6 +45,11 @@
                                     </td>
                                     <td>{{ boat.boat_class.name }}{% if boat.class_supplement %} {{ boat.class_supplement }}{% endif %}</td>
                                     <td>{{ boat.contact_person }}</td>
+                                    <td>
+                                        {% if boat.willing_to_lend %}
+                                            <i class="bi bi-check-circle-fill text-success" title="{% trans 'Willing to lend' %}"></i>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
