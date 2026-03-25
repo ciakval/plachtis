@@ -87,14 +87,19 @@
                             <a href="{% url 'SkaRe:edit_individual_participant' participant.id %}" class="btn btn-primary btn-sm">
                                 <i class="bi bi-pencil"></i> {% trans "Edit Participant" %}
                             </a>
-                            {% if participant.entity.created_by == request.user %}
-                                <a href="{% url 'SkaRe:manage_individual_participant_editors' participant.id %}" class="btn btn-outline-secondary btn-sm">
-                                    <i class="bi bi-people"></i> {% trans "Editors" %}
-                                    {% if participant.entity.editors.count > 0 %}
-                                        <span class="badge bg-secondary">{{ participant.entity.editors.count }}</span>
-                                    {% endif %}
-                                </a>
-                            {% endif %}
+                            <div class="d-flex gap-2">
+                                {% if participant.entity.created_by == request.user %}
+                                    <a href="{% url 'SkaRe:manage_individual_participant_editors' participant.id %}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-people"></i> {% trans "Editors" %}
+                                        {% if participant.entity.editors.count > 0 %}
+                                            <span class="badge bg-secondary">{{ participant.entity.editors.count }}</span>
+                                        {% endif %}
+                                    </a>
+                                    <a href="{% url 'SkaRe:person_lend' person_id=participant.pk %}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-share"></i> {% trans "Lend" %}
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>

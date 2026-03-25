@@ -92,10 +92,17 @@
                             {% if unit.regular_participants.all %}
                                 <ul class="list-group list-group-flush mb-3">
                                     {% for participant in unit.regular_participants.all %}
-                                    <li class="list-group-item px-0 py-1">
-                                        {{ participant.first_name }} {{ participant.last_name }}
-                                        {% if participant.nickname %}({{ participant.nickname }}){% endif %}
-                                        - <span class="badge bg-secondary">{{ participant.get_category_display }}</span>
+                                    <li class="list-group-item px-0 py-1 d-flex justify-content-between align-items-center">
+                                        <span>
+                                            {{ participant.first_name }} {{ participant.last_name }}
+                                            {% if participant.nickname %}({{ participant.nickname }}){% endif %}
+                                            - <span class="badge bg-secondary">{{ participant.get_category_display }}</span>
+                                        </span>
+                                        {% if unit.entity.created_by == request.user or request.user in unit.entity.editors.all %}
+                                        <a href="{% url 'SkaRe:person_lend' person_id=participant.pk %}" class="btn btn-outline-secondary btn-sm">
+                                            <i class="bi bi-share"></i> {% trans "Lend" %}
+                                        </a>
+                                        {% endif %}
                                     </li>
                                     {% endfor %}
                                 </ul>

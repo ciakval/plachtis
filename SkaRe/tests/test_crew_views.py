@@ -62,6 +62,15 @@ class BoatLendViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
 
+    def test_lend_page_accessible_by_infodesk(self):
+        infodesk = _make_user('infodesk_user')
+        group, _ = Group.objects.get_or_create(name='InfoDesk')
+        infodesk.groups.add(group)
+        self.client.login(username='infodesk_user', password='pw')
+        url = reverse('SkaRe:boat_lend', kwargs={'boat_id': self.boat.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
     def test_add_user_to_visible_to(self):
         self.client.login(username='owner', password='pw')
         url = reverse('SkaRe:boat_lend', kwargs={'boat_id': self.boat.pk})
