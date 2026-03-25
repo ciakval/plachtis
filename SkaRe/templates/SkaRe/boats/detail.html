@@ -1,4 +1,5 @@
 {% extends 'SkaRe/base.html' %}
+{% load i18n %}
 
 {% block title %}{{ boat.name }} - SkaRe{% endblock %}
 
@@ -10,12 +11,12 @@
             <div>
                 {% if can_edit %}
                     <a href="{% url 'SkaRe:boat_edit' boat_id=boat.pk %}" class="btn btn-primary">
-                        <i class="bi bi-pencil"></i> Upravit
+                        <i class="bi bi-pencil"></i> {% trans "Edit" %}
                     </a>
                 {% endif %}
                 {% if is_creator %}
                     <a href="{% url 'SkaRe:boat_delete' boat_id=boat.pk %}" class="btn btn-danger">
-                        <i class="bi bi-trash"></i> Smazat
+                        <i class="bi bi-trash"></i> {% trans "Delete" %}
                     </a>
                 {% endif %}
             </div>
@@ -23,44 +24,44 @@
 
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0"><i class="bi bi-sailboat"></i> Loď</h5>
+                <h5 class="mb-0"><i class="bi bi-sailboat"></i> {% trans "Boat" %}</h5>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
-                    <dt class="col-sm-3">Třída</dt>
+                    <dt class="col-sm-3">{% trans "Class" %}</dt>
                     <dd class="col-sm-9">{{ boat.boat_class.name }}</dd>
 
                     {% if boat.class_supplement %}
-                    <dt class="col-sm-3">Doplněk třídy</dt>
+                    <dt class="col-sm-3">{% trans "Class Supplement" %}</dt>
                     <dd class="col-sm-9">{{ boat.class_supplement }}</dd>
                     {% endif %}
 
                     {% if boat.sail_number %}
-                    <dt class="col-sm-3">Plachetní číslo</dt>
+                    <dt class="col-sm-3">{% trans "Sail Number" %}</dt>
                     <dd class="col-sm-9">{{ boat.sail_number }}</dd>
                     {% endif %}
 
-                    <dt class="col-sm-3">Název</dt>
+                    <dt class="col-sm-3">{% trans "Name" %}</dt>
                     <dd class="col-sm-9">{{ boat.name }}</dd>
 
                     {% if boat.description %}
-                    <dt class="col-sm-3">Popis</dt>
+                    <dt class="col-sm-3">{% trans "Description" %}</dt>
                     <dd class="col-sm-9">{{ boat.description }}</dd>
                     {% endif %}
 
                     {% if boat.sail_area %}
-                    <dt class="col-sm-3">Plocha plachet</dt>
+                    <dt class="col-sm-3">{% trans "Sail Area" %}</dt>
                     <dd class="col-sm-9">{{ boat.sail_area }} m²</dd>
                     {% endif %}
                 </dl>
                 {% if boat.hull_color %}
                 <p class="mb-2">
-                    <strong>Barva trupu:</strong> {{ boat.get_hull_color_display }}
+                    <strong>{% trans "Hull color:" %}</strong> {{ boat.get_hull_color_display }}
                 </p>
                 {% endif %}
                 {% if boat.sail_color %}
                 <p class="mb-2">
-                    <strong>Barva plachet:</strong> {{ boat.get_sail_color_display }}
+                    <strong>{% trans "Sail color:" %}</strong> {{ boat.get_sail_color_display }}
                 </p>
                 {% endif %}
             </div>
@@ -68,34 +69,34 @@
 
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0"><i class="bi bi-person-fill"></i> Vlastník / správce</h5>
+                <h5 class="mb-0"><i class="bi bi-person-fill"></i> {% trans "Owner / Manager" %}</h5>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
                     {% if boat.harbor_number %}
-                    <dt class="col-sm-3">Evidenční číslo přístavu</dt>
+                    <dt class="col-sm-3">{% trans "Harbor Number" %}</dt>
                     <dd class="col-sm-9">{{ boat.harbor_number }}</dd>
                     {% endif %}
 
                     {% if boat.harbor_name %}
-                    <dt class="col-sm-3">Přístav / oddíl</dt>
+                    <dt class="col-sm-3">{% trans "Harbor / Unit" %}</dt>
                     <dd class="col-sm-9">{{ boat.harbor_name }}</dd>
                     {% endif %}
 
-                    <dt class="col-sm-3">Kontaktní osoba</dt>
+                    <dt class="col-sm-3">{% trans "Contact Person" %}</dt>
                     <dd class="col-sm-9">{{ boat.contact_person }}</dd>
 
-                    <dt class="col-sm-3">Telefon</dt>
+                    <dt class="col-sm-3">{% trans "Phone" %}</dt>
                     <dd class="col-sm-9">{{ boat.contact_phone }}</dd>
                 </dl>
                 {% if boat.vessel_registry_number %}
                 <p class="mb-2">
-                    <strong>Registrační číslo (rejstřík malých plavidel):</strong> {{ boat.vessel_registry_number }}
+                    <strong>{% trans "Vessel Registry Number:" %}</strong> {{ boat.vessel_registry_number }}
                 </p>
                 {% endif %}
                 {% if boat.engine_power_hp %}
                 <p class="mb-2">
-                    <strong>Výkon motoru:</strong> {{ boat.engine_power_hp }} hp
+                    <strong>{% trans "Engine Power:" %}</strong> {{ boat.engine_power_hp }} hp
                 </p>
                 {% endif %}
             </div>
@@ -103,7 +104,7 @@
 
         <div class="mt-3">
             <a href="{% url 'SkaRe:boat_list' %}" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Zpět na seznam
+                <i class="bi bi-arrow-left"></i> {% trans "Back to List" %}
             </a>
         </div>
     </div>
