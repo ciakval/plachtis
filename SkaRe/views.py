@@ -245,6 +245,7 @@ def edit_unit(request, unit_id):
                 'boats_motor',
                 'scarf_count',
                 'hat_count',
+                'small_hat_count',
                 'accommodation_expectations',
                 'estimated_accommodation_area',
             ]
@@ -257,6 +258,7 @@ def edit_unit(request, unit_id):
                 'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'scarf_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'hat_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'small_hat_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
                 'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control'}),
             }
@@ -482,6 +484,7 @@ def edit_individual_participant(request, participant_id):
                 'boats_motor',
                 'scarf_count',
                 'hat_count',
+                'small_hat_count',
                 'accommodation_expectations',
                 'estimated_accommodation_area',
             ]
@@ -500,6 +503,7 @@ def edit_individual_participant(request, participant_id):
                 'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'scarf_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'hat_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'small_hat_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
                 'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control'}),
             }
