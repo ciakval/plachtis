@@ -1198,8 +1198,10 @@ def _get_registry_rows():
     rows = cache.get(_SAIL_REGISTRY_CACHE_KEY)
     if rows is None:
         raw = _fetch_sheet_csv(settings.SAIL_REGISTRY_SHEET_URL)
-        reader = csv.DictReader(io.StringIO(raw))
-        rows = list(reader)
+        lines = io.StringIO(raw).readlines()
+        # Row 1 is the sheet title, row 2 is metadata — actual headers are on row 3
+        reader = csv.DictReader(lines[2:])
+        rows = [row for row in reader if any(v.strip() for v in row.values())]
         cache.set(_SAIL_REGISTRY_CACHE_KEY, rows, settings.SAIL_REGISTRY_CACHE_TTL)
     return rows
 
@@ -1241,7 +1243,12 @@ def boat_sail_lookup(request):
     class_name = typ_parts[1] if len(typ_parts) > 1 else ''
 
     # Sail area: Czech decimal comma → dot
-    sail_area_raw = match.get('plocha dle Certifikátu (m2)', '').strip()
+    # Column header starts with 'plocha' (full name may include ', datum měření' suffix)
+    sail_area_raw = ''
+    for key, val in match.items():
+        if key.lower().startswith('plocha'):
+            sail_area_raw = val.strip()
+            break
     sail_area = sail_area_raw.replace(',', '.') if sail_area_raw else ''
 
     return JsonResponse({
