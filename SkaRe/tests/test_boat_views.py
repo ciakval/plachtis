@@ -123,6 +123,15 @@ class MyUnitViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
 
+    def test_returns_contact_phone(self):
+        self._create_unit()
+        url = reverse('SkaRe:boat_my_unit')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertIn('contact_phone', data)
+        self.assertEqual(data['contact_phone'], '+420123456789')
+
 
 class BoatListViewTest(TestCase):
     def setUp(self):

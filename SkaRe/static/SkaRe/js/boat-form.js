@@ -100,6 +100,7 @@ if (unitPrefillBtn) {
                 fillIfEmpty('id_harbor_number', data.harbor_number);
                 fillIfEmpty('id_harbor_name', data.harbor_name);
                 fillIfEmpty('id_contact_person', data.contact_person);
+                fillIfEmpty('id_contact_phone', data.contact_phone);
             });
     });
 }

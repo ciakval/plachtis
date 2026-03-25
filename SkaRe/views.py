@@ -1281,6 +1281,7 @@ def boat_my_unit(request):
         'harbor_number': unit.entity.scout_unit_evidence_id,
         'harbor_name': unit.entity.scout_unit_name,
         'contact_person': unit.contact_person_name,
+        'contact_phone': unit.entity.contact_phone,
     })
 
 
