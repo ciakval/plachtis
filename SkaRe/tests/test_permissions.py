@@ -1,6 +1,12 @@
-from django.test import TestCase
-from django.contrib.auth.models import User, Group
-from SkaRe.permissions import is_infodesk, is_race_management
+from datetime import timedelta
+
+from django.contrib.auth.models import AnonymousUser, Group, User
+from django.http import HttpResponse
+from django.test import RequestFactory, TestCase
+from django.utils import timezone
+
+from SkaRe.models import Entity, EventSettings
+from SkaRe.permissions import infodesk_required, is_infodesk, is_race_management
 
 
 class IsInfodeskTest(TestCase):
@@ -39,14 +45,6 @@ class IsRaceManagementTest(TestCase):
         self.assertFalse(is_race_management(self.user))
 
 
-from django.test import TestCase, RequestFactory
-from django.http import HttpResponse
-from SkaRe.permissions import is_infodesk, is_race_management, infodesk_required
-from SkaRe.models import Entity, EventSettings
-from django.utils import timezone
-from datetime import timedelta
-
-
 class InfodeskRequiredDecoratorTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
@@ -62,7 +60,6 @@ class InfodeskRequiredDecoratorTest(TestCase):
         self.view = protected_view
 
     def test_anonymous_redirected(self):
-        from django.contrib.auth.models import AnonymousUser
         request = self.factory.get('/test/')
         request.user = AnonymousUser()
         response = self.view(request)

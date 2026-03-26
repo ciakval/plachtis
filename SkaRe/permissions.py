@@ -1,5 +1,9 @@
 from functools import wraps
+
+from django.conf import settings as django_settings
 from django.http import HttpResponseForbidden
+from django.shortcuts import redirect
+from django.urls import NoReverseMatch, reverse
 
 
 def is_infodesk(user) -> bool:
@@ -17,12 +21,9 @@ def infodesk_required(view_func):
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
-            from django.conf import settings as django_settings
-            from django.shortcuts import redirect
-            from django.urls import reverse
             try:
                 login_url = reverse(django_settings.LOGIN_URL)
-            except Exception:
+            except NoReverseMatch:
                 login_url = django_settings.LOGIN_URL
             return redirect(f'{login_url}?next={request.path}')
         if not is_infodesk(request.user):
