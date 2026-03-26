@@ -71,7 +71,7 @@ class SailTicketLogTest(TestCase):
             status=SailTicket.Status.ON_WATER,
             changed_by=self.user,
         )
-        self.assertEqual(log.status, 'on_water')
+        self.assertEqual(log.status, SailTicket.Status.ON_WATER)
 
     def test_note_defaults_to_empty(self):
         log = SailTicketLog.objects.create(

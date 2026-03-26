@@ -20,7 +20,7 @@ class SailTicket(models.Model):
 
     code = models.CharField(max_length=50, unique=True)
     color = models.CharField(max_length=10, choices=Color.choices)
-    rfid_uid = models.CharField(max_length=100, blank=True)
+    rfid_uid = models.CharField(max_length=100, blank=True, db_index=True)
     boat = models.ForeignKey(
         Boat,
         null=True,
