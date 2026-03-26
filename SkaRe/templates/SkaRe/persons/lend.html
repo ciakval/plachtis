@@ -1,0 +1,77 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Lend Participant" %} - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="mb-4">
+            <i class="bi bi-people-fill"></i> {% trans "Lend Participant" %}
+        </h1>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ person }}</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    <i class="bi bi-info-circle"></i>
+                    {% trans "Users listed here can see and include this participant in a crew registration." %}
+                </p>
+
+                <h6 class="mb-3">{% trans "Currently lent to" %}</h6>
+
+                {% if lent_to %}
+                    <ul class="list-group mb-4">
+                        {% for u in lent_to %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="bi bi-person"></i>
+                                    <strong>{{ u.username }}</strong>
+                                    {% if u.first_name or u.last_name %}
+                                        <span class="text-muted">({{ u.first_name }} {{ u.last_name }})</span>
+                                    {% endif %}
+                                </div>
+                                <form method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="remove">
+                                    <input type="hidden" name="user_id" value="{{ u.id }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('{% trans "Remove access for this user?" %}');">
+                                        <i class="bi bi-x-circle"></i> {% trans "Remove" %}
+                                    </button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle"></i> {% trans "This participant has not been lent to anyone yet." %}
+                    </div>
+                {% endif %}
+
+                <h6 class="mb-3">{% trans "Add user" %}</h6>
+                <form method="post" class="row g-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+                    <div class="col-md-8">
+                        <input type="text" name="username" class="form-control"
+                               placeholder="{% trans 'Enter username' %}" required>
+                        <div class="form-text">{% trans "Enter the exact username of the user you want to grant access." %}</div>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-plus-circle"></i> {% trans "Grant access" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <a href="{% url 'SkaRe:home' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> {% trans "Back" %}
+        </a>
+    </div>
+</div>
+{% endblock %}

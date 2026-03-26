@@ -1,0 +1,24 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Delete Crew" %} - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> {% trans "Delete Crew" %}</h5>
+            </div>
+            <div class="card-body">
+                <p>{% blocktrans with crew=crew %}Are you sure you want to delete crew <strong>{{ crew }}</strong>? This action cannot be undone.{% endblocktrans %}</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">{% trans "Yes, delete" %}</button>
+                    <a href="{% url 'SkaRe:crew_detail' crew_id=crew.pk %}" class="btn btn-secondary ms-2">{% trans "Cancel" %}</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

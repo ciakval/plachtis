@@ -114,3 +114,41 @@ class BoatColorFieldTest(TestCase):
         boat = self._make_boat(engine_power_hp=15)
         boat.refresh_from_db()
         self.assertEqual(boat.engine_power_hp, 15)
+
+
+class BoatLendingFieldsTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='lendtest', password='pw')
+        self.borrower = User.objects.create_user(username='borrower', password='pw')
+        self.bc = BoatClass.objects.create(name='P550', category=BoatClass.Category.SAIL, order=1)
+
+    def _make_boat(self, **kw):
+        return Boat.objects.create(
+            created_by=self.user, boat_class=self.bc,
+            name='Lendable', contact_person='J', contact_phone='123456789',
+            **kw
+        )
+
+    def test_willing_to_lend_defaults_false(self):
+        boat = self._make_boat()
+        boat.refresh_from_db()
+        self.assertFalse(boat.willing_to_lend)
+
+    def test_willing_to_lend_can_be_set_true(self):
+        boat = self._make_boat(willing_to_lend=True)
+        boat.refresh_from_db()
+        self.assertTrue(boat.willing_to_lend)
+
+    def test_visible_to_empty_by_default(self):
+        boat = self._make_boat()
+        self.assertEqual(boat.visible_to.count(), 0)
+
+    def test_visible_to_add_user(self):
+        boat = self._make_boat()
+        boat.visible_to.add(self.borrower)
+        self.assertIn(self.borrower, boat.visible_to.all())
+
+    def test_borrowed_boats_reverse_relation(self):
+        boat = self._make_boat()
+        boat.visible_to.add(self.borrower)
+        self.assertIn(boat, self.borrower.borrowed_boats.all())

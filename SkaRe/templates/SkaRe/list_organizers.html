@@ -125,14 +125,21 @@
                             <a href="{% url 'SkaRe:edit_organizer' organizer.id %}" class="btn btn-success btn-sm">
                                 <i class="bi bi-pencil"></i> {% trans "Edit Organizer" %}
                             </a>
-                            {% if organizer.entity.created_by == request.user %}
-                                <a href="{% url 'SkaRe:manage_organizer_editors' organizer.id %}" class="btn btn-outline-secondary btn-sm">
-                                    <i class="bi bi-people"></i> {% trans "Editors" %}
-                                    {% if organizer.entity.editors.count > 0 %}
-                                        <span class="badge bg-secondary">{{ organizer.entity.editors.count }}</span>
-                                    {% endif %}
-                                </a>
-                            {% endif %}
+                            <div class="d-flex gap-2">
+                                {% if organizer.entity.created_by == request.user %}
+                                    <a href="{% url 'SkaRe:manage_organizer_editors' organizer.id %}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-people"></i> {% trans "Editors" %}
+                                        {% if organizer.entity.editors.count > 0 %}
+                                            <span class="badge bg-secondary">{{ organizer.entity.editors.count }}</span>
+                                        {% endif %}
+                                    </a>
+                                {% endif %}
+                                {% if organizer.entity.created_by == request.user or request.user in organizer.entity.editors.all %}
+                                    <a href="{% url 'SkaRe:person_lend' person_id=organizer.pk %}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-share"></i> {% trans "Lend" %}
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
