@@ -153,10 +153,22 @@ class Person(models.Model):
         blank=True, help_text=_("Any health restrictions or medical conditions"),
         verbose_name=_("Health restrictions")
     )
-    dietary_restrictions = models.TextField(
-        blank=True, help_text=_("Any dietary restrictions or preferences"),
-        verbose_name=_("Dietary restrictions")
-    )
+    # Dietary preferences
+    diet_vegan = models.BooleanField(default=False, verbose_name=_('Vegan'))
+    diet_vegetarian = models.BooleanField(default=False, verbose_name=_('Vegetarian'))
+
+    # Major allergens / exclusions
+    diet_gluten_free = models.BooleanField(default=False, verbose_name=_('Gluten-free'))
+    diet_lactose_free = models.BooleanField(default=False, verbose_name=_('Lactose/dairy-free'))
+    diet_no_eggs = models.BooleanField(default=False, verbose_name=_('No eggs'))
+    diet_no_peanuts = models.BooleanField(default=False, verbose_name=_('No peanuts'))
+    diet_no_tree_nuts = models.BooleanField(default=False, verbose_name=_('No tree nuts'))
+    diet_no_soy = models.BooleanField(default=False, verbose_name=_('No soy'))
+    diet_no_fish = models.BooleanField(default=False, verbose_name=_('No fish'))
+    diet_no_fruits = models.BooleanField(default=False, verbose_name=_('No fruits'))
+
+    # Catch-all
+    diet_other = models.TextField(blank=True, verbose_name=_('Other dietary restrictions'))
     relevant_information = models.TextField(
         blank=True, help_text=_("Any relevant information about the person"),
         verbose_name=_("Relevant information")
@@ -230,6 +242,28 @@ class Person(models.Model):
             if calculated_category:
                 self.category = calculated_category
         super().save(*args, **kwargs)
+
+    def dietary_summary(self) -> str:
+        """Return a comma-separated string of active dietary restrictions."""
+        parts = []
+        flag_labels = [
+            ('diet_vegan', 'Vegan'),
+            ('diet_vegetarian', 'Vegetarian'),
+            ('diet_gluten_free', 'Gluten-free'),
+            ('diet_lactose_free', 'Lactose/dairy-free'),
+            ('diet_no_eggs', 'No eggs'),
+            ('diet_no_peanuts', 'No peanuts'),
+            ('diet_no_tree_nuts', 'No tree nuts'),
+            ('diet_no_soy', 'No soy'),
+            ('diet_no_fish', 'No fish'),
+            ('diet_no_fruits', 'No fruits'),
+        ]
+        for field, label in flag_labels:
+            if getattr(self, field):
+                parts.append(label)
+        if self.diet_other:
+            parts.append(self.diet_other)
+        return ', '.join(parts)
 
     def __str__(self):
         if self.nickname:

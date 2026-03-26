@@ -186,7 +186,7 @@
                         <td data-col="phone">{{ p.entity.contact_phone }}</td>
                         <td data-col="hometown">{{ p.entity.home_town|default:"-" }}</td>
                         <td data-col="arrival">{{ p.entity.expected_arrival|date:"d.m.Y H:i"|default:"-" }}</td>
-                        <td data-col="dietary">{{ p.dietary_restrictions|default:"-"|truncatewords:10 }}</td>
+                        <td data-col="dietary">{{ p.dietary_summary|default:"-"|truncatewords:10 }}</td>
                         <td data-col="health">{{ p.health_restrictions|default:"-"|truncatewords:10 }}</td>
                         <td data-col="info">{{ p.relevant_information|default:"-"|truncatewords:10 }}</td>
                     </tr>
@@ -206,7 +206,7 @@
                         <td data-col="phone">{{ p.unit.entity.contact_phone|default:"-" }}</td>
                         <td data-col="hometown">{{ p.unit.entity.home_town|default:"-" }}</td>
                         <td data-col="arrival">{{ p.unit.entity.expected_arrival|date:"d.m.Y H:i"|default:"-" }}</td>
-                        <td data-col="dietary">{{ p.dietary_restrictions|default:"-"|truncatewords:10 }}</td>
+                        <td data-col="dietary">{{ p.dietary_summary|default:"-"|truncatewords:10 }}</td>
                         <td data-col="health">{{ p.health_restrictions|default:"-"|truncatewords:10 }}</td>
                         <td data-col="info">{{ p.relevant_information|default:"-"|truncatewords:10 }}</td>
                     </tr>
@@ -226,7 +226,7 @@
                         <td data-col="phone">{{ p.entity.contact_phone }}</td>
                         <td data-col="hometown">{{ p.entity.home_town|default:"-" }}</td>
                         <td data-col="arrival">{{ p.entity.expected_arrival|date:"d.m.Y H:i"|default:"-" }}</td>
-                        <td data-col="dietary">{{ p.dietary_restrictions|default:"-"|truncatewords:10 }}</td>
+                        <td data-col="dietary">{{ p.dietary_summary|default:"-"|truncatewords:10 }}</td>
                         <td data-col="health">{{ p.health_restrictions|default:"-"|truncatewords:10 }}</td>
                         <td data-col="info">{{ p.relevant_information|default:"-"|truncatewords:10 }}</td>
                     </tr>

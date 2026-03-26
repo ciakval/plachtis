@@ -125,7 +125,17 @@ def random_person_data(category=None):
         'date_of_birth': random_date_of_birth(category),
         'category': category,
         'health_restrictions': random.choice(HEALTH_RESTRICTIONS),
-        'dietary_restrictions': random.choice(DIETARY_RESTRICTIONS),
+        'diet_vegan': random.random() < 0.05,
+        'diet_vegetarian': random.random() < 0.1,
+        'diet_gluten_free': random.random() < 0.05,
+        'diet_lactose_free': random.random() < 0.05,
+        'diet_no_eggs': random.random() < 0.03,
+        'diet_no_peanuts': random.random() < 0.03,
+        'diet_no_tree_nuts': random.random() < 0.03,
+        'diet_no_soy': random.random() < 0.02,
+        'diet_no_fish': random.random() < 0.03,
+        'diet_no_fruits': random.random() < 0.02,
+        'diet_other': random.choice(['', '', '', '', '', 'Bez vepřového']),
         'relevant_information': "",
     }
 
