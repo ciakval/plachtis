@@ -34,7 +34,7 @@ def home(request):
         'registration_deadline': EventSettings.get_registration_deadline(),
         'editing_deadline': EventSettings.get_editing_deadline(),
     }
-    return render(request, 'SkaRe/home.html', context)
+    return render(request, 'SkaRe/registration/home.html', context)
 
 
 def user_login(request):
@@ -65,7 +65,7 @@ def user_login(request):
             messages.error(request, _('Invalid username or password.'))
 
     form = AuthenticationForm()
-    return render(request, 'SkaRe/login.html', {'form': form})
+    return render(request, 'SkaRe/registration/login.html', {'form': form})
 
 
 def user_logout(request):
@@ -77,7 +77,7 @@ def user_logout(request):
 
 def forgot_password(request):
     """View for forgot password page."""
-    return render(request, 'SkaRe/forgot_password.html')
+    return render(request, 'SkaRe/registration/forgot_password.html')
 
 
 def user_register(request):
@@ -102,7 +102,7 @@ def user_register(request):
         form = UserRegistrationForm()
         form_token = generate_form_token(request)
 
-    return render(request, 'SkaRe/register.html', {'form': form, 'form_token': request.session.get('form_token', '')})
+    return render(request, 'SkaRe/registration/register.html', {'form': form, 'form_token': request.session.get('form_token', '')})
 
 
 @login_required
@@ -178,7 +178,7 @@ def register_unit(request):
         'deadline': EventSettings.get_registration_deadline(),
         'form_token': request.session.get('form_token', ''),
     }
-    return render(request, 'SkaRe/register_unit.html', context)
+    return render(request, 'SkaRe/registration/register_unit.html', context)
 
 
 @login_required
@@ -194,7 +194,7 @@ def list_units(request):
         'units': units,
         'editing_deadline': EventSettings.get_editing_deadline(),
     }
-    return render(request, 'SkaRe/list_units.html', context)
+    return render(request, 'SkaRe/registration/list_units.html', context)
 
 
 @login_required
@@ -360,7 +360,7 @@ def edit_unit(request, unit_id):
         'participant_formset': participant_formset,
         'existing_participants': list(existing_participants),
     }
-    return render(request, 'SkaRe/edit_unit.html', context)
+    return render(request, 'SkaRe/registration/edit_unit.html', context)
 
 
 @login_required
@@ -416,7 +416,7 @@ def register_individual_participant(request):
         'deadline': EventSettings.get_registration_deadline(),
         'form_token': request.session.get('form_token', ''),
     }
-    return render(request, 'SkaRe/register_individual_participant.html', context)
+    return render(request, 'SkaRe/registration/register_individual_participant.html', context)
 
 
 @login_required
@@ -430,7 +430,7 @@ def list_individual_participants(request):
         'participants': participants,
         'editing_deadline': EventSettings.get_editing_deadline(),
     }
-    return render(request, 'SkaRe/list_individual_participants.html', context)
+    return render(request, 'SkaRe/registration/list_individual_participants.html', context)
 
 
 @login_required
@@ -550,7 +550,7 @@ def edit_individual_participant(request, participant_id):
         'participant_form': participant_form,
         'entity_form': entity_form,
     }
-    return render(request, 'SkaRe/edit_individual_participant.html', context)
+    return render(request, 'SkaRe/registration/edit_individual_participant.html', context)
 
 
 @login_required
@@ -606,7 +606,7 @@ def register_organizer(request):
         'deadline': EventSettings.get_registration_deadline(),
         'form_token': request.session.get('form_token', ''),
     }
-    return render(request, 'SkaRe/register_organizer.html', context)
+    return render(request, 'SkaRe/registration/register_organizer.html', context)
 
 
 @login_required
@@ -620,7 +620,7 @@ def list_organizers(request):
         'organizers': organizers,
         'editing_deadline': EventSettings.get_editing_deadline(),
     }
-    return render(request, 'SkaRe/list_organizers.html', context)
+    return render(request, 'SkaRe/registration/list_organizers.html', context)
 
 
 @login_required
@@ -656,7 +656,7 @@ def list_all(request):
         'results_limited': results_limited,
         'results_limit': ADMIN_RESULTS_LIMIT,
     }
-    return render(request, 'SkaRe/list_all.html', context)
+    return render(request, 'SkaRe/registration/list_all.html', context)
 
 
 @login_required
@@ -752,7 +752,7 @@ def list_merchandise(request):
         'results_limited': results_limited,
         'results_limit': ADMIN_RESULTS_LIMIT,
     }
-    return render(request, 'SkaRe/list_merchandise.html', context)
+    return render(request, 'SkaRe/registration/list_merchandise.html', context)
 
 
 @login_required
@@ -868,7 +868,7 @@ def edit_organizer(request, organizer_id):
         'organizer_form': organizer_form,
         'entity_form': entity_form,
     }
-    return render(request, 'SkaRe/edit_organizer.html', context)
+    return render(request, 'SkaRe/registration/edit_organizer.html', context)
 
 
 @login_required
@@ -1027,7 +1027,7 @@ def manage_entities(request):
         'page_obj': page_obj,
         'manage_entities_page_size': MANAGE_ENTITIES_PAGE_SIZE,
     }
-    return render(request, 'SkaRe/manage_entities.html', context)
+    return render(request, 'SkaRe/registration/manage_entities.html', context)
 
 
 @login_required
@@ -1078,7 +1078,7 @@ def manage_unit_editors(request, unit_id):
         'unit': unit,
         'editors': unit.entity.editors.all(),
     }
-    return render(request, 'SkaRe/manage_editors.html', context)
+    return render(request, 'SkaRe/registration/manage_editors.html', context)
 
 
 @login_required
@@ -1130,7 +1130,7 @@ def manage_individual_participant_editors(request, participant_id):
         'editors': participant.entity.editors.all(),
         'entity_type': 'individual_participant',
     }
-    return render(request, 'SkaRe/manage_editors.html', context)
+    return render(request, 'SkaRe/registration/manage_editors.html', context)
 
 
 @login_required
@@ -1182,4 +1182,4 @@ def manage_organizer_editors(request, organizer_id):
         'editors': organizer.entity.editors.all(),
         'entity_type': 'organizer',
     }
-    return render(request, 'SkaRe/manage_editors.html', context)
+    return render(request, 'SkaRe/registration/manage_editors.html', context)
