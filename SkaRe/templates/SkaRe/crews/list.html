@@ -31,7 +31,7 @@
                                 <tr>
                                     <td><a href="{% url 'SkaRe:crew_detail' crew_id=crew.pk %}">{{ crew.boat }}</a></td>
                                     <td>{{ crew.get_category_display }}</td>
-                                    <td>{{ crew.members.count }}</td>
+                                    <td>{{ crew.members.all|length }}</td>
                                     <td>
                                         <a href="{% url 'SkaRe:crew_edit' crew_id=crew.pk %}" class="btn btn-sm btn-outline-primary">{% trans "Edit" %}</a>
                                         <a href="{% url 'SkaRe:crew_delete' crew_id=crew.pk %}" class="btn btn-sm btn-outline-danger">{% trans "Delete" %}</a>

@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.conf import settings
 from django.core.cache import cache
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import Q, Sum
 from django.core.paginator import Paginator
 from django import forms
@@ -1480,23 +1480,27 @@ def crew_register(request):
         if Crew.objects.filter(boat=boat, category=category).exists():
             form.add_error(None, _('A crew for this boat and category already exists.'))
         else:
-            with transaction.atomic():
-                crew = Crew.objects.create(
-                    boat=boat, category=category, created_by=request.user
-                )
-                CrewMember.objects.create(
-                    crew=crew,
-                    role=CrewMember.ROLE_HELMSMAN,
-                    participant=form.cleaned_data['helmsman'],
-                )
-                for i in range(1, 5):
-                    person = form.cleaned_data.get(f'crew_member_{i}')
-                    if person:
-                        CrewMember.objects.create(
-                            crew=crew, role=CrewMember.ROLE_CREW, participant=person
-                        )
-            messages.success(request, _('Crew registered successfully.'))
-            return redirect('SkaRe:crew_detail', crew_id=crew.id)
+            try:
+                with transaction.atomic():
+                    crew = Crew.objects.create(
+                        boat=boat, category=category, created_by=request.user
+                    )
+                    CrewMember.objects.create(
+                        crew=crew,
+                        role=CrewMember.ROLE_HELMSMAN,
+                        participant=form.cleaned_data['helmsman'],
+                    )
+                    for i in range(1, 5):
+                        person = form.cleaned_data.get(f'crew_member_{i}')
+                        if person:
+                            CrewMember.objects.create(
+                                crew=crew, role=CrewMember.ROLE_CREW, participant=person
+                            )
+            except IntegrityError:
+                form.add_error(None, _('A crew for this boat and category already exists.'))
+            else:
+                messages.success(request, _('Crew registered successfully.'))
+                return redirect('SkaRe:crew_detail', crew_id=crew.id)
 
     crew_fields = [
         ('helmsman', _('Helmsman')),
@@ -1555,21 +1559,25 @@ def crew_edit(request, crew_id):
         if Crew.objects.filter(boat=boat, category=category).exclude(pk=crew_id).exists():
             form.add_error(None, _('A crew for this boat and category already exists.'))
         else:
-            with transaction.atomic():
-                crew.boat = boat
-                crew.category = category
-                crew.save()
-                crew.members.all().delete()
-                CrewMember.objects.create(
-                    crew=crew, role=CrewMember.ROLE_HELMSMAN,
-                    participant=form.cleaned_data['helmsman'],
-                )
-                for i in range(1, 5):
-                    person = form.cleaned_data.get(f'crew_member_{i}')
-                    if person:
-                        CrewMember.objects.create(crew=crew, role=CrewMember.ROLE_CREW, participant=person)
-            messages.success(request, _('Crew updated successfully.'))
-            return redirect('SkaRe:crew_detail', crew_id=crew.id)
+            try:
+                with transaction.atomic():
+                    crew.boat = boat
+                    crew.category = category
+                    crew.save()
+                    crew.members.all().delete()
+                    CrewMember.objects.create(
+                        crew=crew, role=CrewMember.ROLE_HELMSMAN,
+                        participant=form.cleaned_data['helmsman'],
+                    )
+                    for i in range(1, 5):
+                        person = form.cleaned_data.get(f'crew_member_{i}')
+                        if person:
+                            CrewMember.objects.create(crew=crew, role=CrewMember.ROLE_CREW, participant=person)
+            except IntegrityError:
+                form.add_error(None, _('A crew for this boat and category already exists.'))
+            else:
+                messages.success(request, _('Crew updated successfully.'))
+                return redirect('SkaRe:crew_detail', crew_id=crew.id)
 
     crew_fields = [
         ('helmsman', _('Helmsman')),
