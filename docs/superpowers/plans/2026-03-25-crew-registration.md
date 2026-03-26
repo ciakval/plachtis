@@ -6,7 +6,7 @@
 
 **Architecture:** `Person` is already a concrete MTI model — no conversion needed. `CrewRegistrationForm` is a plain `Form` (not `ModelForm`) that captures boat + category + helmsman + up to 4 crew members and saves them as one `Crew` + up to 5 `CrewMember` rows inside `transaction.atomic()`. Lending uses a `visible_to` M2M field on both `Person` and `Boat`, managed via dedicated lend views that follow the existing `manage_editors` pattern.
 
-**Tech Stack:** Django 4.x, Python 3.12, Bootstrap 5, Django i18n (`gettext_lazy` / `{% trans %}`), SQLite
+**Tech Stack:** Django 6.0, Python 3.12, Bootstrap 5, Django i18n (`gettext_lazy` / `{% trans %}`), SQLite
 
 ---
 

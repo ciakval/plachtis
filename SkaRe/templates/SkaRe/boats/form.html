@@ -60,6 +60,12 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <button type="button" id="btn-sail-lookup" class="btn btn-secondary">
+                            <i class="bi bi-search"></i> Vyhledat v registru plachet
+                        </button>
+                        <div id="sail-lookup-error" class="text-danger mt-1" style="display:none;"></div>
+                    </div>
+                    <div class="mb-3">
                         <label for="{{ form.description.id_for_label }}" class="form-label">
                             {{ form.description.label }}
                         </label>
@@ -102,6 +108,26 @@
                             {% endif %}
                             {% if form.sail_color.errors %}
                                 <div class="text-danger">{{ form.sail_color.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.vessel_registry_number.id_for_label }}" class="form-label">
+                                {{ form.vessel_registry_number.label }}
+                            </label>
+                            {{ form.vessel_registry_number }}
+                            {% if form.vessel_registry_number.errors %}
+                                <div class="text-danger">{{ form.vessel_registry_number.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.engine_power_hp.id_for_label }}" class="form-label">
+                                {{ form.engine_power_hp.label }}
+                            </label>
+                            {{ form.engine_power_hp }}
+                            {% if form.engine_power_hp.errors %}
+                                <div class="text-danger">{{ form.engine_power_hp.errors }}</div>
                             {% endif %}
                         </div>
                     </div>
@@ -157,26 +183,6 @@
                             {{ form.contact_phone }}
                             {% if form.contact_phone.errors %}
                                 <div class="text-danger">{{ form.contact_phone.errors }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ form.vessel_registry_number.id_for_label }}" class="form-label">
-                                {{ form.vessel_registry_number.label }}
-                            </label>
-                            {{ form.vessel_registry_number }}
-                            {% if form.vessel_registry_number.errors %}
-                                <div class="text-danger">{{ form.vessel_registry_number.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ form.engine_power_hp.id_for_label }}" class="form-label">
-                                {{ form.engine_power_hp.label }}
-                            </label>
-                            {{ form.engine_power_hp }}
-                            {% if form.engine_power_hp.errors %}
-                                <div class="text-danger">{{ form.engine_power_hp.errors }}</div>
                             {% endif %}
                         </div>
                     </div>

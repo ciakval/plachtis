@@ -75,7 +75,8 @@
                         <th>{% trans "Type" %}</th>
                         <th>{% trans "Name" %}</th>
                         <th>{% trans "Scarves" %}</th>
-                        <th>{% trans "Hats" %}</th>
+                        <th>Čepice L/XL</th>
+                        <th>Čepice S/M</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -85,15 +86,17 @@
                         <td>{{ unit.entity.scout_unit_name }}</td>
                         <td><strong>{{ unit.scarf_count }}</strong></td>
                         <td><strong>{{ unit.hat_count }}</strong></td>
+                        <td><strong>{{ unit.small_hat_count }}</strong></td>
                     </tr>
                     {% endfor %}
-                    
+
                     {% for participant in individual_participants %}
                     <tr>
                         <td><span class="badge bg-primary">{% trans "Individual Participant" %}</span></td>
                         <td>{{ participant.first_name }} {{ participant.last_name }}</td>
                         <td><strong>{{ participant.scarf_count }}</strong></td>
                         <td><strong>{{ participant.hat_count }}</strong></td>
+                        <td><strong>{{ participant.small_hat_count }}</strong></td>
                     </tr>
                     {% endfor %}
                     
@@ -103,6 +106,7 @@
                         <td>{{ organizer.first_name }} {{ organizer.last_name }}</td>
                         <td><strong>{% if organizer.wants_scarf %}1{% else %}0{% endif %}</strong></td>
                         <td><strong>{% if organizer.wants_hat %}1{% else %}0{% endif %}</strong></td>
+                        <td><strong>0</strong></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -110,7 +114,8 @@
                     <tr>
                         <th colspan="2">{% trans "Total" %}</th>
                         <th><strong>{{ total_scarves }}</strong></th>
-                        <th><strong>{{ total_hats }}</strong></th>
+                        <th><strong>{{ total_hats_large }}</strong></th>
+                        <th><strong>{{ total_hats_small }}</strong></th>
                     </tr>
                 </tfoot>
             </table>

@@ -245,6 +245,7 @@ def edit_unit(request, unit_id):
                 'boats_motor',
                 'scarf_count',
                 'hat_count',
+                'small_hat_count',
                 'accommodation_expectations',
                 'estimated_accommodation_area',
             ]
@@ -257,6 +258,7 @@ def edit_unit(request, unit_id):
                 'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'scarf_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'hat_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'small_hat_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
                 'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control'}),
             }
@@ -482,6 +484,7 @@ def edit_individual_participant(request, participant_id):
                 'boats_motor',
                 'scarf_count',
                 'hat_count',
+                'small_hat_count',
                 'accommodation_expectations',
                 'estimated_accommodation_area',
             ]
@@ -500,6 +503,7 @@ def edit_individual_participant(request, participant_id):
                 'boats_motor': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'scarf_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'hat_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+                'small_hat_count': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
                 'accommodation_expectations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
                 'estimated_accommodation_area': forms.TextInput(attrs={'class': 'form-control'}),
             }
@@ -718,10 +722,15 @@ def list_merchandise(request):
         individual_participants.aggregate(total=Sum('scarf_count'))['total'],
         organizers.filter(wants_scarf=True).count(),
     ])
-    total_hats = sum(item or 0 for item in [
+    total_hats_large = sum(item or 0 for item in [
         units.aggregate(total=Sum('hat_count'))['total'],
         individual_participants.aggregate(total=Sum('hat_count'))['total'],
         organizers.filter(wants_hat=True).count(),
+    ])
+    total_hats_small = sum(item or 0 for item in [
+        units.aggregate(total=Sum('small_hat_count'))['total'],
+        individual_participants.aggregate(total=Sum('small_hat_count'))['total'],
+        # organizers intentionally excluded — no small hat for organizers
     ])
 
     results_limited = (
@@ -742,7 +751,8 @@ def list_merchandise(request):
         'search_query': search_query,
         'type_filter': type_filter,
         'total_scarves': total_scarves,
-        'total_hats': total_hats,
+        'total_hats_large': total_hats_large,
+        'total_hats_small': total_hats_small,
         'unit_total': unit_total,
         'individual_total': individual_total,
         'organizer_total': organizer_total,
@@ -1281,6 +1291,7 @@ def boat_my_unit(request):
         'harbor_number': unit.entity.scout_unit_evidence_id,
         'harbor_name': unit.entity.scout_unit_name,
         'contact_person': unit.contact_person_name,
+        'contact_phone': unit.entity.contact_phone,
     })
 
 
