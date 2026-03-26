@@ -52,13 +52,6 @@ UNIT_NAMES = [
     "Námořníci Ostrava", "Říční vlci Plzeň", "Jezero Liberec"
 ]
 
-DIETARY_RESTRICTIONS = [
-    "", "", "", "", "",  # Most people don't have restrictions
-    "Vegetarián", "Vegan", "Bezlepková dieta", "Bez laktózy",
-    "Alergie na ořechy", "Alergie na vejce", "Bez vepřového",
-    "Vegetarián, bez laktózy", "Alergie na mořské plody"
-]
-
 HEALTH_RESTRICTIONS = [
     "", "", "", "", "", "", "",  # Most people are healthy
     "Astma", "Alergie na včelí bodnutí", "Epilepsie", "Diabetes",
