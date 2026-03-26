@@ -182,6 +182,21 @@ class Person(models.Model):
         help_text=_('Users who can see this person when registering a crew'),
     )
 
+    class AttendanceStatus(models.TextChoices):
+        EXPECTED   = 'expected',   _('Expected')
+        ARRIVED    = 'arrived',    _('Arrived')
+        DEPARTED   = 'departed',   _('Departed')
+        NOT_COMING = 'not_coming', _('Not coming')
+
+    attendance_status = models.CharField(
+        max_length=20,
+        choices=AttendanceStatus.choices,
+        default=AttendanceStatus.EXPECTED,
+        verbose_name=_('Attendance status'),
+    )
+    arrived_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Arrived at'))
+    departed_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Departed at'))
+
     def calculate_category(self, reference_date=None):
         """
         Calculate scout category based on date of birth year only.
