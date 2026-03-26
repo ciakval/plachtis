@@ -47,10 +47,18 @@
                                 {% if field_name == 'helmsman' %}
                                     {{ form.helmsman }}
                                     {% if form.helmsman.errors %}<div class="text-danger small">{{ form.helmsman.errors }}</div>{% endif %}
-                                {% elif field_name == 'crew_member_1' %}{{ form.crew_member_1 }}
-                                {% elif field_name == 'crew_member_2' %}{{ form.crew_member_2 }}
-                                {% elif field_name == 'crew_member_3' %}{{ form.crew_member_3 }}
-                                {% elif field_name == 'crew_member_4' %}{{ form.crew_member_4 }}
+                                {% elif field_name == 'crew_member_1' %}
+                                    {{ form.crew_member_1 }}
+                                    {% if form.crew_member_1.errors %}<div class="text-danger small">{{ form.crew_member_1.errors }}</div>{% endif %}
+                                {% elif field_name == 'crew_member_2' %}
+                                    {{ form.crew_member_2 }}
+                                    {% if form.crew_member_2.errors %}<div class="text-danger small">{{ form.crew_member_2.errors }}</div>{% endif %}
+                                {% elif field_name == 'crew_member_3' %}
+                                    {{ form.crew_member_3 }}
+                                    {% if form.crew_member_3.errors %}<div class="text-danger small">{{ form.crew_member_3.errors }}</div>{% endif %}
+                                {% elif field_name == 'crew_member_4' %}
+                                    {{ form.crew_member_4 }}
+                                    {% if form.crew_member_4.errors %}<div class="text-danger small">{{ form.crew_member_4.errors }}</div>{% endif %}
                                 {% endif %}
                             </div>
                         </div>

@@ -95,6 +95,8 @@
                                             <span class="badge bg-secondary">{{ participant.entity.editors.count }}</span>
                                         {% endif %}
                                     </a>
+                                {% endif %}
+                                {% if participant.entity.created_by == request.user or request.user in participant.entity.editors.all %}
                                     <a href="{% url 'SkaRe:person_lend' person_id=participant.pk %}" class="btn btn-outline-secondary btn-sm">
                                         <i class="bi bi-share"></i> {% trans "Lend" %}
                                     </a>

@@ -165,7 +165,7 @@ class Person(models.Model):
         User,
         blank=True,
         related_name='borrowed_persons',
-        verbose_name=_('visible to'),
+        verbose_name=_('Visible to'),
         help_text=_('Users who can see this person when registering a crew'),
     )
 
@@ -760,8 +760,8 @@ class CrewMember(models.Model):
     ROLE_HELMSMAN = 'helmsman'
     ROLE_CREW     = 'crew'
     ROLE_CHOICES  = [
-        (ROLE_HELMSMAN, _('helmsman')),
-        (ROLE_CREW,     _('crew member')),
+        (ROLE_HELMSMAN, _('Kormidelník')),
+        (ROLE_CREW,     _('Člen posádky')),
     ]
 
     crew = models.ForeignKey(

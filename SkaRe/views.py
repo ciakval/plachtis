@@ -34,25 +34,6 @@ ADMIN_RESULTS_LIMIT = 500
 MANAGE_ENTITIES_PAGE_SIZE = 100
 
 
-def _visible_persons(user):
-    """Return all Persons visible to a user for crew registration."""
-    return Person.objects.filter(
-        Q(regularparticipant__unit__entity__created_by=user) |
-        Q(regularparticipant__unit__entity__editors=user) |
-        Q(individualparticipant__entity__created_by=user) |
-        Q(individualparticipant__entity__editors=user) |
-        Q(organizer__entity__created_by=user) |
-        Q(organizer__entity__editors=user) |
-        Q(visible_to=user)
-    ).distinct()
-
-
-def _visible_boats(user):
-    """Return all Boats visible to a user for crew registration."""
-    return Boat.objects.filter(
-        Q(created_by=user) | Q(visible_to=user)
-    ).distinct()
-
 
 def home(request):
     """Homepage view."""
@@ -1405,7 +1386,7 @@ def boat_lend(request, boat_id):
                 user_to_remove = User.objects.get(id=user_id)
                 boat.visible_to.remove(user_to_remove)
                 messages.success(request, _('Access removed for user "{username}".').format(username=user_to_remove.username))
-            except User.DoesNotExist:
+            except (User.DoesNotExist, ValueError):
                 pass
         return redirect('SkaRe:boat_lend', boat_id=boat_id)
 
@@ -1455,7 +1436,7 @@ def person_lend(request, person_id):
                 user_to_remove = User.objects.get(id=user_id)
                 person.visible_to.remove(user_to_remove)
                 messages.success(request, _('Access removed for user "{username}".').format(username=user_to_remove.username))
-            except User.DoesNotExist:
+            except (User.DoesNotExist, ValueError):
                 pass
         return redirect('SkaRe:person_lend', person_id=person_id)
 
@@ -1523,6 +1504,9 @@ def crew_list(request):
 def crew_detail(request, crew_id):
     """View crew details."""
     crew = get_object_or_404(Crew, id=crew_id)
+    if not crew.can_be_edited(request.user):
+        messages.error(request, _('You do not have permission to view this crew.'))
+        return redirect('SkaRe:crew_list')
     members = crew.members.select_related('participant').order_by('-role')
     can_edit = crew.can_be_edited(request.user)
     return render(request, 'SkaRe/crews/detail.html', {'crew': crew, 'members': members, 'can_edit': can_edit})
