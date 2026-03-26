@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from solo.models import SingletonModel
+from ..permissions import is_infodesk
 
 
 def validate_date_of_birth(value):
@@ -321,20 +322,17 @@ class Entity(models.Model):
     )
 
     def can_be_edited(self, user):
-        """Check if this entity can be edited by the given user"""
-        # User must be the owner or an editor
+        """Check if this entity can be edited by the given user.
+
+        InfoDesk members bypass ownership and deadline checks entirely.
+        """
+        if is_infodesk(user):
+            return True
         is_owner = self.created_by == user
         is_editor = self.editors.filter(id=user.id).exists()
-
         if not (is_owner or is_editor):
             return False
-
-        # If registration is still open, allow editing
-        if EventSettings.is_editing_open():
-            return True
-
-        # After deadline, only allow if entity is unlocked
-        return self.unlocked_for_editing
+        return EventSettings.is_editing_open() or self.unlocked_for_editing
 
     def is_owner(self, user):
         """Check if the user is the owner (creator) of this entity"""
