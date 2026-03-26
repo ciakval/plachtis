@@ -323,12 +323,13 @@ def edit_unit(request, unit_id):
                     for instance in instances:
                         instance.unit = unit
                         instance.save()
+                    participant_formset.save_m2m()
 
                     for form in participant_formset.deleted_forms:
                         if form.instance and form.instance.pk:
                             form.instance.delete()
 
-                    participant_count = len(instances)
+                    participant_count = RegularParticipant.objects.filter(unit=unit).count()
                     messages.success(request, _('Unit "{unit_name}" updated successfully with {count} participant(s)!').format(
                         unit_name=unit.entity.scout_unit_name,
                         count=participant_count
