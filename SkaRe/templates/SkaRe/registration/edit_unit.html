@@ -29,11 +29,14 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="{{ entity_form.scout_unit_evidence_id.id_for_label }}" class="form-label">
-                                {{ entity_form.scout_unit_evidence_id.label }} <span class="text-danger">*</span>
+                                {{ entity_form.scout_unit_evidence_id.label }}
                             </label>
                             {{ entity_form.scout_unit_evidence_id }}
                             {% if entity_form.scout_unit_evidence_id.errors %}
                                 <div class="text-danger">{{ entity_form.scout_unit_evidence_id.errors }}</div>
+                            {% endif %}
+                            {% if entity_form.scout_unit_evidence_id.help_text %}
+                                <div class="form-text text-muted small">{{ entity_form.scout_unit_evidence_id.help_text }}</div>
                             {% endif %}
                         </div>
                     </div>

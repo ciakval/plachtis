@@ -80,6 +80,11 @@ class UserRegistrationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password1'].help_text = _(
+            'Password must be at least 8 characters. '
+            'Cannot be entirely numeric or too similar to your username.'
+        )
+        self.fields['password2'].help_text = _('Enter the same password again to confirm.')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -103,9 +108,10 @@ class UnitRegistrationForm(forms.ModelForm):
     )
     scout_unit_evidence_id = forms.CharField(
         max_length=50,
-        required=True,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
-        label=_("Evidence ID")
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('e.g., 523.10')}),
+        label=_("Evidence ID"),
+        help_text=_("Junák unit ID (e.g. 523.10). Non-Junák units can leave this blank or use their own identifier."),
     )
 
     # Entity fields

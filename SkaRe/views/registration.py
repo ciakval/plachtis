@@ -266,9 +266,10 @@ def edit_unit(request, unit_id):
         )
         scout_unit_evidence_id = forms.CharField(
             max_length=50,
-            required=True,
-            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
-            label=_("Evidence ID")
+            required=False,
+            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('e.g., 523.10')}),
+            label=_("Evidence ID"),
+            help_text=_("Junák unit ID (e.g. 523.10). Non-Junák units can leave this blank or use their own identifier."),
         )
 
         def __init__(self, *args, **kwargs):
