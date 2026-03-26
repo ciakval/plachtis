@@ -6,14 +6,14 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from datetime import datetime
 from django.utils import timezone
-from .models import Unit, RegularParticipant, IndividualParticipant, Organizer, BoatClass, Boat, Person, Crew
+from ..models import Unit, RegularParticipant, IndividualParticipant, Organizer
 
 
 def validate_czech_phone(value):
     """Validate Czech/Slovak phone number: must be +420/9 digits, +421/9 digits, or just 9 digits."""
     # Remove spaces for validation
     phone_clean = value.replace(' ', '').replace('-', '')
-    
+
     # Check if it starts with +420 or +421
     if phone_clean.startswith('+420'):
         # Extract digits after +420
@@ -30,7 +30,7 @@ def validate_czech_phone(value):
         return value
     else:
         raise ValidationError(_('Phone number must be: +420 followed by 9 digits, +421 followed by 9 digits, or just 9 digits (e.g., +420 123 456 789, +421 123 456 789, or 123 456 789)'))
-    
+
     return value
 
 
@@ -190,17 +190,17 @@ class RegularParticipantForm(forms.ModelForm):
                     field.widget.attrs['class'] += ' is-invalid'
                 else:
                     field.widget.attrs['class'] = 'is-invalid'
-    
+
     def full_clean(self):
         """Override to ensure DELETE field is processed.
-        
+
         The DELETE field is added by the formset dynamically, so it might not be
         in self.fields during full_clean(). We manually process it from POST data.
         """
         super().full_clean()
         if not hasattr(self, 'cleaned_data') or self.cleaned_data is None:
             self.cleaned_data = {}
-        
+
         if 'DELETE' not in self.cleaned_data:
             if hasattr(self, 'data') and self.data:
                 if hasattr(self, 'prefix') and self.prefix:
@@ -209,20 +209,20 @@ class RegularParticipantForm(forms.ModelForm):
                 else:
                     delete_keys = [k for k in self.data.keys() if k.endswith('-DELETE')]
                     delete_value = self.data.get(delete_keys[0], False) if delete_keys else False
-                
+
                 self.cleaned_data['DELETE'] = (delete_value == 'on' or delete_value is True or delete_value == 'True')
             else:
                 self.cleaned_data['DELETE'] = False
-    
+
     def has_data(self):
         """Check if the form has any meaningful data filled in.
-        
+
         Returns True if at least one of the required fields (first_name, last_name, date_of_birth) has a value.
         This is used to skip empty forms in formsets.
         """
         if not hasattr(self, 'cleaned_data') or not self.cleaned_data:
             return False
-        
+
         # Check if at least one required field has a value
         return bool(
             self.cleaned_data.get('first_name') or
@@ -255,7 +255,7 @@ class RegularParticipantForm(forms.ModelForm):
 # Formset factory function for handling multiple participants
 def get_participant_formset(extra=3):
     """Get a formset for participants with configurable number of empty forms.
-    
+
     Args:
         extra: Number of empty forms to show (default 3 for new registrations, 0 for editing)
     """
@@ -398,7 +398,7 @@ class OrganizerRegistrationForm(forms.ModelForm):
                     field.widget.attrs['class'] += ' is-invalid'
                 else:
                     field.widget.attrs['class'] = 'is-invalid'
-    
+
     def clean_codex_agreement(self):
         """Validate that codex_agreement is checked."""
         codex_agreement = self.cleaned_data.get('codex_agreement')
@@ -441,143 +441,3 @@ class OrganizerRegistrationForm(forms.ModelForm):
             'wants_scarf': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'wants_hat': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
-
-
-class BoatForm(forms.ModelForm):
-    """Form for registering or editing a boat."""
-
-    class Meta:
-        model = Boat
-        fields = [
-            'boat_class', 'class_supplement', 'sail_number', 'name',
-            'description', 'sail_area', 'hull_color', 'sail_color',
-            'harbor_number', 'harbor_name', 'contact_person', 'contact_phone',
-            'vessel_registry_number', 'engine_power_hp', 'willing_to_lend',
-        ]
-        widgets = {
-            'boat_class': forms.Select(attrs={'class': 'form-control'}),
-            'class_supplement': forms.TextInput(attrs={'class': 'form-control'}),
-            'sail_number': forms.TextInput(attrs={'class': 'form-control', 'id': 'id_sail_number'}),
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'sail_area': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'step': '0.01'}),
-            'hull_color': forms.Select(attrs={'class': 'form-control'}),
-            'sail_color': forms.Select(attrs={'class': 'form-control'}),
-            'harbor_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'harbor_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'contact_person': forms.TextInput(attrs={'class': 'form-control'}),
-            'contact_phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'vessel_registry_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'engine_power_hp': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'willing_to_lend': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Build grouped choices for the boat_class select (SAIL optgroup, then OTHER optgroup).
-        # widget.choices controls rendering; ModelChoiceField.queryset controls validation.
-        sail_pks = list(
-            BoatClass.objects.filter(category=BoatClass.Category.SAIL)
-            .order_by('order', 'name').values_list('pk', 'name')
-        )
-        other_pks = list(
-            BoatClass.objects.filter(category=BoatClass.Category.OTHER)
-            .order_by('order', 'name').values_list('pk', 'name')
-        )
-        self.fields['boat_class'].widget.choices = (
-            [('', '---------')]
-            + [(_('Sailboats'), [(str(pk), name) for pk, name in sail_pks])]
-            + [(_('Other'), [(str(pk), name) for pk, name in other_pks])]
-        )
-        self.fields['boat_class'].queryset = BoatClass.objects.order_by('order', 'name')
-        self.fields['boat_class'].required = True
-        self.fields['contact_phone'].validators = [validate_event_phone]
-        self.fields['hull_color'].help_text = _('Colour is critical for identifying the boat on the water.')
-        self.fields['sail_color'].help_text = _('Colour is critical for identifying the boat on the water.')
-        # Note: accessing self.errors here is intentional — Django's errors property
-        # calls full_clean() on demand for bound forms, which is the same pattern
-        # used by UnitRegistrationForm and others in this codebase.
-        for field_name, field in self.fields.items():
-            if field_name in self.errors:
-                if 'class' in field.widget.attrs:
-                    field.widget.attrs['class'] += ' is-invalid'
-                else:
-                    field.widget.attrs['class'] = 'is-invalid'
-
-
-class CrewRegistrationForm(forms.Form):
-    boat = forms.ModelChoiceField(
-        queryset=Boat.objects.none(),
-        label=_('Boat'),
-        empty_label=_('— select a boat —'),
-    )
-    category = forms.ChoiceField(
-        choices=[('', _('— select a category —'))] + Crew.CATEGORY_CHOICES,
-        label=_('Category'),
-    )
-    helmsman = forms.ModelChoiceField(
-        queryset=Person.objects.none(),
-        label=_('Helmsman'),
-        empty_label=_('— select a person —'),
-    )
-    crew_member_1 = forms.ModelChoiceField(
-        queryset=Person.objects.none(),
-        required=False,
-        label=_('Crew member 1'),
-        empty_label=_('—'),
-    )
-    crew_member_2 = forms.ModelChoiceField(
-        queryset=Person.objects.none(),
-        required=False,
-        label=_('Crew member 2'),
-        empty_label=_('—'),
-    )
-    crew_member_3 = forms.ModelChoiceField(
-        queryset=Person.objects.none(),
-        required=False,
-        label=_('Crew member 3'),
-        empty_label=_('—'),
-    )
-    crew_member_4 = forms.ModelChoiceField(
-        queryset=Person.objects.none(),
-        required=False,
-        label=_('Crew member 4'),
-        empty_label=_('—'),
-    )
-
-    def __init__(self, user, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        visible_boats = Boat.objects.filter(
-            Q(created_by=user) | Q(visible_to=user)
-        ).distinct()
-        visible_persons = Person.objects.filter(
-            Q(regularparticipant__unit__entity__created_by=user) |
-            Q(regularparticipant__unit__entity__editors=user) |
-            Q(individualparticipant__entity__created_by=user) |
-            Q(individualparticipant__entity__editors=user) |
-            Q(organizer__entity__created_by=user) |
-            Q(organizer__entity__editors=user) |
-            Q(visible_to=user)
-        ).distinct()
-        self.fields['boat'].queryset = visible_boats
-        for field in ['helmsman', 'crew_member_1', 'crew_member_2', 'crew_member_3', 'crew_member_4']:
-            self.fields[field].queryset = visible_persons
-        for fname in ['boat', 'helmsman', 'crew_member_1', 'crew_member_2', 'crew_member_3', 'crew_member_4']:
-            self.fields[fname].widget.attrs.update({'class': 'form-select'})
-        self.fields['category'].widget.attrs.update({'class': 'form-select'})
-
-    def clean(self):
-        cleaned_data = super().clean()
-        participants = [
-            cleaned_data.get('helmsman'),
-            cleaned_data.get('crew_member_1'),
-            cleaned_data.get('crew_member_2'),
-            cleaned_data.get('crew_member_3'),
-            cleaned_data.get('crew_member_4'),
-        ]
-        non_null = [p for p in participants if p is not None]
-        if len(non_null) != len({p.pk for p in non_null}):
-            raise forms.ValidationError(
-                _('A participant cannot appear more than once in a crew.')
-            )
-        return cleaned_data

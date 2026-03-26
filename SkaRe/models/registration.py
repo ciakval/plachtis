@@ -13,10 +13,10 @@ def validate_date_of_birth(value):
     """
     today = date.today()
     min_date = date(1900, 1, 1)
-    
+
     if value > today:
         raise ValidationError(_('Date of birth cannot be in the future.'))
-    
+
     if value < min_date:
         raise ValidationError(_('Date of birth cannot be before 1900.'))
 
@@ -121,7 +121,7 @@ class EventSettings(SingletonModel):
 class Person(models.Model):
     """Represents a person in the system.
     """
-    
+
     first_name = models.CharField(max_length=100, verbose_name=_("First name"))
     last_name = models.CharField(max_length=100, verbose_name=_("Last name"))
     nickname = models.CharField(
@@ -132,13 +132,13 @@ class Person(models.Model):
         verbose_name=_("Date of birth"),
         validators=[validate_date_of_birth]
     )
-    
+
     class ScoutCategory(models.TextChoices):
         ADULT = "ADULT", _("Adult")
         ROVER = "ROVER", _("Rover")
         SCOUT = "SCOUT", _("Scout")
         CUB = "CUB", _("Cub")
-        
+
     category = models.CharField(
         max_length=20,
         choices=ScoutCategory.choices,
@@ -147,7 +147,7 @@ class Person(models.Model):
         verbose_name=_("Category"),
         null=True, blank=True
     )
-    
+
     health_restrictions = models.TextField(
         blank=True, help_text=_("Any health restrictions or medical conditions"),
         verbose_name=_("Health restrictions")
@@ -172,22 +172,22 @@ class Person(models.Model):
     def calculate_category(self, reference_date=None):
         """
         Calculate scout category based on date of birth year only.
-        
+
         Age groups (based on year only, not exact birthday):
         - CUB: up to 12 years old (cannot have 13th birthday in reference year)
         - SCOUT: up to 15 years old (cannot have 16th birthday in reference year)
         - ROVER: up to 18 years old (cannot have 19th birthday in reference year)
         - ADULT: 19 and over (can have 19th birthday or older in reference year)
-        
+
         Args:
             reference_date: Date to calculate age from (defaults to event date or current date)
-        
+
         Returns:
             ScoutCategory value or None if date_of_birth is not set
         """
         if not self.date_of_birth:
             return None
-        
+
         # Use event date if available, otherwise use current date
         if reference_date is None:
             try:
@@ -200,18 +200,18 @@ class Person(models.Model):
                 reference_date = date.today()
         elif isinstance(reference_date, datetime):
             reference_date = reference_date.date()
-        
+
         # Calculate age based on year only (no month/day adjustment)
         birth_year = self.date_of_birth.year
         reference_year = reference_date.year
         age = reference_year - birth_year
-        
+
         # Determine category based on age (year-based only)
         # CUB: up to 12 (age <= 12, so birth_year >= reference_year - 12)
         # SCOUT: up to 15 (age <= 15, so birth_year >= reference_year - 15)
         # ROVER: up to 18 (age <= 18, so birth_year >= reference_year - 18)
         # ADULT: 19+ (age >= 19, so birth_year < reference_year - 18)
-        
+
         if age <= 12:
             return self.ScoutCategory.CUB
         elif age <= 15:
@@ -220,7 +220,7 @@ class Person(models.Model):
             return self.ScoutCategory.ROVER
         else:
             return self.ScoutCategory.ADULT
-    
+
     def save(self, *args, **kwargs):
         """Override save to auto-calculate category from date_of_birth."""
         # Auto-calculate category if date_of_birth is set
@@ -229,16 +229,16 @@ class Person(models.Model):
             if calculated_category:
                 self.category = calculated_category
         super().save(*args, **kwargs)
-    
+
     def __str__(self):
         if self.nickname:
             return f"{self.first_name} {self.last_name} ({self.nickname})"
         return f"{self.first_name} {self.last_name}"
-    
+
 class Entity(models.Model):
     """
     Represents a registration entity in the system.
-    
+
     Registration entity is anything that can be registered:
     - Unit
     - Individual Participant
@@ -267,19 +267,19 @@ class Entity(models.Model):
         help_text=_("Whether this unit is unlocked for editing after the deadline (set by privileged users only)"),
         verbose_name=_("Unlocked for editing"),
     )
-    
+
     paid = models.BooleanField(
         default=False,
         help_text=_("Whether payment has been received for this entity"),
         verbose_name=_("Paid"),
     )
-    
+
     confirmed = models.BooleanField(
         default=False,
         help_text=_("Whether this entity has been confirmed"),
         verbose_name=_("Confirmed"),
     )
-    
+
     scout_unit_name = models.CharField(
         max_length=200,
         help_text=_("Name of the scout unit"),
@@ -292,7 +292,7 @@ class Entity(models.Model):
         verbose_name=_("Evidence ID"),
         blank=True,
     )
-    
+
     contact_email = models.EmailField(
         help_text=_("Contact email address"),
         verbose_name=_("Contact email")
@@ -319,13 +319,13 @@ class Entity(models.Model):
         help_text=_("Home town of the unit"),
         verbose_name=_("Home town")
     )
-    
+
     def can_be_edited(self, user):
         """Check if this entity can be edited by the given user"""
         # User must be the owner or an editor
         is_owner = self.created_by == user
         is_editor = self.editors.filter(id=user.id).exists()
-        
+
         if not (is_owner or is_editor):
             return False
 
@@ -335,11 +335,11 @@ class Entity(models.Model):
 
         # After deadline, only allow if entity is unlocked
         return self.unlocked_for_editing
-    
+
     def is_owner(self, user):
         """Check if the user is the owner (creator) of this entity"""
         return self.created_by == user
-    
+
     def can_manage_editors(self, user):
         """Check if the user can add/remove editors (only owner can)"""
         return self.created_by == user
@@ -348,7 +348,7 @@ class Unit(models.Model):
     """
     Represents a registered unit (scout troop, oddil, stredisko) in the system.
     """
-    
+
     entity = models.OneToOneField(
         Entity,
         on_delete=models.CASCADE,
@@ -356,7 +356,7 @@ class Unit(models.Model):
         help_text=_("The registration entity associated with this unit"),
         verbose_name=_("Entity"),
     )
-    
+
     contact_person_name = models.CharField(
         max_length=200,
         help_text=_("Name of the contact person"),
@@ -423,7 +423,7 @@ class Unit(models.Model):
 class RegularParticipant(Person):
     """
     Model representing a regular Participant in the system.
-    
+
     Regular participant is a member of a specific Unit.
     """
     unit = models.ForeignKey(
@@ -433,11 +433,11 @@ class RegularParticipant(Person):
         help_text=_("The unit this participant belongs to"),
         verbose_name=_("Unit"),
     )
-    
+
 class IndividualParticipant(Person):
     """
     Model representing an Individual Participant in the system.
-    
+
     Individual Participants are those who register independently,
     not as part of a Unit.
     Therefore, they are an Entity on their own.
@@ -501,16 +501,16 @@ class IndividualParticipant(Person):
         verbose_name=_("Estimated accommodation area")
     )
 
-    
+
 
 class Organizer(Person):
     """
     Model representing an Organizer in the system.
-    
+
     The Organizer is a special type of participant with additional fields
     related to their role in the event organization.
     """
-    
+
     entity = models.OneToOneField(
         Entity,
         on_delete=models.CASCADE,
@@ -518,7 +518,7 @@ class Organizer(Person):
         help_text=_("The registration entity associated with this organizer"),
         verbose_name=_("Entity"),
     )
-    
+
     class Division(models.TextChoices):
         MANAGEMENT = "MANAGEMENT", _("Management")
         RACING = "RACING", _("Racing")
@@ -529,7 +529,7 @@ class Organizer(Person):
         FOOD = "FOOD", _("Food")
         PROGRAM = "PROGRAM", _("Program")
         OTHERS = "OTHERS", _("Others")
-        
+
     division = models.CharField(
         max_length=20,
         choices=Division.choices,
@@ -537,12 +537,12 @@ class Organizer(Person):
         help_text=_("Division the organizer belongs to"),
         verbose_name=_("Division"),
     )
-    
+
     class TransportOptions(models.TextChoices):
         PUBLIC = "PUBLIC", _("Public Transport")
         CAR = "CAR", _("Car")
         CAR_WITH_TRAILER = "CAR_WITH_TRAILER", _("Car with Trailer")
-        
+
     transport = models.CharField(
         max_length=20,
         choices=TransportOptions.choices,
@@ -550,26 +550,26 @@ class Organizer(Person):
         help_text=_("Transport method to the event"),
         verbose_name=_("Transport"),
     )
-    
+
     need_lift = models.BooleanField(
         default=False,
         help_text=_("Whether the organizer needs a lift from the nearest transport hub"),
         verbose_name=_("Need lift"),
     )
-    
+
     want_travel_order = models.BooleanField(
         default=False,
         help_text=_("Whether the organizer wants a travel order for reimbursement"),
         verbose_name=_("Want travel order"),
     )
-    
+
     class AccomodationOptions(models.TextChoices):
         WITH_UNIT = "WITH_UNIT", _("With Unit")
         OWN_TENT = "OWN_TENT", _("Own Tent")
         CARAVAN = "CARAVAN", _("Caravan")
         NEED_TENT = "NEED_TENT", _("Need Tent")
         INSIDE_BUILDING = "INSIDE_BUILDING", _("Inside Building")
-    
+
     accommodation = models.CharField(
         max_length=20,
         choices=AccomodationOptions.choices,
@@ -577,13 +577,13 @@ class Organizer(Person):
         help_text=_("Accommodation preference of the organizer"),
         verbose_name=_("Accommodation"),
     )
-    
+
     codex_agreement = models.BooleanField(
         default=False,
         help_text=_("Whether the organizer agrees to follow the event codex"),
         verbose_name=_("Codex agreement"),
     )
-    
+
     wants_scarf = models.BooleanField(
         default=True,
         help_text=_("Whether the organizer wants a scarf"),
@@ -598,202 +598,3 @@ class Organizer(Person):
     def __str__(self):
         person_name = super().__str__()
         return _("{person_name}").format(person_name=person_name)
-
-
-class BoatClass(models.Model):
-    class Category(models.TextChoices):
-        SAIL = "SAIL", _("Sail")
-        OTHER = "OTHER", _("Other")
-
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
-    category = models.CharField(
-        max_length=10,
-        choices=Category.choices,
-        verbose_name=_("Category"),
-    )
-    is_other = models.BooleanField(
-        default=False,
-        help_text=_("Marks the catch-all 'Other' entry for this category. Convention only — no DB constraint."),
-        verbose_name=_("Is other"),
-    )
-    order = models.PositiveIntegerField(
-        default=0,
-        help_text=_("Controls display order in dropdowns."),
-        verbose_name=_("Order"),
-    )
-
-    class Meta:
-        ordering = ['order', 'name']
-        verbose_name = _("Boat class")
-        verbose_name_plural = _("Boat classes")
-
-    def __str__(self):
-        return self.name
-
-
-class Boat(models.Model):
-    """
-    A boat registered for the event.
-    Owner (created_by) or InfoDesk group members can edit.
-    Only the creator can delete.
-    No editing deadline in Phase 1.
-    """
-    class Color(models.TextChoices):
-        WHITE  = 'bila',     _('White')
-        BLACK  = 'cerna',    _('Black')
-        RED    = 'cervena',  _('Red')
-        BLUE   = 'modra',    _('Blue')
-        GREEN  = 'zelena',   _('Green')
-        YELLOW = 'zluta',    _('Yellow')
-        ORANGE = 'oranzova', _('Orange')
-        GRAY   = 'seda',     _('Gray')
-        BROWN  = 'hneda',    _('Brown')
-        OTHER  = 'jina',     _('Other')
-
-    created_by = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='boats',
-        help_text=_("Deleting the user also deletes their boats — consistent with Entity.created_by."),
-        verbose_name=_("Created by"),
-    )
-    boat_class = models.ForeignKey(
-        BoatClass,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name=_('boat class'),
-    )
-    class_supplement = models.CharField(
-        verbose_name=_('class supplement'),
-        max_length=200, blank=True,
-    )
-    sail_number = models.CharField(verbose_name=_('sail number'), max_length=50, blank=True)
-    name = models.CharField(verbose_name=_('name'), max_length=200)
-    description = models.TextField(verbose_name=_('description'), blank=True)
-    sail_area = models.DecimalField(
-        verbose_name=_('sail area'),
-        max_digits=8, decimal_places=2, null=True, blank=True,
-    )
-    hull_color             = models.CharField(verbose_name=_('hull color'), max_length=20, choices=Color.choices, blank=True)
-    sail_color             = models.CharField(verbose_name=_('sail color'), max_length=20, choices=Color.choices, blank=True)
-    harbor_number = models.CharField(verbose_name=_('harbor number'), max_length=100, blank=True)
-    harbor_name = models.CharField(verbose_name=_('harbor name'), max_length=200, blank=True)
-    contact_person = models.CharField(verbose_name=_('contact person'), max_length=200)
-    contact_phone = models.CharField(verbose_name=_('contact phone'), max_length=50)
-    vessel_registry_number = models.CharField(verbose_name=_('vessel registry number'), max_length=50, blank=True)
-    engine_power_hp        = models.PositiveSmallIntegerField(verbose_name=_('engine power (hp)'), null=True, blank=True)
-    willing_to_lend = models.BooleanField(
-        default=False,
-        verbose_name=_('willing to lend'),
-        help_text=_('Check if you are willing to lend this boat for the race'),
-    )
-    visible_to = models.ManyToManyField(
-        User,
-        blank=True,
-        related_name='borrowed_boats',
-        verbose_name=_('visible to'),
-        help_text=_('Users who can see and select this boat when registering a crew'),
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = _("Boat")
-        verbose_name_plural = _("Boats")
-
-    def __str__(self):
-        if self.sail_number:
-            return f"{self.sail_number} {self.name}"
-        return self.name
-
-    def can_be_edited(self, user):
-        """Creator or InfoDesk group member can edit. No deadline check in Phase 1."""
-        return self.created_by == user or user.groups.filter(name='InfoDesk').exists()
-
-
-class Crew(models.Model):
-    CATEGORY_Q  = 'Q'
-    CATEGORY_S  = 'S'
-    CATEGORY_R  = 'R'
-    CATEGORY_D  = 'D'
-    CATEGORY_SN = 'SN'
-    CATEGORY_DN = 'DN'
-    CATEGORY_OZ = 'OZ'
-    CATEGORY_OD = 'OD'
-    CATEGORY_MS = 'MS'
-
-    CATEGORY_CHOICES = [
-        (CATEGORY_Q,  _('Q – Žabičky a vlčata')),
-        (CATEGORY_S,  _('S – Skautky a skauti')),
-        (CATEGORY_R,  _('R – Rangers a roveři')),
-        (CATEGORY_D,  _('D – Dospělí')),
-        (CATEGORY_SN, _('SN – Skautští námořníci')),
-        (CATEGORY_DN, _('DN – Dospělí námořníci')),
-        (CATEGORY_OZ, _('OŽ – Open Žáci')),
-        (CATEGORY_OD, _('OD – Open Dospělí')),
-        (CATEGORY_MS, _('MS – Modrá stuha')),
-    ]
-
-    boat = models.ForeignKey(
-        Boat,
-        on_delete=models.PROTECT,
-        verbose_name=_('boat'),
-    )
-    category = models.CharField(
-        max_length=3,
-        choices=CATEGORY_CHOICES,
-        verbose_name=_('category'),
-    )
-    created_by = models.ForeignKey(
-        User,
-        on_delete=models.PROTECT,
-        verbose_name=_('created by'),
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ('boat', 'category')
-        verbose_name = _('crew')
-        verbose_name_plural = _('crews')
-
-    def __str__(self):
-        return f"{self.boat} – {self.get_category_display()}"
-
-    def can_be_edited(self, user):
-        """Creator or InfoDesk group member can edit. No deadline check in Phase 1."""
-        return self.created_by == user or user.groups.filter(name='InfoDesk').exists()
-
-
-class CrewMember(models.Model):
-    ROLE_HELMSMAN = 'helmsman'
-    ROLE_CREW     = 'crew'
-    ROLE_CHOICES  = [
-        (ROLE_HELMSMAN, _('Kormidelník')),
-        (ROLE_CREW,     _('Člen posádky')),
-    ]
-
-    crew = models.ForeignKey(
-        Crew,
-        on_delete=models.CASCADE,
-        related_name='members',
-        verbose_name=_('crew'),
-    )
-    role = models.CharField(
-        max_length=10,
-        choices=ROLE_CHOICES,
-        verbose_name=_('role'),
-    )
-    participant = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT,
-        verbose_name=_('participant'),
-    )
-
-    class Meta:
-        verbose_name = _('crew member')
-        verbose_name_plural = _('crew members')
-
-    def __str__(self):
-        return f"{self.get_role_display()}: {self.participant}"
