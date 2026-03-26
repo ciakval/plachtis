@@ -269,3 +269,39 @@ class CrewEditDeleteViewTest(TestCase):
         self.client.login(username='editstranger', password='pw')
         self.client.post(reverse('SkaRe:crew_delete', kwargs={'crew_id': self.crew.pk}))
         self.assertTrue(Crew.objects.filter(pk=self.crew.pk).exists())
+
+
+class CrewExportCsvTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.staff = User.objects.create_user(username='csvstaff', password='pw', is_staff=True)
+        self.regular = _make_user('csvregular')
+        self.user = _make_user('csvowner')
+        self.unit = _make_unit(self.user)
+        self.helmsman = _make_person(self.unit)
+        self.boat = _make_boat(self.user)
+        self.crew = Crew.objects.create(
+            boat=self.boat, category=Crew.CATEGORY_S, created_by=self.user
+        )
+        CrewMember.objects.create(
+            crew=self.crew, role=CrewMember.ROLE_HELMSMAN,
+            participant=Person.objects.get(pk=self.helmsman.pk),
+        )
+
+    def test_export_requires_staff(self):
+        self.client.login(username='csvregular', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_export_csv'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_export_returns_csv_for_staff(self):
+        self.client.login(username='csvstaff', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_export_csv'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/csv')
+
+    def test_export_contains_helmsman_row(self):
+        self.client.login(username='csvstaff', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_export_csv'))
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('Jan', content)
+        self.assertIn(Crew.CATEGORY_S, content)

@@ -16,7 +16,7 @@ from django.core.paginator import Paginator
 from django import forms
 from django.utils.translation import gettext as _
 from django.utils.http import url_has_allowed_host_and_scheme
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import (
     UserRegistrationForm, UnitRegistrationForm,
     IndividualParticipantRegistrationForm, OrganizerRegistrationForm,
@@ -1603,3 +1603,61 @@ def crew_delete(request, crew_id):
         return redirect('SkaRe:crew_list')
 
     return render(request, 'SkaRe/crews/confirm_delete.html', {'crew': crew})
+
+
+@login_required
+def crew_export_csv(request):
+    """Staff-only CSV export of all crews and their members."""
+    if not request.user.is_staff:
+        messages.error(request, _('Staff access required.'))
+        return redirect('SkaRe:home')
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="crews.csv"'
+    # BOM for Excel UTF-8 compatibility
+    response.write('\ufeff')
+
+    writer = csv.writer(response)
+    writer.writerow([
+        'crew_id', 'category', 'boat_sail_number', 'boat_name',
+        'boat_class', 'sail_area', 'role',
+        'first_name', 'last_name', 'date_of_birth', 'scout_category',
+        'participant_type', 'unit_name',
+    ])
+
+    members = (
+        CrewMember.objects
+        .select_related('crew', 'crew__boat', 'crew__boat__boat_class', 'participant')
+        .order_by('crew__id', '-role')
+    )
+
+    for m in members:
+        crew = m.crew
+        person = m.participant
+        participant_type = ''
+        unit_name = ''
+        if hasattr(person, 'regularparticipant'):
+            participant_type = 'RegularParticipant'
+            unit_name = person.regularparticipant.unit.entity.scout_unit_name
+        elif hasattr(person, 'individualparticipant'):
+            participant_type = 'IndividualParticipant'
+        elif hasattr(person, 'organizer'):
+            participant_type = 'Organizer'
+
+        writer.writerow([
+            crew.id,
+            crew.category,
+            crew.boat.sail_number,
+            crew.boat.name,
+            crew.boat.boat_class.name if crew.boat.boat_class else '',
+            crew.boat.sail_area or '',
+            m.role,
+            person.first_name,
+            person.last_name,
+            person.date_of_birth,
+            person.category or '',
+            participant_type,
+            unit_name,
+        ])
+
+    return response
