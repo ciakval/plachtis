@@ -160,7 +160,7 @@ class EditIndividualParticipantSmallHatCountTest(TestCase):
             'nickname': '',
             'date_of_birth': '1995-06-15',
             'health_restrictions': '',
-            'dietary_restrictions': '',
+            'diet_other': '',
             'relevant_information': '',
             'boats_p550': 0,
             'boats_sail': 0,

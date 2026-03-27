@@ -9,3 +9,5 @@ from .registration import (
     Organizer,
 )
 from .boats import BoatClass, Boat, Crew, CrewMember
+from .attendance import AttendanceLog
+from .tickets import SailTicket, SailTicketLog

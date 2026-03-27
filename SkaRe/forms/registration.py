@@ -80,6 +80,11 @@ class UserRegistrationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password1'].help_text = _(
+            'Password must be at least 8 characters. '
+            'Cannot be entirely numeric or too similar to your username.'
+        )
+        self.fields['password2'].help_text = _('Enter the same password again to confirm.')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -103,9 +108,10 @@ class UnitRegistrationForm(forms.ModelForm):
     )
     scout_unit_evidence_id = forms.CharField(
         max_length=50,
-        required=True,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 523.10'}),
-        label=_("Evidence ID")
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('e.g., 523.10')}),
+        label=_("Evidence ID"),
+        help_text=_("Junák unit ID (e.g. 523.10). Non-Junák units can leave this blank or use their own identifier."),
     )
 
     # Entity fields
@@ -238,7 +244,17 @@ class RegularParticipantForm(forms.ModelForm):
             'nickname',
             'date_of_birth',
             'health_restrictions',
-            'dietary_restrictions',
+            'diet_vegan',
+            'diet_vegetarian',
+            'diet_gluten_free',
+            'diet_lactose_free',
+            'diet_no_eggs',
+            'diet_no_peanuts',
+            'diet_no_tree_nuts',
+            'diet_no_soy',
+            'diet_no_fish',
+            'diet_no_fruits',
+            'diet_other',
             'relevant_information',
         ]
         widgets = {
@@ -247,7 +263,17 @@ class RegularParticipantForm(forms.ModelForm):
             'nickname': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': _('Nickname')}),
             'date_of_birth': forms.DateInput(attrs={'class': 'form-control form-control-sm', 'type': 'date'}, format='%Y-%m-%d'),
             'health_restrictions': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': _('e.g. Anxiety, asthma')}),
-            'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': _('e.g. Vegetarian, gluten-free')}),
+            'diet_vegan': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_vegetarian': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_gluten_free': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_lactose_free': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_eggs': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_peanuts': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_tree_nuts': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_soy': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_fish': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_fruits': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_other': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': _('Other restrictions')}),
             'relevant_information': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 2, 'placeholder': _('e.g. Special needs')}),
         }
 
@@ -318,7 +344,17 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
             'nickname',
             'date_of_birth',
             'health_restrictions',
-            'dietary_restrictions',
+            'diet_vegan',
+            'diet_vegetarian',
+            'diet_gluten_free',
+            'diet_lactose_free',
+            'diet_no_eggs',
+            'diet_no_peanuts',
+            'diet_no_tree_nuts',
+            'diet_no_soy',
+            'diet_no_fish',
+            'diet_no_fruits',
+            'diet_other',
             'relevant_information',
             'boats_p550',
             'boats_sail',
@@ -336,7 +372,17 @@ class IndividualParticipantRegistrationForm(forms.ModelForm):
             'nickname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Nickname (optional)')}),
             'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': _('Any health restrictions or medical conditions')}),
-            'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': _('Any dietary restrictions or preferences')}),
+            'diet_vegan': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_vegetarian': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_gluten_free': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_lactose_free': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_eggs': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_peanuts': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_tree_nuts': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_soy': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_fish': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_fruits': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_other': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': _('Other restrictions')}),
             'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': _('Any relevant information')}),
             'boats_p550': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'boats_sail': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
@@ -414,7 +460,17 @@ class OrganizerRegistrationForm(forms.ModelForm):
             'nickname',
             'date_of_birth',
             'health_restrictions',
-            'dietary_restrictions',
+            'diet_vegan',
+            'diet_vegetarian',
+            'diet_gluten_free',
+            'diet_lactose_free',
+            'diet_no_eggs',
+            'diet_no_peanuts',
+            'diet_no_tree_nuts',
+            'diet_no_soy',
+            'diet_no_fish',
+            'diet_no_fruits',
+            'diet_other',
             'relevant_information',
             'division',
             'transport',
@@ -431,7 +487,17 @@ class OrganizerRegistrationForm(forms.ModelForm):
             'nickname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Nickname (optional)')}),
             'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'health_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': _('Any health restrictions or medical conditions')}),
-            'dietary_restrictions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': _('Any dietary restrictions or preferences')}),
+            'diet_vegan': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_vegetarian': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_gluten_free': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_lactose_free': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_eggs': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_peanuts': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_tree_nuts': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_soy': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_fish': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_no_fruits': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'diet_other': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': _('Other restrictions')}),
             'relevant_information': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': _('Any relevant information')}),
             'division': forms.Select(attrs={'class': 'form-control'}),
             'transport': forms.Select(attrs={'class': 'form-control'}),

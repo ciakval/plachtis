@@ -242,10 +242,62 @@
                                 {% endif %}
                             </div>
                             <div class="mb-3">
-                                <label for="{{ form.dietary_restrictions.id_for_label }}" class="form-label">{{ form.dietary_restrictions.label }}</label>
-                                {{ form.dietary_restrictions }}
-                                {% if form.dietary_restrictions.errors %}
-                                    <div class="text-danger">{{ form.dietary_restrictions.errors }}</div>
+                                <label class="form-label">{% trans "Dietary restrictions" %}</label>
+                                <div class="row row-cols-2 g-1 mb-2">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            {{ form.diet_vegan }} <label class="form-check-label" for="{{ form.diet_vegan.id_for_label }}">{% trans "Vegan" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            {{ form.diet_vegetarian }} <label class="form-check-label" for="{{ form.diet_vegetarian.id_for_label }}">{% trans "Vegetarian" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            {{ form.diet_gluten_free }} <label class="form-check-label" for="{{ form.diet_gluten_free.id_for_label }}">{% trans "Gluten-free" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            {{ form.diet_lactose_free }} <label class="form-check-label" for="{{ form.diet_lactose_free.id_for_label }}">{% trans "Lactose/dairy-free" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            {{ form.diet_no_eggs }} <label class="form-check-label" for="{{ form.diet_no_eggs.id_for_label }}">{% trans "No eggs" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            {{ form.diet_no_peanuts }} <label class="form-check-label" for="{{ form.diet_no_peanuts.id_for_label }}">{% trans "No peanuts" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            {{ form.diet_no_tree_nuts }} <label class="form-check-label" for="{{ form.diet_no_tree_nuts.id_for_label }}">{% trans "No tree nuts" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            {{ form.diet_no_soy }} <label class="form-check-label" for="{{ form.diet_no_soy.id_for_label }}">{% trans "No soy" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            {{ form.diet_no_fish }} <label class="form-check-label" for="{{ form.diet_no_fish.id_for_label }}">{% trans "No fish" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            {{ form.diet_no_fruits }} <label class="form-check-label" for="{{ form.diet_no_fruits.id_for_label }}">{% trans "No fruits" %}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ form.diet_other }}
+                                {% if form.diet_other.errors %}
+                                    <div class="text-danger">{{ form.diet_other.errors }}</div>
                                 {% endif %}
                             </div>
                             <div class="mb-3">

@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from solo.models import SingletonModel
+from ..permissions import is_infodesk
 
 
 def validate_date_of_birth(value):
@@ -152,10 +153,22 @@ class Person(models.Model):
         blank=True, help_text=_("Any health restrictions or medical conditions"),
         verbose_name=_("Health restrictions")
     )
-    dietary_restrictions = models.TextField(
-        blank=True, help_text=_("Any dietary restrictions or preferences"),
-        verbose_name=_("Dietary restrictions")
-    )
+    # Dietary preferences
+    diet_vegan = models.BooleanField(default=False, verbose_name=_('Vegan'))
+    diet_vegetarian = models.BooleanField(default=False, verbose_name=_('Vegetarian'))
+
+    # Major allergens / exclusions
+    diet_gluten_free = models.BooleanField(default=False, verbose_name=_('Gluten-free'))
+    diet_lactose_free = models.BooleanField(default=False, verbose_name=_('Lactose/dairy-free'))
+    diet_no_eggs = models.BooleanField(default=False, verbose_name=_('No eggs'))
+    diet_no_peanuts = models.BooleanField(default=False, verbose_name=_('No peanuts'))
+    diet_no_tree_nuts = models.BooleanField(default=False, verbose_name=_('No tree nuts'))
+    diet_no_soy = models.BooleanField(default=False, verbose_name=_('No soy'))
+    diet_no_fish = models.BooleanField(default=False, verbose_name=_('No fish'))
+    diet_no_fruits = models.BooleanField(default=False, verbose_name=_('No fruits'))
+
+    # Catch-all
+    diet_other = models.TextField(blank=True, verbose_name=_('Other dietary restrictions'))
     relevant_information = models.TextField(
         blank=True, help_text=_("Any relevant information about the person"),
         verbose_name=_("Relevant information")
@@ -168,6 +181,21 @@ class Person(models.Model):
         verbose_name=_('Visible to'),
         help_text=_('Users who can see this person when registering a crew'),
     )
+
+    class AttendanceStatus(models.TextChoices):
+        EXPECTED   = 'expected',   _('Expected')
+        ARRIVED    = 'arrived',    _('Arrived')
+        DEPARTED   = 'departed',   _('Departed')
+        NOT_COMING = 'not_coming', _('Not coming')
+
+    attendance_status = models.CharField(
+        max_length=20,
+        choices=AttendanceStatus.choices,
+        default=AttendanceStatus.EXPECTED,
+        verbose_name=_('Attendance status'),
+    )
+    arrived_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Arrived at'))
+    departed_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Departed at'))
 
     def calculate_category(self, reference_date=None):
         """
@@ -229,6 +257,28 @@ class Person(models.Model):
             if calculated_category:
                 self.category = calculated_category
         super().save(*args, **kwargs)
+
+    def dietary_summary(self) -> str:
+        """Return a comma-separated string of active dietary restrictions."""
+        parts = []
+        flag_labels = [
+            ('diet_vegan', 'Vegan'),
+            ('diet_vegetarian', 'Vegetarian'),
+            ('diet_gluten_free', 'Gluten-free'),
+            ('diet_lactose_free', 'Lactose/dairy-free'),
+            ('diet_no_eggs', 'No eggs'),
+            ('diet_no_peanuts', 'No peanuts'),
+            ('diet_no_tree_nuts', 'No tree nuts'),
+            ('diet_no_soy', 'No soy'),
+            ('diet_no_fish', 'No fish'),
+            ('diet_no_fruits', 'No fruits'),
+        ]
+        for field, label in flag_labels:
+            if getattr(self, field):
+                parts.append(label)
+        if self.diet_other:
+            parts.append(self.diet_other)
+        return ', '.join(parts)
 
     def __str__(self):
         if self.nickname:
@@ -321,20 +371,17 @@ class Entity(models.Model):
     )
 
     def can_be_edited(self, user):
-        """Check if this entity can be edited by the given user"""
-        # User must be the owner or an editor
+        """Check if this entity can be edited by the given user.
+
+        InfoDesk members bypass ownership and deadline checks entirely.
+        """
+        if is_infodesk(user):
+            return True
         is_owner = self.created_by == user
         is_editor = self.editors.filter(id=user.id).exists()
-
         if not (is_owner or is_editor):
             return False
-
-        # If registration is still open, allow editing
-        if EventSettings.is_editing_open():
-            return True
-
-        # After deadline, only allow if entity is unlocked
-        return self.unlocked_for_editing
+        return EventSettings.is_editing_open() or self.unlocked_for_editing
 
     def is_owner(self, user):
         """Check if the user is the owner (creator) of this entity"""
