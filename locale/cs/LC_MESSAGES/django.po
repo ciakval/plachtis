@@ -1198,7 +1198,13 @@ msgstr "Šátky a čepice"
 msgid "Manage Entities"
 msgstr "Správa registrací"
 
-#: SkaRe/templates/SkaRe/home.html:89
+msgid "Go to InfoDesk Dashboard"
+msgstr "Přejít na InfoDesk"
+
+msgid "Manage attendance, registrations, tickets, and exports."
+msgstr "Správa docházky, přihlášek, lístků a exportů."
+
+#: SkaRe/templates/SkaRe/registration/home.html
 msgid "Please login or register to access the system."
 msgstr "Pro přístup do systému se prosím přihlaste nebo zaregistrujte."
 

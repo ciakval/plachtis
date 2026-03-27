@@ -32,8 +32,13 @@
                             <span class="navbar-text text-white me-3">{% trans "Hello" %}, {{ user.first_name|default:user.username }}!</span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'SkaRe:boat_list' %}"><i class="bi bi-sailboat"></i> Lodě</a>
+                            <a class="nav-link" href="{% url 'SkaRe:boat_list' %}"><i class="bi bi-sailboat"></i> {% trans "Boats" %}</a>
                         </li>
+                        {% if user_is_infodesk %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'SkaRe:infodesk_dashboard' %}"><i class="bi bi-headset"></i> InfoDesk</a>
+                        </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'SkaRe:logout' %}">{% trans "Logout" %}</a>
                         </li>

@@ -7,12 +7,12 @@
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <div class="jumbotron bg-light p-5 rounded text-center">
-<img src="{% static 'SkaRe/images/logo-transparent.png' %}" alt="SkaRe Logo" class="home-logo">
+        <div class="jumbotron bg-light p-5 rounded text-center mb-4">
+            <img src="{% static 'SkaRe/images/logo-transparent.png' %}" alt="SkaRe Logo" class="home-logo">
             <p class="lead">{% trans "Manage Units and Participants in the PlachtIS system." %}</p>
-            
+
             {% if registration_deadline or editing_deadline %}
-                <div class="alert alert-info">
+                <div class="alert alert-info mb-0">
                     {% if registration_deadline %}
                     <i class="bi bi-calendar-event"></i> {% trans "Registration deadline" %}: <strong>{{ registration_deadline|date:"F j, Y, g:i a" }}</strong>
                     {% endif %}
@@ -24,81 +24,102 @@
                     {% endif %}
                 </div>
             {% endif %}
-            
-            <hr class="my-4">
-            
-            {% if user.is_authenticated %}
-                <p>{% trans "Hello" %}, {{ user.first_name }} {{ user.last_name }}! {% trans "You are logged in as" %} <strong>{{ user.username }}</strong>.</p>
-                
-                <div class="mb-4">
-                    <h5>{% trans "Register" %}</h5>
-                    <a class="btn btn-primary btn-lg me-2 mb-2" href="{% url 'SkaRe:register_unit' %}" role="button">
-                        <i class="bi bi-people"></i> {% trans "Register Unit" %}
-                    </a>
-                    <a class="btn btn-primary btn-lg me-2 mb-2" href="{% url 'SkaRe:register_individual_participant' %}" role="button">
-                        <i class="bi bi-person"></i> {% trans "Register Individual Participant" %}
-                    </a>
-                    <a class="btn btn-success btn-lg mb-2" href="{% url 'SkaRe:register_organizer' %}" role="button">
-                        <i class="bi bi-star"></i> {% trans "Register Organizer" %}
-                    </a>
-                    <a class="btn btn-primary btn-lg me-2 mb-2" href="{% url 'SkaRe:boat_register' %}" role="button">
-                        <i class="bi bi-sailboat"></i> {% trans "Register a Boat" %}
-                    </a>
-                    <a class="btn btn-primary btn-lg me-2 mb-2" href="{% url 'SkaRe:crew_register' %}" role="button">
-                        <i class="bi bi-people-fill"></i> {% trans "Register a Crew" %}
+        </div>
+
+        {% if user.is_authenticated %}
+            <p class="text-center text-muted mb-4">{% trans "Hello" %}, <strong>{{ user.first_name }} {{ user.last_name }}</strong> ({{ user.username }})</p>
+
+            {% if user_is_infodesk %}
+            <div class="card border-0 bg-dark text-white mb-4">
+                <div class="card-body d-flex align-items-center justify-content-between flex-wrap gap-3 p-4">
+                    <div>
+                        <h4 class="card-title mb-1"><i class="bi bi-headset"></i> InfoDesk</h4>
+                        <p class="card-text text-white-50 mb-0">{% trans "Manage attendance, registrations, tickets, and exports." %}</p>
+                    </div>
+                    <a href="{% url 'SkaRe:infodesk_dashboard' %}" class="btn btn-light btn-lg">
+                        <i class="bi bi-arrow-right-circle"></i> {% trans "Go to InfoDesk Dashboard" %}
                     </a>
                 </div>
-                
-                <div class="mb-4">
-                    <h5>{% trans "My Registrations" %}</h5>
-                    <a class="btn btn-info btn-lg me-2 mb-2" href="{% url 'SkaRe:list_units' %}" role="button">
-                        <i class="bi bi-people-fill"></i> {% trans "My Units" %}
-                    </a>
-                    <a class="btn btn-info btn-lg me-2 mb-2" href="{% url 'SkaRe:list_individual_participants' %}" role="button">
-                        <i class="bi bi-person-fill"></i> {% trans "My Individual Participants" %}
-                    </a>
-                    <a class="btn btn-info btn-lg mb-2" href="{% url 'SkaRe:list_organizers' %}" role="button">
-                        <i class="bi bi-star-fill"></i> {% trans "My Organizers" %}
-                    </a>
-                    <a class="btn btn-info btn-lg me-2 mb-2" href="{% url 'SkaRe:boat_list' %}" role="button">
-                        <i class="bi bi-sailboat"></i> {% trans "Boats" %}
-                    </a>
-                    <a class="btn btn-info btn-lg me-2 mb-2" href="{% url 'SkaRe:crew_list' %}" role="button">
-                        <i class="bi bi-people-fill"></i> {% trans "My Crews" %}
-                    </a>
+            </div>
+            {% endif %}
+
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="card h-100">
+                        <div class="card-header fw-semibold"><i class="bi bi-plus-circle"></i> {% trans "Register" %}</div>
+                        <div class="card-body d-flex flex-wrap gap-2 align-content-start">
+                            <a class="btn btn-primary" href="{% url 'SkaRe:register_unit' %}">
+                                <i class="bi bi-people"></i> {% trans "Register Unit" %}
+                            </a>
+                            <a class="btn btn-primary" href="{% url 'SkaRe:register_individual_participant' %}">
+                                <i class="bi bi-person"></i> {% trans "Register Individual Participant" %}
+                            </a>
+                            <a class="btn btn-success" href="{% url 'SkaRe:register_organizer' %}">
+                                <i class="bi bi-star"></i> {% trans "Register Organizer" %}
+                            </a>
+                            <a class="btn btn-primary" href="{% url 'SkaRe:boat_register' %}">
+                                <i class="bi bi-sailboat"></i> {% trans "Register a Boat" %}
+                            </a>
+                            <a class="btn btn-primary" href="{% url 'SkaRe:crew_register' %}">
+                                <i class="bi bi-people-fill"></i> {% trans "Register a Crew" %}
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                
-                {% if user.is_staff %}
-                <div class="mb-3">
-                    <h5>{% trans "Administrator options" %}</h5>
-                    <a class="btn btn-warning btn-lg me-2 mb-2" href="/admin/" role="button">
+
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header fw-semibold"><i class="bi bi-list-ul"></i> {% trans "My Registrations" %}</div>
+                        <div class="card-body d-flex flex-wrap gap-2 align-content-start">
+                            <a class="btn btn-outline-primary" href="{% url 'SkaRe:list_units' %}">
+                                <i class="bi bi-people-fill"></i> {% trans "My Units" %}
+                            </a>
+                            <a class="btn btn-outline-primary" href="{% url 'SkaRe:list_individual_participants' %}">
+                                <i class="bi bi-person-fill"></i> {% trans "My Individual Participants" %}
+                            </a>
+                            <a class="btn btn-outline-success" href="{% url 'SkaRe:list_organizers' %}">
+                                <i class="bi bi-star-fill"></i> {% trans "My Organizers" %}
+                            </a>
+                            <a class="btn btn-outline-primary" href="{% url 'SkaRe:boat_list' %}">
+                                <i class="bi bi-sailboat"></i> {% trans "Boats" %}
+                            </a>
+                            <a class="btn btn-outline-primary" href="{% url 'SkaRe:crew_list' %}">
+                                <i class="bi bi-people-fill"></i> {% trans "My Crews" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if user.is_staff %}
+            <div class="card border-warning mb-4">
+                <div class="card-header fw-semibold text-warning-emphasis bg-warning-subtle">
+                    <i class="bi bi-gear"></i> {% trans "Administrator options" %}
+                </div>
+                <div class="card-body d-flex flex-wrap gap-2">
+                    <a class="btn btn-warning" href="/admin/">
                         <i class="bi bi-gear"></i> {% trans "Admin Panel" %}
                     </a>
-                    <a class="btn btn-warning btn-lg me-2 mb-2" href="{% url 'SkaRe:list_all' %}" role="button">
-                        <i class="bi bi-gear"></i> {% trans "Show All Participants" %}
+                    <a class="btn btn-warning" href="{% url 'SkaRe:list_all' %}">
+                        <i class="bi bi-people"></i> {% trans "Show All Participants" %}
                     </a>
-                    <a class="btn btn-warning btn-lg me-2 mb-2" href="{% url 'SkaRe:list_merchandise' %}" role="button">
+                    <a class="btn btn-warning" href="{% url 'SkaRe:list_merchandise' %}">
                         <i class="bi bi-bag-fill"></i> {% trans "Scarves and Hats" %}
                     </a>
-                    <a class="btn btn-warning btn-lg mb-2" href="{% url 'SkaRe:manage_entities' %}" role="button">
+                    <a class="btn btn-warning" href="{% url 'SkaRe:manage_entities' %}">
                         <i class="bi bi-check-circle"></i> {% trans "Manage Entities" %}
                     </a>
                 </div>
-                {% endif %}
-
-                <div class="mb-3">
-                    <a class="btn btn-secondary btn-lg" href="{% url 'SkaRe:logout' %}" role="button">
-                        <i class="bi bi-box-arrow-right"></i> {% trans "Logout" %}
-                    </a>
-                </div>
-            {% else %}
-                <p>{% trans "Please login or register to access the system." %}</p>
-                <p class="mb-0">
-                    <a class="btn btn-primary btn-lg me-2" href="{% url 'SkaRe:login' %}" role="button">{% trans "Login" %}</a>
-                    <a class="btn btn-success btn-lg" href="{% url 'SkaRe:register' %}" role="button">{% trans "Register" %}</a>
-                </p>
+            </div>
             {% endif %}
-        </div>
+
+        {% else %}
+            <div class="text-center">
+                <p>{% trans "Please login or register to access the system." %}</p>
+                <a class="btn btn-primary btn-lg me-2" href="{% url 'SkaRe:login' %}">{% trans "Login" %}</a>
+                <a class="btn btn-success btn-lg" href="{% url 'SkaRe:register' %}">{% trans "Register" %}</a>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
