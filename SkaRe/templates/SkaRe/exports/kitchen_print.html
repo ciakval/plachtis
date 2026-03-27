@@ -1,0 +1,99 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Kitchen Report" %} - SkaRe{% endblock %}
+
+{% block extra_css %}
+<style>
+@media print {
+  nav, .btn, .no-print { display: none !important; }
+  body { font-size: 11pt; }
+  h2 { font-size: 13pt; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="mb-3 no-print">
+  <a href="{% url 'SkaRe:exports_index' %}" class="btn btn-outline-secondary btn-sm me-2">
+    <i class="bi bi-arrow-left"></i> {% trans "Back" %}
+  </a>
+  <button onclick="window.print()" class="btn btn-primary btn-sm">
+    <i class="bi bi-printer"></i> {% trans "Print" %}
+  </button>
+</div>
+
+<h1>{% trans "Kitchen Report" %}</h1>
+
+{% for data in units_data %}
+<div class="mb-3">
+  <h2>{% trans "Unit" %} &ldquo;{{ data.unit.entity.scout_unit_name }}&rdquo; &mdash;
+    {% with total_count=data.with_restrictions|length|add:data.clean_count %}
+    {{ total_count }} {% trans "people present" %}
+    {% endwith %}
+    {% if data.with_restrictions %}({{ data.with_restrictions|length }} {% trans "with dietary restrictions" %}){% else %}({% trans "no dietary restrictions" %}){% endif %}
+  </h2>
+  {% if data.with_restrictions %}
+  <ul>
+    {% for p in data.with_restrictions %}
+    <li>{{ p }}:
+      {% if p.diet_vegan %} {% trans "Vegan" %}{% endif %}
+      {% if p.diet_vegetarian %} {% trans "Vegetarian" %}{% endif %}
+      {% if p.diet_gluten_free %} {% trans "Gluten-free" %}{% endif %}
+      {% if p.diet_lactose_free %} {% trans "Lactose/dairy-free" %}{% endif %}
+      {% if p.diet_no_eggs %} {% trans "No eggs" %}{% endif %}
+      {% if p.diet_no_peanuts %} {% trans "No peanuts" %}{% endif %}
+      {% if p.diet_no_tree_nuts %} {% trans "No tree nuts" %}{% endif %}
+      {% if p.diet_no_soy %} {% trans "No soy" %}{% endif %}
+      {% if p.diet_no_fish %} {% trans "No fish" %}{% endif %}
+      {% if p.diet_no_fruits %} {% trans "No fruits" %}{% endif %}
+      {% if p.diet_other %} ({{ p.diet_other }}){% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if data.clean_count > 0 %}
+  <p>{{ data.clean_count }} {% trans "people: no dietary restrictions" %}</p>
+  {% endif %}
+</div>
+{% endfor %}
+
+{% for p in individuals %}
+<div class="mb-2">
+  <h2>{% trans "Individual" %} &ldquo;{{ p }}&rdquo; &mdash; 1 {% trans "person present" %}</h2>
+</div>
+{% endfor %}
+
+{% if organizers %}
+<div class="mb-3">
+  <h2>{% trans "Organizers" %} &mdash; {{ organizers|length }} {% trans "people present" %}
+    {% if organizers_with_restrictions %}({{ organizers_with_restrictions|length }} {% trans "with dietary restrictions" %}){% else %}({% trans "no dietary restrictions" %}){% endif %}
+  </h2>
+  {% if organizers_with_restrictions %}
+  <ul>
+    {% for p in organizers_with_restrictions %}
+    <li>{{ p }}:
+      {% if p.diet_vegan %} {% trans "Vegan" %}{% endif %}
+      {% if p.diet_vegetarian %} {% trans "Vegetarian" %}{% endif %}
+      {% if p.diet_gluten_free %} {% trans "Gluten-free" %}{% endif %}
+      {% if p.diet_lactose_free %} {% trans "Lactose/dairy-free" %}{% endif %}
+      {% if p.diet_no_eggs %} {% trans "No eggs" %}{% endif %}
+      {% if p.diet_no_peanuts %} {% trans "No peanuts" %}{% endif %}
+      {% if p.diet_no_tree_nuts %} {% trans "No tree nuts" %}{% endif %}
+      {% if p.diet_no_soy %} {% trans "No soy" %}{% endif %}
+      {% if p.diet_no_fish %} {% trans "No fish" %}{% endif %}
+      {% if p.diet_no_fruits %} {% trans "No fruits" %}{% endif %}
+      {% if p.diet_other %} ({{ p.diet_other }}){% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if organizers_clean_count > 0 %}
+  <p>{{ organizers_clean_count }} {% trans "people: no dietary restrictions" %}</p>
+  {% endif %}
+</div>
+{% endif %}
+
+<hr>
+<strong>{% trans "TOTAL" %}: {{ total }} {% trans "people present" %}</strong>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Medical Report" %} - SkaRe{% endblock %}
+
+{% block extra_css %}
+<style>
+@media print {
+  nav, .btn, .no-print { display: none !important; }
+  body { font-size: 11pt; }
+  .person-card { page-break-inside: avoid; border-bottom: 1px solid #ccc; padding: 6pt 0; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="mb-3 no-print">
+  <a href="{% url 'SkaRe:exports_index' %}" class="btn btn-outline-secondary btn-sm me-2">
+    <i class="bi bi-arrow-left"></i> {% trans "Back" %}
+  </a>
+  <button onclick="window.print()" class="btn btn-primary btn-sm">
+    <i class="bi bi-printer"></i> {% trans "Print" %}
+  </button>
+</div>
+
+<h1>{% trans "Medical Report" %}</h1>
+<p class="text-muted no-print">{% trans "People present with health restrictions." %}</p>
+
+{% if unit_participants %}
+<h2>{% trans "Unit members" %}</h2>
+{% for p in unit_participants %}
+<div class="person-card mb-2">
+  <strong>{{ p }}</strong>, {{ p.date_of_birth|date:"Y" }} &mdash; {{ p.health_restrictions }}<br>
+  <small class="text-muted">
+    {% trans "Unit" %}: {{ p.unit.entity.scout_unit_name }} |
+    {% trans "Contact" %}: {{ p.unit.entity.contact_phone }}
+  </small>
+</div>
+{% endfor %}
+{% endif %}
+
+{% if individuals %}
+<h2>{% trans "Individual participants" %}</h2>
+{% for p in individuals %}
+<div class="person-card mb-2">
+  <strong>{{ p }}</strong>, {{ p.date_of_birth|date:"Y" }} &mdash; {{ p.health_restrictions }}<br>
+  <small class="text-muted">
+    {% trans "Individual participant" %} |
+    {% trans "Contact" %}: {{ p.entity.contact_phone }}
+  </small>
+</div>
+{% endfor %}
+{% endif %}
+
+{% if organizers %}
+<h2>{% trans "Organizers" %}</h2>
+{% for p in organizers %}
+<div class="person-card mb-2">
+  <strong>{{ p }}</strong>, {{ p.date_of_birth|date:"Y" }} &mdash; {{ p.health_restrictions }}<br>
+  <small class="text-muted">
+    {% trans "Organizer" %} |
+    {% trans "Contact" %}: {{ p.entity.contact_phone }}
+  </small>
+</div>
+{% endfor %}
+{% endif %}
+
+{% if not unit_participants and not individuals and not organizers %}
+<p class="text-muted">{% trans "No people with health restrictions present." %}</p>
+{% endif %}
+{% endblock %}
