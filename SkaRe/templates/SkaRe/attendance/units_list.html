@@ -1,0 +1,40 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Attendance — Units" %} - SkaRe{% endblock %}
+
+{% block content %}
+<h1 class="mb-3"><i class="bi bi-people-fill"></i> {% trans "Attendance — Units" %}</h1>
+<p>
+  <a href="{% url 'SkaRe:infodesk_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> {% trans "Dashboard" %}
+  </a>
+</p>
+<table class="table table-hover align-middle">
+  <thead class="table-dark">
+    <tr>
+      <th>{% trans "Unit" %}</th>
+      <th>{% trans "Arrived / Total" %}</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for unit in units %}
+    <tr>
+      <td>{{ unit.entity.scout_unit_name }}</td>
+      <td>
+        <span class="badge bg-success">{{ unit.arrived }}</span> /
+        <span class="badge bg-secondary">{{ unit.total }}</span>
+      </td>
+      <td>
+        <a href="{% url 'SkaRe:attendance_unit_detail' unit.pk %}" class="btn btn-primary btn-sm">
+          {% trans "Detail" %}
+        </a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3" class="text-muted text-center">{% trans "No units registered." %}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

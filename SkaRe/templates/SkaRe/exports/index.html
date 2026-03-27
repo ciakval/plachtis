@@ -1,0 +1,45 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Exports" %} - SkaRe{% endblock %}
+
+{% block content %}
+<h1 class="mb-3"><i class="bi bi-file-earmark-text"></i> {% trans "Reports & Exports" %}</h1>
+<p>
+  <a href="{% url 'SkaRe:infodesk_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> {% trans "Dashboard" %}
+  </a>
+</p>
+<p class="text-muted">{% trans "All reports include only people with attendance status: Arrived." %}</p>
+
+<div class="row">
+  <div class="col-md-5">
+    <div class="card mb-4">
+      <div class="card-header fw-bold"><i class="bi bi-egg-fried"></i> {% trans "Kitchen report" %}</div>
+      <div class="card-body">
+        <p class="card-text text-muted">{% trans "People present grouped by unit, with dietary restrictions." %}</p>
+        <a href="{% url 'SkaRe:exports_kitchen_csv' %}" class="btn btn-outline-dark btn-sm me-2">
+          <i class="bi bi-download"></i> {% trans "Download CSV" %}
+        </a>
+        <a href="{% url 'SkaRe:exports_kitchen_print' %}" class="btn btn-primary btn-sm" target="_blank">
+          <i class="bi bi-printer"></i> {% trans "Print view" %}
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card mb-4">
+      <div class="card-header fw-bold"><i class="bi bi-heart-pulse"></i> {% trans "Medical report" %}</div>
+      <div class="card-body">
+        <p class="card-text text-muted">{% trans "People present with health restrictions, sorted by unit." %}</p>
+        <a href="{% url 'SkaRe:exports_medical_csv' %}" class="btn btn-outline-dark btn-sm me-2">
+          <i class="bi bi-download"></i> {% trans "Download CSV" %}
+        </a>
+        <a href="{% url 'SkaRe:exports_medical_print' %}" class="btn btn-primary btn-sm" target="_blank">
+          <i class="bi bi-printer"></i> {% trans "Print view" %}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
