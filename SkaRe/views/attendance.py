@@ -4,6 +4,7 @@ from django.db import transaction
 from django.db.models import Count, Q
 from django.http import HttpResponseBadRequest, HttpResponseNotAllowed
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from ..permissions import infodesk_required
 from ..models import Unit, IndividualParticipant, Organizer, Person, AttendanceLog
@@ -66,6 +67,9 @@ def attendance_set_status(request, person_id):
         person.arrived_at = now
     elif new_status == Person.AttendanceStatus.DEPARTED:
         person.departed_at = now
+    else:
+        person.arrived_at = None
+        person.departed_at = None
     person.save(update_fields=['attendance_status', 'arrived_at', 'departed_at'])
 
     AttendanceLog.objects.create(
@@ -75,7 +79,7 @@ def attendance_set_status(request, person_id):
     )
 
     next_url = request.POST.get('next') or request.META.get('HTTP_REFERER', '')
-    if next_url:
+    if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
         return redirect(next_url)
     return redirect('SkaRe:infodesk_dashboard')
 
@@ -90,16 +94,18 @@ def attendance_unit_mark_all_arrived(request, unit_id):
         attendance_status=Person.AttendanceStatus.EXPECTED
     )
     with transaction.atomic():
-        logs = []
-        for person in to_mark:
+        to_update = list(to_mark)
+        for person in to_update:
             person.attendance_status = Person.AttendanceStatus.ARRIVED
             person.arrived_at = now
-            person.save(update_fields=['attendance_status', 'arrived_at'])
-            logs.append(AttendanceLog(
+        Person.objects.bulk_update(to_update, ['attendance_status', 'arrived_at'])
+        AttendanceLog.objects.bulk_create([
+            AttendanceLog(
                 person=person,
                 status=Person.AttendanceStatus.ARRIVED,
                 changed_by=request.user,
-            ))
-        AttendanceLog.objects.bulk_create(logs)
-    messages.success(request, _('%(n)d participants marked as arrived.') % {'n': len(logs)})
+            )
+            for person in to_update
+        ])
+    messages.success(request, _('%(n)d participants marked as arrived.') % {'n': len(to_update)})
     return redirect('SkaRe:attendance_unit_detail', unit_id=unit_id)

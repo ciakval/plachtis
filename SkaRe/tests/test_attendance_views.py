@@ -147,6 +147,7 @@ class AttendanceSetStatusTest(TestCase):
         self._post(self.person, 'not_coming')
         self.person.refresh_from_db()
         self.assertEqual(self.person.attendance_status, 'not_coming')
+        self.assertIsNone(self.person.arrived_at)
 
     def test_creates_attendance_log_entry(self):
         self._post(self.person, 'arrived')
@@ -163,6 +164,11 @@ class AttendanceSetStatusTest(TestCase):
         next_url = reverse('SkaRe:attendance_unit_detail', kwargs={'unit_id': self.unit.pk})
         response = self._post(self.person, 'arrived', next_url=next_url)
         self.assertRedirects(response, next_url)
+
+    def test_external_next_url_is_ignored(self):
+        response = self._post(self.person, 'arrived', next_url='https://evil.com/steal')
+        # Should redirect to dashboard, not the external URL
+        self.assertRedirects(response, reverse('SkaRe:infodesk_dashboard'))
 
     def test_get_method_not_allowed(self):
         url = reverse('SkaRe:attendance_set_status', kwargs={'person_id': self.person.pk})
