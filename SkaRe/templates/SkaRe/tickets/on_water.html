@@ -1,0 +1,44 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Boats on Water" %} - SkaRe{% endblock %}
+
+{% block content %}
+<h1 class="mb-3"><i class="bi bi-water"></i> {% trans "Boats Currently on Water" %}</h1>
+<p class="text-muted">{% trans "Safety view — refreshed on load." %}</p>
+<div class="mb-3 d-flex gap-2">
+  <a href="{% url 'SkaRe:infodesk_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> {% trans "Dashboard" %}
+  </a>
+  <a href="{{ request.path }}" class="btn btn-primary btn-sm">
+    <i class="bi bi-arrow-clockwise"></i> {% trans "Refresh" %}
+  </a>
+</div>
+
+<table class="table table-hover align-middle">
+  <thead class="table-dark">
+    <tr>
+      <th>{% trans "Ticket" %}</th>
+      <th>{% trans "Color" %}</th>
+      <th>{% trans "Boat" %}</th>
+      <th>{% trans "Class" %}</th>
+      <th>{% trans "Contact" %}</th>
+      <th>{% trans "Contact phone" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ticket in tickets %}
+    <tr>
+      <td><a href="{% url 'SkaRe:ticket_detail' ticket.pk %}">{{ ticket.code }}</a></td>
+      <td>{{ ticket.get_color_display }}</td>
+      <td>{% if ticket.boat %}{{ ticket.boat.name }}{% if ticket.boat.sail_number %} ({{ ticket.boat.sail_number }}){% endif %}{% else %}—{% endif %}</td>
+      <td>{{ ticket.boat.boat_class|default:"—" }}</td>
+      <td>{{ ticket.boat.contact_person|default:"—" }}</td>
+      <td>{{ ticket.boat.contact_phone|default:"—" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6" class="text-success text-center fw-bold">{% trans "No boats on water." %}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Bulk Create Tickets" %} - SkaRe{% endblock %}
+
+{% block content %}
+<h1 class="mb-3"><i class="bi bi-plus-circle"></i> {% trans "Bulk Create Sail Tickets" %}</h1>
+<a href="{% url 'SkaRe:ticket_list' %}" class="btn btn-outline-secondary btn-sm mb-3">
+  <i class="bi bi-arrow-left"></i> {% trans "All tickets" %}
+</a>
+
+{% if existing_ticket_count > 0 %}
+<div class="alert alert-warning">
+  <i class="bi bi-exclamation-triangle"></i>
+  {% blocktrans with n=existing_ticket_count %}{{ n }} tickets already exist. Only boats without an assigned ticket will receive a new one.{% endblocktrans %}
+</div>
+{% endif %}
+
+<div class="card mb-4">
+  <div class="card-header">{% trans "Registered boats (without a ticket)" %}</div>
+  <div class="card-body">
+    <ul class="mb-0">
+      {% for color, count in boat_preview.items %}<li>{{ color }}: {{ count }}</li>{% empty %}<li class="text-muted">{% trans "None" %}</li>{% endfor %}
+    </ul>
+  </div>
+</div>
+
+<form method="post">
+  {% csrf_token %}
+  {% for field in form %}
+  <div class="mb-3">
+    <label class="form-label fw-bold">{{ field.label }}</label>
+    {{ field }}
+    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+    {% for error in field.errors %}<div class="text-danger">{{ error }}</div>{% endfor %}
+  </div>
+  {% endfor %}
+  <button type="submit" class="btn btn-success">
+    <i class="bi bi-check-circle"></i> {% trans "Create tickets" %}
+  </button>
+</form>
+{% endblock %}

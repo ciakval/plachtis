@@ -10,3 +10,4 @@ from .registration import (
 )
 from .boats import BoatForm
 from .crews import CrewRegistrationForm
+from .tickets import BulkTicketCreateForm
