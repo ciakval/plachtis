@@ -39,5 +39,33 @@ urlpatterns = [
     path('crews/<int:crew_id>/', views.crew_detail, name='crew_detail'),
     path('crews/<int:crew_id>/edit/', views.crew_edit, name='crew_edit'),
     path('crews/<int:crew_id>/delete/', views.crew_delete, name='crew_delete'),
+    # InfoDesk
+    path('infodesk/', views.infodesk_dashboard, name='infodesk_dashboard'),
+    path('infodesk/registrations/', views.infodesk_registrations, name='infodesk_registrations'),
+    path('infodesk/registrations/<int:entity_id>/confirm/', views.infodesk_confirm_entity, name='infodesk_confirm_entity'),
+    path('infodesk/registrations/<int:entity_id>/reject/', views.infodesk_reject_entity, name='infodesk_reject_entity'),
+    path('infodesk/registrations/bulk-confirm/', views.infodesk_bulk_confirm, name='infodesk_bulk_confirm'),
+    # Attendance
+    path('infodesk/attendance/units/', views.attendance_units_list, name='attendance_units_list'),
+    path('infodesk/attendance/units/<int:unit_id>/', views.attendance_unit_detail, name='attendance_unit_detail'),
+    path('infodesk/attendance/units/<int:unit_id>/mark-all-arrived/', views.attendance_unit_mark_all_arrived, name='attendance_unit_mark_all_arrived'),
+    path('infodesk/attendance/individuals/', views.attendance_individuals_list, name='attendance_individuals_list'),
+    path('infodesk/attendance/organizers/', views.attendance_organizers_list, name='attendance_organizers_list'),
+    path('infodesk/attendance/persons/<int:person_id>/set-status/', views.attendance_set_status, name='attendance_set_status'),
+    # Tickets
+    path('infodesk/tickets/', views.ticket_list, name='ticket_list'),
+    path('infodesk/tickets/lookup/', views.ticket_lookup, name='ticket_lookup'),
+    path('infodesk/tickets/create-bulk/', views.ticket_create_bulk, name='ticket_create_bulk'),
+    path('infodesk/tickets/on-water/', views.ticket_on_water, name='ticket_on_water'),
+    path('infodesk/tickets/export/csv/', views.ticket_export_csv, name='ticket_export_csv'),
+    path('infodesk/tickets/<int:ticket_id>/', views.ticket_detail, name='ticket_detail'),
+    path('infodesk/tickets/<int:ticket_id>/set-status/', views.ticket_set_status, name='ticket_set_status'),
+    path('infodesk/tickets/<int:ticket_id>/pair-rfid/', views.ticket_pair_rfid, name='ticket_pair_rfid'),
+    # Exports
+    path('infodesk/exports/', views.exports_index, name='exports_index'),
+    path('infodesk/exports/kitchen/csv/', views.exports_kitchen_csv, name='exports_kitchen_csv'),
+    path('infodesk/exports/kitchen/print/', views.exports_kitchen_print, name='exports_kitchen_print'),
+    path('infodesk/exports/medical/csv/', views.exports_medical_csv, name='exports_medical_csv'),
+    path('infodesk/exports/medical/print/', views.exports_medical_print, name='exports_medical_print'),
 ]
 

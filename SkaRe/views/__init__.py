@@ -41,3 +41,35 @@ from .crews import (
     crew_export_csv,
     person_lend,
 )
+from .infodesk import (
+    infodesk_dashboard,
+    infodesk_registrations,
+    infodesk_confirm_entity,
+    infodesk_reject_entity,
+    infodesk_bulk_confirm,
+)
+from .attendance import (
+    attendance_units_list,
+    attendance_unit_detail,
+    attendance_individuals_list,
+    attendance_organizers_list,
+    attendance_set_status,
+    attendance_unit_mark_all_arrived,
+)
+from .tickets import (
+    ticket_list,
+    ticket_detail,
+    ticket_set_status,
+    ticket_pair_rfid,
+    ticket_lookup,
+    ticket_create_bulk,
+    ticket_on_water,
+    ticket_export_csv,
+)
+from .exports import (
+    exports_index,
+    exports_kitchen_csv,
+    exports_kitchen_print,
+    exports_medical_csv,
+    exports_medical_print,
+)
