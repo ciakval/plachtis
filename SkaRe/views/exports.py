@@ -55,10 +55,6 @@ def _arrived_organizers():
     )
 
 
-def _has_dietary_restrictions(p):
-    return any(getattr(p, field) for field, _ in DIET_FIELDS) or bool(p.diet_other)
-
-
 @infodesk_required
 def exports_index(request):
     return render(request, 'SkaRe/exports/index.html')
@@ -114,13 +110,21 @@ def exports_kitchen_print(request):
                 'with_restrictions': [],
                 'clean_count': 0,
             }
-        if _has_dietary_restrictions(p):
+        if p.dietary_summary():
             units_map[uid]['with_restrictions'].append(p)
         else:
             units_map[uid]['clean_count'] += 1
 
     individuals = list(_arrived_individuals())
     organizers = list(_arrived_organizers())
+
+    organizers_with_restrictions = []
+    organizers_clean_count = 0
+    for o in organizers:
+        if o.dietary_summary():
+            organizers_with_restrictions.append(o)
+        else:
+            organizers_clean_count += 1
 
     total = (
         sum(len(d['with_restrictions']) + d['clean_count'] for d in units_map.values())
@@ -132,14 +136,9 @@ def exports_kitchen_print(request):
         'units_data': list(units_map.values()),
         'individuals': individuals,
         'organizers': organizers,
-        'organizers_with_restrictions': [
-            o for o in organizers if _has_dietary_restrictions(o)
-        ],
-        'organizers_clean_count': sum(
-            1 for o in organizers if not _has_dietary_restrictions(o)
-        ),
+        'organizers_with_restrictions': organizers_with_restrictions,
+        'organizers_clean_count': organizers_clean_count,
         'total': total,
-        'diet_fields': DIET_FIELDS,
     })
 
 

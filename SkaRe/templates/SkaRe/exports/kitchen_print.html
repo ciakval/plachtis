@@ -36,19 +36,7 @@
   {% if data.with_restrictions %}
   <ul>
     {% for p in data.with_restrictions %}
-    <li>{{ p }}:
-      {% if p.diet_vegan %} {% trans "Vegan" %}{% endif %}
-      {% if p.diet_vegetarian %} {% trans "Vegetarian" %}{% endif %}
-      {% if p.diet_gluten_free %} {% trans "Gluten-free" %}{% endif %}
-      {% if p.diet_lactose_free %} {% trans "Lactose/dairy-free" %}{% endif %}
-      {% if p.diet_no_eggs %} {% trans "No eggs" %}{% endif %}
-      {% if p.diet_no_peanuts %} {% trans "No peanuts" %}{% endif %}
-      {% if p.diet_no_tree_nuts %} {% trans "No tree nuts" %}{% endif %}
-      {% if p.diet_no_soy %} {% trans "No soy" %}{% endif %}
-      {% if p.diet_no_fish %} {% trans "No fish" %}{% endif %}
-      {% if p.diet_no_fruits %} {% trans "No fruits" %}{% endif %}
-      {% if p.diet_other %} ({{ p.diet_other }}){% endif %}
-    </li>
+    <li>{{ p }}: {{ p.dietary_summary }}</li>
     {% endfor %}
   </ul>
   {% endif %}
@@ -72,19 +60,7 @@
   {% if organizers_with_restrictions %}
   <ul>
     {% for p in organizers_with_restrictions %}
-    <li>{{ p }}:
-      {% if p.diet_vegan %} {% trans "Vegan" %}{% endif %}
-      {% if p.diet_vegetarian %} {% trans "Vegetarian" %}{% endif %}
-      {% if p.diet_gluten_free %} {% trans "Gluten-free" %}{% endif %}
-      {% if p.diet_lactose_free %} {% trans "Lactose/dairy-free" %}{% endif %}
-      {% if p.diet_no_eggs %} {% trans "No eggs" %}{% endif %}
-      {% if p.diet_no_peanuts %} {% trans "No peanuts" %}{% endif %}
-      {% if p.diet_no_tree_nuts %} {% trans "No tree nuts" %}{% endif %}
-      {% if p.diet_no_soy %} {% trans "No soy" %}{% endif %}
-      {% if p.diet_no_fish %} {% trans "No fish" %}{% endif %}
-      {% if p.diet_no_fruits %} {% trans "No fruits" %}{% endif %}
-      {% if p.diet_other %} ({{ p.diet_other }}){% endif %}
-    </li>
+    <li>{{ p }}: {{ p.dietary_summary }}</li>
     {% endfor %}
   </ul>
   {% endif %}

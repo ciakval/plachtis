@@ -52,6 +52,22 @@ def _make_individual(user, arrived=False, health=''):
     return p
 
 
+class ExportsAccessTest(TestCase):
+    def test_anon_redirected(self):
+        client = Client()
+        url = reverse('SkaRe:exports_index')
+        response = client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_non_infodesk_forbidden(self):
+        client = Client()
+        user = User.objects.create_user(username='regular', password='pw')
+        client.login(username='regular', password='pw')
+        url = reverse('SkaRe:exports_index')
+        response = client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+
 class ExportsIndexTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -157,6 +173,12 @@ class MedicalCsvTest(TestCase):
     def test_medical_csv_content_type(self):
         response = self.client.get(reverse('SkaRe:exports_medical_csv'))
         self.assertIn('text/csv', response['Content-Type'])
+
+    def test_csv_includes_individual_participants(self):
+        _make_individual(self.owner, arrived=True, health='diabetes')
+        response = self.client.get(reverse('SkaRe:exports_medical_csv'))
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('diabetes', content)
 
 
 class MedicalPrintTest(TestCase):
