@@ -13,6 +13,14 @@ from ..forms import BulkTicketCreateForm
 VALID_TICKET_STATUSES = {s.value for s in SailTicket.Status}
 
 
+def _csv_safe(value):
+    """Prefix cells starting with formula characters to prevent CSV injection."""
+    s = str(value) if value else ''
+    if s and s[0] in ('=', '+', '-', '@', '\t', '\r'):
+        return "'" + s
+    return s
+
+
 def _boat_color(boat):
     """Map a registered boat to the corresponding SailTicket.Color."""
     if not boat.boat_class:
@@ -231,12 +239,12 @@ def ticket_export_csv(request):
         writer.writerow([
             ticket.code,
             ticket.color,
-            boat.boat_class.name if boat and boat.boat_class else '',
+            _csv_safe(boat.boat_class.name) if boat and boat.boat_class else '',
             boat.sail_number if boat else '',
-            boat.name if boat else '',
-            boat.contact_person if boat else '',
-            boat.contact_phone if boat else '',
-            ticket.rfid_uid,
+            _csv_safe(boat.name) if boat else '',
+            _csv_safe(boat.contact_person) if boat else '',
+            _csv_safe(boat.contact_phone) if boat else '',
+            _csv_safe(ticket.rfid_uid),
             ticket.status,
         ])
     return response

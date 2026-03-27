@@ -22,6 +22,14 @@ DIET_FIELDS = [
 ]
 
 
+def _csv_safe(value):
+    """Prefix cells starting with formula characters to prevent CSV injection."""
+    s = str(value) if value else ''
+    if s and s[0] in ('=', '+', '-', '@', '\t', '\r'):
+        return "'" + s
+    return s
+
+
 def _age(date_of_birth):
     today = date.today()
     return today.year - date_of_birth.year - (
@@ -77,22 +85,22 @@ def exports_kitchen_csv(request):
     for p in _arrived_unit_participants():
         diet_values = [getattr(p, field) for field, _ in DIET_FIELDS]
         writer.writerow([
-            str(p), _('Unit member'), p.unit.entity.scout_unit_name,
-            *diet_values, p.diet_other,
+            _csv_safe(p), _('Unit member'), _csv_safe(p.unit.entity.scout_unit_name),
+            *diet_values, _csv_safe(p.diet_other),
         ])
 
     for p in _arrived_individuals():
         diet_values = [getattr(p, field) for field, _ in DIET_FIELDS]
         writer.writerow([
-            str(p), _('Individual'), _('Individual participant'),
-            *diet_values, p.diet_other,
+            _csv_safe(p), _('Individual'), _('Individual participant'),
+            *diet_values, _csv_safe(p.diet_other),
         ])
 
     for p in _arrived_organizers():
         diet_values = [getattr(p, field) for field, _ in DIET_FIELDS]
         writer.writerow([
-            str(p), _('Organizer'), _('Organizer'),
-            *diet_values, p.diet_other,
+            _csv_safe(p), _('Organizer'), _('Organizer'),
+            *diet_values, _csv_safe(p.diet_other),
         ])
 
     return response
@@ -158,27 +166,27 @@ def exports_medical_csv(request):
         if not p.health_restrictions:
             continue
         writer.writerow([
-            str(p), p.date_of_birth, _age(p.date_of_birth),
-            _('Unit member'), p.unit.entity.scout_unit_name,
-            p.unit.entity.contact_phone, p.health_restrictions,
+            _csv_safe(p), p.date_of_birth, _age(p.date_of_birth),
+            _('Unit member'), _csv_safe(p.unit.entity.scout_unit_name),
+            _csv_safe(p.unit.entity.contact_phone), _csv_safe(p.health_restrictions),
         ])
 
     for p in _arrived_individuals():
         if not p.health_restrictions:
             continue
         writer.writerow([
-            str(p), p.date_of_birth, _age(p.date_of_birth),
+            _csv_safe(p), p.date_of_birth, _age(p.date_of_birth),
             _('Individual'), _('Individual participant'),
-            p.entity.contact_phone, p.health_restrictions,
+            _csv_safe(p.entity.contact_phone), _csv_safe(p.health_restrictions),
         ])
 
     for p in _arrived_organizers():
         if not p.health_restrictions:
             continue
         writer.writerow([
-            str(p), p.date_of_birth, _age(p.date_of_birth),
+            _csv_safe(p), p.date_of_birth, _age(p.date_of_birth),
             _('Organizer'), _('Organizer'),
-            p.entity.contact_phone, p.health_restrictions,
+            _csv_safe(p.entity.contact_phone), _csv_safe(p.health_restrictions),
         ])
 
     return response

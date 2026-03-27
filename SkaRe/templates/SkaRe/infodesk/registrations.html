@@ -59,19 +59,17 @@
             <td>{{ row.entity.created_at|date:"d.m.Y H:i" }}</td>
             <td>
               {% if not row.entity.confirmed %}
-                <form method="post" action="{% url 'SkaRe:infodesk_confirm_entity' row.entity.pk %}" class="d-inline">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-success btn-sm">
-                    <i class="bi bi-check"></i> {% trans "Confirm" %}
-                  </button>
-                </form>
+                <button type="submit"
+                        class="btn btn-success btn-sm"
+                        formaction="{% url 'SkaRe:infodesk_confirm_entity' row.entity.pk %}">
+                  <i class="bi bi-check"></i> {% trans "Confirm" %}
+                </button>
               {% else %}
-                <form method="post" action="{% url 'SkaRe:infodesk_reject_entity' row.entity.pk %}" class="d-inline">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-outline-danger btn-sm">
-                    <i class="bi bi-x"></i> {% trans "Reject" %}
-                  </button>
-                </form>
+                <button type="submit"
+                        class="btn btn-outline-danger btn-sm"
+                        formaction="{% url 'SkaRe:infodesk_reject_entity' row.entity.pk %}">
+                  <i class="bi bi-x"></i> {% trans "Reject" %}
+                </button>
               {% endif %}
             </td>
           </tr>
