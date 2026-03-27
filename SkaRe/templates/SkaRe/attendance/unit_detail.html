@@ -1,0 +1,83 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{{ unit.entity.scout_unit_name }} - {% trans "Attendance" %} - SkaRe{% endblock %}
+
+{% block content %}
+<h1 class="mb-2">{{ unit.entity.scout_unit_name }}</h1>
+<p class="text-muted mb-3">{% trans "Contact" %}: {{ unit.entity.contact_phone }}</p>
+
+<div class="mb-3 d-flex gap-2">
+  <a href="{% url 'SkaRe:attendance_units_list' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> {% trans "Units" %}
+  </a>
+  <form method="post" action="{% url 'SkaRe:attendance_unit_mark_all_arrived' unit.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success btn-sm">
+      <i class="bi bi-check-all"></i> {% trans "Mark all as arrived" %}
+    </button>
+  </form>
+</div>
+
+{% if messages %}
+  {% for msg in messages %}
+    <div class="alert alert-info alert-dismissible fade show">
+      {{ msg }} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<table class="table table-hover align-middle">
+  <thead class="table-dark">
+    <tr>
+      <th>{% trans "Name" %}</th>
+      <th>{% trans "Status" %}</th>
+      <th>{% trans "Arrived at" %}</th>
+      <th>{% trans "Actions" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in participants %}
+    <tr>
+      <td>{{ p }}</td>
+      <td>
+        {% if p.attendance_status == 'arrived' %}
+          <span class="badge bg-success">{% trans "Arrived" %}</span>
+        {% elif p.attendance_status == 'departed' %}
+          <span class="badge bg-secondary">{% trans "Departed" %}</span>
+        {% elif p.attendance_status == 'not_coming' %}
+          <span class="badge bg-danger">{% trans "Not coming" %}</span>
+        {% else %}
+          <span class="badge bg-warning text-dark">{% trans "Expected" %}</span>
+        {% endif %}
+      </td>
+      <td>{{ p.arrived_at|date:"d.m.Y H:i"|default:"—" }}</td>
+      <td>
+        {% with next_url=request.path %}
+        {% if p.attendance_status != 'arrived' %}
+        <form method="post" action="{% url 'SkaRe:attendance_set_status' p.pk %}" class="d-inline">
+          {% csrf_token %}<input type="hidden" name="new_status" value="arrived"><input type="hidden" name="next" value="{{ next_url }}">
+          <button type="submit" class="btn btn-success btn-sm">{% trans "Arrived" %}</button>
+        </form>
+        {% endif %}
+        {% if p.attendance_status == 'arrived' %}
+        <form method="post" action="{% url 'SkaRe:attendance_set_status' p.pk %}" class="d-inline">
+          {% csrf_token %}<input type="hidden" name="new_status" value="departed"><input type="hidden" name="next" value="{{ next_url }}">
+          <button type="submit" class="btn btn-secondary btn-sm">{% trans "Departed" %}</button>
+        </form>
+        {% endif %}
+        {% if p.attendance_status != 'not_coming' %}
+        <form method="post" action="{% url 'SkaRe:attendance_set_status' p.pk %}" class="d-inline">
+          {% csrf_token %}<input type="hidden" name="new_status" value="not_coming"><input type="hidden" name="next" value="{{ next_url }}">
+          <button type="submit" class="btn btn-outline-danger btn-sm">{% trans "Not coming" %}</button>
+        </form>
+        {% endif %}
+        {% endwith %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" class="text-muted text-center">{% trans "No participants." %}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

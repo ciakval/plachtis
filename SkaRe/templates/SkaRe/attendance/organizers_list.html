@@ -1,0 +1,61 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Attendance — Organizers" %} - SkaRe{% endblock %}
+
+{% block content %}
+<h1 class="mb-3"><i class="bi bi-person-badge"></i> {% trans "Attendance — Organizers" %}</h1>
+<p>
+  <a href="{% url 'SkaRe:infodesk_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> {% trans "Dashboard" %}
+  </a>
+</p>
+<table class="table table-hover align-middle">
+  <thead class="table-dark">
+    <tr>
+      <th>{% trans "Name" %}</th>
+      <th>{% trans "Status" %}</th>
+      <th>{% trans "Arrived at" %}</th>
+      <th>{% trans "Actions" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in organizers %}
+    <tr>
+      <td>{{ p }}</td>
+      <td>
+        {% if p.attendance_status == 'arrived' %}<span class="badge bg-success">{% trans "Arrived" %}</span>
+        {% elif p.attendance_status == 'departed' %}<span class="badge bg-secondary">{% trans "Departed" %}</span>
+        {% elif p.attendance_status == 'not_coming' %}<span class="badge bg-danger">{% trans "Not coming" %}</span>
+        {% else %}<span class="badge bg-warning text-dark">{% trans "Expected" %}</span>{% endif %}
+      </td>
+      <td>{{ p.arrived_at|date:"d.m.Y H:i"|default:"—" }}</td>
+      <td>
+        {% with next_url=request.path %}
+        {% if p.attendance_status != 'arrived' %}
+        <form method="post" action="{% url 'SkaRe:attendance_set_status' p.pk %}" class="d-inline">
+          {% csrf_token %}<input type="hidden" name="new_status" value="arrived"><input type="hidden" name="next" value="{{ next_url }}">
+          <button type="submit" class="btn btn-success btn-sm">{% trans "Arrived" %}</button>
+        </form>
+        {% endif %}
+        {% if p.attendance_status == 'arrived' %}
+        <form method="post" action="{% url 'SkaRe:attendance_set_status' p.pk %}" class="d-inline">
+          {% csrf_token %}<input type="hidden" name="new_status" value="departed"><input type="hidden" name="next" value="{{ next_url }}">
+          <button type="submit" class="btn btn-secondary btn-sm">{% trans "Departed" %}</button>
+        </form>
+        {% endif %}
+        {% if p.attendance_status != 'not_coming' %}
+        <form method="post" action="{% url 'SkaRe:attendance_set_status' p.pk %}" class="d-inline">
+          {% csrf_token %}<input type="hidden" name="new_status" value="not_coming"><input type="hidden" name="next" value="{{ next_url }}">
+          <button type="submit" class="btn btn-outline-danger btn-sm">{% trans "Not coming" %}</button>
+        </form>
+        {% endif %}
+        {% endwith %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" class="text-muted text-center">{% trans "No organizers." %}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
