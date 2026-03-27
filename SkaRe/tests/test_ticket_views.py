@@ -60,6 +60,14 @@ class TicketListViewTest(TestCase):
         self.assertContains(response, 'P550-001')
         self.assertNotContains(response, 'P550-002')
 
+    def test_list_filter_by_color(self):
+        _make_ticket('P550-001', SailTicket.Color.P550)
+        _make_ticket('SAIL-001', SailTicket.Color.SAIL)
+        url = reverse('SkaRe:ticket_list') + '?color=p550'
+        response = self.client.get(url)
+        self.assertContains(response, 'P550-001')
+        self.assertNotContains(response, 'SAIL-001')
+
 
 class TicketDetailViewTest(TestCase):
     def setUp(self):
@@ -108,7 +116,7 @@ class TicketSetStatusTest(TestCase):
         self._post('on_water')
         self.assertEqual(SailTicketLog.objects.filter(ticket=self.ticket).count(), 1)
         log = SailTicketLog.objects.get(ticket=self.ticket)
-        self.assertEqual(log.status, 'on_water')
+        self.assertEqual(log.status, SailTicket.Status.ON_WATER)
         self.assertEqual(log.changed_by, self.desk)
 
     def test_invalid_status_returns_400(self):
@@ -246,6 +254,8 @@ class BulkTicketCreateTest(TestCase):
         })
         # No duplicate ticket for the same boat
         self.assertEqual(SailTicket.objects.filter(boat=boat).count(), 1)
+        # Total tickets should still be 1 (not 2)
+        self.assertEqual(SailTicket.objects.count(), 1)
 
 
 class TicketOnWaterTest(TestCase):

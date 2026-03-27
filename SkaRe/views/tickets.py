@@ -32,7 +32,8 @@ def _generate_codes(color_prefix, count):
     )
     codes = []
     n = 1
-    while len(codes) < count:
+    limit = count + len(existing) + 1
+    while len(codes) < count and n <= limit:
         code = f'{color_prefix}-{n:03d}'
         if code not in existing:
             codes.append(code)
@@ -104,7 +105,7 @@ def ticket_set_status(request, ticket_id):
 @infodesk_required
 def ticket_pair_rfid(request, ticket_id):
     if request.method != 'POST':
-        return redirect('SkaRe:ticket_detail', ticket_id=ticket_id)
+        return HttpResponseNotAllowed(['POST'])
     ticket = get_object_or_404(SailTicket, pk=ticket_id)
     with transaction.atomic():
         SailTicket.objects.filter(pending_pairing=True).update(pending_pairing=False)
@@ -165,20 +166,22 @@ def ticket_create_bulk(request):
             }
 
             with transaction.atomic():
-                created = 0
+                to_create = []
                 for color, color_boats in boat_groups.items():
                     total = len(color_boats) + reserve_counts[color]
+                    if total == 0:
+                        continue
                     codes = _generate_codes(COLOR_PREFIX[color], total)
                     for i, boat in enumerate(color_boats):
-                        SailTicket.objects.create(code=codes[i], color=color, boat=boat)
-                        created += 1
+                        to_create.append(SailTicket(code=codes[i], color=color, boat=boat))
                     for i in range(len(color_boats), total):
-                        SailTicket.objects.create(code=codes[i], color=color)
-                        created += 1
-                spare_codes = _generate_codes(COLOR_PREFIX[SailTicket.Color.SPARE], spare_count)
-                for code in spare_codes:
-                    SailTicket.objects.create(code=code, color=SailTicket.Color.SPARE)
-                    created += 1
+                        to_create.append(SailTicket(code=codes[i], color=color))
+                if spare_count > 0:
+                    spare_codes = _generate_codes(COLOR_PREFIX[SailTicket.Color.SPARE], spare_count)
+                    for code in spare_codes:
+                        to_create.append(SailTicket(code=code, color=SailTicket.Color.SPARE))
+                SailTicket.objects.bulk_create(to_create)
+                created = len(to_create)
 
             messages.success(request, _('%(n)d tickets created.') % {'n': created})
             return redirect('SkaRe:ticket_list')
