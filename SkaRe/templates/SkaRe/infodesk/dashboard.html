@@ -9,7 +9,7 @@
     <h1 class="mb-4"><i class="bi bi-headset"></i> {% trans "InfoDesk Dashboard" %}</h1>
 
     <div class="row mb-4">
-      <div class="col-md-3">
+      <div class="col-md-2">
         <div class="card text-bg-warning">
           <div class="card-body text-center">
             <h2 class="card-title display-4">{{ unconfirmed_count }}</h2>
@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <div class="card text-bg-success">
           <div class="card-body text-center">
             <h2 class="card-title display-4">{{ arrived_count }}</h2>
@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <div class="card text-bg-secondary">
           <div class="card-body text-center">
             <h2 class="card-title display-4">{{ expected_count }}</h2>
@@ -34,7 +34,15 @@
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
+        <div class="card text-bg-danger">
+          <div class="card-body text-center">
+            <h2 class="card-title display-4">{{ not_coming_count }}</h2>
+            <p class="card-text">{% trans "Not coming" %}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
         <div class="card text-bg-primary">
           <div class="card-body text-center">
             <h2 class="card-title display-4">{{ on_water_count }}</h2>
@@ -71,7 +79,7 @@
         <div class="card mb-3">
           <div class="card-header"><i class="bi bi-file-earmark-text"></i> {% trans "Exports" %}</div>
           <div class="list-group list-group-flush">
-            <a href="{% url 'SkaRe:exports_index' %}" class="list-group-item list-group-item-action">{% trans "Kitchen &amp; medical reports" %}</a>
+            <a href="{% url 'SkaRe:exports_index' %}" class="list-group-item list-group-item-action">{% trans "Kitchen & medical reports" %}</a>
             <a href="{% url 'SkaRe:ticket_export_csv' %}" class="list-group-item list-group-item-action">{% trans "Ticket CSV (printing)" %}</a>
           </div>
         </div>

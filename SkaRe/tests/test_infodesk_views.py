@@ -117,7 +117,7 @@ class RegistrationQueueTest(TestCase):
         self.assertTrue(e1.confirmed)
         self.assertTrue(e2.confirmed)
 
-    def test_confirm_returns_405_on_get(self):
+    def test_confirm_get_redirects_to_registrations(self):
         entity = _make_unit_entity(self.owner)
         url = reverse('SkaRe:infodesk_confirm_entity', kwargs={'entity_id': entity.pk})
         response = self.client.get(url)
