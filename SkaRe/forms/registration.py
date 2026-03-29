@@ -480,6 +480,7 @@ class OrganizerRegistrationForm(forms.ModelForm):
             'codex_agreement',
             'wants_scarf',
             'wants_hat',
+            'wants_small_hat',
         ]
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('First name')}),
@@ -506,4 +507,5 @@ class OrganizerRegistrationForm(forms.ModelForm):
             'accommodation': forms.Select(attrs={'class': 'form-control'}),
             'wants_scarf': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'wants_hat': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'wants_small_hat': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

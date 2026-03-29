@@ -745,7 +745,7 @@ def list_merchandise(request):
     total_hats_small = sum(item or 0 for item in [
         units.aggregate(total=Sum('small_hat_count'))['total'],
         individual_participants.aggregate(total=Sum('small_hat_count'))['total'],
-        # organizers intentionally excluded — no small hat for organizers
+        organizers.filter(wants_small_hat=True).count(),
     ])
 
     results_limited = (
@@ -832,6 +832,7 @@ def edit_organizer(request, organizer_id):
                 'accommodation',
                 'wants_scarf',
                 'wants_hat',
+                'wants_small_hat',
             ]
             widgets = {
                 'first_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -859,6 +860,7 @@ def edit_organizer(request, organizer_id):
                 'accommodation': forms.Select(attrs={'class': 'form-control'}),
                 'wants_scarf': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
                 'wants_hat': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+                'wants_small_hat': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             }
 
     class EntityEditForm(forms.ModelForm):

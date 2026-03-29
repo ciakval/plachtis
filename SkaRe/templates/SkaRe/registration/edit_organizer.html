@@ -173,6 +173,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        {{ organizer_form.wants_small_hat }}
+                                        <label class="form-check-label" for="{{ organizer_form.wants_small_hat.id_for_label }}">
+                                            {{ organizer_form.wants_small_hat.label }}
+                                        </label>
+                                        {% if organizer_form.wants_small_hat.errors %}
+                                            <div class="text-danger">{{ organizer_form.wants_small_hat.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

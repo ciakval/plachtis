@@ -641,6 +641,11 @@ class Organizer(Person):
         help_text=_("Whether the organizer wants a hat"),
         verbose_name=_("Wants hat"),
     )
+    wants_small_hat = models.BooleanField(
+        default=False,
+        help_text=_("Whether the organizer wants a small hat (S/M)"),
+        verbose_name=_("Wants small hat (S/M)"),
+    )
 
     def __str__(self):
         person_name = super().__str__()
