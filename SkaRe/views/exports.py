@@ -9,16 +9,14 @@ from ..models import (
 )
 
 DIET_FIELDS = [
-    ('diet_vegan', _('Vegan')),
     ('diet_vegetarian', _('Vegetarian')),
-    ('diet_gluten_free', _('Gluten-free')),
-    ('diet_lactose_free', _('Lactose/dairy-free')),
-    ('diet_no_eggs', _('No eggs')),
-    ('diet_no_peanuts', _('No peanuts')),
-    ('diet_no_tree_nuts', _('No tree nuts')),
+    ('diet_vegan', _('Vegan')),
     ('diet_no_soy', _('No soy')),
+    ('diet_lactose_free', _('Lactose-free')),
+    ('diet_gluten_free', _('Gluten-free')),
+    ('diet_no_peanuts', _('No peanuts')),
+    ('diet_no_eggs', _('No eggs')),
     ('diet_no_fish', _('No fish')),
-    ('diet_no_fruits', _('No fruits')),
 ]
 
 

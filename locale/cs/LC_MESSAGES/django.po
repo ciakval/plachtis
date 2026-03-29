@@ -139,6 +139,33 @@ msgstr "Zdravotní omezení / Duševní stav"
 msgid "Any dietary restrictions or preferences"
 msgstr "Stravovací omezení / preference"
 
+msgid "Vegetarian"
+msgstr "Vegetarián"
+
+msgid "Vegan"
+msgstr "Vegan"
+
+msgid "No soy"
+msgstr "Bez sóji"
+
+msgid "Lactose-free"
+msgstr "Bez laktózy"
+
+msgid "Gluten-free"
+msgstr "Bez lepku"
+
+msgid "No peanuts"
+msgstr "Bez arašídů"
+
+msgid "No eggs"
+msgstr "Bez vajec"
+
+msgid "No fish"
+msgstr "Bez ryb"
+
+msgid "Other dietary restrictions"
+msgstr "Ostatní stravovací omezení"
+
 #: SkaRe/forms.py:336 SkaRe/forms.py:430
 msgid "Any relevant information"
 msgstr "Další údaje"

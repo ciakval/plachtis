@@ -262,44 +262,36 @@
                                             <td>
     <div class="small">
         <div class="form-check form-check-inline">
-            <input type="checkbox" name="{{ form.diet_vegan.html_name }}" id="{{ form.diet_vegan.id_for_label }}" class="form-check-input"{% if form.diet_vegan.value %} checked{% endif %}>
-            <label class="form-check-label" for="{{ form.diet_vegan.id_for_label }}">{% trans "Vegan" %}</label>
-        </div>
-        <div class="form-check form-check-inline">
             <input type="checkbox" name="{{ form.diet_vegetarian.html_name }}" id="{{ form.diet_vegetarian.id_for_label }}" class="form-check-input"{% if form.diet_vegetarian.value %} checked{% endif %}>
             <label class="form-check-label" for="{{ form.diet_vegetarian.id_for_label }}">{% trans "Vegetarian" %}</label>
         </div>
         <div class="form-check form-check-inline">
-            <input type="checkbox" name="{{ form.diet_gluten_free.html_name }}" id="{{ form.diet_gluten_free.id_for_label }}" class="form-check-input"{% if form.diet_gluten_free.value %} checked{% endif %}>
-            <label class="form-check-label" for="{{ form.diet_gluten_free.id_for_label }}">{% trans "Gluten-free" %}</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="checkbox" name="{{ form.diet_lactose_free.html_name }}" id="{{ form.diet_lactose_free.id_for_label }}" class="form-check-input"{% if form.diet_lactose_free.value %} checked{% endif %}>
-            <label class="form-check-label" for="{{ form.diet_lactose_free.id_for_label }}">{% trans "Lactose/dairy-free" %}</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="checkbox" name="{{ form.diet_no_eggs.html_name }}" id="{{ form.diet_no_eggs.id_for_label }}" class="form-check-input"{% if form.diet_no_eggs.value %} checked{% endif %}>
-            <label class="form-check-label" for="{{ form.diet_no_eggs.id_for_label }}">{% trans "No eggs" %}</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="checkbox" name="{{ form.diet_no_peanuts.html_name }}" id="{{ form.diet_no_peanuts.id_for_label }}" class="form-check-input"{% if form.diet_no_peanuts.value %} checked{% endif %}>
-            <label class="form-check-label" for="{{ form.diet_no_peanuts.id_for_label }}">{% trans "No peanuts" %}</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="checkbox" name="{{ form.diet_no_tree_nuts.html_name }}" id="{{ form.diet_no_tree_nuts.id_for_label }}" class="form-check-input"{% if form.diet_no_tree_nuts.value %} checked{% endif %}>
-            <label class="form-check-label" for="{{ form.diet_no_tree_nuts.id_for_label }}">{% trans "No tree nuts" %}</label>
+            <input type="checkbox" name="{{ form.diet_vegan.html_name }}" id="{{ form.diet_vegan.id_for_label }}" class="form-check-input"{% if form.diet_vegan.value %} checked{% endif %}>
+            <label class="form-check-label" for="{{ form.diet_vegan.id_for_label }}">{% trans "Vegan" %}</label>
         </div>
         <div class="form-check form-check-inline">
             <input type="checkbox" name="{{ form.diet_no_soy.html_name }}" id="{{ form.diet_no_soy.id_for_label }}" class="form-check-input"{% if form.diet_no_soy.value %} checked{% endif %}>
             <label class="form-check-label" for="{{ form.diet_no_soy.id_for_label }}">{% trans "No soy" %}</label>
         </div>
         <div class="form-check form-check-inline">
-            <input type="checkbox" name="{{ form.diet_no_fish.html_name }}" id="{{ form.diet_no_fish.id_for_label }}" class="form-check-input"{% if form.diet_no_fish.value %} checked{% endif %}>
-            <label class="form-check-label" for="{{ form.diet_no_fish.id_for_label }}">{% trans "No fish" %}</label>
+            <input type="checkbox" name="{{ form.diet_lactose_free.html_name }}" id="{{ form.diet_lactose_free.id_for_label }}" class="form-check-input"{% if form.diet_lactose_free.value %} checked{% endif %}>
+            <label class="form-check-label" for="{{ form.diet_lactose_free.id_for_label }}">{% trans "Lactose-free" %}</label>
         </div>
         <div class="form-check form-check-inline">
-            <input type="checkbox" name="{{ form.diet_no_fruits.html_name }}" id="{{ form.diet_no_fruits.id_for_label }}" class="form-check-input"{% if form.diet_no_fruits.value %} checked{% endif %}>
-            <label class="form-check-label" for="{{ form.diet_no_fruits.id_for_label }}">{% trans "No fruits" %}</label>
+            <input type="checkbox" name="{{ form.diet_gluten_free.html_name }}" id="{{ form.diet_gluten_free.id_for_label }}" class="form-check-input"{% if form.diet_gluten_free.value %} checked{% endif %}>
+            <label class="form-check-label" for="{{ form.diet_gluten_free.id_for_label }}">{% trans "Gluten-free" %}</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="{{ form.diet_no_peanuts.html_name }}" id="{{ form.diet_no_peanuts.id_for_label }}" class="form-check-input"{% if form.diet_no_peanuts.value %} checked{% endif %}>
+            <label class="form-check-label" for="{{ form.diet_no_peanuts.id_for_label }}">{% trans "No peanuts" %}</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="{{ form.diet_no_eggs.html_name }}" id="{{ form.diet_no_eggs.id_for_label }}" class="form-check-input"{% if form.diet_no_eggs.value %} checked{% endif %}>
+            <label class="form-check-label" for="{{ form.diet_no_eggs.id_for_label }}">{% trans "No eggs" %}</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="{{ form.diet_no_fish.html_name }}" id="{{ form.diet_no_fish.id_for_label }}" class="form-check-input"{% if form.diet_no_fish.value %} checked{% endif %}>
+            <label class="form-check-label" for="{{ form.diet_no_fish.id_for_label }}">{% trans "No fish" %}</label>
         </div>
         <input type="text" name="{{ form.diet_other.html_name }}" id="{{ form.diet_other.id_for_label }}"
                class="form-control form-control-sm mt-1"
@@ -354,44 +346,36 @@
             <td>
     <div class="small">
         <div class="form-check form-check-inline">
-            <input type="checkbox" name="participants-__prefix__-diet_vegan" id="id_participants-__prefix__-diet_vegan" class="form-check-input">
-            <label class="form-check-label" for="id_participants-__prefix__-diet_vegan">{% trans "Vegan" %}</label>
-        </div>
-        <div class="form-check form-check-inline">
             <input type="checkbox" name="participants-__prefix__-diet_vegetarian" id="id_participants-__prefix__-diet_vegetarian" class="form-check-input">
             <label class="form-check-label" for="id_participants-__prefix__-diet_vegetarian">{% trans "Vegetarian" %}</label>
         </div>
         <div class="form-check form-check-inline">
-            <input type="checkbox" name="participants-__prefix__-diet_gluten_free" id="id_participants-__prefix__-diet_gluten_free" class="form-check-input">
-            <label class="form-check-label" for="id_participants-__prefix__-diet_gluten_free">{% trans "Gluten-free" %}</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="checkbox" name="participants-__prefix__-diet_lactose_free" id="id_participants-__prefix__-diet_lactose_free" class="form-check-input">
-            <label class="form-check-label" for="id_participants-__prefix__-diet_lactose_free">{% trans "Lactose/dairy-free" %}</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="checkbox" name="participants-__prefix__-diet_no_eggs" id="id_participants-__prefix__-diet_no_eggs" class="form-check-input">
-            <label class="form-check-label" for="id_participants-__prefix__-diet_no_eggs">{% trans "No eggs" %}</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="checkbox" name="participants-__prefix__-diet_no_peanuts" id="id_participants-__prefix__-diet_no_peanuts" class="form-check-input">
-            <label class="form-check-label" for="id_participants-__prefix__-diet_no_peanuts">{% trans "No peanuts" %}</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="checkbox" name="participants-__prefix__-diet_no_tree_nuts" id="id_participants-__prefix__-diet_no_tree_nuts" class="form-check-input">
-            <label class="form-check-label" for="id_participants-__prefix__-diet_no_tree_nuts">{% trans "No tree nuts" %}</label>
+            <input type="checkbox" name="participants-__prefix__-diet_vegan" id="id_participants-__prefix__-diet_vegan" class="form-check-input">
+            <label class="form-check-label" for="id_participants-__prefix__-diet_vegan">{% trans "Vegan" %}</label>
         </div>
         <div class="form-check form-check-inline">
             <input type="checkbox" name="participants-__prefix__-diet_no_soy" id="id_participants-__prefix__-diet_no_soy" class="form-check-input">
             <label class="form-check-label" for="id_participants-__prefix__-diet_no_soy">{% trans "No soy" %}</label>
         </div>
         <div class="form-check form-check-inline">
-            <input type="checkbox" name="participants-__prefix__-diet_no_fish" id="id_participants-__prefix__-diet_no_fish" class="form-check-input">
-            <label class="form-check-label" for="id_participants-__prefix__-diet_no_fish">{% trans "No fish" %}</label>
+            <input type="checkbox" name="participants-__prefix__-diet_lactose_free" id="id_participants-__prefix__-diet_lactose_free" class="form-check-input">
+            <label class="form-check-label" for="id_participants-__prefix__-diet_lactose_free">{% trans "Lactose-free" %}</label>
         </div>
         <div class="form-check form-check-inline">
-            <input type="checkbox" name="participants-__prefix__-diet_no_fruits" id="id_participants-__prefix__-diet_no_fruits" class="form-check-input">
-            <label class="form-check-label" for="id_participants-__prefix__-diet_no_fruits">{% trans "No fruits" %}</label>
+            <input type="checkbox" name="participants-__prefix__-diet_gluten_free" id="id_participants-__prefix__-diet_gluten_free" class="form-check-input">
+            <label class="form-check-label" for="id_participants-__prefix__-diet_gluten_free">{% trans "Gluten-free" %}</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="participants-__prefix__-diet_no_peanuts" id="id_participants-__prefix__-diet_no_peanuts" class="form-check-input">
+            <label class="form-check-label" for="id_participants-__prefix__-diet_no_peanuts">{% trans "No peanuts" %}</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="participants-__prefix__-diet_no_eggs" id="id_participants-__prefix__-diet_no_eggs" class="form-check-input">
+            <label class="form-check-label" for="id_participants-__prefix__-diet_no_eggs">{% trans "No eggs" %}</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="participants-__prefix__-diet_no_fish" id="id_participants-__prefix__-diet_no_fish" class="form-check-input">
+            <label class="form-check-label" for="id_participants-__prefix__-diet_no_fish">{% trans "No fish" %}</label>
         </div>
         <input type="text" name="participants-__prefix__-diet_other" id="id_participants-__prefix__-diet_other"
                class="form-control form-control-sm mt-1" placeholder="{% trans 'Other' %}">

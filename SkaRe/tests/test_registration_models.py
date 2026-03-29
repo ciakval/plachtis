@@ -33,9 +33,9 @@ class PersonDietaryFieldsTest(TestCase):
     def test_all_diet_booleans_default_false(self):
         p = self._make_person()
         for field in [
-            'diet_vegan', 'diet_vegetarian', 'diet_gluten_free',
-            'diet_lactose_free', 'diet_no_eggs', 'diet_no_peanuts',
-            'diet_no_tree_nuts', 'diet_no_soy', 'diet_no_fish', 'diet_no_fruits',
+            'diet_vegetarian', 'diet_vegan',
+            'diet_no_soy', 'diet_lactose_free', 'diet_gluten_free',
+            'diet_no_peanuts', 'diet_no_eggs', 'diet_no_fish',
         ]:
             self.assertFalse(getattr(p, field), f'{field} should default to False')
 
