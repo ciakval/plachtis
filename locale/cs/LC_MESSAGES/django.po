@@ -405,7 +405,7 @@ msgstr "kontaktní telefon"
 
 #: SkaRe/models/boats.py:76
 msgid "vessel registry number"
-msgstr "registrační číslo v rejstříku malých plavidel (je-li přiděleno)
+msgstr "registrační číslo v rejstříku malých plavidel (je-li přiděleno)"
 
 #: SkaRe/models/boats.py:77
 msgid "engine power (hp)"
@@ -1142,7 +1142,7 @@ msgstr "Ostatní lodě"
 
 #: SkaRe/models/tickets.py:14
 msgid "Spare"
-msgstr Náhradní"
+msgstr "Náhradní"
 
 #: SkaRe/models/tickets.py:17
 msgid "Ashore"
@@ -2267,7 +2267,8 @@ msgstr "organizátorů"
 msgid ""
 "Displaying only the newest %(limit)s records in each section to keep the "
 "page responsive."
-msgstr "Zobrazuji pouze nejnovějších %(limit) zázanamů v každé sekci kvůli rychlosti."
+msgstr ""
+"Zobrazuji pouze nejnovějších %(limit)s zázanamů v každé sekci kvůli rychlosti."
 
 #: SkaRe/templates/SkaRe/registration/list_all.html:197
 msgid "Regular participant"
@@ -2367,7 +2368,7 @@ msgstr "jednotlivci"
 msgid ""
 "Displaying only the newest %(limit)s records in each category to keep the "
 "page responsive."
-msgstr "Zobrazuji pouze nejnovějších %(limit) zázanamů v každé sekci kvůli rychlosti."
+msgstr "Zobrazuji pouze nejnovějších %(limit)s zázanamů v každé sekci kvůli rychlosti."
 
 #: SkaRe/templates/SkaRe/registration/list_merchandise.html:95
 #: SkaRe/templates/SkaRe/registration/manage_editors.html:19
@@ -3081,7 +3082,7 @@ msgstr "Editoři organizátora nemohou být upravování po uzavření editace."
 #: SkaRe/views/tickets.py:122
 #, python-format
 msgid "Waiting for RFID scan on ticket %(code)s\\u2026"
-msgstr "Čekám na načtení fyzické plavenky s kódem %(code)"
+msgstr "Čekám na načtení fyzické plavenky s kódem %(code)s"
 
 #: SkaRe/views/tickets.py:194
 #, python-format
