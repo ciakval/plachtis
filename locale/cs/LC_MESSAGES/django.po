@@ -1553,7 +1553,7 @@ msgstr "Role"
 
 #: SkaRe/templates/SkaRe/crews/detail.html:59
 msgid "Back to my crews"
-msgstr "Zpět na posádku"
+msgstr "Zpět na Mé posádky"
 
 #: SkaRe/templates/SkaRe/crews/edit.html:4
 #: SkaRe/templates/SkaRe/crews/edit.html:9
