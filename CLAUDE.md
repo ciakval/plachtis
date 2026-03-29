@@ -10,36 +10,34 @@ PlachtIS is a Django 6.0 event registration system for SkaRe (a sailing event). 
 
 ```bash
 # Development server
-python manage.py runserver
-# or with uv:
 uv run manage.py runserver
 
 # Database migrations
-python manage.py migrate
-python manage.py makemigrations
+uv run manage.py migrate
+uv run manage.py makemigrations
 
 # Run all tests
-python manage.py test
+uv run manage.py test
 
 # Run tests for specific module / class / method
-python manage.py test SkaRe.tests.test_boat_views
-python manage.py test SkaRe.tests.test_boat_views.SailLookupViewTest
-python manage.py test SkaRe.tests.test_boat_views.SailLookupViewTest.test_found_returns_json
+uv run manage.py test SkaRe.tests.test_boat_views
+uv run manage.py test SkaRe.tests.test_boat_views.SailLookupViewTest
+uv run manage.py test SkaRe.tests.test_boat_views.SailLookupViewTest.test_found_returns_json
 
 # Useful test flags
-python manage.py test --failfast --keepdb --verbosity=2
+uv run manage.py test --failfast --keepdb --verbosity=2
 
 # Seed test data
-python manage.py seed_small
-python manage.py seed_medium
-python manage.py seed_large
+uv run manage.py seed_small
+uv run manage.py seed_medium
+uv run manage.py seed_large
 
 # Translations (compile after editing .po files)
-python manage.py compilemessages
+uv run manage.py compilemessages
 
 # Django system checks
-python manage.py check
-python manage.py check --deploy  # production validation
+uv run manage.py check
+uv run manage.py check --deploy  # production validation
 ```
 
 ## Architecture
