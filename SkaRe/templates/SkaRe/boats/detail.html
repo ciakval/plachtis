@@ -14,7 +14,7 @@
                         <i class="bi bi-pencil"></i> {% trans "Edit" %}
                     </a>
                 {% endif %}
-                {% if is_creator %}
+                {% if can_delete %}
                     <a href="{% url 'SkaRe:boat_delete' boat_id=boat.pk %}" class="btn btn-danger">
                         <i class="bi bi-trash"></i> {% trans "Delete" %}
                     </a>

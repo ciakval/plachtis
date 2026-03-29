@@ -13,6 +13,7 @@ from django.utils.translation import gettext as _
 from django.db import transaction
 from ..models import Entity, Unit, BoatClass, Boat
 from ..forms import BoatForm
+from ..permissions import is_infodesk
 
 _SAIL_REGISTRY_CACHE_KEY = "sail_registry_rows"
 
@@ -130,7 +131,7 @@ def boat_detail(request, boat_id):
     return render(request, 'SkaRe/boats/detail.html', {
         'boat': boat,
         'can_edit': boat.can_be_edited(request.user),
-        'is_creator': boat.created_by == request.user,
+        'can_delete': boat.created_by == request.user or is_infodesk(request.user),
     })
 
 
@@ -180,8 +181,8 @@ def boat_edit(request, boat_id):
 @login_required
 def boat_delete(request, boat_id):
     boat = get_object_or_404(Boat, id=boat_id)
-    if boat.created_by != request.user:
-        messages.error(request, _('Only the boat creator can delete it.'))
+    if boat.created_by != request.user and not is_infodesk(request.user):
+        messages.error(request, _('You do not have permission to delete this boat.'))
         return redirect('SkaRe:boat_detail', boat_id=boat_id)
     if request.method == 'POST':
         boat.delete()
