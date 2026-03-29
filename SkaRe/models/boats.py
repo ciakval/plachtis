@@ -42,18 +42,6 @@ class Boat(models.Model):
     Only the creator can delete.
     No editing deadline in Phase 1.
     """
-    class Color(models.TextChoices):
-        WHITE  = 'bila',     _('White')
-        BLACK  = 'cerna',    _('Black')
-        RED    = 'cervena',  _('Red')
-        BLUE   = 'modra',    _('Blue')
-        GREEN  = 'zelena',   _('Green')
-        YELLOW = 'zluta',    _('Yellow')
-        ORANGE = 'oranzova', _('Orange')
-        GRAY   = 'seda',     _('Gray')
-        BROWN  = 'hneda',    _('Brown')
-        OTHER  = 'jina',     _('Other')
-
     created_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -79,8 +67,8 @@ class Boat(models.Model):
         verbose_name=_('sail area'),
         max_digits=8, decimal_places=2, null=True, blank=True,
     )
-    hull_color             = models.CharField(verbose_name=_('hull color'), max_length=20, choices=Color.choices, blank=True)
-    sail_color             = models.CharField(verbose_name=_('sail color'), max_length=20, choices=Color.choices, blank=True)
+    hull_color             = models.CharField(verbose_name=_('hull color'), max_length=50)
+    sail_color             = models.CharField(verbose_name=_('sail color'), max_length=50)
     harbor_number = models.CharField(verbose_name=_('harbor number'), max_length=100, blank=True)
     harbor_name = models.CharField(verbose_name=_('harbor name'), max_length=200, blank=True)
     contact_person = models.CharField(verbose_name=_('contact person'), max_length=200)

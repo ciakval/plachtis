@@ -61,12 +61,12 @@
                 </dl>
                 {% if boat.hull_color %}
                 <p class="mb-2">
-                    <strong>{% trans "Hull color:" %}</strong> {{ boat.get_hull_color_display }}
+                    <strong>{% trans "Hull color:" %}</strong> {{ boat.hull_color }}
                 </p>
                 {% endif %}
                 {% if boat.sail_color %}
                 <p class="mb-2">
-                    <strong>{% trans "Sail color:" %}</strong> {{ boat.get_sail_color_display }}
+                    <strong>{% trans "Sail color:" %}</strong> {{ boat.sail_color }}
                 </p>
                 {% endif %}
             </div>

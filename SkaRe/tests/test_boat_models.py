@@ -34,6 +34,8 @@ class BoatModelTest(TestCase):
             name='My Boat',
             contact_person='Jan Novák',
             contact_phone='+420123456789',
+            hull_color='Bílá',
+            sail_color='Bílá',
         )
         defaults.update(kwargs)
         return Boat.objects.create(**defaults)
@@ -84,24 +86,23 @@ class BoatColorFieldTest(TestCase):
         )
 
     def _make_boat(self, **kw):
+        defaults = dict(hull_color='Bílá', sail_color='Bílá')
+        defaults.update(kw)
         return Boat.objects.create(
             created_by=self.user, boat_class=self.bc,
             name='Test', contact_person='J', contact_phone='123456789',
-            **kw
+            **defaults
         )
 
-    def test_hull_color_blank_by_default(self):
-        boat = self._make_boat()
-        self.assertEqual(boat.hull_color, '')
-
-    def test_sail_color_blank_by_default(self):
-        boat = self._make_boat()
-        self.assertEqual(boat.sail_color, '')
-
-    def test_hull_color_accepts_valid_choice(self):
-        boat = self._make_boat(hull_color=Boat.Color.WHITE)
+    def test_hull_color_stores_free_text(self):
+        boat = self._make_boat(hull_color='Modrá', sail_color='Bílá')
         boat.refresh_from_db()
-        self.assertEqual(boat.hull_color, 'bila')
+        self.assertEqual(boat.hull_color, 'Modrá')
+
+    def test_sail_color_stores_free_text(self):
+        boat = self._make_boat(hull_color='Červená', sail_color='Zelená')
+        boat.refresh_from_db()
+        self.assertEqual(boat.sail_color, 'Zelená')
 
     def test_vessel_registry_number_blank_by_default(self):
         boat = self._make_boat()
@@ -124,10 +125,12 @@ class BoatLendingFieldsTest(TestCase):
         self.bc = BoatClass.objects.create(name='P550', category=BoatClass.Category.SAIL, order=1)
 
     def _make_boat(self, **kw):
+        defaults = dict(hull_color='Bílá', sail_color='Bílá')
+        defaults.update(kw)
         return Boat.objects.create(
             created_by=self.user, boat_class=self.bc,
             name='Lendable', contact_person='J', contact_phone='123456789',
-            **kw
+            **defaults
         )
 
     def test_willing_to_lend_defaults_false(self):

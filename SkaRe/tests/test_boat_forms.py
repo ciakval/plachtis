@@ -17,6 +17,8 @@ class BoatFormTest(TestCase):
             'name': 'My Boat',
             'description': '',
             'sail_area': '',
+            'hull_color': 'Bílá',
+            'sail_color': 'Modrá',
             'harbor_number': '523.10',
             'harbor_name': '5. oddíl Koráb',
             'contact_person': 'Jan Novák',
@@ -109,20 +111,27 @@ class BoatFormNewFieldsTest(TestCase):
             'boat_class': bc.pk,
             'sail_number': '14',
             'name': 'Albatros',
+            'hull_color': 'Bílá',
+            'sail_color': 'Modrá',
             'contact_person': 'Jan Novák',
             'contact_phone': '+420 123 456 789',
         }
 
     def test_form_valid_with_hull_and_sail_color(self):
         data = self._base_data()
-        data['hull_color'] = 'bila'
-        data['sail_color'] = 'modra'
+        data['hull_color'] = 'Modrá'
+        data['sail_color'] = 'Červená'
         form = BoatForm(data=data)
         self.assertTrue(form.is_valid(), form.errors)
 
-    def test_form_valid_without_optional_new_fields(self):
-        form = BoatForm(data=self._base_data())
-        self.assertTrue(form.is_valid(), form.errors)
+    def test_hull_and_sail_color_required(self):
+        data = self._base_data()
+        data['hull_color'] = ''
+        data['sail_color'] = ''
+        form = BoatForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('hull_color', form.errors)
+        self.assertIn('sail_color', form.errors)
 
     def test_boat_class_now_required(self):
         data = self._base_data()
@@ -156,6 +165,8 @@ class BoatFormWillingToLendTest(TestCase):
         data = {
             'boat_class': bc.pk,
             'name': 'Test Boat',
+            'hull_color': 'Bílá',
+            'sail_color': 'Modrá',
             'contact_person': 'Jan',
             'contact_phone': '123456789',
             'willing_to_lend': False,
