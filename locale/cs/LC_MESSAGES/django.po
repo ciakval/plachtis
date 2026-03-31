@@ -368,8 +368,8 @@ msgid "sail number"
 msgstr "plachetní číslo"
 
 #: SkaRe/models/boats.py:64
-msgid "name"
-msgstr "název"
+msgid "Boat name"
+msgstr "Jméno lodi"
 
 #: SkaRe/models/boats.py:65
 msgid "description"

@@ -61,14 +61,15 @@ class Boat(models.Model):
         max_length=200, blank=True,
     )
     sail_number = models.CharField(verbose_name=_('sail number'), max_length=50, blank=True)
-    name = models.CharField(verbose_name=_('name'), max_length=200)
+    name = models.CharField(verbose_name=_('Boat name'), max_length=200)
     description = models.TextField(verbose_name=_('description'), blank=True)
     sail_area = models.DecimalField(
         verbose_name=_('sail area'),
         max_digits=8, decimal_places=2, null=True, blank=True,
     )
     hull_color             = models.CharField(verbose_name=_('hull color'), max_length=50)
-    sail_color             = models.CharField(verbose_name=_('sail color'), max_length=50)
+    # Not all boats have sails, make it optional
+    sail_color             = models.CharField(verbose_name=_('sail color'), max_length=50, blank=True, null=True)
     harbor_number = models.CharField(verbose_name=_('harbor number'), max_length=100, blank=True)
     harbor_name = models.CharField(verbose_name=_('harbor name'), max_length=200, blank=True)
     contact_person = models.CharField(verbose_name=_('contact person'), max_length=200)
