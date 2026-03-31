@@ -1827,7 +1827,7 @@ msgstr "Typ"
 
 #: SkaRe/templates/SkaRe/infodesk/registrations.html:38
 msgid "Created"
-msgstr "Autor"
+msgstr "Datum registrace"
 
 #: SkaRe/templates/SkaRe/infodesk/registrations.html:56
 #: SkaRe/templates/SkaRe/registration/manage_entities.html:43
