@@ -124,14 +124,19 @@ class BoatFormNewFieldsTest(TestCase):
         form = BoatForm(data=data)
         self.assertTrue(form.is_valid(), form.errors)
 
-    def test_hull_and_sail_color_required(self):
+    def test_hull_color_required(self):
         data = self._base_data()
         data['hull_color'] = ''
-        data['sail_color'] = ''
         form = BoatForm(data=data)
         self.assertFalse(form.is_valid())
         self.assertIn('hull_color', form.errors)
-        self.assertIn('sail_color', form.errors)
+
+    def test_sail_color_optional(self):
+        data = self._base_data()
+        data['sail_color'] = ''
+        form = BoatForm(data=data)
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertNotIn('sail_color', form.errors)
 
     def test_boat_class_now_required(self):
         data = self._base_data()
