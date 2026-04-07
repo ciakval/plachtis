@@ -278,7 +278,7 @@ def ticket_export_csv(request):
 
     writer = csv.writer(response)
     writer.writerow([
-        'Code', 'Color', 'Boat class', 'Sail number', 'Boat name',
+        'Code', 'Color', 'Boat class', 'Sail number', 'Boat name', 'Harbor',
         'Contact person', 'Contact phone', 'RFID UID', 'Status',
     ])
     for ticket in tickets:
@@ -289,6 +289,7 @@ def ticket_export_csv(request):
             _csv_safe(boat.boat_class.name) if boat and boat.boat_class else '',
             boat.sail_number if boat else '',
             _csv_safe(boat.name) if boat else '',
+            _csv_safe(str(boat.harbor_number) + " " + boat.harbor_name) if boat else '',
             _csv_safe(boat.contact_person) if boat else '',
             _csv_safe(boat.contact_phone) if boat else '',
             _csv_safe(ticket.rfid_uid),
