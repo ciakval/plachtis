@@ -55,7 +55,7 @@ def _extract_numeric(sail_number):
 def _build_ticket_plan(boats, reserve_counts, spare_count):
     """Return a list of unsaved SailTicket instances representing the full plan.
 
-    Each ticket is annotated with a ``_from_sail_number`` bool attribute.
+    Each ticket is annotated with a ``from_sail_number`` bool attribute.
 
     Args:
         boats: queryset of Boat objects, select_related('boat_class')
@@ -95,22 +95,22 @@ def _build_ticket_plan(boats, reserve_counts, spare_count):
 
         for num, boat in claimed.items():
             t = SailTicket(code=f'{prefix}-{num}', color=color, boat=boat)
-            t._from_sail_number = True
+            t.from_sail_number = True
             tickets.append(t)
 
         for i, boat in enumerate(unnumbered):
             t = SailTicket(code=f'{prefix}-{sequential[i]}', color=color, boat=boat)
-            t._from_sail_number = False
+            t.from_sail_number = False
             tickets.append(t)
 
         for i in range(len(unnumbered), total_sequential):
             t = SailTicket(code=f'{prefix}-{sequential[i]}', color=color)
-            t._from_sail_number = False
+            t.from_sail_number = False
             tickets.append(t)
 
     for i in range(1, spare_count + 1):
         t = SailTicket(code=f'SPARE-{i}', color=SailTicket.Color.SPARE)
-        t._from_sail_number = False
+        t.from_sail_number = False
         tickets.append(t)
 
     return tickets

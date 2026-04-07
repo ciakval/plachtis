@@ -164,13 +164,13 @@ class BuildTicketPlanTest(TestCase):
         boats = Boat.objects.select_related('boat_class')
         plan = _build_ticket_plan(boats, _NO_RESERVES, 0)
         ticket = next(t for t in plan if t.code == 'P550-7')
-        self.assertTrue(ticket._from_sail_number)
+        self.assertTrue(ticket.from_sail_number)
 
     def test_from_sail_number_annotation_false_for_unnumbered_boat(self):
         _make_boat(self.user, sail_number='')
         boats = Boat.objects.select_related('boat_class')
         plan = _build_ticket_plan(boats, _NO_RESERVES, 0)
-        self.assertFalse(plan[0]._from_sail_number)
+        self.assertFalse(plan[0].from_sail_number)
 
     def test_from_sail_number_annotation_false_for_reserve(self):
         boats = Boat.objects.none()
@@ -179,7 +179,7 @@ class BuildTicketPlanTest(TestCase):
             SailTicket.Color.SAIL: 0,
             SailTicket.Color.OTHER: 0,
         }, 0)
-        self.assertFalse(plan[0]._from_sail_number)
+        self.assertFalse(plan[0].from_sail_number)
 
     def test_categories_are_independent(self):
         """P550 and SAIL sail numbers don't conflict with each other."""
