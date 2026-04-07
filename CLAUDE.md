@@ -46,14 +46,15 @@ uv run manage.py check --deploy  # production validation
 
 - **`PlachtIS/`** — Django project: `settings.py`, `urls.py` (root router)
 - **`SkaRe/`** — Single Django app containing all business logic:
-  - `models.py` — Core data models (~650 lines)
-  - `views.py` — Function-based views (~1350 lines)
-  - `forms.py` — Form definitions and validators (~500 lines)
+  - `models/` — Data models split by domain: `registration.py`, `boats.py`, `tickets.py`, `attendance.py`
+  - `views/` — Function-based views split by domain: `registration.py`, `boats.py`, `crews.py`, `tickets.py`, `attendance.py`, `infodesk.py`, `exports.py`
+  - `forms/` — Forms split by domain: `registration.py`, `boats.py`, `crews.py`, `tickets.py`
+  - `permissions.py` — `infodesk_required` / `is_infodesk` / `is_race_management` helpers
   - `urls.py` — App URL routing
   - `form_utils.py` — CSRF token helpers for duplicate-submission prevention
   - `context_processors.py` — Injects `VERSION`/`BUILD_ID` into all templates
   - `management/commands/` — `seed_small/medium/large.py` seeding commands
-  - `tests/` — Test suite (boat views, forms, models, migrations)
+  - `tests/` — Test suite (boat, crew, registration, ticket, attendance, infodesk, exports, permissions)
 
 ### Data Model
 
@@ -71,6 +72,10 @@ Entity  — registration owner/editor metadata
 EventSettings (django-solo singleton) — registration/editing deadlines
 
 BoatClass → Boat (created_by User, references BoatClass)
+Crew → CrewMember (references Person)
+
+SailTicket (RFID-tagged ticket per person, rfid_uid field) → SailTicketLog
+AttendanceLog (event attendance tracking)
 ```
 
 ### Permission Model
