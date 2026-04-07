@@ -190,3 +190,88 @@ class BuildTicketPlanTest(TestCase):
         codes = [t.code for t in plan]
         self.assertIn('P550-5', codes)
         self.assertIn('SAIL-5', codes)
+
+
+class TicketCreateBulkViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.desk = _make_infodesk()
+        self.client.login(username='desk', password='pw')
+        self.owner = User.objects.create_user('owner', password='pw')
+
+    def _post(self, extra=None):
+        data = {
+            'p550_reserves': 0,
+            'sail_reserves': 0,
+            'other_reserves': 0,
+            'spare_count': 0,
+        }
+        if extra:
+            data.update(extra)
+        return self.client.post(reverse('SkaRe:ticket_create_bulk'), data)
+
+    def test_get_renders_form_no_plan(self):
+        response = self.client.get(reverse('SkaRe:ticket_create_bulk'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.context)
+        self.assertNotIn('plan', response.context)
+
+    def test_post_step1_renders_preview_without_db_changes(self):
+        response = self._post({'p550_reserves': 2})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('plan', response.context)
+        self.assertEqual(SailTicket.objects.count(), 0)
+
+    def test_post_step1_plan_in_context_matches_reserves(self):
+        response = self._post({'p550_reserves': 3})
+        plan = response.context['plan']
+        p550_tickets = [t for t in plan if t.color == SailTicket.Color.P550]
+        self.assertEqual(len(p550_tickets), 3)
+
+    def test_post_step2_deletes_existing_tickets(self):
+        SailTicket.objects.create(code='OLD-001', color=SailTicket.Color.SPARE)
+        self._post({'confirm': '1', 'spare_count': 1})
+        self.assertFalse(SailTicket.objects.filter(code='OLD-001').exists())
+
+    def test_post_step2_deletes_logs_via_cascade(self):
+        ticket = SailTicket.objects.create(code='OLD-001', color=SailTicket.Color.SPARE)
+        SailTicketLog.objects.create(ticket=ticket, status=SailTicket.Status.ASHORE)
+        self._post({'confirm': '1'})
+        self.assertEqual(SailTicketLog.objects.count(), 0)
+
+    def test_post_step2_creates_correct_tickets(self):
+        response = self._post({'confirm': '1', 'p550_reserves': 2, 'spare_count': 1})
+        self.assertRedirects(response, reverse('SkaRe:ticket_list'))
+        self.assertEqual(SailTicket.objects.count(), 3)
+        codes = set(SailTicket.objects.values_list('code', flat=True))
+        self.assertIn('P550-1', codes)
+        self.assertIn('P550-2', codes)
+        self.assertIn('SPARE-1', codes)
+
+    def test_post_step2_zero_existing_tickets_works(self):
+        self.assertEqual(SailTicket.objects.count(), 0)
+        self._post({'confirm': '1', 'spare_count': 2})
+        self.assertEqual(SailTicket.objects.count(), 2)
+
+    def test_post_step2_assigns_sail_number_as_code(self):
+        _make_boat(self.owner, sail_number='CZE 99', boat_class=_p550_class())
+        self._post({'confirm': '1'})
+        self.assertTrue(SailTicket.objects.filter(code='P550-99').exists())
+
+    def test_post_step2_conflict_one_gets_number_other_gets_sequential(self):
+        _make_boat(self.owner, sail_number='CZE 1234', name='First', boat_class=_p550_class())
+        _make_boat(self.owner, sail_number='1234', name='Second', boat_class=_p550_class())
+        self._post({'confirm': '1'})
+        codes = set(SailTicket.objects.values_list('code', flat=True))
+        self.assertIn('P550-1234', codes)
+        self.assertIn('P550-1', codes)
+        self.assertEqual(SailTicket.objects.count(), 2)
+
+    def test_post_step2_redirects_to_ticket_list(self):
+        response = self._post({'confirm': '1'})
+        self.assertRedirects(response, reverse('SkaRe:ticket_list'))
+
+    def test_get_requires_infodesk(self):
+        self.client.logout()
+        response = self.client.get(reverse('SkaRe:ticket_create_bulk'))
+        self.assertNotEqual(response.status_code, 200)
