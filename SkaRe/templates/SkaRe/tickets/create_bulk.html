@@ -9,15 +9,74 @@
   <i class="bi bi-arrow-left"></i> {% trans "All tickets" %}
 </a>
 
+{% if plan %}
+{# ── Preview / confirmation mode ── #}
+<div class="alert alert-danger">
+  <i class="bi bi-exclamation-octagon-fill"></i>
+  <strong>{% trans "Warning" %}</strong> —
+  {% blocktrans with n=existing_ticket_count %}
+    This will permanently delete all {{ n }} existing tickets and their logs. This cannot be undone.
+  {% endblocktrans %}
+</div>
+
+{% for color_label, tickets in plan_by_color %}
+<h5 class="mt-4">{{ color_label }} <span class="badge bg-secondary">{{ tickets|length }}</span></h5>
+<table class="table table-sm table-bordered">
+  <thead class="table-light">
+    <tr>
+      <th>{% trans "Code" %}</th>
+      <th>{% trans "Boat" %}</th>
+      <th>{% trans "Number source" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ticket in tickets %}
+    <tr>
+      <td><code>{{ ticket.code }}</code></td>
+      <td>
+        {% if ticket.boat %}
+          {{ ticket.boat.name }}
+          {% if ticket.boat.sail_number %}<span class="text-muted">({{ ticket.boat.sail_number }})</span>{% endif %}
+        {% else %}
+          <span class="text-muted">{% trans "Reserve — no boat" %}</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if ticket._from_sail_number %}
+          <span class="badge bg-primary">{% trans "From sail number" %}</span>
+        {% else %}
+          <span class="badge bg-secondary">{% trans "Sequential" %}</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endfor %}
+
+<form method="post" class="mt-4">
+  {% csrf_token %}
+  {% for field in form %}<input type="hidden" name="{{ field.html_name }}" value="{{ field.value }}">{% endfor %}
+  <input type="hidden" name="confirm" value="1">
+  <a href="{% url 'SkaRe:ticket_create_bulk' %}" class="btn btn-outline-secondary me-2">
+    <i class="bi bi-arrow-left"></i> {% trans "Back" %}
+  </a>
+  <button type="submit" class="btn btn-danger">
+    <i class="bi bi-trash"></i> {% trans "Confirm and create tickets" %}
+  </button>
+</form>
+
+{% else %}
+{# ── Input form mode ── #}
 {% if existing_ticket_count > 0 %}
 <div class="alert alert-warning">
   <i class="bi bi-exclamation-triangle"></i>
-  {% blocktrans with n=existing_ticket_count %}{{ n }} tickets already exist. Only boats without an assigned ticket will receive a new one.{% endblocktrans %}
+  {% blocktrans with n=existing_ticket_count %}{{ n }} tickets already exist. Proceeding will delete them all.{% endblocktrans %}
 </div>
 {% endif %}
 
 <div class="card mb-4">
-  <div class="card-header">{% trans "Registered boats (without a ticket)" %}</div>
+  <div class="card-header">{% trans "Registered boats (all)" %}</div>
   <div class="card-body">
     <ul class="mb-0">
       {% for color, count in boat_preview.items %}<li>{{ color }}: {{ count }}</li>{% empty %}<li class="text-muted">{% trans "None" %}</li>{% endfor %}
@@ -35,8 +94,9 @@
     {% for error in field.errors %}<div class="text-danger">{{ error }}</div>{% endfor %}
   </div>
   {% endfor %}
-  <button type="submit" class="btn btn-success">
-    <i class="bi bi-check-circle"></i> {% trans "Create tickets" %}
+  <button type="submit" class="btn btn-warning">
+    <i class="bi bi-eye"></i> {% trans "Preview tickets" %}
   </button>
 </form>
+{% endif %}
 {% endblock %}
