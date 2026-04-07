@@ -1,4 +1,6 @@
 import csv
+import re
+from collections import defaultdict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db import transaction
@@ -32,29 +34,86 @@ def _boat_color(boat):
     return SailTicket.Color.OTHER
 
 
-def _generate_codes(color_prefix, count):
-    """Generate `count` unique sequential codes for the given prefix, skipping existing ones."""
-    existing = set(
-        SailTicket.objects.filter(code__startswith=f'{color_prefix}-')
-        .values_list('code', flat=True)
-    )
-    codes = []
-    n = 1
-    limit = count + len(existing) + 1
-    while len(codes) < count and n <= limit:
-        code = f'{color_prefix}-{n:03d}'
-        if code not in existing:
-            codes.append(code)
-        n += 1
-    return codes
-
-
 COLOR_PREFIX = {
     SailTicket.Color.P550: 'P550',
     SailTicket.Color.SAIL: 'SAIL',
     SailTicket.Color.OTHER: 'OTHER',
     SailTicket.Color.SPARE: 'SPARE',
 }
+
+
+def _extract_numeric(sail_number):
+    """Extract the integer from a sail number string, e.g. 'CZE 1234' → 1234.
+
+    Returns None if no digits are present or the result is zero.
+    """
+    digits = re.sub(r'\D', '', sail_number)
+    n = int(digits) if digits else 0
+    return n if n > 0 else None
+
+
+def _build_ticket_plan(boats, reserve_counts, spare_count):
+    """Return a list of unsaved SailTicket instances representing the full plan.
+
+    Each ticket is annotated with a ``_from_sail_number`` bool attribute.
+
+    Args:
+        boats: queryset of Boat objects, select_related('boat_class')
+        reserve_counts: dict mapping SailTicket.Color → int (reserves per category)
+        spare_count: int — number of SPARE tickets to generate
+    """
+    boat_groups = {
+        SailTicket.Color.P550: [],
+        SailTicket.Color.SAIL: [],
+        SailTicket.Color.OTHER: [],
+    }
+    for boat in boats.order_by('pk'):
+        color = _boat_color(boat)
+        boat_groups[color].append(boat)
+
+    tickets = []
+
+    for color, color_boats in boat_groups.items():
+        prefix = COLOR_PREFIX[color]
+        claimed = {}    # int number → Boat
+        unnumbered = []
+
+        for boat in color_boats:
+            num = _extract_numeric(boat.sail_number) if boat.sail_number else None
+            if num is not None and num not in claimed:
+                claimed[num] = boat
+            else:
+                unnumbered.append(boat)
+
+        total_sequential = len(unnumbered) + reserve_counts.get(color, 0)
+        sequential = []
+        n = 1
+        while len(sequential) < total_sequential:
+            if n not in claimed:
+                sequential.append(n)
+            n += 1
+
+        for num, boat in claimed.items():
+            t = SailTicket(code=f'{prefix}-{num}', color=color, boat=boat)
+            t._from_sail_number = True
+            tickets.append(t)
+
+        for i, boat in enumerate(unnumbered):
+            t = SailTicket(code=f'{prefix}-{sequential[i]}', color=color, boat=boat)
+            t._from_sail_number = False
+            tickets.append(t)
+
+        for i in range(len(unnumbered), total_sequential):
+            t = SailTicket(code=f'{prefix}-{sequential[i]}', color=color)
+            t._from_sail_number = False
+            tickets.append(t)
+
+    for i in range(1, spare_count + 1):
+        t = SailTicket(code=f'SPARE-{i}', color=SailTicket.Color.SPARE)
+        t._from_sail_number = False
+        tickets.append(t)
+
+    return tickets
 
 
 @infodesk_required
@@ -146,61 +205,49 @@ def ticket_create_bulk(request):
     if request.method == 'POST':
         form = BulkTicketCreateForm(request.POST)
         if form.is_valid():
-            p550_reserves = form.cleaned_data['p550_reserves']
-            sail_reserves = form.cleaned_data['sail_reserves']
-            other_reserves = form.cleaned_data['other_reserves']
-            spare_count = form.cleaned_data['spare_count']
-
-            # Boats that don't yet have any ticket assigned
-            assigned_boat_ids = set(
-                SailTicket.objects.filter(boat__isnull=False).values_list('boat_id', flat=True)
-            )
-            boats = Boat.objects.select_related('boat_class').exclude(pk__in=assigned_boat_ids)
-
-            # Group boats by color
-            boat_groups = {
-                SailTicket.Color.P550: [],
-                SailTicket.Color.SAIL: [],
-                SailTicket.Color.OTHER: [],
-            }
-            for boat in boats:
-                color = _boat_color(boat)
-                boat_groups[color].append(boat)
-
             reserve_counts = {
-                SailTicket.Color.P550: p550_reserves,
-                SailTicket.Color.SAIL: sail_reserves,
-                SailTicket.Color.OTHER: other_reserves,
+                SailTicket.Color.P550: form.cleaned_data['p550_reserves'],
+                SailTicket.Color.SAIL: form.cleaned_data['sail_reserves'],
+                SailTicket.Color.OTHER: form.cleaned_data['other_reserves'],
             }
+            spare_count = form.cleaned_data['spare_count']
+            boats = Boat.objects.select_related('boat_class')
+            plan = _build_ticket_plan(boats, reserve_counts, spare_count)
 
-            with transaction.atomic():
-                to_create = []
-                for color, color_boats in boat_groups.items():
-                    total = len(color_boats) + reserve_counts[color]
-                    if total == 0:
-                        continue
-                    codes = _generate_codes(COLOR_PREFIX[color], total)
-                    for i, boat in enumerate(color_boats):
-                        to_create.append(SailTicket(code=codes[i], color=color, boat=boat))
-                    for i in range(len(color_boats), total):
-                        to_create.append(SailTicket(code=codes[i], color=color))
-                if spare_count > 0:
-                    spare_codes = _generate_codes(COLOR_PREFIX[SailTicket.Color.SPARE], spare_count)
-                    for code in spare_codes:
-                        to_create.append(SailTicket(code=code, color=SailTicket.Color.SPARE))
-                SailTicket.objects.bulk_create(to_create)
-                created = len(to_create)
+            if request.POST.get('confirm') == '1':
+                with transaction.atomic():
+                    SailTicket.objects.all().delete()
+                    SailTicket.objects.bulk_create(plan)
+                messages.success(request, _('%(n)d tickets created.') % {'n': len(plan)})
+                return redirect('SkaRe:ticket_list')
 
-            messages.success(request, _('%(n)d tickets created.') % {'n': created})
-            return redirect('SkaRe:ticket_list')
+            # Step 1: show preview — group tickets by color for the template
+            groups = defaultdict(list)
+            for ticket in plan:
+                groups[ticket.color].append(ticket)
+            color_order = [
+                SailTicket.Color.P550,
+                SailTicket.Color.SAIL,
+                SailTicket.Color.OTHER,
+                SailTicket.Color.SPARE,
+            ]
+            plan_by_color = [
+                (SailTicket.Color(color).label, groups[color])
+                for color in color_order
+                if groups[color]
+            ]
+            return render(request, 'SkaRe/tickets/create_bulk.html', {
+                'form': form,
+                'plan': plan,
+                'plan_by_color': plan_by_color,
+                'existing_ticket_count': SailTicket.objects.count(),
+            })
     else:
         form = BulkTicketCreateForm()
 
-    unassigned_boats = Boat.objects.select_related('boat_class').exclude(
-        pk__in=SailTicket.objects.filter(boat__isnull=False).values_list('boat_id', flat=True)
-    )
+    all_boats = Boat.objects.select_related('boat_class')
     boat_preview = {}
-    for boat in unassigned_boats:
+    for boat in all_boats:
         color = _boat_color(boat)
         boat_preview[color] = boat_preview.get(color, 0) + 1
 

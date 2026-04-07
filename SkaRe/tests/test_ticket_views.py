@@ -219,6 +219,7 @@ class BulkTicketCreateTest(TestCase):
             'sail_reserves': 0,
             'other_reserves': 0,
             'spare_count': 1,
+            'confirm': '1',
         })
         self.assertRedirects(response, reverse('SkaRe:ticket_list'))
         # 1 boat ticket + 2 reserves + 1 spare = 4
@@ -230,6 +231,7 @@ class BulkTicketCreateTest(TestCase):
         self.client.post(url, {
             'p550_reserves': 0, 'sail_reserves': 0,
             'other_reserves': 0, 'spare_count': 0,
+            'confirm': '1',
         })
         ticket = SailTicket.objects.filter(boat=boat).first()
         self.assertIsNotNone(ticket)
@@ -239,6 +241,7 @@ class BulkTicketCreateTest(TestCase):
         self.client.post(url, {
             'p550_reserves': 0, 'sail_reserves': 0,
             'other_reserves': 0, 'spare_count': 3,
+            'confirm': '1',
         })
         spares = SailTicket.objects.filter(color=SailTicket.Color.SPARE)
         self.assertEqual(spares.count(), 3)
@@ -246,15 +249,16 @@ class BulkTicketCreateTest(TestCase):
 
     def test_skips_boats_already_assigned_a_ticket(self):
         boat = _make_boat(self.owner)
-        existing = _make_ticket('P550-001', boat=boat)
+        _make_ticket('P550-001', boat=boat)
         url = reverse('SkaRe:ticket_create_bulk')
         self.client.post(url, {
             'p550_reserves': 0, 'sail_reserves': 0,
             'other_reserves': 0, 'spare_count': 0,
+            'confirm': '1',
         })
-        # No duplicate ticket for the same boat
+        # Bulk create wipes all tickets and re-creates; boat gets exactly one ticket
         self.assertEqual(SailTicket.objects.filter(boat=boat).count(), 1)
-        # Total tickets should still be 1 (not 2)
+        # Total tickets: 1 (just the one boat)
         self.assertEqual(SailTicket.objects.count(), 1)
 
 
