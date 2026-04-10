@@ -10,7 +10,6 @@ from django.core.paginator import Paginator
 from django import forms
 from django.utils.translation import gettext as _
 from django.utils.http import url_has_allowed_host_and_scheme
-from django.http import HttpResponse
 from ..models import (
     Entity, Unit, RegularParticipant, EventSettings,
     IndividualParticipant, Organizer, Person,

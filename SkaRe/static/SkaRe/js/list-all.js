@@ -20,6 +20,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Type filter
     document.getElementById('typeFilter').addEventListener('change', filterTable);
+
+    // Export button
+    const exportButton = document.getElementById('exportCsvButton');
+    if (exportButton) {
+        exportButton.addEventListener('click', exportVisibleRowsToCsv);
+    }
 });
 
 function updateColumnVisibility() {
@@ -154,5 +160,73 @@ function updateSortIcons(activeColumn, ascending) {
         activeIcon.classList.remove('bi-arrow-down-up');
         activeIcon.classList.add(ascending ? 'bi-arrow-up' : 'bi-arrow-down');
     }
+}
+
+function exportVisibleRowsToCsv() {
+    const table = document.getElementById('participantsTable');
+    if (!table) {
+        return;
+    }
+
+    const visibleColumns = Array.from(table.querySelectorAll('thead th[data-col]')).filter(function(th) {
+        return !th.classList.contains('hidden-column');
+    });
+
+    const visibleRows = Array.from(table.querySelectorAll('tbody tr')).filter(function(row) {
+        return row.style.display !== 'none';
+    });
+
+    if (visibleColumns.length === 0 || visibleRows.length === 0) {
+        return;
+    }
+
+    const csvLines = [];
+
+    const headers = visibleColumns.map(function(th) {
+        return _csvEscape(th.textContent);
+    });
+    csvLines.push(headers.join(','));
+
+    visibleRows.forEach(function(row) {
+        const values = visibleColumns.map(function(th) {
+            const columnKey = th.dataset.col;
+            const cell = row.querySelector('td[data-col="' + columnKey + '"]');
+            return _csvEscape(cell ? cell.textContent : '');
+        });
+        csvLines.push(values.join(','));
+    });
+
+    const csvContent = '\ufeff' + csvLines.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'all_participants_filtered.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    showExportConfirmation();
+}
+
+// Keep function available for inline onclick fallback.
+window.exportVisibleRowsToCsv = exportVisibleRowsToCsv;
+
+function _csvEscape(value) {
+    const text = (value || '').toString().replace(/\s+/g, ' ').trim();
+    return '"' + text.replace(/"/g, '""') + '"';
+}
+
+function showExportConfirmation() {
+    const feedback = document.getElementById('exportCsvFeedback');
+    if (!feedback) {
+        return;
+    }
+
+    feedback.classList.remove('d-none');
+    window.setTimeout(function() {
+        feedback.classList.add('d-none');
+    }, 3000);
 }
 
