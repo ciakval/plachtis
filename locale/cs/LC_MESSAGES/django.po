@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 21:54+0000\n"
+"POT-Creation-Date: 2026-04-14 19:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,98 +19,61 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
 "<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#: SkaRe/forms/boats.py:49
 msgid "Sailboats"
 msgstr "Plachetnice"
 
-#: SkaRe/forms/boats.py:50 SkaRe/models/boats.py:10
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:348
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:439
-#: SkaRe/templates/SkaRe/registration/register_unit.html:298
-#: SkaRe/templates/SkaRe/registration/register_unit.html:381
 msgid "Other"
 msgstr "Ostatní"
 
-#: SkaRe/forms/boats.py:56 SkaRe/forms/boats.py:57
 msgid "Colour is critical for identifying the boat on the water."
 msgstr "Barva je při identifikaci lodi na vodě zásadní."
 
-#: SkaRe/forms/crews.py:10 SkaRe/models/boats.py:94
-#: SkaRe/templates/SkaRe/boats/detail.html:32
-#: SkaRe/templates/SkaRe/boats/form.html:19
-#: SkaRe/templates/SkaRe/crews/detail.html:17
-#: SkaRe/templates/SkaRe/crews/list.html:23
-#: SkaRe/templates/SkaRe/tickets/detail.html:25
-#: SkaRe/templates/SkaRe/tickets/list.html:53
-#: SkaRe/templates/SkaRe/tickets/lookup.html:26
-#: SkaRe/templates/SkaRe/tickets/on_water.html:23
 msgid "Boat"
 msgstr "Loď"
 
-#: SkaRe/forms/crews.py:11
 msgid "— select a boat —"
 msgstr "— vyber loď —"
 
-#: SkaRe/forms/crews.py:14
 msgid "— select a category —"
 msgstr "— vyber kategorii —"
 
-#: SkaRe/forms/crews.py:15 SkaRe/models/boats.py:16
-#: SkaRe/models/registration.py:148 SkaRe/templates/SkaRe/crews/detail.html:19
-#: SkaRe/templates/SkaRe/crews/list.html:24
-#: SkaRe/templates/SkaRe/registration/list_all.html:66
-#: SkaRe/templates/SkaRe/registration/list_all.html:162
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:32
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:35
 msgid "Category"
 msgstr "Výchovná kategorie"
 
-#: SkaRe/forms/crews.py:19 SkaRe/views/crews.py:52 SkaRe/views/crews.py:132
 msgid "Helmsman"
 msgstr "Kormidelník"
 
-#: SkaRe/forms/crews.py:20
 msgid "— select a person —"
 msgstr "— vyber účastníka —"
 
-#: SkaRe/forms/crews.py:25 SkaRe/views/crews.py:53 SkaRe/views/crews.py:133
 msgid "Crew member 1"
 msgstr "Lodník 1"
 
-#: SkaRe/forms/crews.py:26 SkaRe/forms/crews.py:32 SkaRe/forms/crews.py:38
-#: SkaRe/forms/crews.py:44
 msgid "—"
 msgstr "—"
 
-#: SkaRe/forms/crews.py:31 SkaRe/views/crews.py:54 SkaRe/views/crews.py:134
 msgid "Crew member 2"
 msgstr "Lodník 2"
 
-#: SkaRe/forms/crews.py:37 SkaRe/views/crews.py:55 SkaRe/views/crews.py:135
 msgid "Crew member 3"
 msgstr "Lodník 3"
 
-#: SkaRe/forms/crews.py:43 SkaRe/views/crews.py:56 SkaRe/views/crews.py:136
 msgid "Crew member 4"
 msgstr "Lodník 4"
 
-#: SkaRe/forms/crews.py:80
 msgid "A participant cannot appear more than once in a crew."
 msgstr "Účastník nemůže být v posádce více než jednou."
 
-#: SkaRe/forms/registration.py:22
 msgid ""
 "Phone number must have exactly 9 digits after +420 (e.g., +420 123 456 789)"
 msgstr ""
 "Telefonní číslo musí mít přesně 9 číslic za +420 (např., +420 123 456 789)"
 
-#: SkaRe/forms/registration.py:27
 msgid ""
 "Phone number must have exactly 9 digits after +421 (e.g., +421 123 456 789)"
 msgstr ""
 "Telefonní číslo musí mít přesně 9 číslic za +421 (např., +421 123 456 789)"
 
-#: SkaRe/forms/registration.py:32
 msgid ""
 "Phone number must be: +420 followed by 9 digits, +421 followed by 9 digits, "
 "or just 9 digits (e.g., +420 123 456 789, +421 123 456 789, or 123 456 789)"
@@ -119,7 +82,6 @@ msgstr ""
 "číslicemi, nebo pouze 9 číslic (např., +420 123 456 789, +421 123 456 789, "
 "nebo 123 456 789)"
 
-#: SkaRe/forms/registration.py:50
 msgid ""
 "Enter a valid phone number (e.g. +420 123 456 789, +49 30 12345678 or "
 "123456789)"
@@ -127,1172 +89,720 @@ msgstr ""
 "Zadejte platné telefonní číslo (např. +420 123 456 789, +49 30 12345678 nebo "
 "123456789)"
 
-#: SkaRe/forms/registration.py:84
 msgid ""
 "Password must be at least 8 characters. Cannot be entirely numeric or too "
 "similar to your username."
 msgstr ""
 
-#: SkaRe/forms/registration.py:87
 msgid "Enter the same password again to confirm."
 msgstr ""
 
-#: SkaRe/forms/registration.py:107 SkaRe/views/registration.py:265
 msgid "Scout Unit Name"
 msgstr "Název oddílu/střediska/přístavu"
 
-#: SkaRe/forms/registration.py:112 SkaRe/views/registration.py:270
 msgid "e.g., 523.10"
 msgstr "např. 523.10"
 
-#: SkaRe/forms/registration.py:113 SkaRe/models/registration.py:338
-#: SkaRe/templates/SkaRe/registration/list_units.html:32
-#: SkaRe/views/registration.py:271
 msgid "Evidence ID"
 msgstr "Evidenční číslo oddílu/střediska/přístavu"
 
-#: SkaRe/forms/registration.py:114 SkaRe/views/registration.py:272
 msgid ""
 "Junák unit ID (e.g. 523.10). Non-Junák units can leave this blank or use "
 "their own identifier."
 msgstr "Číslo jednotky v Junáku (ostatní nechají prázdné)"
 
-#: SkaRe/forms/registration.py:120 SkaRe/forms/registration.py:298
-#: SkaRe/forms/registration.py:397
 msgid "Contact Email"
 msgstr "Kontaktní e-mail"
 
-#: SkaRe/forms/registration.py:125 SkaRe/forms/registration.py:303
-#: SkaRe/forms/registration.py:402
 msgid "Contact Phone"
 msgstr "Kontaktní telefon"
 
-#: SkaRe/forms/registration.py:131 SkaRe/forms/registration.py:309
-#: SkaRe/forms/registration.py:408
-#: SkaRe/templates/SkaRe/registration/list_all.html:92
-#: SkaRe/templates/SkaRe/registration/list_all.html:168
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:50
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:86
-#: SkaRe/templates/SkaRe/registration/list_units.html:50
 msgid "Expected Arrival"
 msgstr "Očekávaný příjezd"
 
-#: SkaRe/forms/registration.py:137 SkaRe/forms/registration.py:315
-#: SkaRe/forms/registration.py:414
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:55
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:91
-#: SkaRe/templates/SkaRe/registration/list_units.html:55
 msgid "Expected Departure"
 msgstr "Očekávaný odjezd"
 
-#: SkaRe/forms/registration.py:144 SkaRe/forms/registration.py:322
-#: SkaRe/forms/registration.py:421
-#: SkaRe/templates/SkaRe/registration/list_all.html:88
-#: SkaRe/templates/SkaRe/registration/list_all.html:167
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:45
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:81
-#: SkaRe/templates/SkaRe/registration/list_units.html:45
 msgid "Home Town"
 msgstr "Obec, odkud na SkaRe přijedeš"
 
-#: SkaRe/forms/registration.py:259 SkaRe/forms/registration.py:364
-#: SkaRe/forms/registration.py:476 SkaRe/models/registration.py:126
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:399
-#: SkaRe/templates/SkaRe/registration/register_unit.html:341
 msgid "First name"
 msgstr "Jméno"
 
-#: SkaRe/forms/registration.py:260 SkaRe/forms/registration.py:365
-#: SkaRe/forms/registration.py:477 SkaRe/models/registration.py:127
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:400
-#: SkaRe/templates/SkaRe/registration/register_unit.html:342
 msgid "Last name"
 msgstr "Příjmení"
 
-#: SkaRe/forms/registration.py:261 SkaRe/models/registration.py:129
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:268
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:401
-#: SkaRe/templates/SkaRe/registration/list_all.html:56
-#: SkaRe/templates/SkaRe/registration/list_all.html:160
-#: SkaRe/templates/SkaRe/registration/register_unit.html:245
-#: SkaRe/templates/SkaRe/registration/register_unit.html:343
 msgid "Nickname"
 msgstr "Přezdívka"
 
-#: SkaRe/forms/registration.py:263
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:403
-#: SkaRe/templates/SkaRe/registration/register_unit.html:345
 msgid "e.g. Anxiety, asthma"
 msgstr "např. Srdeční nedostatečnost, užívá Oxazepam, úzkostná porucha"
 
-#: SkaRe/forms/registration.py:272 SkaRe/forms/registration.py:377
-#: SkaRe/forms/registration.py:489
 #, fuzzy
 #| msgid "Other dietary restrictions"
 msgid "Other restrictions"
 msgstr "Ostatní stravovací omezení"
 
-#: SkaRe/forms/registration.py:273
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:442
-#: SkaRe/templates/SkaRe/registration/register_unit.html:384
 msgid "e.g. Special needs"
 msgstr "Další informace"
 
-#: SkaRe/forms/registration.py:366 SkaRe/forms/registration.py:478
 msgid "Nickname (optional)"
 msgstr "Přezdívka (volitelně)"
 
-#: SkaRe/forms/registration.py:368 SkaRe/forms/registration.py:480
-#: SkaRe/models/registration.py:153
 msgid "Any health restrictions or medical conditions"
 msgstr "Zdravotní omezení / Duševní stav"
 
-#: SkaRe/forms/registration.py:378 SkaRe/forms/registration.py:490
 msgid "Any relevant information"
 msgstr "Další údaje"
 
-#: SkaRe/forms/registration.py:386
 msgid "e.g., Small tent, caravan"
 msgstr "např. Malý stan, Karavan, ..."
 
-#: SkaRe/forms/registration.py:387
 msgid "e.g., 20 m²"
 msgstr "např. 20 m2"
 
-#: SkaRe/forms/registration.py:426 SkaRe/models/registration.py:627
 msgid "Codex agreement"
 msgstr "Kodex jednání dospělých"
 
-#: SkaRe/forms/registration.py:427 SkaRe/forms/registration.py:444
 #, fuzzy
 #| msgid "Whether the organizer agrees to follow the event codex"
 msgid "You must agree to follow the event codex."
 msgstr "Zda se organizátor zavazuje dodržovat Kodex jednání dospělých"
 
-#: SkaRe/forms/tickets.py:8
 msgid "P550 reserve tickets"
 msgstr "Plavenky navíc pro P550"
 
-#: SkaRe/forms/tickets.py:9
 msgid "Extra P550 tickets beyond registered P550 boats"
 msgstr "Plavenky navíc pro P550"
 
-#: SkaRe/forms/tickets.py:13
 msgid "Sailboat reserve tickets"
 msgstr "Plavenky navíc pro ostatní plachetnice"
 
-#: SkaRe/forms/tickets.py:14
 msgid "Extra sailboat tickets beyond registered sailboats"
 msgstr "Plavenky navíc pro ostatní plachetnice"
 
-#: SkaRe/forms/tickets.py:18
 msgid "Other boat reserve tickets"
 msgstr "Plavenky navíc pro ostatní lodě"
 
-#: SkaRe/forms/tickets.py:19
 msgid "Extra other-boat tickets beyond registered other boats"
 msgstr "Plavenky navíc pro ostatní plachetnice"
 
-#: SkaRe/forms/tickets.py:23
 msgid "Spare tickets"
 msgstr "Rezervní plavenky"
 
-#: SkaRe/forms/tickets.py:24
 msgid "Spare tickets not assigned to any boat"
 msgstr "Rezervní plavenky"
 
-#: SkaRe/models/boats.py:9
 msgid "Sail"
 msgstr "Plachetnice"
 
-#: SkaRe/models/boats.py:12
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:16
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:16
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:33
-#: SkaRe/templates/SkaRe/boats/detail.html:49
-#: SkaRe/templates/SkaRe/boats/list.html:27
-#: SkaRe/templates/SkaRe/crews/detail.html:34
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:35
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:76
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:84
-#: SkaRe/views/exports.py:78 SkaRe/views/exports.py:159
 msgid "Name"
 msgstr "Název"
 
-#: SkaRe/models/boats.py:20
 msgid ""
 "Marks the catch-all 'Other' entry for this category. Convention only — no DB "
 "constraint."
 msgstr ""
 
-#: SkaRe/models/boats.py:21
 msgid "Is other"
 msgstr ""
 
-#: SkaRe/models/boats.py:25
 msgid "Controls display order in dropdowns."
 msgstr ""
 
-#: SkaRe/models/boats.py:26
 msgid "Order"
 msgstr ""
 
-#: SkaRe/models/boats.py:31
 msgid "Boat class"
 msgstr "Lodní třída"
 
-#: SkaRe/models/boats.py:32
 msgid "Boat classes"
 msgstr "Lodní třídy"
 
-#: SkaRe/models/boats.py:49
 msgid ""
-"Deleting the user also deletes their boats — consistent with Entity."
-"created_by."
+"Deleting the user also deletes their boats — consistent with "
+"Entity.created_by."
 msgstr "Smazáním uživatele se smažou i jeho lodě."
 
-#: SkaRe/models/boats.py:50 SkaRe/models/registration.py:299
 msgid "Created by"
 msgstr "Autor"
 
-#: SkaRe/models/boats.py:57
 msgid "boat class"
 msgstr "Lodní třída"
 
-#: SkaRe/models/boats.py:60
 msgid "class supplement"
 msgstr "Upřesnění lodní třídy"
 
-#: SkaRe/models/boats.py:63
 msgid "sail number"
 msgstr "plachetní číslo"
 
-#: SkaRe/models/boats.py:64
 msgid "Boat name"
 msgstr "Jméno lodi"
 
-#: SkaRe/models/boats.py:65
 msgid "description"
 msgstr "popis"
 
-#: SkaRe/models/boats.py:67
 msgid "sail area"
 msgstr "plocha plachet"
 
-#: SkaRe/models/boats.py:70
 msgid "hull color"
 msgstr "barva trupu"
 
-#: SkaRe/models/boats.py:71
 msgid "sail color"
 msgstr "barva plachet"
 
-#: SkaRe/models/boats.py:72
 msgid "harbor number"
 msgstr "evidenční číslo přístavu"
 
-#: SkaRe/models/boats.py:73
 msgid "harbor name"
 msgstr "přístav / oddíl"
 
-#: SkaRe/models/boats.py:74
 msgid "contact person"
 msgstr "kontaktní osoba"
 
-#: SkaRe/models/boats.py:75
 msgid "contact phone"
 msgstr "kontaktní telefon"
 
-#: SkaRe/models/boats.py:76
 msgid "vessel registry number"
 msgstr "registrační číslo v rejstříku malých plavidel (je-li přiděleno)"
 
-#: SkaRe/models/boats.py:77
 msgid "engine power (hp)"
 msgstr "výkon motoru (hp)"
 
-#: SkaRe/models/boats.py:80
 msgid "willing to lend"
 msgstr "ochoten půjčit"
 
-#: SkaRe/models/boats.py:81
 msgid "Check if you are willing to lend this boat for the race"
 msgstr "zaškrtněte, jste-li ochotni půjčit loď jiným oddílům"
 
-#: SkaRe/models/boats.py:87
 msgid "visible to"
 msgstr "viditelný"
 
-#: SkaRe/models/boats.py:88
 msgid "Users who can see and select this boat when registering a crew"
 msgstr "uživatelé, kteří můžou vybírat loď při registraci posádky"
 
-#: SkaRe/models/boats.py:95 SkaRe/templates/SkaRe/base.html:35
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:121
-#: SkaRe/templates/SkaRe/registration/home.html:84
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:129
 msgid "Boats"
 msgstr "Lodě"
 
-#: SkaRe/models/boats.py:119
 msgid "Q – Žabičky a vlčata"
 msgstr ""
 
-#: SkaRe/models/boats.py:120
 msgid "S – Skautky a skauti"
 msgstr ""
 
-#: SkaRe/models/boats.py:121
 msgid "R – Rangers a roveři"
 msgstr ""
 
-#: SkaRe/models/boats.py:122
 msgid "D – Dospělí"
 msgstr ""
 
-#: SkaRe/models/boats.py:123
 msgid "SN – Skautští námořníci"
 msgstr ""
 
-#: SkaRe/models/boats.py:124
 msgid "DN – Dospělí námořníci"
 msgstr ""
 
-#: SkaRe/models/boats.py:125
 msgid "OŽ – Open Žáci"
 msgstr ""
 
-#: SkaRe/models/boats.py:126
 msgid "OD – Open Dospělí"
 msgstr ""
 
-#: SkaRe/models/boats.py:127
 msgid "MS – Modrá stuha"
 msgstr ""
 
-#: SkaRe/models/boats.py:133
 msgid "boat"
 msgstr "loď"
 
-#: SkaRe/models/boats.py:138
 msgid "category"
 msgstr "typ lodi"
 
-#: SkaRe/models/boats.py:143
 msgid "created by"
 msgstr "Autor"
 
-#: SkaRe/models/boats.py:150 SkaRe/models/boats.py:173
 msgid "crew"
 msgstr "posádka"
 
-#: SkaRe/models/boats.py:151
 msgid "crews"
 msgstr "posádky"
 
-#: SkaRe/models/boats.py:165
 msgid "Kormidelník"
 msgstr ""
 
-#: SkaRe/models/boats.py:166
 msgid "Člen posádky"
 msgstr ""
 
-#: SkaRe/models/boats.py:178
 msgid "role"
 msgstr ""
 
-#: SkaRe/models/boats.py:183
 #, fuzzy
 #| msgid "participants"
 msgid "participant"
 msgstr "Účastníci"
 
-#: SkaRe/models/boats.py:187
 msgid "crew member"
 msgstr "člen posádky"
 
-#: SkaRe/models/boats.py:188
 msgid "crew members"
 msgstr "člen posádky"
 
-#: SkaRe/models/registration.py:19
 msgid "Date of birth cannot be in the future."
 msgstr "Datum narození nemůže být v budoucnosti."
 
-#: SkaRe/models/registration.py:22
 msgid "Date of birth cannot be before 1900."
 msgstr "Datum narození nemůže být před rokem 1900."
 
-#: SkaRe/models/registration.py:34
 msgid "Deadline for creating new Units and Participants"
 msgstr "Termín uzavření registrace účastníků"
 
-#: SkaRe/models/registration.py:39
 msgid "Deadline for editing Units and Participants"
 msgstr "Termín uzavření registrace účastníků"
 
-#: SkaRe/models/registration.py:46
 msgid "Deadline for creating and editing crew registrations"
 msgstr "Termín uzavření registrace posádek"
 
-#: SkaRe/models/registration.py:47
 msgid "Crew registration deadline"
 msgstr "Termín uzavření registrace posádek"
 
-#: SkaRe/models/registration.py:54 SkaRe/models/registration.py:55
 msgid "Event Settings"
 msgstr "Nastavení události"
 
-#: SkaRe/models/registration.py:129
 msgid "Optional nickname"
 msgstr "Přezdívka (volitelně)"
 
-#: SkaRe/models/registration.py:132 SkaRe/models/registration.py:133
-#: SkaRe/templates/SkaRe/crews/detail.html:35 SkaRe/views/exports.py:159
 msgid "Date of birth"
 msgstr "Datum narození"
 
-#: SkaRe/models/registration.py:138
 msgid "Adult"
 msgstr "Dospělý (18+)"
 
-#: SkaRe/models/registration.py:139
 msgid "Rover"
 msgstr "Rover/Ranger (16-18)"
 
-#: SkaRe/models/registration.py:140
 msgid "Scout"
 msgstr "Skaut/Skautka (13-15)"
 
-#: SkaRe/models/registration.py:141
 msgid "Cub"
 msgstr "Vlče/Světluška (0-12)"
 
-#: SkaRe/models/registration.py:147
 msgid "Scout category"
 msgstr "Výchovná kategorie"
 
-#: SkaRe/models/registration.py:154 SkaRe/views/exports.py:160
 msgid "Health restrictions"
 msgstr "Zdravotní omezení / Duševní stav"
 
-#: SkaRe/models/registration.py:157
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:236
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:242
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:316
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:408
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:244
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:262
-#: SkaRe/templates/SkaRe/registration/register_unit.html:266
-#: SkaRe/templates/SkaRe/registration/register_unit.html:350
-#: SkaRe/views/exports.py:12
 msgid "Vegetarian"
 msgstr "Vegetarián"
 
-#: SkaRe/models/registration.py:158
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:241
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:247
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:320
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:412
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:249
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:267
-#: SkaRe/templates/SkaRe/registration/register_unit.html:270
-#: SkaRe/templates/SkaRe/registration/register_unit.html:354
-#: SkaRe/views/exports.py:13
 msgid "Vegan"
 msgstr "Vegan"
 
-#: SkaRe/models/registration.py:161
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:246
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:252
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:324
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:416
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:254
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:272
-#: SkaRe/templates/SkaRe/registration/register_unit.html:274
-#: SkaRe/templates/SkaRe/registration/register_unit.html:358
-#: SkaRe/views/exports.py:14
 msgid "No soy"
 msgstr "Bez sóji"
 
-#: SkaRe/models/registration.py:162
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:251
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:257
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:328
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:420
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:259
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:277
-#: SkaRe/templates/SkaRe/registration/register_unit.html:278
-#: SkaRe/templates/SkaRe/registration/register_unit.html:362
-#: SkaRe/views/exports.py:15
 msgid "Lactose-free"
 msgstr "Bez laktózy"
 
-#: SkaRe/models/registration.py:163
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:256
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:262
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:332
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:424
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:264
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:282
-#: SkaRe/templates/SkaRe/registration/register_unit.html:282
-#: SkaRe/templates/SkaRe/registration/register_unit.html:366
-#: SkaRe/views/exports.py:16
 msgid "Gluten-free"
 msgstr "Bez lepku"
 
-#: SkaRe/models/registration.py:164
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:261
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:267
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:336
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:428
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:269
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:287
-#: SkaRe/templates/SkaRe/registration/register_unit.html:286
-#: SkaRe/templates/SkaRe/registration/register_unit.html:370
-#: SkaRe/views/exports.py:17
 msgid "No peanuts"
 msgstr "Bez arašídů"
 
-#: SkaRe/models/registration.py:165
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:266
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:272
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:340
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:432
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:274
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:292
-#: SkaRe/templates/SkaRe/registration/register_unit.html:290
-#: SkaRe/templates/SkaRe/registration/register_unit.html:374
-#: SkaRe/views/exports.py:18
 msgid "No eggs"
 msgstr "Bez vajec"
 
-#: SkaRe/models/registration.py:166
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:271
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:277
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:344
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:436
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:279
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:297
-#: SkaRe/templates/SkaRe/registration/register_unit.html:294
-#: SkaRe/templates/SkaRe/registration/register_unit.html:378
-#: SkaRe/views/exports.py:19
 msgid "No fish"
 msgstr "Bez ryb"
 
-#: SkaRe/models/registration.py:169 SkaRe/views/exports.py:80
 msgid "Other dietary restrictions"
 msgstr "Ostatní stravovací omezení"
 
-#: SkaRe/models/registration.py:171
 msgid "Any relevant information about the person"
 msgstr "Další údaje"
 
-#: SkaRe/models/registration.py:172
 msgid "Relevant information"
 msgstr "Další údaje"
 
-#: SkaRe/models/registration.py:179
 msgid "Visible to"
 msgstr ""
 
-#: SkaRe/models/registration.py:180
 msgid "Users who can see this person when registering a crew"
 msgstr ""
 
-#: SkaRe/models/registration.py:184
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:30
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:30
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:51
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:33
 msgid "Expected"
 msgstr "Nepřítomen"
 
-#: SkaRe/models/registration.py:185
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:27
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:38
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:27
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:38
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:45
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:60
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:25
 msgid "Arrived"
 msgstr "Přítomen"
 
-#: SkaRe/models/registration.py:186
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:28
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:44
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:28
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:44
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:47
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:66
 msgid "Departed"
 msgstr "Odjel"
 
-#: SkaRe/models/registration.py:187
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:29
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:50
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:29
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:50
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:49
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:72
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:41
 msgid "Not coming"
 msgstr "Nepřijede"
 
-#: SkaRe/models/registration.py:193
 msgid "Attendance status"
 msgstr "Stav"
 
-#: SkaRe/models/registration.py:195
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:18
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:18
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:35
 msgid "Arrived at"
 msgstr "Čas příjezdu"
 
-#: SkaRe/models/registration.py:196
 msgid "Departed at"
 msgstr "Čas odjezdu"
 
-#: SkaRe/models/registration.py:298
 msgid "User who created this entry"
 msgstr "Uživatel, který vytořil tuto položku"
 
-#: SkaRe/models/registration.py:305
 msgid "Users who can edit this entry (in addition to the creator)"
 msgstr "Uživatel, který může měnit tuto položku (kromě autora)"
 
-#: SkaRe/models/registration.py:306
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:93
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:131
-#: SkaRe/templates/SkaRe/registration/list_units.html:123
 msgid "Editors"
 msgstr "Editoři"
 
-#: SkaRe/models/registration.py:313
 msgid ""
 "Whether this unit is unlocked for editing after the deadline (set by "
 "privileged users only)"
 msgstr "Odemčeno k editaci"
 
-#: SkaRe/models/registration.py:314
 msgid "Unlocked for editing"
 msgstr "Odemčeno k editaci"
 
-#: SkaRe/models/registration.py:319
 msgid "Whether payment has been received for this entity"
 msgstr "Zda byla zaplacena platba za tuto registraci"
 
-#: SkaRe/models/registration.py:320
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:40
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:86
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:112
 msgid "Paid"
 msgstr "Zaplaceno"
 
-#: SkaRe/models/registration.py:325
 msgid "Whether this entity has been confirmed"
 msgstr "Zda byla tato registrace potvrzena"
 
-#: SkaRe/models/registration.py:326
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:54
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:42
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:87
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:123
 msgid "Confirmed"
 msgstr "Potvrzeno"
 
-#: SkaRe/models/registration.py:331
 msgid "Name of the scout unit"
 msgstr "Jméno oddílu/střediska/přístavu"
 
-#: SkaRe/models/registration.py:332
 msgid "Scout unit name"
 msgstr "Jméno oddílu/střediska/přístavu"
 
-#: SkaRe/models/registration.py:337
 msgid "Unit evidence ID (e.g., 523.10, 816.08.001)"
 msgstr "Evidenční číslo oddílu/střediska/přístavu (např. 523.10)"
 
-#: SkaRe/models/registration.py:343
 msgid "Contact email address"
 msgstr "Kontaktní e-mail"
 
-#: SkaRe/models/registration.py:344
 msgid "Contact email"
 msgstr "Kontaktní e-mail"
 
-#: SkaRe/models/registration.py:348
 msgid "Contact phone number"
 msgstr "Kontaktní telefon"
 
-#: SkaRe/models/registration.py:349
-#: SkaRe/templates/SkaRe/tickets/on_water.html:26 SkaRe/views/exports.py:160
 msgid "Contact phone"
 msgstr "Kontaktní telefon"
 
-#: SkaRe/models/registration.py:355
 msgid "Expected date and time of arrival"
 msgstr "Očekávaný příjezd"
 
-#: SkaRe/models/registration.py:356
 msgid "Expected arrival"
 msgstr "Očekávaný příjezd"
 
-#: SkaRe/models/registration.py:360
 msgid "Expected date and time of departure"
 msgstr "Očekávaný odjezd"
 
-#: SkaRe/models/registration.py:361
 msgid "Expected departure"
 msgstr "Očekávaný odjezd"
 
-#: SkaRe/models/registration.py:365
 msgid "Home town of the unit"
 msgstr "Obec, odkud na SkaRe přijedete"
 
-#: SkaRe/models/registration.py:366
 msgid "Home town"
 msgstr "Obec, odkud na SkaRe přijedete"
 
-#: SkaRe/models/registration.py:399
 msgid "The registration entity associated with this unit"
 msgstr "Registrační entita přiřazená k této jednotce"
 
-#: SkaRe/models/registration.py:400 SkaRe/models/registration.py:493
-#: SkaRe/models/registration.py:562
 msgid "Entity"
 msgstr "Entita"
 
-#: SkaRe/models/registration.py:405
 msgid "Name of the contact person"
 msgstr "Vedoucí"
 
-#: SkaRe/models/registration.py:406
 msgid "Contact person name"
 msgstr "Vedoucí"
 
-#: SkaRe/models/registration.py:411
 msgid "Optional backup contact phone"
 msgstr "Druhý kontaktní telefon"
 
-#: SkaRe/models/registration.py:412
 msgid "Backup contact phone"
 msgstr "Druhý kontaktní telefon"
 
-#: SkaRe/models/registration.py:418 SkaRe/models/registration.py:499
 msgid "Estimated number of P550 boats"
 msgstr "Počet pramic P550"
 
-#: SkaRe/models/registration.py:419 SkaRe/models/registration.py:500
 msgid "P550 boats"
 msgstr "Počet pramic P550"
 
-#: SkaRe/models/registration.py:423 SkaRe/models/registration.py:504
 msgid "Estimated number of other sail-boats"
 msgstr "Počet jiných plachetnic"
 
-#: SkaRe/models/registration.py:424 SkaRe/models/registration.py:505
 msgid "Sail boats"
 msgstr "Počet jiných plachetnic"
 
-#: SkaRe/models/registration.py:428 SkaRe/models/registration.py:509
 msgid "Estimated number of paddle-powered boats"
 msgstr "Počet kánoí,kajaků,apod."
 
-#: SkaRe/models/registration.py:429 SkaRe/models/registration.py:510
 msgid "Paddle boats"
 msgstr "Počet kánoí,kajaků,apod."
 
-#: SkaRe/models/registration.py:433 SkaRe/models/registration.py:514
 msgid "Estimated number of motor-powered boats"
 msgstr "Počet motorových lodí"
 
-#: SkaRe/models/registration.py:434 SkaRe/models/registration.py:515
 msgid "Motor boats"
 msgstr "Počet motorových lodí"
 
-#: SkaRe/models/registration.py:439 SkaRe/models/registration.py:520
 msgid "Number of scarves"
 msgstr "Počet šátků"
 
-#: SkaRe/models/registration.py:440 SkaRe/models/registration.py:521
 msgid "Scarf count"
 msgstr "Počet šátků"
 
-#: SkaRe/models/registration.py:445 SkaRe/models/registration.py:526
 msgid "Number of large hats (L/XL)"
 msgstr "Počet čepic L/XL"
 
-#: SkaRe/models/registration.py:446 SkaRe/models/registration.py:527
 msgid "Hat count (L/XL)"
 msgstr "Počet čepic L/XL"
 
-#: SkaRe/models/registration.py:450 SkaRe/models/registration.py:531
 msgid "Number of small hats (S/M)"
 msgstr "Počet čepic S/M"
 
-#: SkaRe/models/registration.py:451 SkaRe/models/registration.py:532
 msgid "Hat count (S/M)"
 msgstr "Počet čepic S/M"
 
-#: SkaRe/models/registration.py:457 SkaRe/models/registration.py:538
 msgid "Accommodation expectations (small tents, large tent, caravan, ...)"
 msgstr "V čem plánujete spát (malé stany, velký stan, karavan, ...)"
 
-#: SkaRe/models/registration.py:458 SkaRe/models/registration.py:539
 msgid "Accommodation expectations"
 msgstr "V čem plánujete spát (malé stany, velký stan, karavan, ...)"
 
-#: SkaRe/models/registration.py:462 SkaRe/models/registration.py:543
 msgid "Estimated needed area for accommodation"
 msgstr "Kolik potřebujete místa (m2)?"
 
-#: SkaRe/models/registration.py:463 SkaRe/models/registration.py:544
 msgid "Estimated accommodation area"
 msgstr "Kolik potřebujete místa (m2)?"
 
-#: SkaRe/models/registration.py:476
 msgid "The unit this participant belongs to"
 msgstr "Jednotka, ke které účastník náleží"
 
-#: SkaRe/models/registration.py:477
-#: SkaRe/templates/SkaRe/attendance/units_list.html:16
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:30
-#: SkaRe/templates/SkaRe/exports/medical_print.html:35
-#: SkaRe/templates/SkaRe/registration/list_all.html:70
-#: SkaRe/templates/SkaRe/registration/list_all.html:163
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:85
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:17
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:95
-#: SkaRe/views/infodesk.py:33 SkaRe/views/registration.py:1031
 msgid "Unit"
 msgstr "Jednotka"
 
-#: SkaRe/models/registration.py:492
 msgid "The registration entity associated with this individual participant"
 msgstr "Registrační entita přiřazená k tomuto jednotlivci"
 
-#: SkaRe/models/registration.py:561
 msgid "The registration entity associated with this organizer"
 msgstr "Registrační entita přiřazená k tomuto organizátorovi"
 
-#: SkaRe/models/registration.py:566
 msgid "Management"
 msgstr "Ředitelství"
 
-#: SkaRe/models/registration.py:567
 msgid "Racing"
 msgstr "Závodní"
 
-#: SkaRe/models/registration.py:568
 msgid "Rescue"
 msgstr "VZS"
 
-#: SkaRe/models/registration.py:569
 msgid "Crisis"
 msgstr "Krize"
 
-#: SkaRe/models/registration.py:570
 msgid "Information"
 msgstr "Informační"
 
-#: SkaRe/models/registration.py:571
 msgid "Material"
 msgstr "TMZ"
 
-#: SkaRe/models/registration.py:572
 msgid "Food"
 msgstr "Jídelna"
 
-#: SkaRe/models/registration.py:573
 msgid "Program"
 msgstr "Program"
 
-#: SkaRe/models/registration.py:574
 msgid "Others"
 msgstr "Ostatní"
 
-#: SkaRe/models/registration.py:580
 msgid "Division the organizer belongs to"
 msgstr "Divize SkaRe"
 
-#: SkaRe/models/registration.py:581
-#: SkaRe/templates/SkaRe/registration/list_all.html:74
-#: SkaRe/templates/SkaRe/registration/list_all.html:164
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:32
 msgid "Division"
 msgstr "Divize"
 
-#: SkaRe/models/registration.py:585
 msgid "Public Transport"
 msgstr "Veřejná doprava"
 
-#: SkaRe/models/registration.py:586
 msgid "Car"
 msgstr "Vlastní auto"
 
-#: SkaRe/models/registration.py:587
 msgid "Car with Trailer"
 msgstr "Auto s přívěsem"
 
-#: SkaRe/models/registration.py:593
 msgid "Transport method to the event"
 msgstr "Způsob dopravy na akci"
 
-#: SkaRe/models/registration.py:594
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:51
 msgid "Transport"
 msgstr "Způsob dopravy na akci"
 
-#: SkaRe/models/registration.py:599
 msgid "Whether the organizer needs a lift from the nearest transport hub"
 msgstr "Zda organizátor potřebuje odvoz"
 
-#: SkaRe/models/registration.py:600
 msgid "Need lift"
 msgstr "Potřebuji odvoz z autobusu/vlaku"
 
-#: SkaRe/models/registration.py:605
 msgid "Whether the organizer wants a travel order for reimbursement"
 msgstr "Zda organizátor chce vystavit cestovní příkaz"
 
-#: SkaRe/models/registration.py:606
 msgid "Want travel order"
 msgstr "Chci vystavit cestovní příkaz"
 
-#: SkaRe/models/registration.py:610
 msgid "With Unit"
 msgstr "Se svým oddílem"
 
-#: SkaRe/models/registration.py:611
 msgid "Own Tent"
 msgstr "Ve stanu"
 
-#: SkaRe/models/registration.py:612
 msgid "Caravan"
 msgstr "V karavanu"
 
-#: SkaRe/models/registration.py:613
 msgid "Need Tent"
 msgstr "Potřebuji půjčit stan"
 
-#: SkaRe/models/registration.py:614
 msgid "Inside Building"
 msgstr "Uvnitř v budově"
 
-#: SkaRe/models/registration.py:620
 msgid "Accommodation preference of the organizer"
 msgstr "Požadavky na ubytování organizátora"
 
-#: SkaRe/models/registration.py:621
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:196
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:218
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:54
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:204
-#: SkaRe/templates/SkaRe/registration/register_unit.html:208
 msgid "Accommodation"
 msgstr "Způsob ubytování"
 
-#: SkaRe/models/registration.py:626
 msgid "Whether the organizer agrees to follow the event codex"
 msgstr "Zda se organizátor zavazuje dodržovat Kodex jednání dospělých"
 
-#: SkaRe/models/registration.py:632
 msgid "Whether the organizer wants a scarf"
 msgstr "Zda organizátor chce šátek"
 
-#: SkaRe/models/registration.py:633
 msgid "Wants scarf"
 msgstr "Chci šátek"
 
-#: SkaRe/models/registration.py:637
 msgid "Whether the organizer wants a hat"
 msgstr "Zda organizátor chce čepici"
 
-#: SkaRe/models/registration.py:638
 msgid "Wants hat"
 msgstr "Chci čepici (velkou - L/XL)"
 
-#: SkaRe/models/registration.py:642
 msgid "Whether the organizer wants a small hat (S/M)"
 msgstr "Zda organizátor chce malou čepici"
 
-#: SkaRe/models/registration.py:643
 msgid "Wants small hat (S/M)"
 msgstr "Chci čepici (malou - S/M)"
 
-#: SkaRe/models/registration.py:648
+#, python-brace-format
 msgid "{person_name}"
 msgstr "{person_name}"
 
-#: SkaRe/models/tickets.py:11
 msgid "P550"
 msgstr "P550"
 
-#: SkaRe/models/tickets.py:12
 msgid "Sailboat"
 msgstr "Plachetnice"
 
-#: SkaRe/models/tickets.py:13
 msgid "Other boat"
 msgstr "Ostatní lodě"
 
-#: SkaRe/models/tickets.py:14
 msgid "Spare"
 msgstr "Náhradní"
 
-#: SkaRe/models/tickets.py:17
 msgid "Ashore"
 msgstr "Na břehu"
 
-#: SkaRe/models/tickets.py:18 SkaRe/templates/SkaRe/tickets/list.html:19
 msgid "On water"
 msgstr "Na vodě"
 
-#: SkaRe/models/tickets.py:19
 msgid "Lost"
 msgstr "Ztracená"
 
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:4
 msgid "Attendance — Individuals"
 msgstr "Přítomnost - Jednotlivci"
 
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:7
 msgid "Attendance — Individual Participants"
 msgstr "Přítomnost - Jednotlivci"
 
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:10
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:10
-#: SkaRe/templates/SkaRe/attendance/units_list.html:10
-#: SkaRe/templates/SkaRe/exports/index.html:10
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:12
-#: SkaRe/templates/SkaRe/tickets/list.html:10
-#: SkaRe/templates/SkaRe/tickets/lookup.html:9
-#: SkaRe/templates/SkaRe/tickets/on_water.html:11
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:17
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:17
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:34
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:37
-#: SkaRe/templates/SkaRe/tickets/detail.html:24
-#: SkaRe/templates/SkaRe/tickets/detail.html:58
-#: SkaRe/templates/SkaRe/tickets/list.html:54
-#: SkaRe/templates/SkaRe/tickets/lookup.html:27
 msgid "Status"
 msgstr "Stav"
 
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:19
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:19
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:36
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:39
-#: SkaRe/templates/SkaRe/tickets/lookup.html:28
 msgid "Actions"
 msgstr "Akce"
 
-#: SkaRe/templates/SkaRe/attendance/individuals_list.html:57
 msgid "No individual participants."
 msgstr "Žádní jednotlivci."
 
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:4
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:7
 msgid "Attendance — Organizers"
 msgstr "Přítomnost - Organizátoři"
 
-#: SkaRe/templates/SkaRe/attendance/organizers_list.html:57
 msgid "No organizers."
 msgstr "Žádní organizátoři"
 
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:4
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:59
 msgid "Attendance"
 msgstr "Přítomnost"
 
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:8
-#: SkaRe/templates/SkaRe/exports/medical_print.html:36
-#: SkaRe/templates/SkaRe/exports/medical_print.html:49
-#: SkaRe/templates/SkaRe/exports/medical_print.html:62
-#: SkaRe/templates/SkaRe/tickets/on_water.html:25
 msgid "Contact"
 msgstr "Kontaktní informace"
 
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:12
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:61
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:31
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:31
 msgid "Units"
 msgstr "Jednotky"
 
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:17
 msgid "Mark all as arrived"
 msgstr "Označ všechny jako přítomné"
 
-#: SkaRe/templates/SkaRe/attendance/unit_detail.html:79
 msgid "No participants."
 msgstr "Žádní účastníci"
 
-#: SkaRe/templates/SkaRe/attendance/units_list.html:4
-#: SkaRe/templates/SkaRe/attendance/units_list.html:7
 msgid "Attendance — Units"
 msgstr "Přítomnost - Jednotky"
 
-#: SkaRe/templates/SkaRe/attendance/units_list.html:17
 msgid "Arrived / Total"
 msgstr "Přítomných / Celkem"
 
-#: SkaRe/templates/SkaRe/attendance/units_list.html:31
-#: SkaRe/templates/SkaRe/tickets/list.html:76
 msgid "Detail"
 msgstr "Detail"
 
-#: SkaRe/templates/SkaRe/attendance/units_list.html:36
 msgid "No units registered."
 msgstr "Zatím nejsou registrovány žádné jednotky."
 
-#: SkaRe/templates/SkaRe/base.html:32
-#: SkaRe/templates/SkaRe/registration/home.html:30
 msgid "Hello"
 msgstr "Ahoj"
 
-#: SkaRe/templates/SkaRe/base.html:43
 msgid "Logout"
 msgstr "Odhlásit se"
 
-#: SkaRe/templates/SkaRe/base.html:47
-#: SkaRe/templates/SkaRe/registration/home.html:119
-#: SkaRe/templates/SkaRe/registration/login.html:4
-#: SkaRe/templates/SkaRe/registration/login.html:11
-#: SkaRe/templates/SkaRe/registration/login.html:33
 msgid "Login"
 msgstr "Přihlásit se"
 
-#: SkaRe/templates/SkaRe/base.html:50 SkaRe/templates/SkaRe/boats/form.html:236
-#: SkaRe/templates/SkaRe/registration/home.html:49
-#: SkaRe/templates/SkaRe/registration/home.html:120
-#: SkaRe/templates/SkaRe/registration/register.html:4
-#: SkaRe/templates/SkaRe/registration/register.html:11
-#: SkaRe/templates/SkaRe/registration/register.html:68
 msgid "Register"
 msgstr "Registrace"
 
-#: SkaRe/templates/SkaRe/boats/confirm_delete.html:4
 #, python-format
 msgid "Delete Boat %(name)s - SkaRe"
 msgstr "Smazat loď %(name)s - SkaRe"
 
-#: SkaRe/templates/SkaRe/boats/confirm_delete.html:9
 msgid "Delete Boat"
 msgstr "Smazat loď"
 
-#: SkaRe/templates/SkaRe/boats/confirm_delete.html:13
 msgid "Confirm Deletion"
 msgstr "Potvrzení smazání"
 
-#: SkaRe/templates/SkaRe/boats/confirm_delete.html:17
 #, python-format
 msgid ""
 "Are you sure you want to delete the boat <strong>%(name)s</strong>? This "
@@ -1300,215 +810,127 @@ msgid ""
 msgstr ""
 "Opravdu chcete smazat loď <strong>%(name)s</strong>? Tato akce je nevratná."
 
-#: SkaRe/templates/SkaRe/boats/confirm_delete.html:24
-#: SkaRe/templates/SkaRe/boats/form.html:227
-#: SkaRe/templates/SkaRe/boats/form.html:231
-#: SkaRe/templates/SkaRe/crews/confirm_delete.html:18
-#: SkaRe/templates/SkaRe/crews/edit.html:72
-#: SkaRe/templates/SkaRe/crews/register.html:74
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:384
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:300
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:318
-#: SkaRe/templates/SkaRe/registration/register_unit.html:328
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: SkaRe/templates/SkaRe/boats/confirm_delete.html:29
-#: SkaRe/templates/SkaRe/boats/detail.html:19
-#: SkaRe/templates/SkaRe/crews/detail.html:54
-#: SkaRe/templates/SkaRe/crews/list.html:37
 msgid "Delete"
 msgstr "Smazat"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:14
-#: SkaRe/templates/SkaRe/crews/detail.html:53
-#: SkaRe/templates/SkaRe/crews/list.html:36
 msgid "Edit"
 msgstr "Upravit"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:24
 msgid "Manage lending"
 msgstr "Správa zápůjček"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:36
-#: SkaRe/templates/SkaRe/boats/list.html:28
-#: SkaRe/templates/SkaRe/tickets/on_water.html:24
 msgid "Class"
 msgstr "Třída"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:40
 msgid "Class Supplement"
 msgstr "Doplněk třídy"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:45
-#: SkaRe/templates/SkaRe/boats/list.html:26
 msgid "Sail Number"
 msgstr "Plachetní číslo"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:53
 msgid "Description"
 msgstr "Popis"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:58
 msgid "Sail Area"
 msgstr "Plocha plachet"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:64
 msgid "Hull color:"
 msgstr "Barva trupu:"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:69
 msgid "Sail color:"
 msgstr "Barva plachet:"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:77
-#: SkaRe/templates/SkaRe/boats/form.html:171
 msgid "Owner / Manager"
 msgstr "Vlastník / správce"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:82
 msgid "Harbor Number"
 msgstr "Evidenční číslo přístavu"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:87
 msgid "Harbor / Unit"
 msgstr "Přístav / oddíl"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:91
-#: SkaRe/templates/SkaRe/boats/list.html:29
-#: SkaRe/templates/SkaRe/registration/list_units.html:35
 msgid "Contact Person"
 msgstr "Kontaktní osoba"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:94
-#: SkaRe/templates/SkaRe/registration/list_all.html:84
-#: SkaRe/templates/SkaRe/registration/list_all.html:166
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:41
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:44
-#: SkaRe/templates/SkaRe/registration/list_units.html:41
 msgid "Phone"
 msgstr "Telefon"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:99
 msgid "Vessel Registry Number:"
 msgstr "Registrační číslo (rejstřík malých plavidel):"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:104
 msgid "Engine Power:"
 msgstr "Výkon motoru:"
 
-#: SkaRe/templates/SkaRe/boats/detail.html:112
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:292
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:298
 msgid "Back to List"
 msgstr "Zpět na seznam"
 
-#: SkaRe/templates/SkaRe/boats/form.html:4
-#: SkaRe/templates/SkaRe/boats/form.html:11
-#: SkaRe/templates/SkaRe/boats/list.html:12
-#: SkaRe/templates/SkaRe/boats/list.html:67
-#: SkaRe/templates/SkaRe/registration/home.html:61
 msgid "Register a Boat"
 msgstr "Registrovat loď"
 
-#: SkaRe/templates/SkaRe/boats/form.html:4
-#: SkaRe/templates/SkaRe/boats/form.html:11
 msgid "Edit Boat"
 msgstr "Upravit loď"
 
-#: SkaRe/templates/SkaRe/boats/form.html:162
 msgid "I am willing to lend this boat for the race"
 msgstr "Jsem ochoten zapůjčit loď na závod"
 
-#: SkaRe/templates/SkaRe/boats/form.html:177
 msgid "Fill from My Unit"
 msgstr "Vyplnit z mé jednotky"
 
-#: SkaRe/templates/SkaRe/boats/form.html:236
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:295
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:301
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:387
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:144
 msgid "Save Changes"
 msgstr "Uložit změny"
 
-#: SkaRe/templates/SkaRe/boats/lend.html:4
-#: SkaRe/templates/SkaRe/boats/lend.html:10
 msgid "Lend Boat"
 msgstr "Zapůjčit loď"
 
-#: SkaRe/templates/SkaRe/boats/lend.html:20
 msgid "Users listed here can see and use this boat when registering a crew."
 msgstr "Tito uživatelé vidí tuto loď a mohou ji použít pro registraci posádky."
 
-#: SkaRe/templates/SkaRe/boats/lend.html:23
-#: SkaRe/templates/SkaRe/persons/lend.html:23
 msgid "Currently lent to"
 msgstr "Aktuálně zapůjčeno"
 
-#: SkaRe/templates/SkaRe/boats/lend.html:41
-#: SkaRe/templates/SkaRe/persons/lend.html:41
 msgid "Remove access for this user?"
 msgstr "Odebrat tohoto uživatele?"
 
-#: SkaRe/templates/SkaRe/boats/lend.html:42
-#: SkaRe/templates/SkaRe/persons/lend.html:42
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:49
 msgid "Remove"
 msgstr "Odebrat"
 
-#: SkaRe/templates/SkaRe/boats/lend.html:50
 msgid "This boat has not been lent to anyone yet."
 msgstr "Tato loď nebyla nikomu zapůjčena."
 
-#: SkaRe/templates/SkaRe/boats/lend.html:54
-#: SkaRe/templates/SkaRe/persons/lend.html:54
 msgid "Add user"
 msgstr "Přidat uživatele"
 
-#: SkaRe/templates/SkaRe/boats/lend.html:60
-#: SkaRe/templates/SkaRe/persons/lend.html:60
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:66
 msgid "Enter username"
 msgstr "Zadejte uživatelské jméno"
 
-#: SkaRe/templates/SkaRe/boats/lend.html:61
-#: SkaRe/templates/SkaRe/persons/lend.html:61
 msgid "Enter the exact username of the user you want to grant access."
 msgstr ""
 "Zadejte přesné uživatelské jméno uživatele, kterému chcete loď zapůjčit"
 
-#: SkaRe/templates/SkaRe/boats/lend.html:65
-#: SkaRe/templates/SkaRe/persons/lend.html:65
 msgid "Grant access"
 msgstr "Udělit přístup"
 
-#: SkaRe/templates/SkaRe/boats/lend.html:73
 msgid "Back to boat"
 msgstr "Zpět na loď"
 
-#: SkaRe/templates/SkaRe/boats/list.html:4
 msgid "Boats - SkaRe"
 msgstr "Lodě - SkaRe"
 
-#: SkaRe/templates/SkaRe/boats/list.html:10
 msgid "Registered Boats"
 msgstr "Registrované lodě"
 
-#: SkaRe/templates/SkaRe/boats/list.html:19
 msgid "Boat List"
 msgstr "Seznam lodí"
 
-#: SkaRe/templates/SkaRe/boats/list.html:30
-#: SkaRe/templates/SkaRe/boats/list.html:50
 msgid "Willing to lend"
 msgstr "Ochoten zapůjčit"
 
-#: SkaRe/templates/SkaRe/boats/list.html:62
 msgid "No Boats"
 msgstr "Žádné lodě"
 
-#: SkaRe/templates/SkaRe/boats/list.html:63
 msgid ""
 "No boats have been registered yet. Click the button below to register the "
 "first one!"
@@ -1516,494 +938,289 @@ msgstr ""
 "Zatím nejsou zaregistrovány žádné lodě. Klikněte na tlačítko níže a "
 "zaregistrujte první loď!"
 
-#: SkaRe/templates/SkaRe/crews/confirm_delete.html:4
-#: SkaRe/templates/SkaRe/crews/confirm_delete.html:11
 msgid "Delete Crew"
 msgstr "Smazat posádku"
 
-#: SkaRe/templates/SkaRe/crews/confirm_delete.html:14
+#, fuzzy, python-format
+#| msgid ""
+#| "Are you sure you want to delete crew <strong>%(crew)s</strong>? This "
+#| "action cannot be undone."
 msgid ""
 "Are you sure you want to delete crew <strong>%(crew)s</strong>? This action "
 "cannot be undone."
 msgstr ""
-"Opravdu chcete smazat posádku <strong>%(name)s</strong>? Tato akce je nevratná."
+"Opravdu chcete smazat posádku <strong>%(name)s</strong>? Tato akce je "
+"nevratná."
 
-#: SkaRe/templates/SkaRe/crews/confirm_delete.html:17
 msgid "Yes, delete"
 msgstr "Ano, smazat"
 
-#: SkaRe/templates/SkaRe/crews/detail.html:4
-#: SkaRe/templates/SkaRe/crews/edit.html:20
-#: SkaRe/templates/SkaRe/crews/register.html:20
 msgid "Crew"
 msgstr "Posádka"
 
-#: SkaRe/templates/SkaRe/crews/detail.html:13
 msgid "Crew details"
 msgstr "Detail posádky"
 
-#: SkaRe/templates/SkaRe/crews/detail.html:27
-#: SkaRe/templates/SkaRe/crews/list.html:25
 msgid "Members"
 msgstr "Členové"
 
-#: SkaRe/templates/SkaRe/crews/detail.html:33
 msgid "Role"
 msgstr "Role"
 
-#: SkaRe/templates/SkaRe/crews/detail.html:59
 msgid "Back to my crews"
 msgstr "Zpět na Mé posádky"
 
-#: SkaRe/templates/SkaRe/crews/edit.html:4
-#: SkaRe/templates/SkaRe/crews/edit.html:9
 msgid "Edit Crew"
 msgstr "Upravit posádku"
 
-#: SkaRe/templates/SkaRe/crews/edit.html:40
-#: SkaRe/templates/SkaRe/crews/register.html:40
 msgid "Crew Members"
 msgstr "Členové posádky"
 
-#: SkaRe/templates/SkaRe/crews/edit.html:66
-#: SkaRe/templates/SkaRe/crews/register.html:66
 msgid "Helmsman required; up to 4 crew members."
 msgstr "Kormidelník vyžadován; jinak až čtyři lodníci."
 
-#: SkaRe/templates/SkaRe/crews/edit.html:71
 msgid "Save changes"
 msgstr "Uložit změny"
 
-#: SkaRe/templates/SkaRe/crews/list.html:4
-#: SkaRe/templates/SkaRe/crews/list.html:10
-#: SkaRe/templates/SkaRe/registration/home.html:87
 msgid "My Crews"
 msgstr "Moje posádky"
 
-#: SkaRe/templates/SkaRe/crews/list.html:12
-#: SkaRe/templates/SkaRe/crews/list.html:50
-#: SkaRe/templates/SkaRe/registration/home.html:64
 msgid "Register a Crew"
 msgstr "Registrovat posádku"
 
-#: SkaRe/templates/SkaRe/crews/list.html:49
 msgid "You have not registered any crews yet."
 msgstr "Nezaregistrovali jste žádnou posádku."
 
-#: SkaRe/templates/SkaRe/crews/list.html:56
-#: SkaRe/templates/SkaRe/registration/list_all.html:246
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:111
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:126
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:132
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:149
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:165
-#: SkaRe/templates/SkaRe/registration/list_units.html:135
-#: SkaRe/templates/SkaRe/registration/list_units.html:157
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:174
 msgid "Back to Home"
 msgstr "Zpět na domovskou stránku"
 
-#: SkaRe/templates/SkaRe/crews/register.html:4
-#: SkaRe/templates/SkaRe/crews/register.html:9
-#: SkaRe/templates/SkaRe/crews/register.html:72
 msgid "Register Crew"
 msgstr "Registrovat posádku"
 
-#: SkaRe/templates/SkaRe/exports/index.html:4
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:80
 msgid "Exports"
 msgstr "Exporty"
 
-#: SkaRe/templates/SkaRe/exports/index.html:7
 msgid "Reports & Exports"
 msgstr "Přehledy a exporty"
 
-#: SkaRe/templates/SkaRe/exports/index.html:13
 msgid "All reports include only people with attendance status: Arrived."
 msgstr "V exportech jsou pouze účastníci, kteří jsou fyzicky přítomní."
 
-#: SkaRe/templates/SkaRe/exports/index.html:18
 msgid "Kitchen report"
 msgstr "Export pro kuchyni"
 
-#: SkaRe/templates/SkaRe/exports/index.html:20
 msgid "People present grouped by unit, with dietary restrictions."
 msgstr "Přítomné osoby ve skupinách podle jednotek, se stravovacími omezeními."
 
-#: SkaRe/templates/SkaRe/exports/index.html:22
-#: SkaRe/templates/SkaRe/exports/index.html:36
 msgid "Download CSV"
 msgstr "Stáhnout CSV"
 
-#: SkaRe/templates/SkaRe/exports/index.html:25
-#: SkaRe/templates/SkaRe/exports/index.html:39
 msgid "Print view"
 msgstr "Přehled (k tisku)"
 
-#: SkaRe/templates/SkaRe/exports/index.html:32
 msgid "Medical report"
 msgstr "Export pro zdravotní tým"
 
-#: SkaRe/templates/SkaRe/exports/index.html:34
 msgid "People present with health restrictions, sorted by unit."
 msgstr "Přítomné osoby se zdravotními omezeními, rozdělené podle jednotek."
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:4
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:26
 msgid "Kitchen Report"
 msgstr "Report pro jídelnu"
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:19
-#: SkaRe/templates/SkaRe/exports/medical_print.html:19
-#: SkaRe/templates/SkaRe/persons/lend.html:73
 msgid "Back"
 msgstr "Zpět"
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:22
-#: SkaRe/templates/SkaRe/exports/medical_print.html:22
 msgid "Print"
 msgstr "Tisknout"
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:32
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:57
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:74
 msgid "people present"
 msgstr "lidí"
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:34
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:58
 msgid "with dietary restrictions"
 msgstr "se stravovacím omezením"
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:34
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:58
 msgid "no dietary restrictions"
 msgstr "bez omezení"
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:44
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:68
 msgid "people: no dietary restrictions"
 msgstr "lidí bez omezení"
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:51
-#: SkaRe/templates/SkaRe/registration/list_all.html:177
-#: SkaRe/views/exports.py:93 SkaRe/views/exports.py:177
-#: SkaRe/views/infodesk.py:35
 msgid "Individual"
 msgstr "Jednotlivec"
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:51
 msgid "person present"
 msgstr "člověk"
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:57
-#: SkaRe/templates/SkaRe/exports/medical_print.html:56
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:63
-#: SkaRe/templates/SkaRe/registration/list_all.html:31
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:33
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:33
 msgid "Organizers"
 msgstr "Organizátoři"
 
-#: SkaRe/templates/SkaRe/exports/kitchen_print.html:74
 msgid "TOTAL"
 msgstr "CELKEM"
 
-#: SkaRe/templates/SkaRe/exports/medical_print.html:4
-#: SkaRe/templates/SkaRe/exports/medical_print.html:26
 msgid "Medical Report"
 msgstr "Zdravotnický export"
 
-#: SkaRe/templates/SkaRe/exports/medical_print.html:27
 msgid "People present with health restrictions."
 msgstr "Přítomní účastníci se zdravotním omezením."
 
-#: SkaRe/templates/SkaRe/exports/medical_print.html:30
 msgid "Unit members"
 msgstr "Regulérní účastníci"
 
-#: SkaRe/templates/SkaRe/exports/medical_print.html:43
 msgid "Individual participants"
 msgstr "Jednotlivci"
 
-#: SkaRe/templates/SkaRe/exports/medical_print.html:48
-#: SkaRe/views/exports.py:93 SkaRe/views/exports.py:177
 msgid "Individual participant"
 msgstr "Jednotlivec"
 
-#: SkaRe/templates/SkaRe/exports/medical_print.html:61
-#: SkaRe/templates/SkaRe/registration/list_all.html:217
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:105
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:21
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:99
-#: SkaRe/views/exports.py:100 SkaRe/views/exports.py:186
-#: SkaRe/views/infodesk.py:37 SkaRe/views/registration.py:1053
 msgid "Organizer"
 msgstr "Organizátor"
 
-#: SkaRe/templates/SkaRe/exports/medical_print.html:69
 msgid "No people with health restrictions present."
 msgstr "Nejsou přítomni žádní účastníci se zdravotním omezením."
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:4
 msgid "InfoDesk"
 msgstr "Infostánek"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:9
 msgid "InfoDesk Dashboard"
 msgstr "Dashboard pro Infostánek"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:16
 msgid "Unconfirmed registrations"
 msgstr "Nepotvrzené registrace"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:17
 msgid "View queue"
 msgstr "Fronta"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:49
 msgid "Boats on water"
 msgstr "lodí na vodě"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:50
 msgid "Safety view"
 msgstr "Přehled"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:62
 msgid "Individuals"
 msgstr "Jednotlivci"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:69
-#: SkaRe/templates/SkaRe/tickets/list.html:4
-#: SkaRe/templates/SkaRe/tickets/list.html:7
 msgid "Sail Tickets"
 msgstr "Plavenky"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:71
-#: SkaRe/templates/SkaRe/tickets/create_bulk.html:9
-#: SkaRe/templates/SkaRe/tickets/detail.html:11
 msgid "All tickets"
 msgstr "Všechny plavenky"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:72
-#: SkaRe/templates/SkaRe/tickets/list.html:13
 msgid "Quick lookup"
 msgstr "Vyhledání plavenky"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:73
-#: SkaRe/templates/SkaRe/tickets/list.html:16
 msgid "Bulk create"
 msgstr "Hromadné vytvoření plavenek"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:74
 msgid "On water (safety)"
 msgstr "Lodě na vodě"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:82
 msgid "Kitchen & medical reports"
 msgstr "Exporty pro jídelnu a zdravotníky"
 
-#: SkaRe/templates/SkaRe/infodesk/dashboard.html:83
 msgid "Ticket CSV (printing)"
 msgstr "Export plavenek ve fromátu CSV"
 
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:4
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:9
 msgid "Registration Queue"
 msgstr "Fronta nepotvrzených registrací"
 
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:28
 msgid "Confirm selected"
 msgstr "Potvrdit vybrané registrace"
 
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:36
-#: SkaRe/templates/SkaRe/registration/list_all.html:44
-#: SkaRe/templates/SkaRe/registration/list_all.html:157
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:75
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:83
-#: SkaRe/views/exports.py:78 SkaRe/views/exports.py:159
 msgid "Type"
 msgstr "Typ"
 
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:38
 msgid "Created"
 msgstr "Datum registrace"
 
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:56
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:43
 msgid "Unconfirmed"
 msgstr "Nepotvrzeno"
 
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:65
 msgid "Confirm"
 msgstr "Potvrzeno"
 
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:71
 msgid "Reject"
 msgstr "Odmítnout"
 
-#: SkaRe/templates/SkaRe/infodesk/registrations.html:77
 msgid "No registrations yet."
 msgstr "Zatím žádné registrace."
 
-#: SkaRe/templates/SkaRe/persons/lend.html:4
-#: SkaRe/templates/SkaRe/persons/lend.html:10
 msgid "Lend Participant"
 msgstr "Zapůjčit účastníka do posádky"
 
-#: SkaRe/templates/SkaRe/persons/lend.html:20
 msgid ""
 "Users listed here can see and include this participant in a crew "
 "registration."
 msgstr "Zde zobrazení uživatelé mohou daného účastníka přidat do posádky."
 
-#: SkaRe/templates/SkaRe/persons/lend.html:50
 msgid "This participant has not been lent to anyone yet."
 msgstr "Tento účastník ještě nebyl nikomu zapůjčen."
 
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:5
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:12
 msgid "Edit Individual Participant"
 msgstr "Upravit jednotlivce"
 
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:21
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:21
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:29
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:30
 msgid "Personal Information"
 msgstr "Osobní informace"
 
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:64
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:64
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:48
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:72
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:73
-#: SkaRe/templates/SkaRe/registration/register_unit.html:60
 msgid "Contact Information"
 msgstr "Kontaktní informace"
 
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:89
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:195
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:96
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:97
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:215
-#: SkaRe/templates/SkaRe/registration/register_unit.html:101
 msgid "Event Logistics"
 msgstr "Logistika akce"
 
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:160
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:149
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:179
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:60
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:4
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:57
-#: SkaRe/templates/SkaRe/registration/list_units.html:80
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:168
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:169
-#: SkaRe/templates/SkaRe/registration/register_unit.html:172
 msgid "Merchandise"
 msgstr "Objednávky"
 
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:221
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:227
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:229
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:247
 msgid "Health & Dietary Information"
 msgstr "Zdravotní a stravovací omezení"
 
-#: SkaRe/templates/SkaRe/registration/edit_individual_participant.html:232
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:238
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:240
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:258
 msgid "Dietary restrictions"
 msgstr "Stravovací omezení / preference"
 
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:5
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:126
 msgid "Edit Organizer"
 msgstr "Upravit organizátora"
 
-#: SkaRe/templates/SkaRe/registration/edit_organizer.html:89
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:98
 msgid "Organizer Details"
 msgstr "Moji organizátoři"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:10
-#: SkaRe/templates/SkaRe/registration/list_units.html:119
 msgid "Edit Unit"
 msgstr "Upravit jednotku"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:17
-#: SkaRe/templates/SkaRe/registration/register_unit.html:28
 msgid "Scout Unit Information"
 msgstr "Informace o skautské jednotce"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:133
-#: SkaRe/templates/SkaRe/registration/list_units.html:61
-#: SkaRe/templates/SkaRe/registration/register_unit.html:133
 msgid "Boat Estimates"
 msgstr "Odhad počtu lodí"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:244
-#: SkaRe/templates/SkaRe/registration/list_units.html:90
 msgid "Participants"
 msgstr "Účastníci"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:248
 msgid "Edit existing participants below or add new ones"
 msgstr "Uprav stávající účastníky nebo přidej nové"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:266
-#: SkaRe/templates/SkaRe/registration/list_all.html:48
-#: SkaRe/templates/SkaRe/registration/list_all.html:158
-#: SkaRe/templates/SkaRe/registration/register.html:28
-#: SkaRe/templates/SkaRe/registration/register_unit.html:243
 msgid "First Name"
 msgstr "Jméno"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:267
-#: SkaRe/templates/SkaRe/registration/list_all.html:52
-#: SkaRe/templates/SkaRe/registration/list_all.html:159
-#: SkaRe/templates/SkaRe/registration/register.html:36
-#: SkaRe/templates/SkaRe/registration/register_unit.html:244
 msgid "Last Name"
 msgstr "Příjmení"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:269
-#: SkaRe/templates/SkaRe/registration/list_all.html:62
-#: SkaRe/templates/SkaRe/registration/list_all.html:161
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:35
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:38
-#: SkaRe/templates/SkaRe/registration/register_unit.html:246
 msgid "Date of Birth"
 msgstr "Datum narození"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:270
-#: SkaRe/templates/SkaRe/registration/register_unit.html:247
 msgid "Health"
 msgstr "Zdravotní a psychický stav"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:271
-#: SkaRe/templates/SkaRe/registration/register_unit.html:248
 msgid "Dietary"
 msgstr "Stravovací omezení a preference"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:272
-#: SkaRe/templates/SkaRe/registration/register_unit.html:249
 msgid "Info"
 msgstr "Další Informace"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:273
-#: SkaRe/templates/SkaRe/registration/register_unit.html:250
 msgid "Action"
 msgstr "Akce"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:360
-#: SkaRe/templates/SkaRe/registration/register_unit.html:305
 msgid "Delete participant"
 msgstr "Smazat účastníka"
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:374
 msgid ""
 "Click 'Add Participant Row' to add more rows. Click the trash icon to mark a "
 "participant for deletion."
@@ -2011,24 +1228,18 @@ msgstr ""
 "Klikněte na 'Přidat účastníka' pro přidání dalších řádků. Vyplňte informace "
 "o účastnících v každém řádku."
 
-#: SkaRe/templates/SkaRe/registration/edit_unit.html:376
 msgid "Add Participant Row"
 msgstr "Přidat účastníka"
 
-#: SkaRe/templates/SkaRe/registration/forgot_password.html:4
-#: SkaRe/templates/SkaRe/registration/forgot_password.html:11
 msgid "Forgot Password"
 msgstr "Zapomenuté heslo"
 
-#: SkaRe/templates/SkaRe/registration/forgot_password.html:17
 msgid "If you have forgotten your password, please send an email to"
 msgstr "Pokud jste zapomněli své heslo, pošlete prosím e-mail na"
 
-#: SkaRe/templates/SkaRe/registration/forgot_password.html:19
 msgid "to request a password reset."
 msgstr "pro žádost o obnovení hesla."
 
-#: SkaRe/templates/SkaRe/registration/forgot_password.html:23
 msgid ""
 "Please include your username in the email so we can help you reset your "
 "password."
@@ -2036,426 +1247,302 @@ msgstr ""
 "Prosím uveďte ve vašem e-mailu vaše uživatelské jméno, abychom vám mohli "
 "pomoci obnovit vaše heslo."
 
-#: SkaRe/templates/SkaRe/registration/forgot_password.html:26
 msgid "Back to login"
 msgstr "Zpět na přihlašovací obrazovku"
 
-#: SkaRe/templates/SkaRe/registration/home.html:5
 msgid "Home"
 msgstr "PlachtIS"
 
-#: SkaRe/templates/SkaRe/registration/home.html:12
 msgid "Manage Units and Participants in the PlachtIS system."
 msgstr "Spravujte jednotky a účastníky v systému PlachtIS."
 
-#: SkaRe/templates/SkaRe/registration/home.html:17
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:18
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:19
-#: SkaRe/templates/SkaRe/registration/register_unit.html:17
 msgid "Registration deadline"
 msgstr "Termín uzavření registrace"
 
-#: SkaRe/templates/SkaRe/registration/home.html:23
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:13
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:13
-#: SkaRe/templates/SkaRe/registration/list_units.html:13
 msgid "Editing deadline"
 msgstr "Úpravy možné do"
 
-#: SkaRe/templates/SkaRe/registration/home.html:37
 msgid "Manage attendance, registrations, tickets, and exports."
 msgstr "Správa docházky, přihlášek, lístků a exportů."
 
-#: SkaRe/templates/SkaRe/registration/home.html:40
 msgid "Go to InfoDesk Dashboard"
 msgstr "Přejít na dashboard Infostánku"
 
-#: SkaRe/templates/SkaRe/registration/home.html:52
-#: SkaRe/templates/SkaRe/registration/list_units.html:150
-#: SkaRe/templates/SkaRe/registration/register_unit.html:5
-#: SkaRe/templates/SkaRe/registration/register_unit.html:12
-#: SkaRe/templates/SkaRe/registration/register_unit.html:326
+msgid "Organizer export"
+msgstr "Export pro organizátory"
+
+msgid ""
+"Download a CSV overview of all units and individual participants (names, "
+"contacts, leaders, boat estimates, headcounts by category, registration "
+"date)."
+msgstr ""
+"Stáhněte si CSV přehled všech jednotek a jednotlivců (jména, kontakty, "
+"vedoucí, odhad lodí, počty podle kategorií, datum registrace)."
+
+msgid "Download units overview (CSV)"
+msgstr "Stáhnout přehled jednotek (CSV)"
+
 msgid "Register Unit"
 msgstr "Registrovat jednotku"
 
-#: SkaRe/templates/SkaRe/registration/home.html:55
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:6
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:13
-#: SkaRe/templates/SkaRe/registration/register_individual_participant.html:303
 msgid "Register Individual Participant"
 msgstr "Registrovat jednotlivce"
 
-#: SkaRe/templates/SkaRe/registration/home.html:58
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:6
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:14
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:321
 msgid "Register Organizer"
 msgstr "Registrovat organizátora"
 
-#: SkaRe/templates/SkaRe/registration/home.html:72
 msgid "My Registrations"
 msgstr "Mé registrace"
 
-#: SkaRe/templates/SkaRe/registration/home.html:75
-#: SkaRe/templates/SkaRe/registration/list_units.html:4
 msgid "My Units"
 msgstr "Moje jednotky"
 
-#: SkaRe/templates/SkaRe/registration/home.html:78
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:4
 msgid "My Individual Participants"
 msgstr "Moji jednotlivci"
 
-#: SkaRe/templates/SkaRe/registration/home.html:81
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:4
 msgid "My Organizers"
 msgstr "Moji organizátoři"
 
-#: SkaRe/templates/SkaRe/registration/home.html:97
 msgid "Administrator options"
 msgstr "Administrační možnosti"
 
-#: SkaRe/templates/SkaRe/registration/home.html:101
 msgid "Admin Panel"
 msgstr "Administrace"
 
-#: SkaRe/templates/SkaRe/registration/home.html:104
 msgid "Show All Participants"
 msgstr "Seznam všech účastníků"
 
-#: SkaRe/templates/SkaRe/registration/home.html:107
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:9
 msgid "Scarves and Hats"
 msgstr "Šátky a čepice"
 
-#: SkaRe/templates/SkaRe/registration/home.html:110
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:4
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:9
 msgid "Manage Entities"
 msgstr "Správa registrací"
 
-#: SkaRe/templates/SkaRe/registration/home.html:118
 msgid "Please login or register to access the system."
 msgstr "Pro přístup do systému se prosím přihlaste nebo zaregistrujte."
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:4
 msgid "Show all participants"
 msgstr "Seznam všech účastníků"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:9
 msgid "All Participants"
 msgstr "Účastníci"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:16
 msgid "Display Options"
 msgstr "Možnosti zobrazení"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:22
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:22
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:22
-#: SkaRe/templates/SkaRe/tickets/lookup.html:15
 msgid "Search"
 msgstr "Hledat"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:23
 msgid "Filter by any value..."
 msgstr "Libovolná hodnota..."
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:26
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:28
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:28
 msgid "Filter by Type"
 msgstr "Filtrovat podle typu"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:28
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:30
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:30
 msgid "All Types"
 msgstr "Všechny typy"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:29
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:32
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:32
 msgid "Individual Participants"
 msgstr "Jednotlivci"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:30
 msgid "Regular Participants (Units)"
 msgstr "Účastníci v oddílech"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:38
 msgid "Show Columns"
 msgstr "Zobrazit tyto sloupce"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:80
-#: SkaRe/templates/SkaRe/registration/list_all.html:165
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:38
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:41
-#: SkaRe/templates/SkaRe/registration/list_units.html:38
-#: SkaRe/templates/SkaRe/registration/register.html:44
 msgid "Email"
 msgstr "E-mail"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:98
-#: SkaRe/templates/SkaRe/registration/list_all.html:169
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:77
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:105
 msgid "Dietary Restrictions"
 msgstr "Stravovací omezení / preference"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:102
-#: SkaRe/templates/SkaRe/registration/list_all.html:170
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:70
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:98
 msgid "Health Restrictions"
 msgstr "Zdravotní omezení / Duševní stav"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:106
-#: SkaRe/templates/SkaRe/registration/list_all.html:171
 msgid "Relevant Info"
 msgstr "Další údaje"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:113
 msgid "Quick Presets"
 msgstr "Rychlé předvolby"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:116
 msgid "Basic Info"
 msgstr "Základní informace"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:119
 msgid "Dietary Only"
 msgstr "Stravovací omezení a preference"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:122
 msgid "Health Only"
 msgstr "Zdravotní a psychický stav"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:125
 msgid "Contact Info"
 msgstr "Kontaktní informace"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:128
 msgid "Show All"
 msgstr "Všechno"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:138
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:56
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:115
+#, fuzzy
+#| msgid "Export CSV"
+msgid "Export to CSV"
+msgstr "Exportovat CSV"
+
+msgid "CSV download started."
+msgstr ""
+
 msgid "Total"
 msgstr "Celkem"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:139
 msgid "participants"
 msgstr "Účastníci"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:140
 msgid "individual"
 msgstr "jednotlivců"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:141
 msgid "regular"
 msgstr "obyčejných účastníků v oddílech"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:142
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:60
 msgid "organizers"
 msgstr "organizátorů"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:148
 #, python-format
 msgid ""
 "Displaying only the newest %(limit)s records in each section to keep the "
 "page responsive."
 msgstr ""
-"Zobrazuji pouze nejnovějších %(limit)s zázanamů v každé sekci kvůli rychlosti."
+"Zobrazuji pouze nejnovějších %(limit)s zázanamů v každé sekci kvůli "
+"rychlosti."
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:197
 msgid "Regular participant"
 msgstr "Obyčejný účastník"
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:240
 msgid "No participants found."
 msgstr "Zatím nejsou registrováni žádní účastníci."
 
-#: SkaRe/templates/SkaRe/registration/list_all.html:252
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:138
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:180
-#: SkaRe/views/registration.py:648 SkaRe/views/registration.py:684
-#: SkaRe/views/registration.py:914
 msgid "You do not have permission to view this page."
 msgstr "Nemáte oprávnění upravovat tuto jednotku."
 
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:9
 msgid "My Registered Individual Participants"
 msgstr "Moji registrovaní jednotlivci"
 
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:27
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:27
-#: SkaRe/templates/SkaRe/registration/list_units.html:27
 msgid "Editor"
 msgstr "Editor"
 
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:63
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:77
-#: SkaRe/templates/SkaRe/registration/list_units.html:83
 msgid "Scarves"
 msgstr "Počet šátků"
 
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:64
-#: SkaRe/templates/SkaRe/registration/list_units.html:84
 msgid "Hats"
 msgstr "Počet čepic"
 
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:83
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:121
-#: SkaRe/templates/SkaRe/registration/list_units.html:114
 msgid "Registered"
 msgstr "Zaregistrováno"
 
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:88
 msgid "Edit Participant"
 msgstr "Upravit jednotlivce"
 
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:101
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:139
-#: SkaRe/templates/SkaRe/registration/list_units.html:103
 msgid "Lend"
 msgstr "Zapůjčit"
 
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:114
 msgid "Register Another Individual Participant"
 msgstr "Registrovat dalšího jednotlivce"
 
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:120
 msgid "You haven't registered any individual participants yet."
 msgstr "Nezaregistrovali jste žádného jednotlivce"
 
-#: SkaRe/templates/SkaRe/registration/list_individual_participants.html:121
 msgid "Register your first participant now!"
 msgstr "Registrovat dalšího jednotlivce"
 
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:16
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:16
 msgid "Filters"
 msgstr "Filtry"
 
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:24
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:24
 msgid "Filter by name..."
 msgstr "Filtrovat podle jména..."
 
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:40
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:50
 msgid "Apply Filters"
 msgstr "Použít filtry"
 
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:44
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:54
 msgid "Clear filters"
 msgstr "Zrušit filtry"
 
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:58
 msgid "units"
 msgstr "jednotky"
 
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:59
 msgid "individual participants"
 msgstr "jednotlivci"
 
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:66
 #, python-format
 msgid ""
 "Displaying only the newest %(limit)s records in each category to keep the "
 "page responsive."
-msgstr "Zobrazuji pouze nejnovějších %(limit)s zázanamů v každé sekci kvůli rychlosti."
+msgstr ""
+"Zobrazuji pouze nejnovějších %(limit)s zázanamů v každé sekci kvůli "
+"rychlosti."
 
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:95
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:19
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:97
-#: SkaRe/views/registration.py:1042
 msgid "Individual Participant"
 msgstr "Jednotlivec"
 
-#: SkaRe/templates/SkaRe/registration/list_merchandise.html:126
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:132
 msgid "No results found."
 msgstr "Nebyly nalezeny žádné výsledky."
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:9
 msgid "My Registered Organizers"
 msgstr "Moji registrovaní organizátoři"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:49
+msgid "Download a CSV overview of all units and individual participants."
+msgstr "Stáhněte si CSV přehled všech jednotek a jednotlivců."
+
+msgid "Units overview (CSV)"
+msgstr "Přehled jednotek (CSV)"
+
 msgid "Logistics"
 msgstr "Logistika"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:59
 msgid "Scarf"
 msgstr "Šátek"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:62
 msgid "Hat"
 msgstr "Čepice"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:65
-#: SkaRe/templates/SkaRe/tickets/create_bulk.html:23
 msgid "None"
 msgstr "Žádné"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:70
 msgid "Needs lift from transport hub"
 msgstr "Potřebuje svézt z dopravního uzlu"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:75
 msgid "Wants travel order"
 msgstr "Chce vystavit cestovní příkaz"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:111
 msgid "Agrees to follow the"
 msgstr "Zavazuje se dodržovat"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:112
 msgid "Codex Agreement"
 msgstr "Kodex jednání dospělých"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:114
 msgid "Agreed"
 msgstr "Ano"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:116
 msgid "Not Agreed"
 msgstr "Ne"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:153
 msgid "Register Another Organizer"
 msgstr "Registrovat dalšího organizátora"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:159
 msgid "You haven't registered any organizers yet."
 msgstr "Nezaregistrovali jste žádného organizátora"
 
-#: SkaRe/templates/SkaRe/registration/list_organizers.html:160
 msgid "Register as an organizer now!"
 msgstr "Registrovat organizátora"
 
-#: SkaRe/templates/SkaRe/registration/list_units.html:9
 msgid "My Registered Units"
 msgstr "Moje registrované jednotky"
 
-#: SkaRe/templates/SkaRe/registration/list_units.html:110
 msgid "No participants registered yet."
 msgstr "Zatím nejsou registrováni žádní účastníci."
 
-#: SkaRe/templates/SkaRe/registration/list_units.html:139
 msgid "Register Another Unit"
 msgstr "Registrovat další jednotku"
 
-#: SkaRe/templates/SkaRe/registration/list_units.html:145
 msgid "No Units Yet"
 msgstr "Zatím žádné jednotky"
 
-#: SkaRe/templates/SkaRe/registration/list_units.html:146
 msgid ""
 "You haven't registered any units yet. Click the button below to register "
 "your first unit!"
@@ -2463,33 +1550,24 @@ msgstr ""
 "Zatím jste neregistrovali žádné jednotky. Klikněte na tlačítko níže a "
 "zaregistrujte svou první jednotku!"
 
-#: SkaRe/templates/SkaRe/registration/login.html:18
 msgid "Username"
 msgstr "Uživatelské jméno"
 
-#: SkaRe/templates/SkaRe/registration/login.html:26
-#: SkaRe/templates/SkaRe/registration/register.html:52
 msgid "Password"
 msgstr "Heslo"
 
-#: SkaRe/templates/SkaRe/registration/login.html:38
 msgid "Don't have an account?"
 msgstr "Nemáte účet?"
 
-#: SkaRe/templates/SkaRe/registration/login.html:38
 msgid "Register here"
 msgstr "Registrujte se zde"
 
-#: SkaRe/templates/SkaRe/registration/login.html:41
 msgid "Forgot password?"
 msgstr "Zapomněli jste heslo?"
 
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:4
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:10
 msgid "Manage Editors"
 msgstr "Správa editorů"
 
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:28
 msgid ""
 "Editors can view and edit this registration, but only you (the owner) can "
 "manage editors."
@@ -2497,105 +1575,78 @@ msgstr ""
 "Editoři mohou zobrazovat a upravovat tuto registraci, ale pouze vy "
 "(vlastník) můžete spravovat editory."
 
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:31
 msgid "Current Editors"
 msgstr "Současní editoři"
 
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:48
 msgid "Remove this editor?"
 msgstr "Odebrat tohoto editora?"
 
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:57
 msgid "No editors added yet."
 msgstr "Zatím nebyli přidáni žádní editoři."
 
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:61
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:71
 msgid "Add Editor"
 msgstr "Přidat editora"
 
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:67
 msgid "Enter the exact username of the user you want to add as editor."
 msgstr ""
 "Zadejte přesné uživatelské jméno uživatele, kterého chcete přidat jako "
 "editora."
 
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:81
 msgid "Back to Units"
 msgstr "Zpět na jednotky"
 
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:85
 msgid "Back to Participants"
 msgstr "Zpět na účastníky"
 
-#: SkaRe/templates/SkaRe/registration/manage_editors.html:89
 msgid "Back to Organizers"
 msgstr "Zpět na organizátory"
 
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:37
 msgid "Filter by Status"
 msgstr "Filtrovat podle stavu"
 
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:39
 msgid "All"
 msgstr "Všechny"
 
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:41
 msgid "Unpaid"
 msgstr "Nezaplaceno"
 
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:66
 msgid "Total Entities"
 msgstr "Celkem registrací"
 
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:67
 #, python-format
 msgid "(page %(page)s of %(pages)s)"
 msgstr "(stránka %(page)s z %(pages)s)"
 
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:85
 msgid "Created By"
 msgstr "Vytvořil"
 
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:151
 msgid "Entity pages"
 msgstr "Entity"
 
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:155
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:158
 msgid "Previous"
 msgstr "Předchozí"
 
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:163
-#: SkaRe/templates/SkaRe/registration/manage_entities.html:166
 msgid "Next"
 msgstr "Další"
 
-#: SkaRe/templates/SkaRe/registration/register.html:19
 msgid "Username (Login)"
 msgstr "Uživatelské jméno (login)"
 
-#: SkaRe/templates/SkaRe/registration/register.html:61
 msgid "Confirm Password"
 msgstr "Potvrdit heslo"
 
-#: SkaRe/templates/SkaRe/registration/register.html:73
 msgid "Already have an account?"
 msgstr "Už máte účet?"
 
-#: SkaRe/templates/SkaRe/registration/register.html:73
 msgid "Login here"
 msgstr "Přihlaste se zde"
 
-#: SkaRe/templates/SkaRe/registration/register_organizer.html:154
 msgid "I agree to follow the"
 msgstr "Zavazuji se dodržovat"
 
-#: SkaRe/templates/SkaRe/registration/register_unit.html:233
 msgid "Unit Participants"
 msgstr "Účastníci jednotky"
 
-#: SkaRe/templates/SkaRe/registration/register_unit.html:316
 msgid ""
 "Click 'Add Participant' to add more rows. Fill in the participant "
 "information in each row."
@@ -2603,491 +1654,454 @@ msgstr ""
 "Klikněte na 'Přidat účastníka' pro přidání dalších řádků. Vyplnëte informace "
 "o účastníkch v každém řádku."
 
-#: SkaRe/templates/SkaRe/registration/register_unit.html:318
 msgid "Add Participant"
 msgstr "Přidat účastníka"
 
-#: SkaRe/templates/SkaRe/tickets/create_bulk.html:4
 msgid "Bulk Create Tickets"
 msgstr "Hromadné vytvoření plavenek"
 
-#: SkaRe/templates/SkaRe/tickets/create_bulk.html:7
 msgid "Bulk Create Sail Tickets"
 msgstr "Hromadné vytvoření plavenek"
 
-#: SkaRe/templates/SkaRe/tickets/create_bulk.html:15
+msgid "Warning"
+msgstr ""
+
 #, python-format
 msgid ""
-"%(n)s tickets already exist. Only boats without an assigned ticket will "
-"receive a new one."
-msgstr "%(n)s plavenek už existuje. Pouze lodě bez plavenky dostanou novou."
+"\n"
+"    This will permanently delete all %(n)s existing tickets and their logs. "
+"This cannot be undone.\n"
+"  "
+msgstr ""
 
-#: SkaRe/templates/SkaRe/tickets/create_bulk.html:20
-msgid "Registered boats (without a ticket)"
-msgstr "Registrované lodě bez plavenky"
-
-#: SkaRe/templates/SkaRe/tickets/create_bulk.html:39
-msgid "Create tickets"
-msgstr "Vytvořit plavenky"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:26
-msgid "RFID UID"
-msgstr "UID plavenky"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:27
-msgid "Pending pairing"
-msgstr "Čeká na spárování"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:27
-msgid "Waiting for scan…"
-msgstr "Čeká na načtení čtečky..."
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:27
-msgid "No"
-msgstr "Ne"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:31
-msgid "Change status"
-msgstr "Změnit stav"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:45
-#: SkaRe/templates/SkaRe/tickets/list.html:55
-msgid "RFID"
-msgstr "Párování"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:49
-msgid "Pair RFID"
-msgstr "Spárovat plavenku"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:56
-msgid "Change log"
-msgstr "Seznam změn"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:58
-msgid "Time"
-msgstr "Čas"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:58
-msgid "By"
-msgstr "Kdo provedl změnu"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:58
-msgid "Note"
-msgstr "Poznámka"
-
-#: SkaRe/templates/SkaRe/tickets/detail.html:68
-msgid "No changes yet."
-msgstr "Žádné změny nebyly provedeny."
-
-#: SkaRe/templates/SkaRe/tickets/list.html:22
-msgid "Export CSV"
-msgstr "Exportovat CSV"
-
-#: SkaRe/templates/SkaRe/tickets/list.html:29
-msgid "All statuses"
-msgstr "Všechny"
-
-#: SkaRe/templates/SkaRe/tickets/list.html:37
-msgid "All colors"
-msgstr "Všechny typy"
-
-#: SkaRe/templates/SkaRe/tickets/list.html:44
-msgid "Filter"
-msgstr "Filtry"
-
-#: SkaRe/templates/SkaRe/tickets/list.html:51
-#: SkaRe/templates/SkaRe/tickets/lookup.html:24
 msgid "Code"
 msgstr "Číslo plavenky"
 
-#: SkaRe/templates/SkaRe/tickets/list.html:52
-#: SkaRe/templates/SkaRe/tickets/lookup.html:25
-#: SkaRe/templates/SkaRe/tickets/on_water.html:22
+#, fuzzy
+#| msgid "Number of scarves"
+msgid "Number source"
+msgstr "Počet šátků"
+
+msgid "Reserve — no boat"
+msgstr ""
+
+#, fuzzy
+#| msgid "sail number"
+msgid "From sail number"
+msgstr "plachetní číslo"
+
+msgid "Sequential"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create tickets"
+msgid "Confirm and create tickets"
+msgstr "Vytvořit plavenky"
+
+#, fuzzy, python-format
+#| msgid ""
+#| "%(n)s tickets already exist. Only boats without an assigned ticket will "
+#| "receive a new one."
+msgid "%(n)s tickets already exist. Proceeding will delete them all."
+msgstr "%(n)s plavenek už existuje. Pouze lodě bez plavenky dostanou novou."
+
+#, fuzzy
+#| msgid "Registered Boats"
+msgid "Registered boats (all)"
+msgstr "Registrované lodě"
+
+#, fuzzy
+#| msgid "Create tickets"
+msgid "Preview tickets"
+msgstr "Vytvořit plavenky"
+
+msgid "RFID UID"
+msgstr "UID plavenky"
+
+msgid "Pending pairing"
+msgstr "Čeká na spárování"
+
+msgid "Waiting for scan…"
+msgstr "Čeká na načtení čtečky..."
+
+msgid "No"
+msgstr "Ne"
+
+msgid "Change status"
+msgstr "Změnit stav"
+
+msgid "RFID"
+msgstr "Párování"
+
+msgid "Pair RFID"
+msgstr "Spárovat plavenku"
+
+msgid "Change log"
+msgstr "Seznam změn"
+
+msgid "Time"
+msgstr "Čas"
+
+msgid "By"
+msgstr "Kdo provedl změnu"
+
+msgid "Note"
+msgstr "Poznámka"
+
+msgid "No changes yet."
+msgstr "Žádné změny nebyly provedeny."
+
+msgid "Export CSV"
+msgstr "Exportovat CSV"
+
+msgid "All statuses"
+msgstr "Všechny"
+
+msgid "All colors"
+msgstr "Všechny typy"
+
+msgid "Filter"
+msgstr "Filtry"
+
 msgid "Color"
 msgstr "Typ plavenky"
 
-#: SkaRe/templates/SkaRe/tickets/list.html:80
-#: SkaRe/templates/SkaRe/tickets/lookup.html:54
 msgid "No tickets found."
 msgstr "Žádné plavenky nenalezeny."
 
-#: SkaRe/templates/SkaRe/tickets/lookup.html:4
 msgid "Ticket Lookup"
 msgstr "Vyhledání plavenky"
 
-#: SkaRe/templates/SkaRe/tickets/lookup.html:7
 msgid "Ticket Quick Lookup"
 msgstr "Vyhledat plavenku"
 
-#: SkaRe/templates/SkaRe/tickets/lookup.html:14
 msgid "Ticket code, boat name, sail number, or owner…"
 msgstr "Číslo plavenky, název lodi, plachetní číslo, správce ..."
 
-#: SkaRe/templates/SkaRe/tickets/lookup.html:20
 #, python-format
 msgid "%(n)s result(s) for \"%(query)s\""
 msgstr "%(n)s výsledků pro \"%(query)s\""
 
-#: SkaRe/templates/SkaRe/tickets/on_water.html:4
 msgid "Boats on Water"
 msgstr "Lodě na vodě"
 
-#: SkaRe/templates/SkaRe/tickets/on_water.html:7
 msgid "Boats Currently on Water"
 msgstr "Lodě aktuálně na vodě"
 
-#: SkaRe/templates/SkaRe/tickets/on_water.html:8
 msgid "Safety view — refreshed on load."
 msgstr "Bezpečnostní přehled - obnov pro načtení stránky"
 
-#: SkaRe/templates/SkaRe/tickets/on_water.html:14
 msgid "Refresh"
 msgstr "Obnovit"
 
-#: SkaRe/templates/SkaRe/tickets/on_water.html:21
 msgid "Ticket"
 msgstr "Plavenka"
 
-#: SkaRe/templates/SkaRe/tickets/on_water.html:40
 msgid "No boats on water."
 msgstr "Žádné lodě nejsou na vodě."
 
-#: SkaRe/views/attendance.py:110
+#, python-format
 msgid "%(n)d participants marked as arrived."
 msgstr "%(n)d účastníků je na místě."
 
-#: SkaRe/views/boats.py:147
 msgid "Boat registered successfully."
 msgstr "Loď úspěšně zaregistrována!"
 
-#: SkaRe/views/boats.py:162
 msgid "You do not have permission to edit this boat."
 msgstr "Nemáte oprávnění upravovat tuto loď."
 
-#: SkaRe/views/boats.py:169
 msgid "Boat updated successfully."
 msgstr "Loď \"{name}\" byla úspěšně aktualizována!"
 
-#: SkaRe/views/boats.py:185
 msgid "You do not have permission to delete this boat."
 msgstr "Nemáte oprávnění smazat tuto loď."
 
-#: SkaRe/views/boats.py:189
 msgid "Boat deleted successfully."
 msgstr "Loď úspěšně smazána"
 
-#: SkaRe/views/boats.py:200
 msgid "You do not have permission to manage lending for this boat."
 msgstr "Nemáte oprávnění nastavovat zapůjčení této lodi."
 
-#: SkaRe/views/boats.py:210
 msgid "You cannot lend to yourself."
 msgstr "Nemůžete loď zapůjčit sobě."
 
-#: SkaRe/views/boats.py:212 SkaRe/views/crews.py:243
+#, python-brace-format
 msgid "User \"{username}\" already has access."
 msgstr "Uživatel \"{username}\" už má přístup."
 
-#: SkaRe/views/boats.py:215
+#, python-brace-format
 msgid "User \"{username}\" can now see this boat."
 msgstr "Uživatel \"{username}\" teď už může používat tuto loď."
 
-#: SkaRe/views/boats.py:217 SkaRe/views/crews.py:248
-#: SkaRe/views/registration.py:1099 SkaRe/views/registration.py:1150
-#: SkaRe/views/registration.py:1202
 #, python-brace-format
 msgid "User \"{username}\" not found."
 msgstr "Uživatel \"{username}\" nebyl nalezen."
 
-#: SkaRe/views/boats.py:223 SkaRe/views/crews.py:254
 #, python-brace-format
 msgid "Access removed for user \"{username}\"."
 msgstr "Uživateli \"{username}\" byl odebrán přístup."
 
-#: SkaRe/views/crews.py:19 SkaRe/views/crews.py:90
 msgid "Crew registration is closed."
 msgstr "Registrace posádek je uzavřena"
 
-#: SkaRe/views/crews.py:27 SkaRe/views/crews.py:46 SkaRe/views/crews.py:109
-#: SkaRe/views/crews.py:126
 msgid "A crew for this boat and category already exists."
 msgstr "Tato loď již má v této kategorii zaregistrovanou posádku."
 
-#: SkaRe/views/crews.py:48
 msgid "Crew registered successfully."
 msgstr "Posádka úspěšně zaregistrována!"
 
-#: SkaRe/views/crews.py:73
 msgid "You do not have permission to view this crew."
 msgstr "Nemáte oprávnění prohlížet tuto posádku."
 
-#: SkaRe/views/crews.py:85
 msgid "You do not have permission to edit this crew."
 msgstr "Nemáte oprávnění upravovat tuto posádku."
 
-#: SkaRe/views/crews.py:128
 msgid "Crew updated successfully."
 msgstr "Posádka byla úspěšně aktualizována!"
 
-#: SkaRe/views/crews.py:146
 msgid "You do not have permission to delete this crew."
 msgstr "Nemáte oprávnění smazat tuto posádku."
 
-#: SkaRe/views/crews.py:151
 msgid "Crew deleted."
 msgstr "Posádka smazána."
 
-#: SkaRe/views/crews.py:161
 msgid "Staff access required."
 msgstr "Je vyžadován administrátorský přístup."
 
-#: SkaRe/views/crews.py:233
 msgid "You do not have permission to manage lending for this person."
 msgstr "Nemáte oprávnění upravovat nastavení zapůjčení tohoto účastníka."
 
-#: SkaRe/views/crews.py:246
+#, python-brace-format
 msgid "User \"{username}\" can now see this person."
 msgstr "Uživatel \"{username}\" teď může vidět tohoto účastníka."
 
-#: SkaRe/views/exports.py:78 SkaRe/views/exports.py:159
 msgid "Unit/Group"
 msgstr "Jednotka"
 
-#: SkaRe/views/exports.py:86 SkaRe/views/exports.py:168
 msgid "Unit member"
 msgstr "Člen jednotky"
 
-#: SkaRe/views/exports.py:159
 msgid "Age"
 msgstr "Věk"
 
-#: SkaRe/views/infodesk.py:38
+msgid "Registration type"
+msgstr "Typ registrace"
+
+msgid "Leader / contact person"
+msgstr "Vedoucí / kontaktní osoba"
+
+msgid "Participants total"
+msgstr "Počet účastníků"
+
+msgid "Participants — Adult"
+msgstr "Účastníci — dospělí"
+
+msgid "Participants — Rover"
+msgstr "Účastníci — rover"
+
+msgid "Participants — Scout"
+msgstr "Účastníci — skaut"
+
+msgid "Participants — Cub"
+msgstr "Účastníci — vlčata a žabičky"
+
+msgid "Participants — other or unset category"
+msgstr "Účastníci — jiná nebo neuvedená kategorie"
+
+msgid "Boats — P550 (estimate)"
+msgstr "Lodě — P550 (odhad)"
+
+msgid "Boats — sail (estimate)"
+msgstr "Lodě — plachetnice (odhad)"
+
+msgid "Boats — paddle (estimate)"
+msgstr "Lodě — pádla (odhad)"
+
+msgid "Boats — motor (estimate)"
+msgstr "Lodě — motor (odhad)"
+
+msgid "Boats total (estimate)"
+msgstr "Lodě celkem (odhad)"
+
+msgid "Registration created"
+msgstr "Registrace vytvořena"
+
+msgid "Yes"
+msgstr "Ano"
+
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: SkaRe/views/infodesk.py:64
 msgid "Registration confirmed."
 msgstr "Registrace potvrzena"
 
-#: SkaRe/views/infodesk.py:75
 msgid "Registration rejected."
 msgstr "Registrace odmítnuta."
 
-#: SkaRe/views/infodesk.py:92
 #, python-format
 msgid "%(n)d registrations confirmed."
 msgstr "potvrzeno %(n)d registrací."
 
-#: SkaRe/views/registration.py:52
 #, python-brace-format
 msgid "Welcome back, {name}!"
 msgstr "Vítejte zpět, {name}!"
 
-#: SkaRe/views/registration.py:65
 msgid "Invalid username or password."
 msgstr "Neplatné uživatelské jméno nebo heslo"
 
-#: SkaRe/views/registration.py:74
 msgid "You have been logged out successfully."
 msgstr "Přihlášení úspěšné"
 
-#: SkaRe/views/registration.py:90 SkaRe/views/registration.py:119
-#: SkaRe/views/registration.py:379 SkaRe/views/registration.py:585
 msgid "This form was already submitted."
 msgstr "Tento formulář byl již odeslán."
 
-#: SkaRe/views/registration.py:97
 #, python-brace-format
 msgid "Welcome, {name}! Your account has been created successfully."
 msgstr "Vítejte, {name}! Váš účet byl úspěšně vytvořen."
 
-#: SkaRe/views/registration.py:100
 msgid "Please correct the errors below."
 msgstr "Prosím opravte chyby ve formuláři"
 
-#: SkaRe/views/registration.py:114 SkaRe/views/registration.py:374
-#: SkaRe/views/registration.py:580
 msgid "Registration is currently closed."
 msgstr "Registrace je uzavřena"
 
-#: SkaRe/views/registration.py:159
 #, python-brace-format
 msgid ""
 "Unit \"{unit_name}\" registered successfully with {count} participant(s)!"
 msgstr ""
 "Oddíl \"{unit_name}\" byl úspěšně registrován s {count} účastníkem/účastníky!"
 
-#: SkaRe/views/registration.py:167
 #, python-brace-format
 msgid "Error registering unit: {error}"
 msgstr "Chyba při registraci oddílu: {error}"
 
-#: SkaRe/views/registration.py:169 SkaRe/views/registration.py:349
-#: SkaRe/views/registration.py:411 SkaRe/views/registration.py:561
-#: SkaRe/views/registration.py:617 SkaRe/views/registration.py:897
 msgid "Please correct the errors in the form."
 msgstr "Prosím opravte chyby ve formuláři"
 
-#: SkaRe/views/registration.py:209
 msgid "You do not have permission to edit this unit."
 msgstr "Nemáte oprávnění upravovat tuto jednotku."
 
-#: SkaRe/views/registration.py:214
 msgid "This unit cannot be edited after the editing deadline."
 msgstr "Nelze upravovat jednotku po uzavření editace."
 
-#: SkaRe/views/registration.py:333
 #, python-brace-format
 msgid "Unit \"{unit_name}\" updated successfully with {count} participant(s)!"
 msgstr ""
 "Oddíl \"{unit_name}\" byl úspěšně aktualizován s {count} účastníkem/"
 "účastníky!"
 
-#: SkaRe/views/registration.py:339
 #, python-brace-format
 msgid "Error updating unit: {error}"
 msgstr "Chyba při aktualizaci oddílu: {error}"
 
-#: SkaRe/views/registration.py:343
 msgid "Please correct the errors in the form of unit and participants"
 msgstr "Prosím opravte chyby ve formuláři jednotky a účastníků"
 
-#: SkaRe/views/registration.py:345
 msgid "Please correct the errors in the form of unit"
 msgstr "Prosím opravte chyby ve formuláři jednotky"
 
-#: SkaRe/views/registration.py:347
 msgid "Please correct the errors in the form of participants"
 msgstr "Prosím opravte chyby ve formuláři účastníků"
 
-#: SkaRe/views/registration.py:404
 #, python-brace-format
 msgid "Individual Participant \"{name}\" registered successfully!"
 msgstr "Individuální účastník \"{name}\" byl úspěšně registrován!"
 
-#: SkaRe/views/registration.py:409
 #, python-brace-format
 msgid "Error registering individual participant: {error}"
 msgstr "Chyba při registraci individuálního účastníka: {error}"
 
-#: SkaRe/views/registration.py:447
 msgid "You do not have permission to edit this participant."
 msgstr "Nemáte oprávnění upravovat tohoto účastníka."
 
-#: SkaRe/views/registration.py:452
 msgid "This participant cannot be edited after the editing deadline."
 msgstr "Nelze upravovat účastníka po uzavření editace."
 
-#: SkaRe/views/registration.py:556
 #, python-brace-format
 msgid "Individual Participant \"{name}\" updated successfully!"
 msgstr "Jednotlivec \"{name}\" byl úspěšně aktualizován!"
 
-#: SkaRe/views/registration.py:559
 #, python-brace-format
 msgid "Error updating participant: {error}"
 msgstr "Chyba při aktualizaci účastníka: {error}"
 
-#: SkaRe/views/registration.py:610
 #, python-brace-format
 msgid "Organizer \"{name}\" registered successfully!"
 msgstr "Organizátor \"{name}\" byl úspěšně registrován!"
 
-#: SkaRe/views/registration.py:615
 #, python-brace-format
 msgid "Error registering organizer: {error}"
 msgstr "Chyba při registraci organizátora: {error}"
 
-#: SkaRe/views/registration.py:785
 msgid "You do not have permission to edit this organizer."
 msgstr "Nemáte oprávnění upravovat tohoto organizátora."
 
-#: SkaRe/views/registration.py:790
 msgid "This organizer cannot be edited after the editing deadline."
 msgstr "Nelze upravovat organizátora po uzavření editace."
 
-#: SkaRe/views/registration.py:892
 #, python-brace-format
 msgid "Organizer \"{name}\" updated successfully!"
 msgstr "Organizátor \"{name}\" byl úspěšně aktualizován!"
 
-#: SkaRe/views/registration.py:895
 #, python-brace-format
 msgid "Error updating organizer: {error}"
 msgstr "Chyba při aktualizaci organizátora: {error}"
 
-#: SkaRe/views/registration.py:950
 #, python-brace-format
 msgid "Updated {count} entities."
 msgstr "Aktualizováno {count} registrací."
 
-#: SkaRe/views/registration.py:952
 msgid "No changes made."
 msgstr "Žádné změny nebyly provedeny."
 
-#: SkaRe/views/registration.py:954
 #, python-brace-format
 msgid "Error updating entities: {error}"
 msgstr "Chyba při aktualizaci registrací: {error}"
 
-#: SkaRe/views/registration.py:1032
 msgid "Unnamed Unit"
 msgstr ""
 
-#: SkaRe/views/registration.py:1076 SkaRe/views/registration.py:1127
-#: SkaRe/views/registration.py:1179
 msgid "Only the owner can manage editors."
 msgstr "Pouze vlastník může spravovat editory."
 
-#: SkaRe/views/registration.py:1081
 msgid "This unit's editors cannot be edited after the editing deadline."
 msgstr "Editoři jednotky nemohou být upravování po uzavření editace."
 
-#: SkaRe/views/registration.py:1092 SkaRe/views/registration.py:1143
-#: SkaRe/views/registration.py:1195
 msgid "You cannot add yourself as an editor."
 msgstr "Nemůžete se přidat jako editor."
 
-#: SkaRe/views/registration.py:1094 SkaRe/views/registration.py:1145
-#: SkaRe/views/registration.py:1197
 #, python-brace-format
 msgid "User \"{username}\" is already an editor."
 msgstr "Uživatel \"{username}\" je již editorem."
 
-#: SkaRe/views/registration.py:1097 SkaRe/views/registration.py:1148
-#: SkaRe/views/registration.py:1200
 #, python-brace-format
 msgid "User \"{username}\" added as editor."
 msgstr "Uživatel \"{username}\" byl přidán jako editor."
 
-#: SkaRe/views/registration.py:1107 SkaRe/views/registration.py:1158
-#: SkaRe/views/registration.py:1210
 #, python-brace-format
 msgid "User \"{username}\" removed from editors."
 msgstr "Uživatel \"{username}\" byl odebrán z editorů."
 
-#: SkaRe/views/registration.py:1109 SkaRe/views/registration.py:1160
-#: SkaRe/views/registration.py:1212
 msgid "User not found."
 msgstr "Uživatel nebyl nalezen."
 
-#: SkaRe/views/registration.py:1132
 msgid "This participant's editors cannot be edited after the editing deadline."
 msgstr "Editoři účastníka nemohou být upravování po uzavření editace."
 
-#: SkaRe/views/registration.py:1184
 msgid "This organizer's editors cannot be edited after the editing deadline."
 msgstr "Editoři organizátora nemohou být upravování po uzavření editace."
 
-#: SkaRe/views/tickets.py:122
-#, python-format
-msgid "Waiting for RFID scan on ticket %(code)s\\u2026"
+#, fuzzy, python-format
+#| msgid "Waiting for RFID scan on ticket %(code)s\\u2026"
+msgid "Waiting for RFID scan on ticket %(code)s…"
 msgstr "Čekám na načtení fyzické plavenky s kódem %(code)s"
 
-#: SkaRe/views/tickets.py:194
 #, python-format
 msgid "%(n)d tickets created."
 msgstr "%(n)d plavenek vytvořeno"
+
+#~ msgid "Registered boats (without a ticket)"
+#~ msgstr "Registrované lodě bez plavenky"
 
 #~ msgid "e.g. Vegetarian, gluten-free"
 #~ msgstr "např. Alergie ořechy, vegetarián"

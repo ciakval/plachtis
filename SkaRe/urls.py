@@ -21,6 +21,7 @@ urlpatterns = [
     path('organizer/list/', views.list_organizers, name='list_organizers'),
     path('organizer/edit/<int:organizer_id>/', views.edit_organizer, name='edit_organizer'),
     path('organizer/editors/<int:organizer_id>/', views.manage_organizer_editors, name='manage_organizer_editors'),
+    path('organizer/exports/units-csv/', views.exports_organizer_units_csv, name='exports_organizer_units_csv'),
     path('all/list/', views.list_all, name='list_all'),
     path('merchandise/list/', views.list_merchandise, name='list_merchandise'),
     path('entities/manage/', views.manage_entities, name='manage_entities'),

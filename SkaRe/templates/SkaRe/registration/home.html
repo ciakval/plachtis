@@ -109,6 +109,9 @@
                     <a class="btn btn-warning" href="{% url 'SkaRe:manage_entities' %}">
                         <i class="bi bi-check-circle"></i> {% trans "Manage Entities" %}
                     </a>
+                    <a class="btn btn-warning" href="{% url 'SkaRe:exports_organizer_units_csv' %}">
+                        <i class="bi bi-file-earmark-spreadsheet"></i> {% trans "Download units overview (CSV)" %}
+                    </a>
                 </div>
             </div>
             {% endif %}

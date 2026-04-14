@@ -37,6 +37,16 @@ def _make_participant(unit, arrived=False, diet_vegan=False, health=''):
     return p
 
 
+def _make_organizer(user):
+    entity = Entity.objects.create(
+        created_by=user, contact_email='o@example.com', contact_phone='+420777000000',
+    )
+    return Organizer.objects.create(
+        entity=entity, first_name='Org', last_name='User',
+        date_of_birth=date(1980, 1, 1),
+    )
+
+
 def _make_individual(user, arrived=False, health=''):
     entity = Entity.objects.create(
         created_by=user, contact_email='i@example.com',
@@ -179,6 +189,59 @@ class MedicalCsvTest(TestCase):
         response = self.client.get(reverse('SkaRe:exports_medical_csv'))
         content = response.content.decode('utf-8-sig')
         self.assertIn('diabetes', content)
+
+
+class OrganizerUnitsCsvAccessTest(TestCase):
+    def test_anon_redirected(self):
+        client = Client()
+        url = reverse('SkaRe:exports_organizer_units_csv')
+        response = client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_non_staff_forbidden(self):
+        client = Client()
+        user = User.objects.create_user(username='regular', password='pw')
+        client.login(username='regular', password='pw')
+        response = client.get(reverse('SkaRe:exports_organizer_units_csv'))
+        self.assertEqual(response.status_code, 403)
+
+    def test_staff_ok(self):
+        client = Client()
+        user = User.objects.create_user(username='admin', password='pw', is_staff=True)
+        client.login(username='admin', password='pw')
+        response = client.get(reverse('SkaRe:exports_organizer_units_csv'))
+        self.assertEqual(response.status_code, 200)
+
+
+class OrganizerUnitsCsvContentTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.staff_user = User.objects.create_user(username='admin2', password='pw', is_staff=True)
+        self.client.login(username='admin2', password='pw')
+        self.owner = User.objects.create_user(username='owner', password='pw')
+
+    def test_contains_unit_name_and_bom(self):
+        unit = _make_unit(self.owner, name='ExportTest Unit')
+        _make_participant(unit, arrived=False)
+        response = self.client.get(reverse('SkaRe:exports_organizer_units_csv'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.content.startswith(b'\xef\xbb\xbf'))
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('ExportTest Unit', content)
+
+    def test_includes_all_units_not_only_arrived(self):
+        unit = _make_unit(self.owner)
+        _make_participant(unit, arrived=False)
+        response = self.client.get(reverse('SkaRe:exports_organizer_units_csv'))
+        reader = csv.reader(io.StringIO(response.content.decode('utf-8-sig')))
+        rows = list(reader)
+        self.assertGreaterEqual(len(rows), 2)
+
+    def test_individual_row_present(self):
+        _make_individual(self.owner)
+        response = self.client.get(reverse('SkaRe:exports_organizer_units_csv'))
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('Nováková', content)
 
 
 class MedicalPrintTest(TestCase):

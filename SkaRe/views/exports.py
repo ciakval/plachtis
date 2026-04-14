@@ -1,12 +1,21 @@
 import csv
 from datetime import date
+
+from django.db.models import Count, Q
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.utils import timezone
 from django.utils.translation import gettext as _
-from ..permissions import infodesk_required
+
 from ..models import (
-    Person, RegularParticipant, IndividualParticipant, Organizer,
+    IndividualParticipant,
+    Organizer,
+    Person,
+    RegularParticipant,
+    Unit,
 )
+from ..permissions import infodesk_required
 
 DIET_FIELDS = [
     ('diet_vegetarian', _('Vegetarian')),
@@ -26,6 +35,14 @@ def _csv_safe(value):
     if s and s[0] in ('=', '+', '-', '@', '\t', '\r'):
         return "'" + s
     return s
+
+
+def _fmt_dt(dt):
+    if not dt:
+        return ''
+    if timezone.is_aware(dt):
+        dt = timezone.localtime(dt)
+    return dt.strftime('%Y-%m-%d %H:%M')
 
 
 def _age(date_of_birth):
@@ -203,3 +220,129 @@ def exports_medical_print(request):
         'individuals': individuals,
         'organizers': organizers,
     })
+
+
+def _unit_category_stats():
+    """Map unit_id -> {adult, rover, scout, cub, total}."""
+    rows = (
+        RegularParticipant.objects.values('unit')
+        .annotate(
+            total=Count('id'),
+            adult=Count('id', filter=Q(category=Person.ScoutCategory.ADULT)),
+            rover=Count('id', filter=Q(category=Person.ScoutCategory.ROVER)),
+            scout=Count('id', filter=Q(category=Person.ScoutCategory.SCOUT)),
+            cub=Count('id', filter=Q(category=Person.ScoutCategory.CUB)),
+        )
+    )
+    return {r['unit']: r for r in rows}
+
+
+def _individual_category_cells(category):
+    c = Person.ScoutCategory
+    if not category:
+        return [0, 0, 0, 0, 1]
+    return [
+        1 if category == c.ADULT else 0,
+        1 if category == c.ROVER else 0,
+        1 if category == c.SCOUT else 0,
+        1 if category == c.CUB else 0,
+        0 if category in (c.ADULT, c.ROVER, c.SCOUT, c.CUB) else 1,
+    ]
+
+
+@login_required
+def exports_organizer_units_csv(request):
+    """CSV overview of units and individual participants for event organizers."""
+    if not request.user.is_staff:
+        return HttpResponseForbidden()
+
+    stats_by_unit = _unit_category_stats()
+    units = Unit.objects.select_related('entity').order_by('entity__scout_unit_name', 'pk')
+    individuals = IndividualParticipant.objects.select_related('entity').order_by(
+        'last_name', 'first_name', 'pk'
+    )
+
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename="units_and_individuals_overview.csv"'
+    response.write('\ufeff')
+
+    writer = csv.writer(response)
+    writer.writerow([
+        _('Registration type'),
+        _('Name'),
+        _('Evidence ID'),
+        _('Leader / contact person'),
+        _('Contact email'),
+        _('Contact phone'),
+        _('Backup contact phone'),
+        _('Home town'),
+        _('Participants total'),
+        _('Participants — Adult'),
+        _('Participants — Rover'),
+        _('Participants — Scout'),
+        _('Participants — Cub'),
+        _('Participants — other or unset category'),
+        _('Registration created'),
+        _('Expected arrival'),
+        _('Expected departure'),
+        _('Confirmed'),
+        _('Paid'),
+    ])
+
+    for unit in units:
+        ent = unit.entity
+        st = stats_by_unit.get(unit.pk, {})
+        total = st.get('total', 0)
+        adult = st.get('adult', 0)
+        rover = st.get('rover', 0)
+        scout = st.get('scout', 0)
+        cub = st.get('cub', 0)
+        other = max(0, total - adult - rover - scout - cub)
+        writer.writerow([
+            _('Unit'),
+            _csv_safe(ent.scout_unit_name),
+            _csv_safe(ent.scout_unit_evidence_id),
+            _csv_safe(unit.contact_person_name),
+            _csv_safe(ent.contact_email),
+            _csv_safe(ent.contact_phone),
+            _csv_safe(unit.backup_contact_phone),
+            _csv_safe(ent.home_town),
+            total,
+            adult,
+            rover,
+            scout,
+            cub,
+            other,
+            _fmt_dt(ent.created_at),
+            _fmt_dt(ent.expected_arrival),
+            _fmt_dt(ent.expected_departure),
+            _('Yes') if ent.confirmed else _('No'),
+            _('Yes') if ent.paid else _('No'),
+        ])
+
+    for p in individuals:
+        ent = p.entity
+        adult, rover, scout, cub, other = _individual_category_cells(p.category)
+        writer.writerow([
+            _('Individual participant'),
+            _csv_safe(str(p)),
+            _csv_safe(ent.scout_unit_evidence_id),
+            _csv_safe(str(p)),
+            _csv_safe(ent.contact_email),
+            _csv_safe(ent.contact_phone),
+            '',
+            _csv_safe(ent.home_town),
+            1,
+            adult,
+            rover,
+            scout,
+            cub,
+            other,
+            _fmt_dt(ent.created_at),
+            _fmt_dt(ent.expected_arrival),
+            _fmt_dt(ent.expected_departure),
+            _('Yes') if ent.confirmed else _('No'),
+            _('Yes') if ent.paid else _('No'),
+        ])
+
+    return response
