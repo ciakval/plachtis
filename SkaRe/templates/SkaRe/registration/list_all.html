@@ -91,6 +91,10 @@
                             <input class="form-check-input column-toggle" type="checkbox" id="col-arrival" data-column="arrival">
                             <label class="form-check-label" for="col-arrival">{% trans "Expected Arrival" %}</label>
                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input column-toggle" type="checkbox" id="col-created" data-column="created">
+                            <label class="form-check-label" for="col-created">{% trans "Registration created" %}</label>
+                        </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-check">
@@ -174,6 +178,7 @@
                         <th data-col="phone">{% trans "Phone" %}</th>
                         <th data-col="hometown">{% trans "Home Town" %}</th>
                         <th data-col="arrival">{% trans "Expected Arrival" %}</th>
+                        <th data-col="created" class="sortable" onclick="sortTable('created')">{% trans "Registration created" %} <i class="sort-icon bi bi-arrow-down-up" data-col="created"></i></th>
                         <th data-col="dietary">{% trans "Dietary Restrictions" %}</th>
                         <th data-col="health">{% trans "Health Restrictions" %}</th>
                         <th data-col="info">{% trans "Relevant Info" %}</th>
@@ -194,6 +199,7 @@
                         <td data-col="phone">{{ p.entity.contact_phone }}</td>
                         <td data-col="hometown">{{ p.entity.home_town|default:"-" }}</td>
                         <td data-col="arrival">{{ p.entity.expected_arrival|date:"d.m.Y H:i"|default:"-" }}</td>
+                        <td data-col="created">{{ p.entity.created_at|date:"d.m.Y H:i"|default:"-" }}</td>
                         <td data-col="dietary">{{ p.dietary_summary|default:"-"|truncatewords:10 }}</td>
                         <td data-col="health">{{ p.health_restrictions|default:"-"|truncatewords:10 }}</td>
                         <td data-col="info">{{ p.relevant_information|default:"-"|truncatewords:10 }}</td>
@@ -214,6 +220,7 @@
                         <td data-col="phone">{{ p.unit.entity.contact_phone|default:"-" }}</td>
                         <td data-col="hometown">{{ p.unit.entity.home_town|default:"-" }}</td>
                         <td data-col="arrival">{{ p.unit.entity.expected_arrival|date:"d.m.Y H:i"|default:"-" }}</td>
+                        <td data-col="created">{{ p.unit.entity.created_at|date:"d.m.Y H:i"|default:"-" }}</td>
                         <td data-col="dietary">{{ p.dietary_summary|default:"-"|truncatewords:10 }}</td>
                         <td data-col="health">{{ p.health_restrictions|default:"-"|truncatewords:10 }}</td>
                         <td data-col="info">{{ p.relevant_information|default:"-"|truncatewords:10 }}</td>
@@ -234,6 +241,7 @@
                         <td data-col="phone">{{ p.entity.contact_phone }}</td>
                         <td data-col="hometown">{{ p.entity.home_town|default:"-" }}</td>
                         <td data-col="arrival">{{ p.entity.expected_arrival|date:"d.m.Y H:i"|default:"-" }}</td>
+                        <td data-col="created">{{ p.entity.created_at|date:"d.m.Y H:i"|default:"-" }}</td>
                         <td data-col="dietary">{{ p.dietary_summary|default:"-"|truncatewords:10 }}</td>
                         <td data-col="health">{{ p.health_restrictions|default:"-"|truncatewords:10 }}</td>
                         <td data-col="info">{{ p.relevant_information|default:"-"|truncatewords:10 }}</td>

@@ -87,7 +87,7 @@ function setPreset(preset) {
         'dietary': ['type', 'firstname', 'lastname', 'dietary'],
         'health': ['type', 'firstname', 'lastname', 'health'],
         'contact': ['type', 'firstname', 'lastname', 'email', 'phone', 'hometown'],
-        'all': ['type', 'firstname', 'lastname', 'nickname', 'dob', 'category', 'unit', 'division', 'email', 'phone', 'hometown', 'arrival', 'dietary', 'health', 'info']
+        'all': ['type', 'firstname', 'lastname', 'nickname', 'dob', 'category', 'unit', 'division', 'email', 'phone', 'hometown', 'arrival', 'created', 'dietary', 'health', 'info']
     };
     
     const columns = presets[preset] || presets['basic'];
@@ -123,17 +123,39 @@ function sortTable(column) {
         let aVal = aCell ? aCell.textContent.trim() : '';
         let bVal = bCell ? bCell.textContent.trim() : '';
         
-        // Handle dates
-        if (column === 'dob') {
-            const parseDate = function(str) {
-                const parts = str.split('.');
-                if (parts.length === 3) {
-                    return new Date(parts[2], parts[1] - 1, parts[0]);
+        // Handle dates and date-times
+        if (column === 'dob' || column === 'created') {
+            const parseDate = function(str, withTime) {
+                const normalized = (str || '').trim();
+                if (!normalized || normalized === '-') {
+                    return new Date(0);
                 }
-                return new Date(0);
+                const dateTimeParts = normalized.split(' ');
+                const datePart = dateTimeParts[0] || '';
+                const dateParts = datePart.split('.');
+                if (dateParts.length !== 3) {
+                    return new Date(0);
+                }
+
+                const day = parseInt(dateParts[0], 10);
+                const month = parseInt(dateParts[1], 10);
+                const year = parseInt(dateParts[2], 10);
+                if ([day, month, year].some(Number.isNaN)) {
+                    return new Date(0);
+                }
+
+                if (withTime) {
+                    const timePart = dateTimeParts[1] || '';
+                    const timeParts = timePart.split(':');
+                    const hours = parseInt(timeParts[0], 10) || 0;
+                    const minutes = parseInt(timeParts[1], 10) || 0;
+                    return new Date(year, month - 1, day, hours, minutes);
+                }
+
+                return new Date(year, month - 1, day);
             };
-            aVal = parseDate(aVal);
-            bVal = parseDate(bVal);
+            aVal = parseDate(aVal, column === 'created');
+            bVal = parseDate(bVal, column === 'created');
             return ascending ? aVal - bVal : bVal - aVal;
         }
         
