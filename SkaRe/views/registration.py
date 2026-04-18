@@ -572,12 +572,10 @@ def edit_individual_participant(request, participant_id):
 
 @login_required
 def register_organizer(request):
-    """View for registering a new Organizer."""
+    """View for registering a new Organizer.
 
-    # Check if registration is still open
-    if not EventSettings.is_registration_open():
-        messages.error(request, _('Registration is currently closed.'))
-        return redirect('SkaRe:home')
+    Organizer registration is not restricted by the registration deadline.
+    """
 
     if request.method == 'POST':
         if is_duplicate_submission(request):
@@ -620,7 +618,6 @@ def register_organizer(request):
 
     context = {
         'form': form,
-        'deadline': EventSettings.get_registration_deadline(),
         'form_token': request.session.get('form_token', ''),
     }
     return render(request, 'SkaRe/registration/register_organizer.html', context)
@@ -635,7 +632,6 @@ def list_organizers(request):
 
     context = {
         'organizers': organizers,
-        'editing_deadline': EventSettings.get_editing_deadline(),
     }
     return render(request, 'SkaRe/registration/list_organizers.html', context)
 
@@ -782,11 +778,6 @@ def edit_organizer(request, organizer_id):
     is_editor = organizer.entity.editors.filter(id=request.user.id).exists()
     if not (is_owner or is_editor):
         messages.error(request, _('You do not have permission to edit this organizer.'))
-        return redirect('SkaRe:list_organizers')
-
-    # Check if organizer can be edited
-    if not organizer.entity.can_be_edited(request.user):
-        messages.error(request, _('This organizer cannot be edited after the editing deadline.'))
         return redirect('SkaRe:list_organizers')
 
     # Define forms inline

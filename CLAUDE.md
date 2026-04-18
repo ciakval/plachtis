@@ -82,6 +82,8 @@ AttendanceLog (event attendance tracking)
 
 Ownership is tracked via `Entity.created_by`. Editors can be delegated via `Entity.editors` (ManyToMany). Key model methods: `can_be_edited()`, `can_manage_editors()`, `is_owner()`. After registration deadline, edits are blocked unless `Entity.unlocked_for_editing=True`.
 
+**Deadline exemptions**: Organizer registration and editing are intentionally exempt from `registration_deadline` and `editing_deadline` — organizers can register and edit at any time (issue #124).
+
 ### Key Patterns
 
 - **Singleton settings**: `EventSettings.get_solo()` via `django-solo`; controls `is_registration_open()` / `is_editing_open()`
