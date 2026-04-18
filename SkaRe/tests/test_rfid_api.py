@@ -94,8 +94,6 @@ class RfidScanValidationTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.url = reverse('SkaRe:rfid_scan')
-        self.headers = {'HTTP_AUTHORIZATION': 'Bearer testkey',
-                        'content_type': 'application/json'}
 
     def _post(self, body):
         return self.client.post(

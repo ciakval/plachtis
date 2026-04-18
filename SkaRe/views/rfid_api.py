@@ -94,23 +94,23 @@ def rfid_scan(request):
     timestamp = now().isoformat()
 
     # ── Pairing mode ──────────────────────────────────────────────────────
-    pending = SailTicket.objects.filter(pending_pairing=True).first()
-    if pending:
-        if SailTicket.objects.filter(rfid_uid=rfid_uid).exists():
-            return JsonResponse({
-                'result': 'error',
-                'error': 'already_paired',
-                'timestamp': timestamp,
-            })
-        with transaction.atomic():
+    with transaction.atomic():
+        pending = SailTicket.objects.select_for_update().filter(pending_pairing=True).first()
+        if pending:
+            if SailTicket.objects.filter(rfid_uid=rfid_uid).exclude(pk=pending.pk).exists():
+                return JsonResponse({
+                    'result': 'error',
+                    'error': 'already_paired',
+                    'timestamp': timestamp,
+                })
             pending.rfid_uid = rfid_uid
             pending.pending_pairing = False
             pending.save(update_fields=['rfid_uid', 'pending_pairing', 'updated_at'])
-        return JsonResponse({
-            'result': 'ok',
-            'ticket_code': pending.code,
-            'timestamp': timestamp,
-        })
+            return JsonResponse({
+                'result': 'ok',
+                'ticket_code': pending.code,
+                'timestamp': timestamp,
+            })
 
     # ── Scanning mode — implemented in Task 4 ────────────────────────────
     return JsonResponse({'error': 'Not implemented'}, status=500)
