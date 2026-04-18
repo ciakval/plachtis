@@ -202,6 +202,19 @@ def ticket_unpair_rfid(request, ticket_id):
 
 
 @infodesk_required
+def ticket_cancel_pairing(request, ticket_id):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    ticket = get_object_or_404(SailTicket, pk=ticket_id)
+    if not ticket.pending_pairing:
+        return HttpResponseBadRequest('Ticket is not awaiting pairing')
+    ticket.pending_pairing = False
+    ticket.save(update_fields=['pending_pairing', 'updated_at'])
+    messages.info(request, _('Pairing cancelled for ticket %(code)s.') % {'code': ticket.code})
+    return redirect('SkaRe:ticket_detail', ticket_id=ticket.pk)
+
+
+@infodesk_required
 def ticket_lookup(request):
     query = request.GET.get('q', '').strip()
     results = []

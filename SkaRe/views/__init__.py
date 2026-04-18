@@ -62,6 +62,7 @@ from .tickets import (
     ticket_set_status,
     ticket_pair_rfid,
     ticket_unpair_rfid,
+    ticket_cancel_pairing,
     ticket_lookup,
     ticket_create_bulk,
     ticket_on_water,

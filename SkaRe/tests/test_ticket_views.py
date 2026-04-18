@@ -340,3 +340,44 @@ class TicketUnpairRfidTest(TestCase):
         url = reverse('SkaRe:ticket_unpair_rfid', args=[ticket.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 405)
+
+
+class TicketCancelPairingTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.desk = _make_infodesk()
+        self.client.login(username='desk', password='pw')
+
+    def test_cancel_clears_pending_pairing(self):
+        ticket = _make_ticket('P550-001')
+        ticket.pending_pairing = True
+        ticket.save()
+        url = reverse('SkaRe:ticket_cancel_pairing', args=[ticket.pk])
+        response = self.client.post(url)
+        self.assertRedirects(response, reverse('SkaRe:ticket_detail', args=[ticket.pk]))
+        ticket.refresh_from_db()
+        self.assertFalse(ticket.pending_pairing)
+
+    def test_cancel_returns_400_when_not_pending(self):
+        ticket = _make_ticket('P550-001')
+        url = reverse('SkaRe:ticket_cancel_pairing', args=[ticket.pk])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)
+
+    def test_cancel_requires_infodesk(self):
+        User.objects.create_user(username='pleb2', password='pw')
+        self.client.login(username='pleb2', password='pw')
+        ticket = _make_ticket('P550-002')
+        ticket.pending_pairing = True
+        ticket.save()
+        url = reverse('SkaRe:ticket_cancel_pairing', args=[ticket.pk])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_cancel_requires_post(self):
+        ticket = _make_ticket('P550-001')
+        ticket.pending_pairing = True
+        ticket.save()
+        url = reverse('SkaRe:ticket_cancel_pairing', args=[ticket.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)

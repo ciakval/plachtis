@@ -44,12 +44,21 @@
     <div class="mt-3">
       <h5>{% trans "RFID" %}</h5>
       <div class="d-flex gap-2 flex-wrap">
+        {% if ticket.pending_pairing %}
+        <form method="post" action="{% url 'SkaRe:ticket_cancel_pairing' ticket.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-secondary btn-sm">
+            <i class="bi bi-x-lg"></i> {% trans "Cancel pairing" %}
+          </button>
+        </form>
+        {% else %}
         <form method="post" action="{% url 'SkaRe:ticket_pair_rfid' ticket.pk %}">
           {% csrf_token %}
           <button type="submit" class="btn btn-warning btn-sm">
             <i class="bi bi-broadcast"></i> {% trans "Pair RFID" %}
           </button>
         </form>
+        {% endif %}
         {% if ticket.rfid_uid %}
         <form method="post" action="{% url 'SkaRe:ticket_unpair_rfid' ticket.pk %}">
           {% csrf_token %}
