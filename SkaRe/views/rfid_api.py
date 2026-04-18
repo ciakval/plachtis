@@ -25,6 +25,8 @@ def require_api_key(view_func):
 @csrf_exempt
 @require_api_key
 def rfid_alive(request):
+    if request.method != 'GET':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
     tickets_with_boat = SailTicket.objects.filter(boat__isnull=False)
     boats_on_water = tickets_with_boat.filter(
         status=SailTicket.Status.ON_WATER

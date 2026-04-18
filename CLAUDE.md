@@ -48,6 +48,7 @@ uv run manage.py check --deploy  # production validation
 - **`SkaRe/`** — Single Django app containing all business logic:
   - `models/` — Data models split by domain: `registration.py`, `boats.py`, `tickets.py`, `attendance.py`
   - `views/` — Function-based views split by domain: `registration.py`, `boats.py`, `crews.py`, `tickets.py`, `attendance.py`, `infodesk.py`, `exports.py`
+  - `views/rfid_api.py` — RFID reader API: `require_api_key` decorator, `rfid_alive` (heartbeat), `rfid_scan` (card scan handler)
   - `forms/` — Forms split by domain: `registration.py`, `boats.py`, `crews.py`, `tickets.py`
   - `permissions.py` — `infodesk_required` / `is_infodesk` / `is_race_management` helpers
   - `urls.py` — App URL routing
@@ -91,6 +92,7 @@ Ownership is tracked via `Entity.created_by`. Editors can be delegated via `Enti
 - **External API**: Google Sheets CSV fetched for sail registry lookup, cached 1 hour (configurable via `SAIL_REGISTRY_CACHE_TTL`). Returns 503 on fetch failure, 404 on missing sail number.
 - **Formsets**: `get_participant_formset()` handles dynamic participants when registering a unit
 - **Phone validation**: `validate_czech_phone()` and `validate_event_phone()` in `forms.py`
+- **RFID reader API**: CSRF-exempt Bearer-token API at `api/rfid/`. `rfid_alive` returns display data; `rfid_scan` handles pairing mode (link card UID to SailTicket) and scanning mode (ASHORE/ON_WATER transitions). See `SkaRe/views/rfid_api.py`.
 
 ### Configuration
 
@@ -98,5 +100,6 @@ Environment variables (see `.env.example`):
 - `DJANGO_SECRET_KEY`, `DJANGO_DEBUG`, `DJANGO_ALLOWED_HOSTS`
 - `SAIL_REGISTRY_SHEET_URL` — Google Sheets CSV URL for sail lookup
 - `SAIL_REGISTRY_CACHE_TTL` — cache duration in seconds (default 3600)
+- `RFID_API_KEY` — pre-shared key for the RFID reader HTTP API
 
 SQLite is used in development (`db.sqlite3`). Production runs on Docker + Gunicorn + Caddy reverse proxy, deployed via GitHub Actions to a VPS.
