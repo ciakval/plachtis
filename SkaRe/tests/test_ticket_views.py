@@ -322,7 +322,7 @@ class TicketUnpairRfidTest(TestCase):
         self.assertEqual(log.changed_by, self.desk)
 
     def test_unpair_requires_infodesk(self):
-        other = User.objects.create_user(username='pleb', password='pw')
+        User.objects.create_user(username='pleb', password='pw')
         self.client.login(username='pleb', password='pw')
         ticket = _make_ticket('P550-001', rfid_uid='AABBCCDD')
         url = reverse('SkaRe:ticket_unpair_rfid', args=[ticket.pk])
