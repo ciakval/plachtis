@@ -21,10 +21,11 @@ def _make_boat(user, name='Albatros', sail_number='CZE1234'):
     )
 
 
-def _make_ticket(code='P550-001', color=None, status=None, boat=None):
+def _make_ticket(code='P550-001', color=None, status=None, boat=None, rfid_uid=''):
     kwargs = {
         'code': code,
         'color': color or SailTicket.Color.P550,
+        'rfid_uid': rfid_uid,
     }
     if status:
         kwargs['status'] = status
@@ -296,3 +297,46 @@ class TicketExportCsvTest(TestCase):
         content = response.content.decode()
         self.assertIn('P550-001', content)
         self.assertIn('Albatros', content)
+
+
+class TicketUnpairRfidTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.desk = _make_infodesk()
+        self.client.login(username='desk', password='pw')
+
+    def test_unpair_clears_rfid_uid(self):
+        ticket = _make_ticket('P550-001', rfid_uid='AABBCCDD')
+        url = reverse('SkaRe:ticket_unpair_rfid', args=[ticket.pk])
+        response = self.client.post(url)
+        self.assertRedirects(response, reverse('SkaRe:ticket_detail', args=[ticket.pk]))
+        ticket.refresh_from_db()
+        self.assertEqual(ticket.rfid_uid, '')
+
+    def test_unpair_creates_log_entry(self):
+        ticket = _make_ticket('P550-001', rfid_uid='AABBCCDD')
+        url = reverse('SkaRe:ticket_unpair_rfid', args=[ticket.pk])
+        self.client.post(url)
+        log = SailTicketLog.objects.get(ticket=ticket)
+        self.assertIn('unpaired', log.note.lower())
+        self.assertEqual(log.changed_by, self.desk)
+
+    def test_unpair_requires_infodesk(self):
+        other = User.objects.create_user(username='pleb', password='pw')
+        self.client.login(username='pleb', password='pw')
+        ticket = _make_ticket('P550-001', rfid_uid='AABBCCDD')
+        url = reverse('SkaRe:ticket_unpair_rfid', args=[ticket.pk])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_unpair_returns_400_when_no_rfid(self):
+        ticket = _make_ticket('P550-001', rfid_uid='')
+        url = reverse('SkaRe:ticket_unpair_rfid', args=[ticket.pk])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)
+
+    def test_unpair_requires_post(self):
+        ticket = _make_ticket('P550-001', rfid_uid='AABBCCDD')
+        url = reverse('SkaRe:ticket_unpair_rfid', args=[ticket.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)

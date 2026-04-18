@@ -183,6 +183,25 @@ def ticket_pair_rfid(request, ticket_id):
 
 
 @infodesk_required
+def ticket_unpair_rfid(request, ticket_id):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    ticket = get_object_or_404(SailTicket, pk=ticket_id)
+    if not ticket.rfid_uid:
+        return HttpResponseBadRequest('Ticket has no paired card')
+    ticket.rfid_uid = ''
+    ticket.save(update_fields=['rfid_uid', 'updated_at'])
+    SailTicketLog.objects.create(
+        ticket=ticket,
+        status=ticket.status,
+        changed_by=request.user,
+        note=f'RFID card unpaired by {request.user.username}',
+    )
+    messages.success(request, _('RFID card unpaired from ticket %(code)s.') % {'code': ticket.code})
+    return redirect('SkaRe:ticket_detail', ticket_id=ticket.pk)
+
+
+@infodesk_required
 def ticket_lookup(request):
     query = request.GET.get('q', '').strip()
     results = []
