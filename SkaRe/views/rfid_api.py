@@ -166,9 +166,13 @@ def rfid_scan(request):
         })
 
     # Normal transition
-    ticket.status = target_status
-    ticket.save(update_fields=['status', 'updated_at'])
-    SailTicketLog.objects.create(ticket=ticket, status=target_status)
+    with transaction.atomic():
+        ticket = SailTicket.objects.select_related(
+            'boat', 'boat__boat_class'
+        ).select_for_update().get(pk=ticket.pk)
+        ticket.status = target_status
+        ticket.save(update_fields=['status', 'updated_at'])
+        SailTicketLog.objects.create(ticket=ticket, status=target_status)
     return JsonResponse({
         'result': 'ok',
         'ticket_code': ticket.code,
