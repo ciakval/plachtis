@@ -62,6 +62,8 @@ urlpatterns = [
     path('infodesk/tickets/<int:ticket_id>/', views.ticket_detail, name='ticket_detail'),
     path('infodesk/tickets/<int:ticket_id>/set-status/', views.ticket_set_status, name='ticket_set_status'),
     path('infodesk/tickets/<int:ticket_id>/pair-rfid/', views.ticket_pair_rfid, name='ticket_pair_rfid'),
+    # RFID reader API
+    path('api/rfid/alive/', views.rfid_alive, name='rfid_alive'),
     # Exports
     path('infodesk/exports/', views.exports_index, name='exports_index'),
     path('infodesk/exports/kitchen/csv/', views.exports_kitchen_csv, name='exports_kitchen_csv'),

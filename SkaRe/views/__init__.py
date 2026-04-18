@@ -74,3 +74,6 @@ from .exports import (
     exports_medical_print,
     exports_organizer_units_csv,
 )
+from .rfid_api import (
+    rfid_alive,
+)
