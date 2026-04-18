@@ -87,3 +87,92 @@ class RfidAliveResponseTest(TestCase):
     def test_timestamp_present(self):
         data = self._get()
         self.assertIn('timestamp', data)
+
+
+@override_settings(RFID_API_KEY='testkey')
+class RfidScanValidationTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse('SkaRe:rfid_scan')
+        self.headers = {'HTTP_AUTHORIZATION': 'Bearer testkey',
+                        'content_type': 'application/json'}
+
+    def _post(self, body):
+        return self.client.post(
+            self.url, json.dumps(body),
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer testkey',
+        )
+
+    def test_missing_rfid_uid_returns_400(self):
+        response = self._post({'module_id': 'departure'})
+        self.assertEqual(response.status_code, 400)
+
+    def test_missing_module_id_returns_400(self):
+        response = self._post({'rfid_uid': 'AABBCCDD'})
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_module_id_returns_400(self):
+        response = self._post({'module_id': 'exit', 'rfid_uid': 'AABBCCDD'})
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_json_returns_400(self):
+        response = self.client.post(
+            self.url, 'not-json',
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer testkey',
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_no_key_returns_401(self):
+        response = self.client.post(self.url,
+            json.dumps({'module_id': 'departure', 'rfid_uid': 'AA'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+
+@override_settings(RFID_API_KEY='testkey')
+class RfidScanPairingModeTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse('SkaRe:rfid_scan')
+
+    def _post(self, body):
+        return self.client.post(
+            self.url, json.dumps(body),
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer testkey',
+        )
+
+    def test_pairing_success_links_uid_and_clears_flag(self):
+        ticket = _make_ticket('P550-001', pending_pairing=True)
+        response = self._post({'module_id': 'departure', 'rfid_uid': 'AABBCCDD'})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEqual(data['result'], 'ok')
+        self.assertEqual(data['ticket_code'], 'P550-001')
+        ticket.refresh_from_db()
+        self.assertEqual(ticket.rfid_uid, 'AABBCCDD')
+        self.assertFalse(ticket.pending_pairing)
+
+    def test_pairing_success_module_id_ignored(self):
+        """module_id does not matter during pairing."""
+        ticket = _make_ticket('P550-001', pending_pairing=True)
+        response = self._post({'module_id': 'arrival', 'rfid_uid': 'AABBCCDD'})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEqual(data['result'], 'ok')
+        ticket.refresh_from_db()
+        self.assertEqual(ticket.rfid_uid, 'AABBCCDD')
+
+    def test_pairing_error_when_uid_already_paired_to_other_ticket(self):
+        _make_ticket('P550-001', pending_pairing=True)
+        _make_ticket('P550-002', rfid_uid='AABBCCDD')
+        response = self._post({'module_id': 'departure', 'rfid_uid': 'AABBCCDD'})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEqual(data['result'], 'error')
+        self.assertEqual(data['error'], 'already_paired')
+        # pending_pairing must still be set — pairing was not completed
+        still_pending = SailTicket.objects.get(code='P550-001')
+        self.assertTrue(still_pending.pending_pairing)

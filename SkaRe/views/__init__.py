@@ -76,4 +76,5 @@ from .exports import (
 )
 from .rfid_api import (
     rfid_alive,
+    rfid_scan,
 )
