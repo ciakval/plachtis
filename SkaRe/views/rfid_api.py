@@ -112,5 +112,67 @@ def rfid_scan(request):
                 'timestamp': timestamp,
             })
 
-    # ── Scanning mode — implemented in Task 4 ────────────────────────────
-    return JsonResponse({'error': 'Not implemented'}, status=500)
+    # ── Scanning mode ─────────────────────────────────────────────────────
+    try:
+        ticket = SailTicket.objects.select_related(
+            'boat', 'boat__boat_class'
+        ).get(rfid_uid=rfid_uid)
+    except SailTicket.DoesNotExist:
+        return JsonResponse({
+            'result': 'error',
+            'error': 'unknown_card',
+            'timestamp': timestamp,
+        })
+
+    target_status = _MODULE_TRANSITIONS[module_id]
+
+    if ticket.status == SailTicket.Status.LOST:
+        data = {
+            'result': 'error',
+            'error': 'lost',
+            'ticket_code': ticket.code,
+            'timestamp': timestamp,
+        }
+        boat_info = _boat_data(ticket.boat)
+        if boat_info:
+            data['boat'] = boat_info
+        return JsonResponse(data)
+
+    if ticket.boat is None:
+        return JsonResponse({
+            'result': 'error',
+            'error': 'no_boat',
+            'ticket_code': ticket.code,
+            'timestamp': timestamp,
+        })
+
+    if ticket.status == target_status:
+        error_key = (
+            'already_on_water'
+            if target_status == SailTicket.Status.ON_WATER
+            else 'already_ashore'
+        )
+        SailTicketLog.objects.create(
+            ticket=ticket,
+            status=ticket.status,
+            note=f'Duplicate scan on {module_id} module',
+        )
+        return JsonResponse({
+            'result': 'error',
+            'error': error_key,
+            'ticket_code': ticket.code,
+            'boat': _boat_data(ticket.boat),
+            'timestamp': timestamp,
+        })
+
+    # Normal transition
+    ticket.status = target_status
+    ticket.save(update_fields=['status', 'updated_at'])
+    SailTicketLog.objects.create(ticket=ticket, status=target_status)
+    return JsonResponse({
+        'result': 'ok',
+        'ticket_code': ticket.code,
+        'new_status': target_status,
+        'boat': _boat_data(ticket.boat),
+        'timestamp': timestamp,
+    })

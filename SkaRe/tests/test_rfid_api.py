@@ -1,7 +1,7 @@
 import json
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
-from SkaRe.models import SailTicket, Boat, BoatClass
+from SkaRe.models import SailTicket, SailTicketLog, Boat, BoatClass
 from django.contrib.auth.models import User
 
 
@@ -174,3 +174,111 @@ class RfidScanPairingModeTest(TestCase):
         # pending_pairing must still be set — pairing was not completed
         still_pending = SailTicket.objects.get(code='P550-001')
         self.assertTrue(still_pending.pending_pairing)
+
+
+@override_settings(RFID_API_KEY='testkey')
+class RfidScanScanningModeTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse('SkaRe:rfid_scan')
+        self.user = _make_user()
+        self.boat = _make_boat(self.user, name='Albatros', sail_number='CZE1234')
+
+    def _post(self, module_id, rfid_uid):
+        return self.client.post(
+            self.url,
+            json.dumps({'module_id': module_id, 'rfid_uid': rfid_uid}),
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer testkey',
+        )
+
+    def test_unknown_card_returns_error(self):
+        response = self._post('departure', 'UNKNOWN')
+        data = json.loads(response.content)
+        self.assertEqual(data['result'], 'error')
+        self.assertEqual(data['error'], 'unknown_card')
+        self.assertNotIn('ticket_code', data)
+        self.assertNotIn('boat', data)
+
+    def test_no_boat_returns_error_with_ticket_code(self):
+        _make_ticket('P550-001', rfid_uid='AABBCCDD')  # no boat
+        response = self._post('departure', 'AABBCCDD')
+        data = json.loads(response.content)
+        self.assertEqual(data['result'], 'error')
+        self.assertEqual(data['error'], 'no_boat')
+        self.assertEqual(data['ticket_code'], 'P550-001')
+        self.assertNotIn('boat', data)
+
+    def test_lost_ticket_returns_error_with_boat(self):
+        _make_ticket('P550-001', status=SailTicket.Status.LOST,
+                     boat=self.boat, rfid_uid='AABBCCDD')
+        response = self._post('departure', 'AABBCCDD')
+        data = json.loads(response.content)
+        self.assertEqual(data['result'], 'error')
+        self.assertEqual(data['error'], 'lost')
+        self.assertEqual(data['ticket_code'], 'P550-001')
+        self.assertIn('boat', data)
+        self.assertEqual(data['boat']['name'], 'Albatros')
+
+    def test_already_on_water_returns_error_and_logs(self):
+        _make_ticket('P550-001', status=SailTicket.Status.ON_WATER,
+                     boat=self.boat, rfid_uid='AABBCCDD')
+        response = self._post('departure', 'AABBCCDD')
+        data = json.loads(response.content)
+        self.assertEqual(data['result'], 'error')
+        self.assertEqual(data['error'], 'already_on_water')
+        self.assertEqual(data['ticket_code'], 'P550-001')
+        self.assertIn('boat', data)
+        # Duplicate scan must be logged
+        log = SailTicketLog.objects.get(ticket__code='P550-001')
+        self.assertIn('departure', log.note)
+
+    def test_already_ashore_returns_error_and_logs(self):
+        _make_ticket('P550-001', status=SailTicket.Status.ASHORE,
+                     boat=self.boat, rfid_uid='AABBCCDD')
+        response = self._post('arrival', 'AABBCCDD')
+        data = json.loads(response.content)
+        self.assertEqual(data['result'], 'error')
+        self.assertEqual(data['error'], 'already_ashore')
+        log = SailTicketLog.objects.get(ticket__code='P550-001')
+        self.assertIn('arrival', log.note)
+
+    def test_departure_transitions_to_on_water_and_logs(self):
+        ticket = _make_ticket('P550-001', status=SailTicket.Status.ASHORE,
+                              boat=self.boat, rfid_uid='AABBCCDD')
+        response = self._post('departure', 'AABBCCDD')
+        data = json.loads(response.content)
+        self.assertEqual(data['result'], 'ok')
+        self.assertEqual(data['ticket_code'], 'P550-001')
+        self.assertEqual(data['new_status'], SailTicket.Status.ON_WATER)
+        self.assertEqual(data['boat']['name'], 'Albatros')
+        ticket.refresh_from_db()
+        self.assertEqual(ticket.status, SailTicket.Status.ON_WATER)
+        self.assertTrue(SailTicketLog.objects.filter(ticket=ticket).exists())
+
+    def test_arrival_transitions_to_ashore_and_logs(self):
+        ticket = _make_ticket('P550-001', status=SailTicket.Status.ON_WATER,
+                              boat=self.boat, rfid_uid='AABBCCDD')
+        response = self._post('arrival', 'AABBCCDD')
+        data = json.loads(response.content)
+        self.assertEqual(data['result'], 'ok')
+        self.assertEqual(data['new_status'], SailTicket.Status.ASHORE)
+        ticket.refresh_from_db()
+        self.assertEqual(ticket.status, SailTicket.Status.ASHORE)
+
+    def test_boat_dict_omits_blank_fields(self):
+        """sail_number, harbor_number, harbor_name, class omitted when blank/null."""
+        bare_boat = Boat.objects.create(
+            created_by=self.user, boat_class=None,
+            name='Bare', sail_number='', contact_person='X',
+            contact_phone='123', hull_color='red',
+        )
+        _make_ticket('P550-002', status=SailTicket.Status.ASHORE,
+                     boat=bare_boat, rfid_uid='BBCCDDEE')
+        response = self._post('departure', 'BBCCDDEE')
+        data = json.loads(response.content)
+        boat = data['boat']
+        self.assertNotIn('sail_number', boat)
+        self.assertNotIn('class', boat)
+        self.assertNotIn('harbor_number', boat)
+        self.assertNotIn('harbor_name', boat)
