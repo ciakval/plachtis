@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import SailTicket, SailTicketLog
+from ..models import SailTicket
 
 
 def require_api_key(view_func):
