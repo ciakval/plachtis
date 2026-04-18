@@ -30,6 +30,9 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 VERSION = os.environ.get('VERSION', 'dev')
 BUILD_ID = os.environ.get('BUILD_ID', 'unknown')
 
+# RFID reader API authentication
+RFID_API_KEY = os.environ.get('RFID_API_KEY', '')
+
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Always allow localhost for health checks
