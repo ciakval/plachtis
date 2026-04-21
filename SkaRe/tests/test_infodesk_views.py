@@ -183,3 +183,65 @@ class InfodeskEditUnitTest(TestCase):
         self.client.post(url, self._post_data('Updated Name'))
         self.unit.entity.refresh_from_db()
         self.assertEqual(self.unit.entity.scout_unit_name, 'Updated Name')
+
+
+class InfodeskEditIndividualParticipantTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.infodesk = _make_infodesk_group_user(username='desk3')
+        self.owner = User.objects.create_user(username='indowner', password='pw')
+        self.client.login(username='desk3', password='pw')
+
+        entity = Entity.objects.create(
+            created_by=self.owner,
+            contact_email='i@example.com',
+            contact_phone='+420123456789',
+        )
+        self.participant = IndividualParticipant.objects.create(
+            entity=entity,
+            first_name='Old',
+            last_name='Name',
+            date_of_birth=date(1990, 1, 1),
+        )
+
+    def _post_data(self, first_name='New'):
+        return {
+            'contact_email': 'i@example.com',
+            'contact_phone': '+420123456789',
+            'first_name': first_name,
+            'last_name': 'Name',
+            'nickname': '',
+            'date_of_birth': '1990-01-01',
+            'health_restrictions': '',
+            'diet_vegetarian': '',
+            'diet_vegan': '',
+            'diet_no_soy': '',
+            'diet_lactose_free': '',
+            'diet_gluten_free': '',
+            'diet_no_peanuts': '',
+            'diet_no_eggs': '',
+            'diet_no_fish': '',
+            'diet_other': '',
+            'relevant_information': '',
+            'boats_p550': '0', 'boats_sail': '0',
+            'boats_paddle': '0', 'boats_motor': '0',
+            'scarf_count': '0', 'hat_count': '0', 'small_hat_count': '0',
+            'accommodation_expectations': '',
+            'estimated_accommodation_area': '',
+        }
+
+    def test_infodesk_can_get_edit_individual_participant(self):
+        url = reverse('SkaRe:edit_individual_participant', kwargs={'participant_id': self.participant.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_infodesk_edit_individual_participant_redirects_to_infodesk_registrations(self):
+        url = reverse('SkaRe:edit_individual_participant', kwargs={'participant_id': self.participant.pk})
+        response = self.client.post(url, self._post_data('Updated'))
+        self.assertRedirects(response, reverse('SkaRe:infodesk_registrations'))
+
+    def test_infodesk_edit_individual_participant_saves_changes(self):
+        url = reverse('SkaRe:edit_individual_participant', kwargs={'participant_id': self.participant.pk})
+        self.client.post(url, self._post_data('Updated'))
+        self.participant.refresh_from_db()
+        self.assertEqual(self.participant.first_name, 'Updated')

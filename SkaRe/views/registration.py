@@ -442,10 +442,10 @@ def edit_individual_participant(request, participant_id):
     """View for editing an existing Individual Participant."""
     participant = get_object_or_404(IndividualParticipant, id=participant_id)
 
-    # Check if user has permission to edit this participant (owner or editor)
+    # Check if user has permission to edit this participant (owner, editor, or InfoDesk)
     is_owner = participant.entity.created_by == request.user
     is_editor = participant.entity.editors.filter(id=request.user.id).exists()
-    if not (is_owner or is_editor):
+    if not (is_owner or is_editor or is_infodesk(request.user)):
         messages.error(request, _('You do not have permission to edit this participant.'))
         return redirect('SkaRe:list_individual_participants')
 
@@ -556,6 +556,8 @@ def edit_individual_participant(request, participant_id):
                     participant_form.save()
 
                     messages.success(request, _('Individual Participant "{name}" updated successfully!').format(name=str(participant)))
+                    if is_infodesk(request.user):
+                        return redirect('SkaRe:infodesk_registrations')
                     return redirect('SkaRe:list_individual_participants')
             except Exception as e:
                 messages.error(request, _('Error updating participant: {error}').format(error=str(e)))
