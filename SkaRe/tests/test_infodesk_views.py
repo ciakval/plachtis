@@ -310,3 +310,58 @@ class InfodeskEditOrganizerTest(TestCase):
         self.client.post(url, self._post_data('Updated'))
         self.organizer.refresh_from_db()
         self.assertEqual(self.organizer.first_name, 'Updated')
+
+
+class InfodeskRegistrationsEditLinksTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.infodesk = _make_infodesk_group_user(username='desk5')
+        self.owner = User.objects.create_user(username='linkowner', password='pw')
+        self.client.login(username='desk5', password='pw')
+
+    def test_edit_link_present_for_unit(self):
+        entity = Entity.objects.create(
+            created_by=self.owner,
+            contact_email='e@example.com',
+            contact_phone='+420123456789',
+            scout_unit_name='Link Unit',
+        )
+        unit = Unit.objects.create(entity=entity, contact_person_name='Leader')
+        url = reverse('SkaRe:infodesk_registrations')
+        response = self.client.get(url)
+        edit_url = reverse('SkaRe:edit_unit', kwargs={'unit_id': unit.pk})
+        self.assertContains(response, edit_url)
+
+    def test_edit_link_present_for_individual_participant(self):
+        entity = Entity.objects.create(
+            created_by=self.owner,
+            contact_email='e2@example.com',
+            contact_phone='+420123456789',
+        )
+        participant = IndividualParticipant.objects.create(
+            entity=entity,
+            first_name='Link',
+            last_name='Person',
+            date_of_birth=date(1990, 1, 1),
+        )
+        url = reverse('SkaRe:infodesk_registrations')
+        response = self.client.get(url)
+        edit_url = reverse('SkaRe:edit_individual_participant', kwargs={'participant_id': participant.pk})
+        self.assertContains(response, edit_url)
+
+    def test_edit_link_present_for_organizer(self):
+        entity = Entity.objects.create(
+            created_by=self.owner,
+            contact_email='e3@example.com',
+            contact_phone='+420123456789',
+        )
+        organizer = Organizer.objects.create(
+            entity=entity,
+            first_name='Link',
+            last_name='Org',
+            date_of_birth=date(1980, 1, 1),
+        )
+        url = reverse('SkaRe:infodesk_registrations')
+        response = self.client.get(url)
+        edit_url = reverse('SkaRe:edit_organizer', kwargs={'organizer_id': organizer.pk})
+        self.assertContains(response, edit_url)
