@@ -20,6 +20,7 @@ from ..forms import (
     validate_czech_phone, get_participant_formset,
 )
 from ..form_utils import generate_form_token, is_duplicate_submission, consume_form_token
+from ..permissions import is_infodesk
 
 
 ADMIN_RESULTS_LIMIT = 500
@@ -201,10 +202,10 @@ def edit_unit(request, unit_id):
     """View for editing an existing Unit."""
     unit = get_object_or_404(Unit, id=unit_id)
 
-    # Check if user has permission to edit this unit (owner or editor)
+    # Check if user has permission to edit this unit (owner, editor, or InfoDesk)
     is_owner = unit.entity.created_by == request.user
     is_editor = unit.entity.editors.filter(id=request.user.id).exists()
-    if not (is_owner or is_editor):
+    if not (is_owner or is_editor or is_infodesk(request.user)):
         messages.error(request, _('You do not have permission to edit this unit.'))
         return redirect('SkaRe:list_units')
 
@@ -333,6 +334,8 @@ def edit_unit(request, unit_id):
                         unit_name=unit.entity.scout_unit_name,
                         count=participant_count
                     ))
+                    if is_infodesk(request.user):
+                        return redirect('SkaRe:infodesk_registrations')
                     return redirect('SkaRe:list_units')
             except Exception as e:
                 messages.error(request, _('Error updating unit: {error}').format(error=str(e)))

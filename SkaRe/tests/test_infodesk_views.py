@@ -122,3 +122,64 @@ class RegistrationQueueTest(TestCase):
         url = reverse('SkaRe:infodesk_confirm_entity', kwargs={'entity_id': entity.pk})
         response = self.client.get(url)
         self.assertRedirects(response, reverse('SkaRe:infodesk_registrations'))
+
+
+from SkaRe.models import Organizer  # Entity, Unit, IndividualParticipant already imported at top of file
+
+
+def _make_infodesk_group_user(username='desk2'):
+    user = User.objects.create_user(username=username, password='pw')
+    group, _ = Group.objects.get_or_create(name='InfoDesk')
+    user.groups.add(group)
+    return user
+
+
+class InfodeskEditUnitTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.infodesk = _make_infodesk_group_user()
+        self.owner = User.objects.create_user(username='unitowner', password='pw')
+        self.client.login(username='desk2', password='pw')
+
+        entity = Entity.objects.create(
+            created_by=self.owner,
+            contact_email='u@example.com',
+            contact_phone='+420123456789',
+            scout_unit_name='Old Name',
+        )
+        self.unit = Unit.objects.create(entity=entity, contact_person_name='Leader')
+
+    def _post_data(self, unit_name='New Name'):
+        return {
+            'scout_unit_name': unit_name,
+            'scout_unit_evidence_id': '',
+            'contact_email': 'u@example.com',
+            'contact_phone': '+420123456789',
+            'contact_person_name': 'Leader',
+            'backup_contact_phone': '',
+            'boats_p550': '0', 'boats_sail': '0',
+            'boats_paddle': '0', 'boats_motor': '0',
+            'scarf_count': '0', 'hat_count': '0', 'small_hat_count': '0',
+            'accommodation_expectations': '',
+            'estimated_accommodation_area': '',
+            'participants-TOTAL_FORMS': '0',
+            'participants-INITIAL_FORMS': '0',
+            'participants-MIN_NUM_FORMS': '0',
+            'participants-MAX_NUM_FORMS': '1000',
+        }
+
+    def test_infodesk_can_get_edit_unit(self):
+        url = reverse('SkaRe:edit_unit', kwargs={'unit_id': self.unit.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_infodesk_edit_unit_redirects_to_infodesk_registrations(self):
+        url = reverse('SkaRe:edit_unit', kwargs={'unit_id': self.unit.pk})
+        response = self.client.post(url, self._post_data('Updated Name'))
+        self.assertRedirects(response, reverse('SkaRe:infodesk_registrations'))
+
+    def test_infodesk_edit_unit_saves_changes(self):
+        url = reverse('SkaRe:edit_unit', kwargs={'unit_id': self.unit.pk})
+        self.client.post(url, self._post_data('Updated Name'))
+        self.unit.entity.refresh_from_db()
+        self.assertEqual(self.unit.entity.scout_unit_name, 'Updated Name')
