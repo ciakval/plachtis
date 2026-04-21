@@ -245,3 +245,68 @@ class InfodeskEditIndividualParticipantTest(TestCase):
         self.client.post(url, self._post_data('Updated'))
         self.participant.refresh_from_db()
         self.assertEqual(self.participant.first_name, 'Updated')
+
+
+class InfodeskEditOrganizerTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.infodesk = _make_infodesk_group_user(username='desk4')
+        self.owner = User.objects.create_user(username='orgowner', password='pw')
+        self.client.login(username='desk4', password='pw')
+
+        entity = Entity.objects.create(
+            created_by=self.owner,
+            contact_email='o2@example.com',
+            contact_phone='+420123456789',
+        )
+        self.organizer = Organizer.objects.create(
+            entity=entity,
+            first_name='Old',
+            last_name='Org',
+            date_of_birth=date(1980, 1, 1),
+        )
+
+    def _post_data(self, first_name='New'):
+        return {
+            'contact_email': 'o2@example.com',
+            'contact_phone': '+420123456789',
+            'first_name': first_name,
+            'last_name': 'Org',
+            'nickname': '',
+            'date_of_birth': '1980-01-01',
+            'health_restrictions': '',
+            'diet_vegetarian': '',
+            'diet_vegan': '',
+            'diet_no_soy': '',
+            'diet_lactose_free': '',
+            'diet_gluten_free': '',
+            'diet_no_peanuts': '',
+            'diet_no_eggs': '',
+            'diet_no_fish': '',
+            'diet_other': '',
+            'relevant_information': '',
+            'division': 'OTHERS',
+            'transport': 'PUBLIC',
+            'need_lift': '',
+            'want_travel_order': '',
+            'accommodation': 'OWN_TENT',
+            'wants_scarf': '',
+            'wants_hat': '',
+            'wants_small_hat': '',
+        }
+
+    def test_infodesk_can_get_edit_organizer(self):
+        url = reverse('SkaRe:edit_organizer', kwargs={'organizer_id': self.organizer.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_infodesk_edit_organizer_redirects_to_infodesk_registrations(self):
+        url = reverse('SkaRe:edit_organizer', kwargs={'organizer_id': self.organizer.pk})
+        response = self.client.post(url, self._post_data('Updated'))
+        self.assertRedirects(response, reverse('SkaRe:infodesk_registrations'))
+
+    def test_infodesk_edit_organizer_saves_changes(self):
+        url = reverse('SkaRe:edit_organizer', kwargs={'organizer_id': self.organizer.pk})
+        self.client.post(url, self._post_data('Updated'))
+        self.organizer.refresh_from_db()
+        self.assertEqual(self.organizer.first_name, 'Updated')

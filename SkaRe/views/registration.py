@@ -778,10 +778,10 @@ def edit_organizer(request, organizer_id):
     """View for editing an existing Organizer."""
     organizer = get_object_or_404(Organizer, id=organizer_id)
 
-    # Check if user has permission to edit this organizer (owner or editor)
+    # Check if user has permission to edit this organizer (owner, editor, or InfoDesk)
     is_owner = organizer.entity.created_by == request.user
     is_editor = organizer.entity.editors.filter(id=request.user.id).exists()
-    if not (is_owner or is_editor):
+    if not (is_owner or is_editor or is_infodesk(request.user)):
         messages.error(request, _('You do not have permission to edit this organizer.'))
         return redirect('SkaRe:list_organizers')
 
@@ -885,6 +885,8 @@ def edit_organizer(request, organizer_id):
                     organizer_form.save()
 
                     messages.success(request, _('Organizer "{name}" updated successfully!').format(name=str(organizer)))
+                    if is_infodesk(request.user):
+                        return redirect('SkaRe:infodesk_registrations')
                     return redirect('SkaRe:list_organizers')
             except Exception as e:
                 messages.error(request, _('Error updating organizer: {error}').format(error=str(e)))
