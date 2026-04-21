@@ -58,6 +58,19 @@
             </td>
             <td>{{ row.entity.created_at|date:"d.m.Y H:i" }}</td>
             <td>
+              {% if row.entity.unit_profile %}
+                <a href="{% url 'SkaRe:edit_unit' row.entity.unit_profile.pk %}" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-pencil"></i> {% trans "Edit" %}
+                </a>
+              {% elif row.entity.individual_participant_profile %}
+                <a href="{% url 'SkaRe:edit_individual_participant' row.entity.individual_participant_profile.pk %}" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-pencil"></i> {% trans "Edit" %}
+                </a>
+              {% elif row.entity.organizer_profile %}
+                <a href="{% url 'SkaRe:edit_organizer' row.entity.organizer_profile.pk %}" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-pencil"></i> {% trans "Edit" %}
+                </a>
+              {% endif %}
               {% if not row.entity.confirmed %}
                 <button type="submit"
                         class="btn btn-success btn-sm"

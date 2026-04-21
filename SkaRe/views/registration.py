@@ -20,6 +20,7 @@ from ..forms import (
     validate_czech_phone, get_participant_formset,
 )
 from ..form_utils import generate_form_token, is_duplicate_submission, consume_form_token
+from ..permissions import is_infodesk
 
 
 ADMIN_RESULTS_LIMIT = 500
@@ -201,10 +202,10 @@ def edit_unit(request, unit_id):
     """View for editing an existing Unit."""
     unit = get_object_or_404(Unit, id=unit_id)
 
-    # Check if user has permission to edit this unit (owner or editor)
+    # Check if user has permission to edit this unit (owner, editor, or InfoDesk)
     is_owner = unit.entity.created_by == request.user
     is_editor = unit.entity.editors.filter(id=request.user.id).exists()
-    if not (is_owner or is_editor):
+    if not (is_owner or is_editor or is_infodesk(request.user)):
         messages.error(request, _('You do not have permission to edit this unit.'))
         return redirect('SkaRe:list_units')
 
@@ -333,6 +334,8 @@ def edit_unit(request, unit_id):
                         unit_name=unit.entity.scout_unit_name,
                         count=participant_count
                     ))
+                    if is_infodesk(request.user):
+                        return redirect('SkaRe:infodesk_registrations')
                     return redirect('SkaRe:list_units')
             except Exception as e:
                 messages.error(request, _('Error updating unit: {error}').format(error=str(e)))
@@ -439,10 +442,10 @@ def edit_individual_participant(request, participant_id):
     """View for editing an existing Individual Participant."""
     participant = get_object_or_404(IndividualParticipant, id=participant_id)
 
-    # Check if user has permission to edit this participant (owner or editor)
+    # Check if user has permission to edit this participant (owner, editor, or InfoDesk)
     is_owner = participant.entity.created_by == request.user
     is_editor = participant.entity.editors.filter(id=request.user.id).exists()
-    if not (is_owner or is_editor):
+    if not (is_owner or is_editor or is_infodesk(request.user)):
         messages.error(request, _('You do not have permission to edit this participant.'))
         return redirect('SkaRe:list_individual_participants')
 
@@ -553,6 +556,8 @@ def edit_individual_participant(request, participant_id):
                     participant_form.save()
 
                     messages.success(request, _('Individual Participant "{name}" updated successfully!').format(name=str(participant)))
+                    if is_infodesk(request.user):
+                        return redirect('SkaRe:infodesk_registrations')
                     return redirect('SkaRe:list_individual_participants')
             except Exception as e:
                 messages.error(request, _('Error updating participant: {error}').format(error=str(e)))
@@ -773,10 +778,10 @@ def edit_organizer(request, organizer_id):
     """View for editing an existing Organizer."""
     organizer = get_object_or_404(Organizer, id=organizer_id)
 
-    # Check if user has permission to edit this organizer (owner or editor)
+    # Check if user has permission to edit this organizer (owner, editor, or InfoDesk)
     is_owner = organizer.entity.created_by == request.user
     is_editor = organizer.entity.editors.filter(id=request.user.id).exists()
-    if not (is_owner or is_editor):
+    if not (is_owner or is_editor or is_infodesk(request.user)):
         messages.error(request, _('You do not have permission to edit this organizer.'))
         return redirect('SkaRe:list_organizers')
 
@@ -880,6 +885,8 @@ def edit_organizer(request, organizer_id):
                     organizer_form.save()
 
                     messages.success(request, _('Organizer "{name}" updated successfully!').format(name=str(organizer)))
+                    if is_infodesk(request.user):
+                        return redirect('SkaRe:infodesk_registrations')
                     return redirect('SkaRe:list_organizers')
             except Exception as e:
                 messages.error(request, _('Error updating organizer: {error}').format(error=str(e)))
