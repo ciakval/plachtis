@@ -218,6 +218,7 @@ class BoatRegisterViewTest(TestCase):
             'name': 'My Boat',
             'description': '',
             'sail_area': '',
+            'hull_color': 'white',
             'harbor_number': '523.10',
             'harbor_name': '5. oddíl Koráb',
             'contact_person': 'Jan Novák',
@@ -272,6 +273,7 @@ class BoatEditViewTest(TestCase):
             'name': 'Updated Boat',
             'description': '',
             'sail_area': '',
+            'hull_color': 'white',
             'harbor_number': '',
             'harbor_name': '',
             'contact_person': 'Jan',
@@ -334,10 +336,10 @@ class BoatDeleteViewTest(TestCase):
         self.client.post(reverse('SkaRe:boat_delete', kwargs={'boat_id': self.boat.pk}))
         self.assertTrue(Boat.objects.filter(pk=self.boat.pk).exists())
 
-    def test_infodesk_cannot_delete(self):
+    def test_infodesk_can_delete(self):
         self.client.login(username='infodesk', password='pw')
         self.client.post(reverse('SkaRe:boat_delete', kwargs={'boat_id': self.boat.pk}))
-        self.assertTrue(Boat.objects.filter(pk=self.boat.pk).exists())
+        self.assertFalse(Boat.objects.filter(pk=self.boat.pk).exists())
 
     def test_get_shows_confirm_page(self):
         self.client.login(username='owner', password='pw')

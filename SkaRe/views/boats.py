@@ -130,6 +130,7 @@ def boat_detail(request, boat_id):
     boat = get_object_or_404(Boat.objects.select_related('boat_class', 'created_by'), id=boat_id)
     return render(request, 'SkaRe/boats/detail.html', {
         'boat': boat,
+        'is_creator': boat.created_by == request.user,
         'can_edit': boat.can_be_edited(request.user),
         'can_delete': boat.created_by == request.user or is_infodesk(request.user),
     })
