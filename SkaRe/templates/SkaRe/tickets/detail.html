@@ -6,11 +6,7 @@
 {% block content %}
 <h1 class="mb-2">{{ ticket.code }}</h1>
 <p class="text-muted">{{ ticket.get_color_display }}</p>
-<div class="mb-3 d-flex gap-2">
-  <a href="{% url 'SkaRe:ticket_list' %}" class="btn btn-outline-secondary btn-sm">
-    <i class="bi bi-arrow-left"></i> {% trans "All tickets" %}
-  </a>
-</div>
+{% include 'SkaRe/tickets/_nav.html' %}
 
 {% if messages %}
   {% for msg in messages %}

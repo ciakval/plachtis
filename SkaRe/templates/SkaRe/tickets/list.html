@@ -5,23 +5,7 @@
 
 {% block content %}
 <h1 class="mb-3"><i class="bi bi-ticket-perforated"></i> {% trans "Sail Tickets" %}</h1>
-<div class="mb-3 d-flex gap-2">
-  <a href="{% url 'SkaRe:infodesk_dashboard' %}" class="btn btn-outline-secondary btn-sm">
-    <i class="bi bi-arrow-left"></i> {% trans "Dashboard" %}
-  </a>
-  <a href="{% url 'SkaRe:ticket_lookup' %}" class="btn btn-primary btn-sm">
-    <i class="bi bi-search"></i> {% trans "Quick lookup" %}
-  </a>
-  <a href="{% url 'SkaRe:ticket_create_bulk' %}" class="btn btn-outline-success btn-sm">
-    <i class="bi bi-plus-circle"></i> {% trans "Bulk create" %}
-  </a>
-  <a href="{% url 'SkaRe:ticket_on_water' %}" class="btn btn-outline-danger btn-sm">
-    <i class="bi bi-water"></i> {% trans "On water" %}
-  </a>
-  <a href="{% url 'SkaRe:ticket_export_csv' %}" class="btn btn-outline-dark btn-sm">
-    <i class="bi bi-download"></i> {% trans "Export CSV" %}
-  </a>
-</div>
+{% include 'SkaRe/tickets/_nav.html' %}
 
 <form class="row g-2 mb-3" method="get">
   <div class="col-auto">
