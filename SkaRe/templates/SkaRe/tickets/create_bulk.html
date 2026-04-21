@@ -5,9 +5,7 @@
 
 {% block content %}
 <h1 class="mb-3"><i class="bi bi-plus-circle"></i> {% trans "Bulk Create Sail Tickets" %}</h1>
-<a href="{% url 'SkaRe:ticket_list' %}" class="btn btn-outline-secondary btn-sm mb-3">
-  <i class="bi bi-arrow-left"></i> {% trans "All tickets" %}
-</a>
+{% include 'SkaRe/tickets/_nav.html' %}
 
 {% if plan %}
 {# ── Preview / confirmation mode ── #}

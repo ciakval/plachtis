@@ -1,0 +1,21 @@
+{% load i18n %}
+<div class="mb-3 d-flex gap-2 flex-wrap">
+  <a href="{% url 'SkaRe:infodesk_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> {% trans "Dashboard" %}
+  </a>
+  <a href="{% url 'SkaRe:ticket_list' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-ticket-perforated"></i> {% trans "All tickets" %}
+  </a>
+  <a href="{% url 'SkaRe:ticket_lookup' %}" class="btn btn-outline-primary btn-sm">
+    <i class="bi bi-search"></i> {% trans "Quick lookup" %}
+  </a>
+  <a href="{% url 'SkaRe:ticket_create_bulk' %}" class="btn btn-outline-success btn-sm">
+    <i class="bi bi-plus-circle"></i> {% trans "Bulk create" %}
+  </a>
+  <a href="{% url 'SkaRe:ticket_on_water' %}" class="btn btn-outline-danger btn-sm">
+    <i class="bi bi-water"></i> {% trans "On water" %}
+  </a>
+  <a href="{% url 'SkaRe:ticket_export_csv' %}" class="btn btn-outline-dark btn-sm">
+    <i class="bi bi-download"></i> {% trans "Export CSV" %}
+  </a>
+</div>

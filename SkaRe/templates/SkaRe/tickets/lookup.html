@@ -5,9 +5,7 @@
 
 {% block content %}
 <h1 class="mb-3"><i class="bi bi-search"></i> {% trans "Ticket Quick Lookup" %}</h1>
-<a href="{% url 'SkaRe:infodesk_dashboard' %}" class="btn btn-outline-secondary btn-sm mb-3">
-  <i class="bi bi-arrow-left"></i> {% trans "Dashboard" %}
-</a>
+{% include 'SkaRe/tickets/_nav.html' %}
 <form method="get" class="mb-4">
   <div class="input-group">
     <input type="text" name="q" value="{{ query }}" class="form-control form-control-lg"
