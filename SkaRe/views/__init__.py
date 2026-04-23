@@ -47,6 +47,7 @@ from .infodesk import (
     infodesk_confirm_entity,
     infodesk_reject_entity,
     infodesk_bulk_confirm,
+    infodesk_tent_borrowers,
 )
 from .attendance import (
     attendance_units_list,

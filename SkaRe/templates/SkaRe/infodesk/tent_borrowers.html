@@ -1,0 +1,43 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Tent Borrowers" %} - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <h1 class="mb-3"><i class="bi bi-house-door"></i> {% trans "Tent Borrowers" %}</h1>
+    <p>
+      <a href="{% url 'SkaRe:infodesk_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i> {% trans "Dashboard" %}
+      </a>
+    </p>
+
+    <p class="text-muted">{% trans "Organizers who indicated they need to borrow a tent." %}</p>
+
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>{% trans "Name" %}</th>
+          <th>{% trans "Division" %}</th>
+          <th>{% trans "Phone" %}</th>
+          <th>{% trans "Email" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for organizer in organizers %}
+        <tr>
+          <td>{{ organizer }}</td>
+          <td>{{ organizer.get_division_display }}</td>
+          <td>{{ organizer.entity.contact_phone|default:"—" }}</td>
+          <td>{{ organizer.entity.contact_email|default:"—" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center text-muted">{% trans "No organizers need a tent." %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="text-muted">{% trans "Total" %}: {{ organizers|length }}</p>
+  </div>
+</div>
+{% endblock %}

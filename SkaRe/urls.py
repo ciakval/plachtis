@@ -46,6 +46,7 @@ urlpatterns = [
     path('infodesk/registrations/<int:entity_id>/confirm/', views.infodesk_confirm_entity, name='infodesk_confirm_entity'),
     path('infodesk/registrations/<int:entity_id>/reject/', views.infodesk_reject_entity, name='infodesk_reject_entity'),
     path('infodesk/registrations/bulk-confirm/', views.infodesk_bulk_confirm, name='infodesk_bulk_confirm'),
+    path('infodesk/tent-borrowers/', views.infodesk_tent_borrowers, name='infodesk_tent_borrowers'),
     # Attendance
     path('infodesk/attendance/units/', views.attendance_units_list, name='attendance_units_list'),
     path('infodesk/attendance/units/<int:unit_id>/', views.attendance_unit_detail, name='attendance_unit_detail'),

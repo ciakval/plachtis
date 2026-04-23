@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils.translation import gettext as _
 from ..permissions import infodesk_required
-from ..models import Entity, Person, SailTicket
+from ..models import Entity, Person, SailTicket, Organizer
 
 
 @infodesk_required
@@ -74,6 +74,14 @@ def infodesk_reject_entity(request, entity_id):
     entity.save(update_fields=['confirmed'])
     messages.success(request, _('Registration rejected.'))
     return redirect('SkaRe:infodesk_registrations')
+
+
+@infodesk_required
+def infodesk_tent_borrowers(request):
+    organizers = Organizer.objects.select_related('entity').filter(
+        accommodation=Organizer.AccomodationOptions.NEED_TENT
+    ).order_by('last_name', 'first_name')
+    return render(request, 'SkaRe/infodesk/tent_borrowers.html', {'organizers': organizers})
 
 
 @infodesk_required
