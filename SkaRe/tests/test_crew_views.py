@@ -389,3 +389,45 @@ class CrewAllViewTest(TestCase):
             reverse('SkaRe:crew_export_single_csv', kwargs={'crew_id': self.crew.pk})
         )
         self.assertEqual(response.status_code, 200)
+
+    def test_crew_all_context_contains_all_crews(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_all'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('crew_rows', response.context)
+        self.assertEqual(len(response.context['crew_rows']), 1)
+
+    def test_crew_all_filter_by_category(self):
+        # Add a second crew in a different category
+        boat2 = _make_boat(self.user)
+        Crew.objects.create(boat=boat2, category=Crew.CATEGORY_R, created_by=self.user)
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_all'), {'category': Crew.CATEGORY_S}
+        )
+        self.assertEqual(len(response.context['crew_rows']), 1)
+        self.assertEqual(response.context['crew_rows'][0]['crew'].category, Crew.CATEGORY_S)
+
+    def test_crew_all_filter_by_name(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_all'), {'q': 'Jan'})
+        self.assertEqual(len(response.context['crew_rows']), 1)
+
+    def test_crew_all_filter_by_name_no_match(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_all'), {'q': 'zzznomatch'})
+        self.assertEqual(len(response.context['crew_rows']), 0)
+
+    def test_crew_all_filter_by_boat_name(self):
+        self.client.login(username='allstaff', password='pw')
+        # _make_boat creates a boat named 'ALBATROS'
+        response = self.client.get(reverse('SkaRe:crew_all'), {'q': 'ALBATROS'})
+        self.assertEqual(len(response.context['crew_rows']), 1)
+
+    def test_crew_all_context_has_stats(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_all'))
+        self.assertIn('total_crews', response.context)
+        self.assertIn('filtered_count', response.context)
+        self.assertIn('category_stats_list', response.context)
+        self.assertEqual(response.context['total_crews'], 1)

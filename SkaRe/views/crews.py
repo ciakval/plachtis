@@ -269,7 +269,54 @@ def crew_all(request):
     if not request.user.is_staff:
         messages.error(request, _('Staff access required.'))
         return redirect('SkaRe:home')
-    return render(request, 'SkaRe/crews/all.html', {})
+
+    q = request.GET.get('q', '').strip()
+    category = request.GET.get('category', '').strip()
+
+    qs = Crew.objects.select_related(
+        'boat', 'boat__boat_class'
+    ).prefetch_related('members__participant')
+
+    if category:
+        qs = qs.filter(category=category)
+    if q:
+        qs = qs.filter(
+            Q(boat__name__icontains=q) |
+            Q(members__participant__first_name__icontains=q) |
+            Q(members__participant__last_name__icontains=q)
+        ).distinct()
+
+    total_crews = Crew.objects.count()
+    category_counts = {
+        row['category']: row['count']
+        for row in Crew.objects.values('category').annotate(count=Count('id'))
+    }
+    category_stats_list = [
+        (code, label, category_counts.get(code, 0))
+        for code, label in Crew.CATEGORY_CHOICES
+    ]
+
+    crew_rows = []
+    for crew in qs:
+        helmsman = next(
+            (m.participant for m in crew.members.all() if m.role == CrewMember.ROLE_HELMSMAN),
+            None,
+        )
+        crew_rows.append({
+            'crew': crew,
+            'helmsman': helmsman,
+            'member_count': len(list(crew.members.all())),
+        })
+
+    return render(request, 'SkaRe/crews/all.html', {
+        'crew_rows': crew_rows,
+        'total_crews': total_crews,
+        'filtered_count': len(crew_rows),
+        'category_stats_list': category_stats_list,
+        'category_choices': Crew.CATEGORY_CHOICES,
+        'q': q,
+        'selected_category': category,
+    })
 
 
 @login_required
