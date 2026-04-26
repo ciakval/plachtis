@@ -51,10 +51,10 @@ if q:
 ```
 
 **Context passed to template:**
-- `crews` — filtered queryset of `Crew` objects (with member prefetch)
+- `crew_rows` — list of dicts `{crew, helmsman, member_count}` (pre-computed per crew, uses prefetch cache)
 - `total_crews` — total crew count (unfiltered)
-- `filtered_count` — count after applying filters
-- `category_stats` — dict mapping category code → count (unfiltered, for stats bar)
+- `filtered_count` — count after applying filters (equals `len(crew_rows)`)
+- `category_stats_list` — list of `(code, label, count)` tuples from `CATEGORY_CHOICES` order (unfiltered counts, for stats bar)
 - `category_choices` — `Crew.CATEGORY_CHOICES` (for dropdown)
 - `q` — current search value (to repopulate input)
 - `selected_category` — current category filter value (to repopulate dropdown)
