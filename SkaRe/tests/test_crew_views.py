@@ -305,3 +305,87 @@ class CrewExportCsvTest(TestCase):
         content = response.content.decode('utf-8-sig')
         self.assertIn('Jan', content)
         self.assertIn(Crew.CATEGORY_S, content)
+
+
+class CrewAllViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.staff = User.objects.create_user('allstaff', password='pw', is_staff=True)
+        self.regular = _make_user('allregular')
+        self.user = _make_user('allowner')
+        self.unit = _make_unit(self.user)
+        self.helmsman = _make_person(self.unit)
+        self.boat = _make_boat(self.user)
+        self.crew = Crew.objects.create(
+            boat=self.boat, category=Crew.CATEGORY_S, created_by=self.user
+        )
+        CrewMember.objects.create(
+            crew=self.crew, role=CrewMember.ROLE_HELMSMAN,
+            participant=Person.objects.get(pk=self.helmsman.pk),
+        )
+
+    # --- crew_all ---
+
+    def test_crew_all_requires_login(self):
+        url = reverse('SkaRe:crew_all')
+        response = self.client.get(url)
+        self.assertRedirects(response, f'/user/login/?next={url}', fetch_redirect_response=False)
+
+    def test_crew_all_requires_staff(self):
+        self.client.login(username='allregular', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_all'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_crew_all_accessible_by_staff(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_all'))
+        self.assertEqual(response.status_code, 200)
+
+    # --- crew_all_export_csv ---
+
+    def test_crew_all_export_requires_staff(self):
+        self.client.login(username='allregular', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_all_export_csv'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_crew_all_export_accessible_by_staff(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_all_export_csv'))
+        self.assertEqual(response.status_code, 200)
+
+    # --- crew_detail_staff ---
+
+    def test_crew_detail_staff_requires_login(self):
+        url = reverse('SkaRe:crew_detail_staff', kwargs={'crew_id': self.crew.pk})
+        response = self.client.get(url)
+        self.assertRedirects(response, f'/user/login/?next={url}', fetch_redirect_response=False)
+
+    def test_crew_detail_staff_requires_staff(self):
+        self.client.login(username='allregular', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_detail_staff', kwargs={'crew_id': self.crew.pk})
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_crew_detail_staff_accessible_by_staff(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_detail_staff', kwargs={'crew_id': self.crew.pk})
+        )
+        self.assertEqual(response.status_code, 200)
+
+    # --- crew_export_single_csv ---
+
+    def test_crew_export_single_requires_staff(self):
+        self.client.login(username='allregular', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_export_single_csv', kwargs={'crew_id': self.crew.pk})
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_crew_export_single_accessible_by_staff(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_export_single_csv', kwargs={'crew_id': self.crew.pk})
+        )
+        self.assertEqual(response.status_code, 200)

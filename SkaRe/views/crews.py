@@ -7,8 +7,10 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.utils.translation import gettext as _
 from django.db import IntegrityError, transaction
+from django.db.models import Count, Q
 from ..models import Boat, Person, Crew, CrewMember, EventSettings
 from ..forms import CrewRegistrationForm
+from .exports import _csv_safe
 
 
 @login_required
@@ -260,3 +262,41 @@ def person_lend(request, person_id):
         'person': person,
         'lent_to': person.visible_to.all(),
     })
+
+
+@login_required
+def crew_all(request):
+    if not request.user.is_staff:
+        messages.error(request, _('Staff access required.'))
+        return redirect('SkaRe:home')
+    return render(request, 'SkaRe/crews/all.html', {})
+
+
+@login_required
+def crew_all_export_csv(request):
+    if not request.user.is_staff:
+        messages.error(request, _('Staff access required.'))
+        return redirect('SkaRe:home')
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="crews.csv"'
+    return response
+
+
+@login_required
+def crew_detail_staff(request, crew_id):
+    if not request.user.is_staff:
+        messages.error(request, _('Staff access required.'))
+        return redirect('SkaRe:home')
+    crew = get_object_or_404(Crew, id=crew_id)
+    return render(request, 'SkaRe/crews/detail_staff.html', {'crew': crew})
+
+
+@login_required
+def crew_export_single_csv(request, crew_id):
+    if not request.user.is_staff:
+        messages.error(request, _('Staff access required.'))
+        return redirect('SkaRe:home')
+    crew = get_object_or_404(Crew, id=crew_id)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="crew_{crew_id}.csv"'
+    return response

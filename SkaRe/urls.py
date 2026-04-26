@@ -40,6 +40,10 @@ urlpatterns = [
     path('crews/<int:crew_id>/', views.crew_detail, name='crew_detail'),
     path('crews/<int:crew_id>/edit/', views.crew_edit, name='crew_edit'),
     path('crews/<int:crew_id>/delete/', views.crew_delete, name='crew_delete'),
+    path('crews/all/', views.crew_all, name='crew_all'),
+    path('crews/all/export/csv/', views.crew_all_export_csv, name='crew_all_export_csv'),
+    path('crews/all/<int:crew_id>/', views.crew_detail_staff, name='crew_detail_staff'),
+    path('crews/all/<int:crew_id>/export/csv/', views.crew_export_single_csv, name='crew_export_single_csv'),
     # InfoDesk
     path('infodesk/', views.infodesk_dashboard, name='infodesk_dashboard'),
     path('infodesk/registrations/', views.infodesk_registrations, name='infodesk_registrations'),
