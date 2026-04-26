@@ -1,2 +1,65 @@
 {% extends 'SkaRe/base.html' %}
-{% block content %}stub{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Crew" %} – {{ crew }} - SkaRe{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="mb-4"><i class="bi bi-people-fill"></i> {{ crew }}</h1>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{% trans "Crew details" %}</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">{% trans "Boat" %}</dt>
+                    <dd class="col-sm-8">
+                        <a href="{% url 'SkaRe:boat_detail' boat_id=crew.boat.pk %}">{{ crew.boat }}</a>
+                    </dd>
+                    <dt class="col-sm-4">{% trans "Category" %}</dt>
+                    <dd class="col-sm-8">{{ crew.get_category_display }}</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{% trans "Members" %}</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>{% trans "Role" %}</th>
+                            <th>{% trans "Name" %}</th>
+                            <th>{% trans "Date of birth" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in members %}
+                        <tr>
+                            <td>{{ member.get_role_display }}</td>
+                            <td>{{ member.participant }}</td>
+                            <td>{{ member.participant.date_of_birth }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mb-3">
+            <a href="{% url 'SkaRe:crew_export_single_csv' crew_id=crew.pk %}"
+               class="btn btn-outline-dark">
+                <i class="bi bi-download"></i> {% trans "Export CSV" %}
+            </a>
+        </div>
+
+        <a href="{% url 'SkaRe:crew_all' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> {% trans "Back to Crew Overview" %}
+        </a>
+    </div>
+</div>
+{% endblock %}

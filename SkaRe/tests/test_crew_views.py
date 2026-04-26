@@ -475,3 +475,45 @@ class CrewAllViewTest(TestCase):
             reverse('SkaRe:crew_all_export_csv'), {'q': 'Jan'}
         )
         self.assertIn('crews_search.csv', response['Content-Disposition'])
+
+    def test_crew_detail_staff_shows_correct_crew(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_detail_staff', kwargs={'crew_id': self.crew.pk})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['crew'], self.crew)
+
+    def test_crew_detail_staff_shows_members(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_detail_staff', kwargs={'crew_id': self.crew.pk})
+        )
+        self.assertIn('members', response.context)
+        self.assertEqual(response.context['members'].count(), 1)
+
+    def test_crew_detail_staff_accessible_for_non_owner(self):
+        # Staff can view any crew, not just their own
+        other_user = _make_user('allother')
+        other_unit = _make_unit(other_user)
+        other_helm = _make_person(other_unit, 'Marie', 'Cizí')
+        other_boat = _make_boat(other_user)
+        other_crew = Crew.objects.create(
+            boat=other_boat, category=Crew.CATEGORY_D, created_by=other_user
+        )
+        CrewMember.objects.create(
+            crew=other_crew, role=CrewMember.ROLE_HELMSMAN,
+            participant=Person.objects.get(pk=other_helm.pk),
+        )
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_detail_staff', kwargs={'crew_id': other_crew.pk})
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_crew_detail_staff_404_for_missing_crew(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_detail_staff', kwargs={'crew_id': 99999})
+        )
+        self.assertEqual(response.status_code, 404)

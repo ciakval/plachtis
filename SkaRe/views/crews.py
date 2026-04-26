@@ -403,7 +403,11 @@ def crew_detail_staff(request, crew_id):
         messages.error(request, _('Staff access required.'))
         return redirect('SkaRe:home')
     crew = get_object_or_404(Crew, id=crew_id)
-    return render(request, 'SkaRe/crews/detail_staff.html', {'crew': crew})
+    members = crew.members.select_related('participant').order_by('-role')
+    return render(request, 'SkaRe/crews/detail_staff.html', {
+        'crew': crew,
+        'members': members,
+    })
 
 
 @login_required
