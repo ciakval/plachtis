@@ -325,8 +325,75 @@ def crew_all_export_csv(request):
     if not request.user.is_staff:
         messages.error(request, _('Staff access required.'))
         return redirect('SkaRe:home')
+
+    q = request.GET.get('q', '').strip()
+    category = request.GET.get('category', '').strip()
+
+    qs = Crew.objects.select_related('boat', 'boat__boat_class').prefetch_related('members__participant')
+    if category:
+        qs = qs.filter(category=category)
+    if q:
+        qs = qs.filter(
+            Q(boat__name__icontains=q) |
+            Q(members__participant__first_name__icontains=q) |
+            Q(members__participant__last_name__icontains=q)
+        ).distinct()
+
+    if category:
+        filename = f'crews_{category}.csv'
+    elif q:
+        filename = 'crews_search.csv'
+    else:
+        filename = 'crews.csv'
+
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="crews.csv"'
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    response.write('\ufeff')
+
+    writer = csv.writer(response)
+    writer.writerow([
+        'crew_id', 'category', 'boat_sail_number', 'boat_name',
+        'boat_class', 'sail_area', 'role',
+        'first_name', 'last_name', 'date_of_birth', 'scout_category',
+        'participant_type', 'unit_name',
+    ])
+
+    members = (
+        CrewMember.objects
+        .filter(crew__in=qs)
+        .select_related('crew', 'crew__boat', 'crew__boat__boat_class', 'participant')
+        .order_by('crew__id', '-role')
+    )
+
+    for m in members:
+        crew = m.crew
+        person = m.participant
+        participant_type = ''
+        unit_name = ''
+        if hasattr(person, 'regularparticipant'):
+            participant_type = 'RegularParticipant'
+            unit_name = person.regularparticipant.unit.entity.scout_unit_name
+        elif hasattr(person, 'individualparticipant'):
+            participant_type = 'IndividualParticipant'
+        elif hasattr(person, 'organizer'):
+            participant_type = 'Organizer'
+
+        writer.writerow([
+            crew.id,
+            crew.category,
+            _csv_safe(crew.boat.sail_number),
+            _csv_safe(crew.boat.name),
+            crew.boat.boat_class.name if crew.boat.boat_class else '',
+            crew.boat.sail_area or '',
+            m.role,
+            _csv_safe(person.first_name),
+            _csv_safe(person.last_name),
+            person.date_of_birth,
+            person.category or '',
+            participant_type,
+            _csv_safe(unit_name),
+        ])
+
     return response
 
 

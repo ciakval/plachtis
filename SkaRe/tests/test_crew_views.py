@@ -431,3 +431,47 @@ class CrewAllViewTest(TestCase):
         self.assertIn('filtered_count', response.context)
         self.assertIn('category_stats_list', response.context)
         self.assertEqual(response.context['total_crews'], 1)
+
+    def test_crew_all_export_returns_csv(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_all_export_csv'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/csv')
+
+    def test_crew_all_export_contains_helmsman(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(reverse('SkaRe:crew_all_export_csv'))
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('Jan', content)
+        self.assertIn(Crew.CATEGORY_S, content)
+
+    def test_crew_all_export_filtered_by_category(self):
+        # Add a second crew in category R — should not appear in S-filtered export
+        boat2 = _make_boat(self.user)
+        crew2 = Crew.objects.create(boat=boat2, category=Crew.CATEGORY_R, created_by=self.user)
+        person2 = _make_person(self.unit, 'Petr', 'Druhý')
+        CrewMember.objects.create(
+            crew=crew2, role=CrewMember.ROLE_HELMSMAN,
+            participant=Person.objects.get(pk=person2.pk),
+        )
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_all_export_csv'), {'category': Crew.CATEGORY_S}
+        )
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('Jan', content)
+        self.assertNotIn('Petr', content)
+
+    def test_crew_all_export_filename_with_category_filter(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_all_export_csv'), {'category': Crew.CATEGORY_S}
+        )
+        self.assertIn(f'crews_{Crew.CATEGORY_S}.csv', response['Content-Disposition'])
+
+    def test_crew_all_export_filename_with_search_filter(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_all_export_csv'), {'q': 'Jan'}
+        )
+        self.assertIn('crews_search.csv', response['Content-Disposition'])
