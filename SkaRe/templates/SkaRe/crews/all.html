@@ -1,2 +1,100 @@
 {% extends 'SkaRe/base.html' %}
-{% block content %}stub{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "All Crews" %} - SkaRe{% endblock %}
+
+{% block content %}
+<h1 class="mb-4"><i class="bi bi-people-fill"></i> {% trans "All Crews" %}</h1>
+
+{# Stats bar #}
+<div class="alert alert-info mb-4">
+    <i class="bi bi-info-circle"></i>
+    <strong>{% trans "Total" %}:</strong>
+    {% if filtered_count != total_crews %}
+        {{ filtered_count }} / {{ total_crews }} {% trans "crews" %}
+    {% else %}
+        {{ total_crews }} {% trans "crews" %}
+    {% endif %}
+    &nbsp;|&nbsp;
+    {% for code, label, count in category_stats_list %}
+        <span class="text-muted">{{ code }}: <strong>{{ count }}</strong></span>{% if not forloop.last %} &nbsp;{% endif %}
+    {% endfor %}
+</div>
+
+{# Filter form #}
+<form method="get" class="mb-3">
+    <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label fw-semibold"><i class="bi bi-search"></i> {% trans "Search" %}</label>
+            <input type="text" name="q" value="{{ q }}" class="form-control"
+                   placeholder="{% trans 'Member name or boat name...' %}">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold"><i class="bi bi-funnel"></i> {% trans "Category" %}</label>
+            <select name="category" class="form-select">
+                <option value="">{% trans "All categories" %}</option>
+                {% for code, label in category_choices %}
+                <option value="{{ code }}"{% if selected_category == code %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-auto d-flex gap-2 align-items-end">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i> {% trans "Search" %}
+            </button>
+            <a href="{% url 'SkaRe:crew_all' %}" class="btn btn-outline-secondary">{% trans "Clear" %}</a>
+        </div>
+    </div>
+</form>
+
+{# Export button #}
+<div class="mb-3">
+    <a href="{% url 'SkaRe:crew_all_export_csv' %}?q={{ q|urlencode }}&category={{ selected_category|urlencode }}"
+       class="btn btn-outline-dark btn-sm">
+        <i class="bi bi-download"></i> {% trans "Export CSV" %}
+    </a>
+</div>
+
+{# Table #}
+{% if crew_rows %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>{% trans "Category" %}</th>
+                <th>{% trans "Boat" %}</th>
+                <th>{% trans "Helmsman" %}</th>
+                <th>{% trans "Members" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in crew_rows %}
+            <tr>
+                <td><span class="badge bg-secondary">{{ row.crew.get_category_display }}</span></td>
+                <td>{{ row.crew.boat }}</td>
+                <td>{{ row.helmsman|default:"–" }}</td>
+                <td>{{ row.member_count }}</td>
+                <td>
+                    <a href="{% url 'SkaRe:crew_detail_staff' crew_id=row.crew.pk %}"
+                       class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-eye"></i> {% trans "Detail" %}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-warning">
+    <i class="bi bi-exclamation-triangle"></i> {% trans "No crews found." %}
+</div>
+{% endif %}
+
+<div class="mt-4">
+    <a class="btn btn-secondary" href="{% url 'SkaRe:home' %}">
+        <i class="bi bi-house"></i> {% trans "Back to Home" %}
+    </a>
+</div>
+{% endblock %}
