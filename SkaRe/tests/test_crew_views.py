@@ -517,3 +517,54 @@ class CrewAllViewTest(TestCase):
             reverse('SkaRe:crew_detail_staff', kwargs={'crew_id': 99999})
         )
         self.assertEqual(response.status_code, 404)
+
+    def test_crew_export_single_returns_csv(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_export_single_csv', kwargs={'crew_id': self.crew.pk})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/csv')
+
+    def test_crew_export_single_filename(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_export_single_csv', kwargs={'crew_id': self.crew.pk})
+        )
+        self.assertIn(f'crew_{self.crew.pk}.csv', response['Content-Disposition'])
+
+    def test_crew_export_single_contains_member(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_export_single_csv', kwargs={'crew_id': self.crew.pk})
+        )
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('Jan', content)
+        self.assertIn(Crew.CATEGORY_S, content)
+
+    def test_crew_export_single_404_for_missing_crew(self):
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_export_single_csv', kwargs={'crew_id': 99999})
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_crew_export_single_only_contains_this_crew(self):
+        # Add a second crew — its members must NOT appear in the first crew's export
+        other_unit = _make_unit(self.user)
+        other_person = _make_person(other_unit, 'Karel', 'Jiný')
+        other_boat = _make_boat(self.user)
+        other_crew = Crew.objects.create(
+            boat=other_boat, category=Crew.CATEGORY_R, created_by=self.user
+        )
+        CrewMember.objects.create(
+            crew=other_crew, role=CrewMember.ROLE_HELMSMAN,
+            participant=Person.objects.get(pk=other_person.pk),
+        )
+        self.client.login(username='allstaff', password='pw')
+        response = self.client.get(
+            reverse('SkaRe:crew_export_single_csv', kwargs={'crew_id': self.crew.pk})
+        )
+        content = response.content.decode('utf-8-sig')
+        self.assertIn('Jan', content)
+        self.assertNotIn('Karel', content)

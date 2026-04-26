@@ -416,6 +416,51 @@ def crew_export_single_csv(request, crew_id):
         messages.error(request, _('Staff access required.'))
         return redirect('SkaRe:home')
     crew = get_object_or_404(Crew, id=crew_id)
+
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = f'attachment; filename="crew_{crew_id}.csv"'
+    response.write('\ufeff')
+
+    writer = csv.writer(response)
+    writer.writerow([
+        'crew_id', 'category', 'boat_sail_number', 'boat_name',
+        'boat_class', 'sail_area', 'role',
+        'first_name', 'last_name', 'date_of_birth', 'scout_category',
+        'participant_type', 'unit_name',
+    ])
+
+    members = (
+        crew.members
+        .select_related('crew__boat', 'crew__boat__boat_class', 'participant')
+        .order_by('-role')
+    )
+
+    for m in members:
+        person = m.participant
+        participant_type = ''
+        unit_name = ''
+        if hasattr(person, 'regularparticipant'):
+            participant_type = 'RegularParticipant'
+            unit_name = person.regularparticipant.unit.entity.scout_unit_name
+        elif hasattr(person, 'individualparticipant'):
+            participant_type = 'IndividualParticipant'
+        elif hasattr(person, 'organizer'):
+            participant_type = 'Organizer'
+
+        writer.writerow([
+            crew.id,
+            crew.category,
+            _csv_safe(crew.boat.sail_number),
+            _csv_safe(crew.boat.name),
+            crew.boat.boat_class.name if crew.boat.boat_class else '',
+            crew.boat.sail_area or '',
+            m.role,
+            _csv_safe(person.first_name),
+            _csv_safe(person.last_name),
+            person.date_of_birth,
+            person.category or '',
+            participant_type,
+            _csv_safe(unit_name),
+        ])
+
     return response
