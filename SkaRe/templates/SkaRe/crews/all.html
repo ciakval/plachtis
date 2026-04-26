@@ -25,13 +25,13 @@
 <form method="get" class="mb-3">
     <div class="row g-2 align-items-end">
         <div class="col-md-4">
-            <label class="form-label fw-semibold"><i class="bi bi-search"></i> {% trans "Search" %}</label>
-            <input type="text" name="q" value="{{ q }}" class="form-control"
+            <label class="form-label fw-semibold" for="id_q"><i class="bi bi-search"></i> {% trans "Search" %}</label>
+            <input type="text" name="q" id="id_q" value="{{ q }}" class="form-control"
                    placeholder="{% trans 'Member name or boat name...' %}">
         </div>
         <div class="col-md-3">
-            <label class="form-label fw-semibold"><i class="bi bi-funnel"></i> {% trans "Category" %}</label>
-            <select name="category" class="form-select">
+            <label class="form-label fw-semibold" for="id_category"><i class="bi bi-funnel"></i> {% trans "Category" %}</label>
+            <select name="category" id="id_category" class="form-select">
                 <option value="">{% trans "All categories" %}</option>
                 {% for code, label in category_choices %}
                 <option value="{{ code }}"{% if selected_category == code %} selected{% endif %}>{{ label }}</option>
