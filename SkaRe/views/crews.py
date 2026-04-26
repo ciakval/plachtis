@@ -329,7 +329,7 @@ def crew_all_export_csv(request):
     q = request.GET.get('q', '').strip()
     category = request.GET.get('category', '').strip()
 
-    qs = Crew.objects.select_related('boat', 'boat__boat_class').prefetch_related('members__participant')
+    qs = Crew.objects.select_related('boat', 'boat__boat_class')
     if category:
         qs = qs.filter(category=category)
     if q:
