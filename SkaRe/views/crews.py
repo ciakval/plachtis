@@ -298,14 +298,15 @@ def crew_all(request):
 
     crew_rows = []
     for crew in qs:
+        members_list = list(crew.members.all())
         helmsman = next(
-            (m.participant for m in crew.members.all() if m.role == CrewMember.ROLE_HELMSMAN),
+            (m.participant for m in members_list if m.role == CrewMember.ROLE_HELMSMAN),
             None,
         )
         crew_rows.append({
             'crew': crew,
             'helmsman': helmsman,
-            'member_count': len(list(crew.members.all())),
+            'member_count': len(members_list),
         })
 
     return render(request, 'SkaRe/crews/all.html', {
