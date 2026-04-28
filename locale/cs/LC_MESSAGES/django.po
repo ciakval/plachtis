@@ -1,14 +1,8 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-14 19:41+0200\n"
+"POT-Creation-Date: 2026-04-29 00:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +32,7 @@ msgid "— select a category —"
 msgstr "— vyber kategorii —"
 
 msgid "Category"
-msgstr "Výchovná kategorie"
+msgstr "Kategorie"
 
 msgid "Helmsman"
 msgstr "Kormidelník"
@@ -138,8 +132,6 @@ msgstr "Přezdívka"
 msgid "e.g. Anxiety, asthma"
 msgstr "např. Srdeční nedostatečnost, užívá Oxazepam, úzkostná porucha"
 
-#, fuzzy
-#| msgid "Other dietary restrictions"
 msgid "Other restrictions"
 msgstr "Ostatní stravovací omezení"
 
@@ -164,8 +156,6 @@ msgstr "např. 20 m2"
 msgid "Codex agreement"
 msgstr "Kodex jednání dospělých"
 
-#, fuzzy
-#| msgid "Whether the organizer agrees to follow the event codex"
 msgid "You must agree to follow the event codex."
 msgstr "Zda se organizátor zavazuje dodržovat Kodex jednání dospělých"
 
@@ -335,8 +325,6 @@ msgstr ""
 msgid "role"
 msgstr ""
 
-#, fuzzy
-#| msgid "participants"
 msgid "participant"
 msgstr "Účastníci"
 
@@ -705,7 +693,6 @@ msgstr "Zda organizátor chce malou čepici"
 msgid "Wants small hat (S/M)"
 msgstr "Chci čepici (malou - S/M)"
 
-#, python-brace-format
 msgid "{person_name}"
 msgstr "{person_name}"
 
@@ -793,7 +780,6 @@ msgstr "Přihlásit se"
 msgid "Register"
 msgstr "Registrace"
 
-#, python-format
 msgid "Delete Boat %(name)s - SkaRe"
 msgstr "Smazat loď %(name)s - SkaRe"
 
@@ -803,7 +789,6 @@ msgstr "Smazat loď"
 msgid "Confirm Deletion"
 msgstr "Potvrzení smazání"
 
-#, python-format
 msgid ""
 "Are you sure you want to delete the boat <strong>%(name)s</strong>? This "
 "action cannot be undone."
@@ -922,6 +907,15 @@ msgstr "Lodě - SkaRe"
 msgid "Registered Boats"
 msgstr "Registrované lodě"
 
+msgid "Total"
+msgstr "Celkem"
+
+msgid "boats"
+msgstr "loď"
+
+msgid "No class"
+msgstr "Lodní třída"
+
 msgid "Boat List"
 msgstr "Seznam lodí"
 
@@ -938,13 +932,73 @@ msgstr ""
 "Zatím nejsou zaregistrovány žádné lodě. Klikněte na tlačítko níže a "
 "zaregistrujte první loď!"
 
+msgid "Lodě na vodě - SkaRe"
+msgstr ""
+
+msgid "Lodě na vodě"
+msgstr ""
+
+msgid "%(count)s loď"
+msgid_plural "%(count)s lodí"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Celkem"
+msgstr ""
+
+msgid "Třída"
+msgstr ""
+
+msgid "Název"
+msgstr ""
+
+msgid "Barva trupu"
+msgstr ""
+
+msgid "Barva plachet"
+msgstr ""
+
+msgid "Telefon"
+msgstr ""
+
+msgid "Přístav"
+msgstr ""
+
+msgid "Momentálně nejsou na vodě žádné lodě."
+msgstr ""
+
+msgid "All Crews"
+msgstr "Moje posádky"
+
+msgid "Search"
+msgstr "Hledat"
+
+msgid "Member name or boat name..."
+msgstr "Jméno člena posádky či lodi..."
+
+msgid "All categories"
+msgstr "Všechny kategorie"
+
+msgid "Clear"
+msgstr ""
+
+msgid "Export CSV"
+msgstr "Exportovat CSV"
+
+msgid "Members"
+msgstr "Členové"
+
+msgid "No crews found."
+msgstr "Nebyly nalezeny žádné výsledky."
+
+msgid "Back to Home"
+msgstr "Zpět na domovskou stránku"
+
 msgid "Delete Crew"
 msgstr "Smazat posádku"
 
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete crew <strong>%(crew)s</strong>? This "
-#| "action cannot be undone."
 msgid ""
 "Are you sure you want to delete crew <strong>%(crew)s</strong>? This action "
 "cannot be undone."
@@ -961,13 +1015,13 @@ msgstr "Posádka"
 msgid "Crew details"
 msgstr "Detail posádky"
 
-msgid "Members"
-msgstr "Členové"
-
 msgid "Role"
 msgstr "Role"
 
 msgid "Back to my crews"
+msgstr "Zpět na Mé posádky"
+
+msgid "Back to Crew Overview"
 msgstr "Zpět na Mé posádky"
 
 msgid "Edit Crew"
@@ -990,9 +1044,6 @@ msgstr "Registrovat posádku"
 
 msgid "You have not registered any crews yet."
 msgstr "Nezaregistrovali jste žádnou posádku."
-
-msgid "Back to Home"
-msgstr "Zpět na domovskou stránku"
 
 msgid "Register Crew"
 msgstr "Registrovat posádku"
@@ -1120,6 +1171,12 @@ msgstr "Exporty pro jídelnu a zdravotníky"
 msgid "Ticket CSV (printing)"
 msgstr "Export plavenek ve fromátu CSV"
 
+msgid "Logistics"
+msgstr "Logistika"
+
+msgid "Tent borrowers"
+msgstr "Organizátoři bez stanů"
+
 msgid "Registration Queue"
 msgstr "Fronta nepotvrzených registrací"
 
@@ -1136,13 +1193,25 @@ msgid "Unconfirmed"
 msgstr "Nepotvrzeno"
 
 msgid "Confirm"
-msgstr "Potvrzeno"
+msgstr "Potvrdit"
 
 msgid "Reject"
 msgstr "Odmítnout"
 
 msgid "No registrations yet."
 msgstr "Zatím žádné registrace."
+
+msgid "Tent Borrowers"
+msgstr ""
+
+msgid "Organizers who indicated they need to borrow a tent."
+msgstr ""
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "No organizers need a tent."
+msgstr "Žádní organizátoři"
 
 msgid "Lend Participant"
 msgstr "Zapůjčit účastníka do posádky"
@@ -1268,20 +1337,6 @@ msgstr "Správa docházky, přihlášek, lístků a exportů."
 msgid "Go to InfoDesk Dashboard"
 msgstr "Přejít na dashboard Infostánku"
 
-msgid "Organizer export"
-msgstr "Export pro organizátory"
-
-msgid ""
-"Download a CSV overview of all units and individual participants (names, "
-"contacts, leaders, boat estimates, headcounts by category, registration "
-"date)."
-msgstr ""
-"Stáhněte si CSV přehled všech jednotek a jednotlivců (jména, kontakty, "
-"vedoucí, odhad lodí, počty podle kategorií, datum registrace)."
-
-msgid "Download units overview (CSV)"
-msgstr "Stáhnout přehled jednotek (CSV)"
-
 msgid "Register Unit"
 msgstr "Registrovat jednotku"
 
@@ -1318,6 +1373,12 @@ msgstr "Šátky a čepice"
 msgid "Manage Entities"
 msgstr "Správa registrací"
 
+msgid "Download units overview (CSV)"
+msgstr "Stáhnout přehled jednotek (CSV)"
+
+msgid "Crew Overview"
+msgstr "Registrace do závodu"
+
 msgid "Please login or register to access the system."
 msgstr "Pro přístup do systému se prosím přihlaste nebo zaregistrujte."
 
@@ -1329,9 +1390,6 @@ msgstr "Účastníci"
 
 msgid "Display Options"
 msgstr "Možnosti zobrazení"
-
-msgid "Search"
-msgstr "Hledat"
 
 msgid "Filter by any value..."
 msgstr "Libovolná hodnota..."
@@ -1351,8 +1409,8 @@ msgstr "Účastníci v oddílech"
 msgid "Show Columns"
 msgstr "Zobrazit tyto sloupce"
 
-msgid "Email"
-msgstr "E-mail"
+msgid "Registration created"
+msgstr "Registrace vytvořena"
 
 msgid "Dietary Restrictions"
 msgstr "Stravovací omezení / preference"
@@ -1381,16 +1439,11 @@ msgstr "Kontaktní informace"
 msgid "Show All"
 msgstr "Všechno"
 
-#, fuzzy
-#| msgid "Export CSV"
 msgid "Export to CSV"
 msgstr "Exportovat CSV"
 
 msgid "CSV download started."
 msgstr ""
-
-msgid "Total"
-msgstr "Celkem"
 
 msgid "participants"
 msgstr "Účastníci"
@@ -1404,7 +1457,6 @@ msgstr "obyčejných účastníků v oddílech"
 msgid "organizers"
 msgstr "organizátorů"
 
-#, python-format
 msgid ""
 "Displaying only the newest %(limit)s records in each section to keep the "
 "page responsive."
@@ -1469,7 +1521,6 @@ msgstr "jednotky"
 msgid "individual participants"
 msgstr "jednotlivci"
 
-#, python-format
 msgid ""
 "Displaying only the newest %(limit)s records in each category to keep the "
 "page responsive."
@@ -1485,15 +1536,6 @@ msgstr "Nebyly nalezeny žádné výsledky."
 
 msgid "My Registered Organizers"
 msgstr "Moji registrovaní organizátoři"
-
-msgid "Download a CSV overview of all units and individual participants."
-msgstr "Stáhněte si CSV přehled všech jednotek a jednotlivců."
-
-msgid "Units overview (CSV)"
-msgstr "Přehled jednotek (CSV)"
-
-msgid "Logistics"
-msgstr "Logistika"
 
 msgid "Scarf"
 msgstr "Šátek"
@@ -1613,7 +1655,6 @@ msgstr "Nezaplaceno"
 msgid "Total Entities"
 msgstr "Celkem registrací"
 
-#, python-format
 msgid "(page %(page)s of %(pages)s)"
 msgstr "(stránka %(page)s z %(pages)s)"
 
@@ -1666,7 +1707,6 @@ msgstr "Hromadné vytvoření plavenek"
 msgid "Warning"
 msgstr ""
 
-#, python-format
 msgid ""
 "\n"
 "    This will permanently delete all %(n)s existing tickets and their logs. "
@@ -1677,41 +1717,27 @@ msgstr ""
 msgid "Code"
 msgstr "Číslo plavenky"
 
-#, fuzzy
-#| msgid "Number of scarves"
 msgid "Number source"
 msgstr "Počet šátků"
 
 msgid "Reserve — no boat"
 msgstr ""
 
-#, fuzzy
-#| msgid "sail number"
 msgid "From sail number"
 msgstr "plachetní číslo"
 
 msgid "Sequential"
 msgstr ""
 
-#, fuzzy
-#| msgid "Create tickets"
 msgid "Confirm and create tickets"
 msgstr "Vytvořit plavenky"
 
-#, fuzzy, python-format
-#| msgid ""
-#| "%(n)s tickets already exist. Only boats without an assigned ticket will "
-#| "receive a new one."
 msgid "%(n)s tickets already exist. Proceeding will delete them all."
 msgstr "%(n)s plavenek už existuje. Pouze lodě bez plavenky dostanou novou."
 
-#, fuzzy
-#| msgid "Registered Boats"
 msgid "Registered boats (all)"
 msgstr "Registrované lodě"
 
-#, fuzzy
-#| msgid "Create tickets"
 msgid "Preview tickets"
 msgstr "Vytvořit plavenky"
 
@@ -1722,7 +1748,7 @@ msgid "Pending pairing"
 msgstr "Čeká na spárování"
 
 msgid "Waiting for scan…"
-msgstr "Čeká na načtení čtečky..."
+msgstr "Čeká na načtení čtečkou..."
 
 msgid "No"
 msgstr "Ne"
@@ -1730,11 +1756,35 @@ msgstr "Ne"
 msgid "Change status"
 msgstr "Změnit stav"
 
+msgid "Unassign this boat from the ticket?"
+msgstr "Odebrat přiřazení lodi k plavence?"
+
+msgid "Cannot unassign a ticket that is on water"
+msgstr "Nelze odebrat přiřazení plavence, která je na vodě"
+
+msgid "Unassign boat"
+msgstr "Odebrat přiřazení lodi"
+
+msgid "Cannot assign a boat to a ticket that is on water"
+msgstr "Nelze přiřadit loď plavence, která je na vodě"
+
+msgid "Assign boat"
+msgstr "Přiřadit loď"
+
 msgid "RFID"
 msgstr "Párování"
 
+msgid "Cancel pairing"
+msgstr "Zrušit párování"
+
 msgid "Pair RFID"
 msgstr "Spárovat plavenku"
+
+msgid "Unpair the RFID card from this ticket?"
+msgstr ""
+
+msgid "Unpair card"
+msgstr "Zrušit spárování s kartou"
 
 msgid "Change log"
 msgstr "Seznam změn"
@@ -1748,11 +1798,11 @@ msgstr "Kdo provedl změnu"
 msgid "Note"
 msgstr "Poznámka"
 
+msgid "RFID reader"
+msgstr ""
+
 msgid "No changes yet."
 msgstr "Žádné změny nebyly provedeny."
-
-msgid "Export CSV"
-msgstr "Exportovat CSV"
 
 msgid "All statuses"
 msgstr "Všechny"
@@ -1760,8 +1810,14 @@ msgstr "Všechny"
 msgid "All colors"
 msgstr "Všechny typy"
 
+msgid "Only assigned"
+msgstr "Pouze plavenky přiřazené k lodím"
+
 msgid "Filter"
 msgstr "Filtry"
+
+msgid "tickets"
+msgstr "plavenek"
 
 msgid "Color"
 msgstr "Typ plavenky"
@@ -1778,7 +1834,6 @@ msgstr "Vyhledat plavenku"
 msgid "Ticket code, boat name, sail number, or owner…"
 msgstr "Číslo plavenky, název lodi, plachetní číslo, správce ..."
 
-#, python-format
 msgid "%(n)s result(s) for \"%(query)s\""
 msgstr "%(n)s výsledků pro \"%(query)s\""
 
@@ -1800,7 +1855,6 @@ msgstr "Plavenka"
 msgid "No boats on water."
 msgstr "Žádné lodě nejsou na vodě."
 
-#, python-format
 msgid "%(n)d participants marked as arrived."
 msgstr "%(n)d účastníků je na místě."
 
@@ -1825,19 +1879,15 @@ msgstr "Nemáte oprávnění nastavovat zapůjčení této lodi."
 msgid "You cannot lend to yourself."
 msgstr "Nemůžete loď zapůjčit sobě."
 
-#, python-brace-format
 msgid "User \"{username}\" already has access."
 msgstr "Uživatel \"{username}\" už má přístup."
 
-#, python-brace-format
 msgid "User \"{username}\" can now see this boat."
 msgstr "Uživatel \"{username}\" teď už může používat tuto loď."
 
-#, python-brace-format
 msgid "User \"{username}\" not found."
 msgstr "Uživatel \"{username}\" nebyl nalezen."
 
-#, python-brace-format
 msgid "Access removed for user \"{username}\"."
 msgstr "Uživateli \"{username}\" byl odebrán přístup."
 
@@ -1871,7 +1921,6 @@ msgstr "Je vyžadován administrátorský přístup."
 msgid "You do not have permission to manage lending for this person."
 msgstr "Nemáte oprávnění upravovat nastavení zapůjčení tohoto účastníka."
 
-#, python-brace-format
 msgid "User \"{username}\" can now see this person."
 msgstr "Uživatel \"{username}\" teď může vidět tohoto účastníka."
 
@@ -1908,24 +1957,6 @@ msgstr "Účastníci — vlčata a žabičky"
 msgid "Participants — other or unset category"
 msgstr "Účastníci — jiná nebo neuvedená kategorie"
 
-msgid "Boats — P550 (estimate)"
-msgstr "Lodě — P550 (odhad)"
-
-msgid "Boats — sail (estimate)"
-msgstr "Lodě — plachetnice (odhad)"
-
-msgid "Boats — paddle (estimate)"
-msgstr "Lodě — pádla (odhad)"
-
-msgid "Boats — motor (estimate)"
-msgstr "Lodě — motor (odhad)"
-
-msgid "Boats total (estimate)"
-msgstr "Lodě celkem (odhad)"
-
-msgid "Registration created"
-msgstr "Registrace vytvořena"
-
 msgid "Yes"
 msgstr "Ano"
 
@@ -1938,11 +1969,9 @@ msgstr "Registrace potvrzena"
 msgid "Registration rejected."
 msgstr "Registrace odmítnuta."
 
-#, python-format
 msgid "%(n)d registrations confirmed."
 msgstr "potvrzeno %(n)d registrací."
 
-#, python-brace-format
 msgid "Welcome back, {name}!"
 msgstr "Vítejte zpět, {name}!"
 
@@ -1955,7 +1984,6 @@ msgstr "Přihlášení úspěšné"
 msgid "This form was already submitted."
 msgstr "Tento formulář byl již odeslán."
 
-#, python-brace-format
 msgid "Welcome, {name}! Your account has been created successfully."
 msgstr "Vítejte, {name}! Váš účet byl úspěšně vytvořen."
 
@@ -1965,13 +1993,11 @@ msgstr "Prosím opravte chyby ve formuláři"
 msgid "Registration is currently closed."
 msgstr "Registrace je uzavřena"
 
-#, python-brace-format
 msgid ""
 "Unit \"{unit_name}\" registered successfully with {count} participant(s)!"
 msgstr ""
 "Oddíl \"{unit_name}\" byl úspěšně registrován s {count} účastníkem/účastníky!"
 
-#, python-brace-format
 msgid "Error registering unit: {error}"
 msgstr "Chyba při registraci oddílu: {error}"
 
@@ -1984,13 +2010,11 @@ msgstr "Nemáte oprávnění upravovat tuto jednotku."
 msgid "This unit cannot be edited after the editing deadline."
 msgstr "Nelze upravovat jednotku po uzavření editace."
 
-#, python-brace-format
 msgid "Unit \"{unit_name}\" updated successfully with {count} participant(s)!"
 msgstr ""
 "Oddíl \"{unit_name}\" byl úspěšně aktualizován s {count} účastníkem/"
 "účastníky!"
 
-#, python-brace-format
 msgid "Error updating unit: {error}"
 msgstr "Chyba při aktualizaci oddílu: {error}"
 
@@ -2003,11 +2027,9 @@ msgstr "Prosím opravte chyby ve formuláři jednotky"
 msgid "Please correct the errors in the form of participants"
 msgstr "Prosím opravte chyby ve formuláři účastníků"
 
-#, python-brace-format
 msgid "Individual Participant \"{name}\" registered successfully!"
 msgstr "Individuální účastník \"{name}\" byl úspěšně registrován!"
 
-#, python-brace-format
 msgid "Error registering individual participant: {error}"
 msgstr "Chyba při registraci individuálního účastníka: {error}"
 
@@ -2017,44 +2039,33 @@ msgstr "Nemáte oprávnění upravovat tohoto účastníka."
 msgid "This participant cannot be edited after the editing deadline."
 msgstr "Nelze upravovat účastníka po uzavření editace."
 
-#, python-brace-format
 msgid "Individual Participant \"{name}\" updated successfully!"
 msgstr "Jednotlivec \"{name}\" byl úspěšně aktualizován!"
 
-#, python-brace-format
 msgid "Error updating participant: {error}"
 msgstr "Chyba při aktualizaci účastníka: {error}"
 
-#, python-brace-format
 msgid "Organizer \"{name}\" registered successfully!"
 msgstr "Organizátor \"{name}\" byl úspěšně registrován!"
 
-#, python-brace-format
 msgid "Error registering organizer: {error}"
 msgstr "Chyba při registraci organizátora: {error}"
 
 msgid "You do not have permission to edit this organizer."
 msgstr "Nemáte oprávnění upravovat tohoto organizátora."
 
-msgid "This organizer cannot be edited after the editing deadline."
-msgstr "Nelze upravovat organizátora po uzavření editace."
-
-#, python-brace-format
 msgid "Organizer \"{name}\" updated successfully!"
 msgstr "Organizátor \"{name}\" byl úspěšně aktualizován!"
 
-#, python-brace-format
 msgid "Error updating organizer: {error}"
 msgstr "Chyba při aktualizaci organizátora: {error}"
 
-#, python-brace-format
 msgid "Updated {count} entities."
 msgstr "Aktualizováno {count} registrací."
 
 msgid "No changes made."
 msgstr "Žádné změny nebyly provedeny."
 
-#, python-brace-format
 msgid "Error updating entities: {error}"
 msgstr "Chyba při aktualizaci registrací: {error}"
 
@@ -2070,15 +2081,12 @@ msgstr "Editoři jednotky nemohou být upravování po uzavření editace."
 msgid "You cannot add yourself as an editor."
 msgstr "Nemůžete se přidat jako editor."
 
-#, python-brace-format
 msgid "User \"{username}\" is already an editor."
 msgstr "Uživatel \"{username}\" je již editorem."
 
-#, python-brace-format
 msgid "User \"{username}\" added as editor."
 msgstr "Uživatel \"{username}\" byl přidán jako editor."
 
-#, python-brace-format
 msgid "User \"{username}\" removed from editors."
 msgstr "Uživatel \"{username}\" byl odebrán z editorů."
 
@@ -2091,58 +2099,29 @@ msgstr "Editoři účastníka nemohou být upravování po uzavření editace."
 msgid "This organizer's editors cannot be edited after the editing deadline."
 msgstr "Editoři organizátora nemohou být upravování po uzavření editace."
 
-#, fuzzy, python-format
-#| msgid "Waiting for RFID scan on ticket %(code)s\\u2026"
 msgid "Waiting for RFID scan on ticket %(code)s…"
 msgstr "Čekám na načtení fyzické plavenky s kódem %(code)s"
 
-#, python-format
+msgid "RFID card unpaired from ticket %(code)s."
+msgstr "Fyzická karta odebrána z plavenky s kódem %(code)s"
+
+msgid "Pairing cancelled for ticket %(code)s."
+msgstr "Párování s fyzickou kartou zrušeno pro plavenku s kódem %(code)s"
+
+msgid "Cannot assign a boat to a ticket that is currently on water."
+msgstr "Nelze přiřadit loď plavence, která je na vodě."
+
+msgid "Boat %(name)s already has a sail ticket assigned."
+msgstr "Loď %(name)s už má přiřazenou plavenku."
+
+msgid "Ticket %(code)s assigned to boat %(boat)s."
+msgstr "Plavenka %(code)s přiřazena k lodi %(boat)s."
+
+msgid "Cannot unassign a ticket that is currently on water."
+msgstr "Nelze odebrat plavenku, která je na vodě."
+
+msgid "Ticket %(code)s unassigned from boat %(boat)s."
+msgstr "Plavenka %(code)s odebrána od lodi %(boat)s."
+
 msgid "%(n)d tickets created."
 msgstr "%(n)d plavenek vytvořeno"
-
-#~ msgid "Registered boats (without a ticket)"
-#~ msgstr "Registrované lodě bez plavenky"
-
-#~ msgid "e.g. Vegetarian, gluten-free"
-#~ msgstr "např. Alergie ořechy, vegetarián"
-
-#~ msgid "Any dietary restrictions or preferences"
-#~ msgstr "Stravovací omezení / preference"
-
-#~ msgid "White"
-#~ msgstr "Bílá"
-
-#~ msgid "Black"
-#~ msgstr "Černá"
-
-#~ msgid "Red"
-#~ msgstr "Červená"
-
-#~ msgid "Blue"
-#~ msgstr "Modrá"
-
-#~ msgid "Green"
-#~ msgstr "Zelená"
-
-#~ msgid "Yellow"
-#~ msgstr "Žlutá"
-
-#~ msgid "Orange"
-#~ msgstr "Oranžová"
-
-#~ msgid "Gray"
-#~ msgstr "Šedá"
-
-#~ msgid "Brown"
-#~ msgstr "Hnědá"
-
-#~ msgid "You are logged in as"
-#~ msgstr "Jste přihlášeni jako"
-
-#, fuzzy
-#~| msgid "Only the owner can manage editors."
-#~ msgid "Only the boat creator can delete it."
-#~ msgstr "Pouze vlastník může spravovat editory."
-
-#~ msgid "Clear filter"
-#~ msgstr "Zrušit filtr"
