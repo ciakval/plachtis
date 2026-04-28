@@ -10,7 +10,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Count, Q
 from ..models import Boat, Person, Crew, CrewMember, EventSettings
 from ..forms import CrewRegistrationForm
-from .exports import _csv_safe
+from .exports import _csv_safe, _fmt_dt, _age
 
 
 @login_required
@@ -156,6 +156,70 @@ def crew_delete(request, crew_id):
     return render(request, 'SkaRe/crews/confirm_delete.html', {'crew': crew})
 
 
+_CREW_CSV_HEADER = [
+    'registration_number', 'category', 'category',
+    'sail_number', 'ne', 'harbor_number', 'harbor_name',
+    'helmsman', 'crew1', 'crew2', 'crew3', 'crew4',
+    'helmsman_age', 'crew1_age', 'crew2_age', 'crew3_age', 'crew4_age',
+    'owner', 'registered_at', 'boat_id', 'sail_number',
+    'boat_name', 'boat_class', 'sail_area',
+]
+
+
+def _crew_csv_row(crew):
+    helmsman = None
+    crew_members = []
+    for m in sorted(crew.members.all(), key=lambda x: x.id):
+        if m.role == CrewMember.ROLE_HELMSMAN:
+            helmsman = m
+        else:
+            crew_members.append(m)
+
+    slots = (crew_members + [None] * 4)[:4]
+
+    def name(m):
+        return _csv_safe(str(m.participant)) if m else ''
+
+    def member_age(m):
+        if m and m.participant.date_of_birth:
+            return _age(m.participant.date_of_birth)
+        return ''
+
+    contact = crew.boat.contact_person or ''
+    phone = crew.boat.contact_phone or ''
+    if contact and phone:
+        owner_info = f"{contact} / {phone}"
+    else:
+        owner_info = contact or phone
+
+    return [
+        crew.id,
+        crew.category,
+        crew.category,
+        _csv_safe(crew.boat.sail_number),
+        'NE',
+        _csv_safe(crew.boat.harbor_number),
+        _csv_safe(crew.boat.harbor_name),
+        name(helmsman),
+        name(slots[0]),
+        name(slots[1]),
+        name(slots[2]),
+        name(slots[3]),
+        member_age(helmsman),
+        member_age(slots[0]),
+        member_age(slots[1]),
+        member_age(slots[2]),
+        member_age(slots[3]),
+        _csv_safe(owner_info),
+        _fmt_dt(crew.created_at),
+        crew.boat.id,
+        _csv_safe(crew.boat.sail_number),
+        _csv_safe(crew.boat.name),
+        crew.boat.boat_class.name if crew.boat.boat_class else '',
+        crew.boat.sail_area or '',
+    ]
+
+
 @login_required
 def crew_export_csv(request):
     """Staff-only CSV export of all crews and their members."""
@@ -169,47 +233,16 @@ def crew_export_csv(request):
     response.write('\ufeff')
 
     writer = csv.writer(response)
-    writer.writerow([
-        'crew_id', 'category', 'boat_sail_number', 'boat_name',
-        'boat_class', 'sail_area', 'role',
-        'first_name', 'last_name', 'date_of_birth', 'scout_category',
-        'participant_type', 'unit_name',
-    ])
+    writer.writerow(_CREW_CSV_HEADER)
 
-    members = (
-        CrewMember.objects
-        .select_related('crew', 'crew__boat', 'crew__boat__boat_class', 'participant')
-        .order_by('crew__id', '-role')
+    crews = (
+        Crew.objects
+        .select_related('boat', 'boat__boat_class')
+        .prefetch_related('members__participant')
+        .order_by('id')
     )
-
-    for m in members:
-        crew = m.crew
-        person = m.participant
-        participant_type = ''
-        unit_name = ''
-        if hasattr(person, 'regularparticipant'):
-            participant_type = 'RegularParticipant'
-            unit_name = person.regularparticipant.unit.entity.scout_unit_name
-        elif hasattr(person, 'individualparticipant'):
-            participant_type = 'IndividualParticipant'
-        elif hasattr(person, 'organizer'):
-            participant_type = 'Organizer'
-
-        writer.writerow([
-            crew.id,
-            crew.category,
-            crew.boat.sail_number,
-            crew.boat.name,
-            crew.boat.boat_class.name if crew.boat.boat_class else '',
-            crew.boat.sail_area or '',
-            m.role,
-            person.first_name,
-            person.last_name,
-            person.date_of_birth,
-            person.category or '',
-            participant_type,
-            unit_name,
-        ])
+    for crew in crews:
+        writer.writerow(_crew_csv_row(crew))
 
     return response
 
@@ -351,48 +384,16 @@ def crew_all_export_csv(request):
     response.write('\ufeff')
 
     writer = csv.writer(response)
-    writer.writerow([
-        'crew_id', 'category', 'boat_sail_number', 'boat_name',
-        'boat_class', 'sail_area', 'role',
-        'first_name', 'last_name', 'date_of_birth', 'scout_category',
-        'participant_type', 'unit_name',
-    ])
+    writer.writerow(_CREW_CSV_HEADER)
 
-    members = (
-        CrewMember.objects
-        .filter(crew__in=qs)
-        .select_related('crew', 'crew__boat', 'crew__boat__boat_class', 'participant')
-        .order_by('crew__id', '-role')
+    crews = (
+        qs
+        .select_related('boat', 'boat__boat_class')
+        .prefetch_related('members__participant')
+        .order_by('id')
     )
-
-    for m in members:
-        crew = m.crew
-        person = m.participant
-        participant_type = ''
-        unit_name = ''
-        if hasattr(person, 'regularparticipant'):
-            participant_type = 'RegularParticipant'
-            unit_name = person.regularparticipant.unit.entity.scout_unit_name
-        elif hasattr(person, 'individualparticipant'):
-            participant_type = 'IndividualParticipant'
-        elif hasattr(person, 'organizer'):
-            participant_type = 'Organizer'
-
-        writer.writerow([
-            crew.id,
-            crew.category,
-            _csv_safe(crew.boat.sail_number),
-            _csv_safe(crew.boat.name),
-            crew.boat.boat_class.name if crew.boat.boat_class else '',
-            crew.boat.sail_area or '',
-            m.role,
-            _csv_safe(person.first_name),
-            _csv_safe(person.last_name),
-            person.date_of_birth,
-            person.category or '',
-            participant_type,
-            _csv_safe(unit_name),
-        ])
+    for crew in crews:
+        writer.writerow(_crew_csv_row(crew))
 
     return response
 
@@ -415,52 +416,17 @@ def crew_export_single_csv(request, crew_id):
     if not request.user.is_staff:
         messages.error(request, _('Staff access required.'))
         return redirect('SkaRe:home')
-    crew = get_object_or_404(Crew, id=crew_id)
+    crew = get_object_or_404(
+        Crew.objects.select_related('boat', 'boat__boat_class').prefetch_related('members__participant'),
+        id=crew_id,
+    )
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = f'attachment; filename="crew_{crew_id}.csv"'
     response.write('\ufeff')
 
     writer = csv.writer(response)
-    writer.writerow([
-        'crew_id', 'category', 'boat_sail_number', 'boat_name',
-        'boat_class', 'sail_area', 'role',
-        'first_name', 'last_name', 'date_of_birth', 'scout_category',
-        'participant_type', 'unit_name',
-    ])
-
-    members = (
-        crew.members
-        .select_related('crew__boat', 'crew__boat__boat_class', 'participant')
-        .order_by('-role')
-    )
-
-    for m in members:
-        person = m.participant
-        participant_type = ''
-        unit_name = ''
-        if hasattr(person, 'regularparticipant'):
-            participant_type = 'RegularParticipant'
-            unit_name = person.regularparticipant.unit.entity.scout_unit_name
-        elif hasattr(person, 'individualparticipant'):
-            participant_type = 'IndividualParticipant'
-        elif hasattr(person, 'organizer'):
-            participant_type = 'Organizer'
-
-        writer.writerow([
-            crew.id,
-            crew.category,
-            _csv_safe(crew.boat.sail_number),
-            _csv_safe(crew.boat.name),
-            crew.boat.boat_class.name if crew.boat.boat_class else '',
-            crew.boat.sail_area or '',
-            m.role,
-            _csv_safe(person.first_name),
-            _csv_safe(person.last_name),
-            person.date_of_birth,
-            person.category or '',
-            participant_type,
-            _csv_safe(unit_name),
-        ])
+    writer.writerow(_CREW_CSV_HEADER)
+    writer.writerow(_crew_csv_row(crew))
 
     return response
