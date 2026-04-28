@@ -3,6 +3,32 @@
 
 {% block title %}{% trans "Sail Tickets" %} - SkaRe{% endblock %}
 
+{% block extra_css %}
+<style>
+  th.sortable {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  th.sortable:hover {
+    --bs-table-bg: #2b3035;
+  }
+  th.sortable.sort-active {
+    --bs-table-bg: #343a40;
+  }
+  .sort-icon {
+    font-size: 0.75em;
+    opacity: 0.4;
+    margin-left: 4px;
+    transition: opacity 0.15s;
+  }
+  th.sortable:hover .sort-icon,
+  th.sortable.sort-active .sort-icon {
+    opacity: 1;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <h1 class="mb-3"><i class="bi bi-ticket-perforated"></i> {% trans "Sail Tickets" %}</h1>
 {% include 'SkaRe/tickets/_nav.html' %}
@@ -44,13 +70,13 @@
     <span class="text-danger">{% trans "Lost" %}: {{ status_counts.lost|default:0 }}</span>
 </div>
 
-<table class="table table-hover align-middle table-sm">
+<table class="table table-hover align-middle table-sm" id="ticketsTable">
   <thead class="table-dark">
     <tr>
-      <th>{% trans "Code" %}</th>
-      <th>{% trans "Color" %}</th>
-      <th>{% trans "Boat" %}</th>
-      <th>{% trans "Status" %}</th>
+      <th class="sortable" data-col="0">{% trans "Code" %} <i class="bi bi-arrow-down-up sort-icon"></i></th>
+      <th class="sortable" data-col="1">{% trans "Color" %} <i class="bi bi-arrow-down-up sort-icon"></i></th>
+      <th class="sortable" data-col="2">{% trans "Boat" %} <i class="bi bi-arrow-down-up sort-icon"></i></th>
+      <th class="sortable" data-col="3">{% trans "Status" %} <i class="bi bi-arrow-down-up sort-icon"></i></th>
       <th>{% trans "RFID" %}</th>
       <th></th>
     </tr>
@@ -60,8 +86,8 @@
     <tr>
       <td><a href="{% url 'SkaRe:ticket_detail' ticket.pk %}">{{ ticket.code }}</a></td>
       <td>{{ ticket.get_color_display }}</td>
-      <td>{{ ticket.boat|default:"—" }}</td>
-      <td>
+      <td data-sort="{{ ticket.boat.name|default:'' }}">{{ ticket.boat|default:"—" }}</td>
+      <td data-sort="{{ ticket.status }}">
         {% if ticket.status == 'on_water' %}<span class="badge bg-primary">{{ ticket.get_status_display }}</span>
         {% elif ticket.status == 'lost' %}<span class="badge bg-danger">{{ ticket.get_status_display }}</span>
         {% else %}<span class="badge bg-secondary">{{ ticket.get_status_display }}</span>{% endif %}
@@ -80,4 +106,55 @@
     {% endfor %}
   </tbody>
 </table>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  const table = document.getElementById('ticketsTable');
+  if (!table) return;
+  const tbody = table.querySelector('tbody');
+  let sortCol = -1, sortAsc = true;
+
+  table.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = parseInt(th.dataset.col);
+      if (sortCol === col) {
+        sortAsc = !sortAsc;
+      } else {
+        sortCol = col;
+        sortAsc = true;
+      }
+
+      // Update header states
+      table.querySelectorAll('th.sortable').forEach(h => {
+        h.classList.remove('sort-active');
+        h.querySelector('.sort-icon').className = 'bi bi-arrow-down-up sort-icon';
+      });
+      th.classList.add('sort-active');
+      th.querySelector('.sort-icon').className = sortAsc
+        ? 'bi bi-arrow-up sort-icon'
+        : 'bi bi-arrow-down sort-icon';
+
+      // Sort rows
+      const rows = [...tbody.querySelectorAll('tr')];
+      if (rows.length === 1 && rows[0].cells.length === 1) return; // empty row
+
+      rows.sort((a, b) => {
+        const cell = i => a.cells[i];
+        const val = row => {
+          const c = row.cells[col];
+          if (!c) return '';
+          return (c.dataset.sort !== undefined ? c.dataset.sort : c.textContent).trim();
+        };
+        const av = val(a), bv = val(b);
+        const cmp = av.localeCompare(bv, undefined, { numeric: true, sensitivity: 'base' });
+        return sortAsc ? cmp : -cmp;
+      });
+
+      rows.forEach(r => tbody.appendChild(r));
+    });
+  });
+})();
+</script>
 {% endblock %}
