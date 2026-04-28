@@ -1,0 +1,63 @@
+{% extends 'SkaRe/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Lodě na vodě - SkaRe" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <h1 class="mb-0"><i class="bi bi-water"></i> {% trans "Lodě na vodě" %}</h1>
+        </div>
+
+        {% if boats %}
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-sailboat"></i>
+                        {% blocktrans count count=boats|length %}{{ count }} loď{% plural %}{{ count }} lodí{% endblocktrans %}
+                    </h5>
+                </div>
+                <div class="card-body border-bottom px-3 py-2">
+                    {% for entry in class_counts %}
+                        <span class="badge bg-secondary me-1">{{ entry.boat_class__name|default:"Bez třídy" }}: {{ entry.count }}</span>
+                    {% endfor %}
+                    <span class="badge bg-primary ms-1">{% trans "Celkem" %}: {{ boats|length }}</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>{% trans "Třída" %}</th>
+                                    <th>{% trans "Název" %}</th>
+                                    <th>{% trans "Barva trupu" %}</th>
+                                    <th>{% trans "Barva plachet" %}</th>
+                                    <th>{% trans "Telefon" %}</th>
+                                    <th>{% trans "Přístav" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for boat in boats %}
+                                <tr>
+                                    <td>{{ boat.boat_class.name|default:"—" }}{% if boat.class_supplement %} {{ boat.class_supplement }}{% endif %}</td>
+                                    <td>{{ boat.name }}</td>
+                                    <td>{{ boat.hull_color }}</td>
+                                    <td>{{ boat.sail_color|default:"—" }}</td>
+                                    <td>{{ boat.contact_phone }}</td>
+                                    <td>{{ boat.harbor_name|default:"—" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                <i class="bi bi-info-circle"></i> {% trans "Momentálně nejsou na vodě žádné lodě." %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

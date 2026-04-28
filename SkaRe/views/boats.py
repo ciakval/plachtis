@@ -119,6 +119,30 @@ def boat_my_unit(request):
     })
 
 
+def boats_on_water(request):
+    """Public view: boats currently on water (via SailTicket status)."""
+    from django.db.models import Count
+    from ..models import SailTicket
+    boats = (
+        Boat.objects
+        .filter(sail_tickets__status=SailTicket.Status.ON_WATER)
+        .select_related('boat_class')
+        .distinct()
+        .order_by('name')
+    )
+    class_counts = (
+        Boat.objects
+        .filter(sail_tickets__status=SailTicket.Status.ON_WATER)
+        .values('boat_class__name')
+        .annotate(count=Count('id', distinct=True))
+        .order_by('boat_class__order', 'boat_class__name')
+    )
+    return render(request, 'SkaRe/boats/on_water.html', {
+        'boats': boats,
+        'class_counts': class_counts,
+    })
+
+
 @login_required
 def boat_list(request):
     boats = Boat.objects.select_related('boat_class', 'created_by').order_by('name')

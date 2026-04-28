@@ -31,6 +31,7 @@ from .boats import (
     boat_lend,
     boat_sail_lookup,
     boat_my_unit,
+    boats_on_water,
 )
 from .crews import (
     crew_register,

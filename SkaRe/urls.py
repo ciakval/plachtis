@@ -5,6 +5,7 @@ app_name = 'SkaRe'
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('lode/', views.boats_on_water, name='boats_on_water'),
     path('user/login/', views.user_login, name='login'),
     path('user/logout/', views.user_logout, name='logout'),
     path('user/register/', views.user_register, name='register'),
