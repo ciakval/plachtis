@@ -13,6 +13,17 @@
             </a>
         </div>
 
+        <div class="alert alert-info mb-4">
+            <i class="bi bi-info-circle"></i>
+            <strong>{% trans "Total" %}:</strong> {{ boat_count }} {% trans "boats" %}
+            {% if class_counts %}
+            —
+            {% for entry in class_counts %}
+                <span class="text-primary">{{ entry.boat_class__name|default:_("No class") }}: {{ entry.count }}</span>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            {% endif %}
+        </div>
+
         {% if boats %}
             <div class="card">
                 <div class="card-header bg-primary text-white">

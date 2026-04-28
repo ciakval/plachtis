@@ -118,17 +118,33 @@ def _build_ticket_plan(boats, reserve_counts, spare_count):
 
 @infodesk_required
 def ticket_list(request):
+    from django.db.models import Count
     tickets = SailTicket.objects.select_related('boat', 'boat__boat_class')
     status_filter = request.GET.get('status', '')
     color_filter = request.GET.get('color', '')
+    assigned_filter = bool(request.GET.get('assigned', ''))
     if status_filter in VALID_TICKET_STATUSES:
         tickets = tickets.filter(status=status_filter)
     if color_filter in {c.value for c in SailTicket.Color}:
         tickets = tickets.filter(color=color_filter)
+    if assigned_filter:
+        tickets = tickets.filter(boat__isnull=False)
+    ticket_count = tickets.count()
+    is_filtered = bool(status_filter or color_filter or assigned_filter)
+    ticket_total = SailTicket.objects.count() if is_filtered else None
+    status_counts = {
+        row['status']: row['count']
+        for row in tickets.values('status').annotate(count=Count('id'))
+    }
     return render(request, 'SkaRe/tickets/list.html', {
         'tickets': tickets,
+        'ticket_count': ticket_count,
+        'ticket_total': ticket_total,
+        'is_filtered': is_filtered,
+        'status_counts': status_counts,
         'status_filter': status_filter,
         'color_filter': color_filter,
+        'assigned_filter': assigned_filter,
         'statuses': SailTicket.Status,
         'colors': SailTicket.Color,
     })

@@ -145,8 +145,19 @@ def boats_on_water(request):
 
 @login_required
 def boat_list(request):
+    from django.db.models import Count
     boats = Boat.objects.select_related('boat_class', 'created_by').order_by('name')
-    return render(request, 'SkaRe/boats/list.html', {'boats': boats})
+    class_counts = (
+        Boat.objects
+        .values('boat_class__name')
+        .annotate(count=Count('id'))
+        .order_by('boat_class__name')
+    )
+    return render(request, 'SkaRe/boats/list.html', {
+        'boats': boats,
+        'boat_count': boats.count(),
+        'class_counts': class_counts,
+    })
 
 
 @login_required
