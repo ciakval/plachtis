@@ -69,6 +69,8 @@ urlpatterns = [
     path('infodesk/tickets/<int:ticket_id>/pair-rfid/', views.ticket_pair_rfid, name='ticket_pair_rfid'),
     path('infodesk/tickets/<int:ticket_id>/unpair-rfid/', views.ticket_unpair_rfid, name='ticket_unpair_rfid'),
     path('infodesk/tickets/<int:ticket_id>/cancel-pairing/', views.ticket_cancel_pairing, name='ticket_cancel_pairing'),
+    path('infodesk/tickets/<int:ticket_id>/assign-boat/', views.ticket_assign_boat, name='ticket_assign_boat'),
+    path('infodesk/tickets/<int:ticket_id>/unassign-boat/', views.ticket_unassign_boat, name='ticket_unassign_boat'),
     # RFID reader API
     path('api/rfid/alive/', views.rfid_alive, name='rfid_alive'),
     path('api/rfid/scan/', views.rfid_scan, name='rfid_scan'),

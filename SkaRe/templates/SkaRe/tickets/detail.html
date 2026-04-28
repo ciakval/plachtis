@@ -38,6 +38,33 @@
       {% endfor %}
     </div>
     <div class="mt-3">
+      <h5>{% trans "Boat" %}</h5>
+      {% if ticket.boat %}
+      <form method="post" action="{% url 'SkaRe:ticket_unassign_boat' ticket.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger btn-sm{% if ticket.status == 'on_water' %} disabled{% endif %}"
+                {% if ticket.status != 'on_water' %}onclick="return confirm('{% trans "Unassign this boat from the ticket?" %}')"{% endif %}
+                {% if ticket.status == 'on_water' %}title="{% trans "Cannot unassign a ticket that is on water" %}"{% endif %}>
+          <i class="bi bi-x-lg"></i> {% trans "Unassign boat" %}
+        </button>
+      </form>
+      {% else %}
+      <form method="post" action="{% url 'SkaRe:ticket_assign_boat' ticket.pk %}" class="d-flex gap-2 align-items-center flex-wrap">
+        {% csrf_token %}
+        <select name="boat_id" class="form-select form-select-sm" style="max-width:20rem;" required>
+          <option value="">{% trans "— select a boat —" %}</option>
+          {% for boat in available_boats %}
+          <option value="{{ boat.pk }}">{{ boat }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-outline-primary btn-sm{% if ticket.status == 'on_water' %} disabled{% endif %}"
+                {% if ticket.status == 'on_water' %}title="{% trans "Cannot assign a boat to a ticket that is on water" %}"{% endif %}>
+          <i class="bi bi-anchor"></i> {% trans "Assign boat" %}
+        </button>
+      </form>
+      {% endif %}
+    </div>
+    <div class="mt-3">
       <h5>{% trans "RFID" %}</h5>
       <div class="d-flex gap-2 flex-wrap">
         {% if ticket.pending_pairing %}

@@ -141,10 +141,17 @@ def ticket_detail(request, ticket_id):
         pk=ticket_id,
     )
     logs = ticket.logs.select_related('changed_by').order_by('-changed_at')
+    assigned_boat_ids = set(
+        SailTicket.objects.exclude(pk=ticket_id)
+        .filter(boat__isnull=False)
+        .values_list('boat_id', flat=True)
+    )
+    available_boats = Boat.objects.exclude(pk__in=assigned_boat_ids).select_related('boat_class').order_by('name')
     return render(request, 'SkaRe/tickets/detail.html', {
         'ticket': ticket,
         'logs': logs,
         'statuses': SailTicket.Status,
+        'available_boats': available_boats,
     })
 
 
@@ -211,6 +218,58 @@ def ticket_cancel_pairing(request, ticket_id):
     ticket.pending_pairing = False
     ticket.save(update_fields=['pending_pairing', 'updated_at'])
     messages.info(request, _('Pairing cancelled for ticket %(code)s.') % {'code': ticket.code})
+    return redirect('SkaRe:ticket_detail', ticket_id=ticket.pk)
+
+
+@infodesk_required
+def ticket_assign_boat(request, ticket_id):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    ticket = get_object_or_404(SailTicket, pk=ticket_id)
+    if ticket.boat:
+        return HttpResponseBadRequest('Ticket already has a boat assigned')
+    if ticket.status == SailTicket.Status.ON_WATER:
+        messages.error(request, _('Cannot assign a boat to a ticket that is currently on water.'))
+        return redirect('SkaRe:ticket_detail', ticket_id=ticket.pk)
+    boat_id = request.POST.get('boat_id', '').strip()
+    if not boat_id:
+        return HttpResponseBadRequest('Missing boat_id')
+    boat = get_object_or_404(Boat, pk=boat_id)
+    if SailTicket.objects.filter(boat=boat).exists():
+        messages.error(request, _('Boat %(name)s already has a sail ticket assigned.') % {'name': boat})
+        return redirect('SkaRe:ticket_detail', ticket_id=ticket.pk)
+    ticket.boat = boat
+    ticket.save(update_fields=['boat', 'updated_at'])
+    SailTicketLog.objects.create(
+        ticket=ticket,
+        status=ticket.status,
+        changed_by=request.user,
+        note=f'Boat assigned: {boat} by {request.user.username}',
+    )
+    messages.success(request, _('Ticket %(code)s assigned to boat %(boat)s.') % {'code': ticket.code, 'boat': boat})
+    return redirect('SkaRe:ticket_detail', ticket_id=ticket.pk)
+
+
+@infodesk_required
+def ticket_unassign_boat(request, ticket_id):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    ticket = get_object_or_404(SailTicket, pk=ticket_id)
+    if not ticket.boat:
+        return HttpResponseBadRequest('Ticket has no boat assigned')
+    if ticket.status == SailTicket.Status.ON_WATER:
+        messages.error(request, _('Cannot unassign a ticket that is currently on water.'))
+        return redirect('SkaRe:ticket_detail', ticket_id=ticket.pk)
+    old_boat = ticket.boat
+    ticket.boat = None
+    ticket.save(update_fields=['boat', 'updated_at'])
+    SailTicketLog.objects.create(
+        ticket=ticket,
+        status=ticket.status,
+        changed_by=request.user,
+        note=f'Boat unassigned: {old_boat} by {request.user.username}',
+    )
+    messages.success(request, _('Ticket %(code)s unassigned from boat %(boat)s.') % {'code': ticket.code, 'boat': old_boat})
     return redirect('SkaRe:ticket_detail', ticket_id=ticket.pk)
 
 

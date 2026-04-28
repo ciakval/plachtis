@@ -68,6 +68,8 @@ from .tickets import (
     ticket_pair_rfid,
     ticket_unpair_rfid,
     ticket_cancel_pairing,
+    ticket_assign_boat,
+    ticket_unassign_boat,
     ticket_lookup,
     ticket_create_bulk,
     ticket_on_water,
