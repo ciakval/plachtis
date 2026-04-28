@@ -77,7 +77,7 @@
     <tr>
       <td>{{ log.changed_at|date:"d.m.Y H:i" }}</td>
       <td>{{ log.status }}</td>
-      <td>{{ log.changed_by|default:"RFID reader" }}</td>
+      <td>{{ log.changed_by|default:_("RFID reader") }}</td>
       <td>{{ log.note|default:"" }}</td>
     </tr>
     {% empty %}
