@@ -383,7 +383,7 @@ def crew_all_export_csv(request):
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     response.write('\ufeff')
 
-    writer = csv.writer(response)
+    writer = csv.writer(response, delimiter=';')
     writer.writerow(_CREW_CSV_HEADER)
 
     crews = (
@@ -425,7 +425,7 @@ def crew_export_single_csv(request, crew_id):
     response['Content-Disposition'] = f'attachment; filename="crew_{crew_id}.csv"'
     response.write('\ufeff')
 
-    writer = csv.writer(response)
+    writer = csv.writer(response, delimiter=';')
     writer.writerow(_CREW_CSV_HEADER)
     writer.writerow(_crew_csv_row(crew))
 
