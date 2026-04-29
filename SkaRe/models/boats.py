@@ -114,18 +114,22 @@ class Crew(models.Model):
     CATEGORY_DN = 'DN'
     CATEGORY_OZ = 'OZ'
     CATEGORY_OD = 'OD'
-    CATEGORY_MS = 'MS'
+    CATEGORY_MS  = 'MS'
+    CATEGORY_SK  = 'ŠK'
+    CATEGORY_MSS = 'MSS'
 
     CATEGORY_CHOICES = [
-        (CATEGORY_Q,  _('Q – Žabičky a vlčata')),
-        (CATEGORY_S,  _('S – Skautky a skauti')),
-        (CATEGORY_R,  _('R – Rangers a roveři')),
-        (CATEGORY_D,  _('D – Dospělí')),
-        (CATEGORY_SN, _('SN – Skautští námořníci')),
-        (CATEGORY_DN, _('DN – Dospělí námořníci')),
-        (CATEGORY_OZ, _('OŽ – Open Žáci')),
-        (CATEGORY_OD, _('OD – Open Dospělí')),
-        (CATEGORY_MS, _('MS – Modrá stuha')),
+        (CATEGORY_Q,   _('Q – Žabičky a vlčata')),
+        (CATEGORY_S,   _('S – Skautky a skauti')),
+        (CATEGORY_R,   _('R – Rangers a roveři')),
+        (CATEGORY_D,   _('D – Dospělí')),
+        (CATEGORY_SN,  _('SN – Skautští námořníci')),
+        (CATEGORY_DN,  _('DN – Dospělí námořníci')),
+        (CATEGORY_OZ,  _('OŽ – Open Žáci')),
+        (CATEGORY_OD,  _('OD – Open Dospělí')),
+        (CATEGORY_MS,  _('MS – Modrá stuha')),
+        (CATEGORY_SK,  _('ŠK – Štít konstruktérů')),
+        (CATEGORY_MSS, _('MSS – Modrá stužka')),
     ]
 
     boat = models.ForeignKey(
