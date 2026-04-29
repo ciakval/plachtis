@@ -232,7 +232,7 @@ def crew_export_csv(request):
     # BOM for Excel UTF-8 compatibility
     response.write('\ufeff')
 
-    writer = csv.writer(response)
+    writer = csv.writer(response, delimiter=';')
     writer.writerow(_CREW_CSV_HEADER)
 
     crews = (
