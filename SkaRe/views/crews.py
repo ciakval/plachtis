@@ -216,7 +216,7 @@ def _crew_csv_row(crew):
         _csv_safe(crew.boat.sail_number),
         _csv_safe(crew.boat.name),
         crew.boat.boat_class.name if crew.boat.boat_class else '',
-        crew.boat.sail_area or '',
+        str(crew.boat.sail_area or '').replace('.',','),
     ]
 
 
