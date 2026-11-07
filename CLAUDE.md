@@ -52,6 +52,7 @@ uv run manage.py check --deploy  # production validation
   - `forms/` — Forms split by domain: `registration.py`, `boats.py`, `crews.py`, `tickets.py`
   - `permissions.py` — `infodesk_required` / `is_infodesk` / `is_race_management` helpers
   - `urls.py` — App URL routing
+  - `checks.py` — system check run by `migrate`: fails container start if the SQLite file or its directory is not writable
   - `form_utils.py` — CSRF token helpers for duplicate-submission prevention
   - `context_processors.py` — Injects `VERSION`/`BUILD_ID` into all templates
   - `management/commands/` — `seed_small/medium/large.py` seeding commands

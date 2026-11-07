@@ -24,43 +24,41 @@ The application now uses environment variables for sensitive configuration, ensu
    python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
    ```
 
-2. **Create environment file** at `/home/plachtis/DOCKER/plachtis/.env`:
-   ```bash
-   cd /home/plachtis/DOCKER/plachtis
-   cp /path/to/repo/.env.example .env
-   # Edit .env and set at minimum:
-   # - DJANGO_SECRET_KEY
-   # - DJANGO_ALLOWED_HOSTS (production hosts)
-   ```
+2. **Create environment file** at `/home/deploy/DOCKER/plachtis/.env`, based on `.env.example`. Set at minimum:
+   - `DJANGO_SECRET_KEY`
+   - `DJANGO_ALLOWED_HOSTS` (production hosts)
 
-   For test deployment at `/home/plachtis/DOCKER/plachtis-test`, copy the same template and use test values:
+   For test deployment at `/home/deploy/DOCKER/plachtis-test`, copy the same template and use test values:
    - `CONTAINER_NAME=plachtis-test-web`
    - `DJANGO_ALLOWED_HOSTS=plachtis-test.remesh.cz`
 
-3. **Use compose.yaml** with the .env file:
+3. **Keep `compose.yaml` next to `.env`.** The server copy is owned by the server, so CI does not update it. Changing it means re-running `bombur-onboard` from `ciakval/bombur-deploy`.
+
+4. **Make `data/` writable by the container user (uid 1000):**
    ```bash
-   # The compose.yaml already references the variables
-   # Just ensure your .env file exists in the same directory
+   sudo chown -R 1000:1000 /home/deploy/DOCKER/plachtis/data
    ```
+   SQLite creates its journal next to the database, so the directory needs to be writable as well as `db.sqlite3`. Otherwise pages load but every write fails with a 500, including login. `python manage.py migrate` checks this at container start and fails with `SkaRe.E001` or `SkaRe.E002`.
 
 ### GitHub Secrets Setup
 
-You need these secrets in your GitHub repository (Settings → Secrets and variables → Actions):
-
-- `VPS_HOST` - Your VPS IP or hostname
-- `VPS_SSH_PORT` - SSH port (usually 22)
-- `VPS_USER` - SSH username
-- `VPS_SSH_KEY` - Private SSH key for authentication
+The only GitHub secret is `DEPLOY_SSH_KEY`, set as an environment secret on both the `production` and `test` environments. It lets CI ask for a deployment of one image and nothing else. Runtime secrets live in `.env` on the server.
 
 ### Automatic Deployment
 
-Every push to `main` branch will:
-1. Build a new Docker image tagged with the Git commit SHA
-2. Push to GitHub Container Registry
-3. Copy compose.yaml to VPS
-4. Pull the exact same commit-SHA image on VPS
-5. Store `GITHUB_REPOSITORY`, `IMAGE_TAG`, and environment-specific values in the target directory `.env`
-6. Restart containers with new code using plain `docker compose up -d`
+- A push to `main` deploys to test (`plachtis-test.remesh.cz`).
+- A `v*` tag deploys to production (`plachtis.remesh.cz`, `plachtis.skare.cz`).
+
+In both cases GitHub Actions builds an image tagged with the Git commit SHA, pushes it to GitHub Container Registry and calls `bombur-deploy`, which pulls that image and runs `docker compose up -d`.
+
+### Logs
+
+```bash
+ssh -p 10022 ciakval@bombur.remesh.cz
+docker logs --since 24h plachtis-web
+```
+
+The output has the Gunicorn access log and Django's errors, including tracebacks for every 500.
 
 ## Caddy Configuration
 
@@ -68,7 +66,7 @@ The application uses whitenoise to serve static files directly from Django/Gunic
 
 ```caddy
 plachtis.remesh.cz {
-    reverse_proxy localhost:8000
+    reverse_proxy plachtis-web:8000
 }
 ```
 

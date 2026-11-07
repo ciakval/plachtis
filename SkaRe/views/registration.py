@@ -50,15 +50,12 @@ def user_login(request):
         if user is not None:
             login(request, user)
             messages.success(request, _('Welcome back, {name}!').format(name=user.first_name or user.username))
-            next_url = request.GET.get('next', 'SkaRe:home')
+            next_url = request.GET.get('next', '')
 
-            # Validate next_url to prevent open redirect vulnerability
-            # URL names (like 'SkaRe:home') are safe to use directly
-            # For actual URLs (absolute or relative), validate they're allowed
-            if '://' in next_url or next_url.startswith('/'):
-                # It's an actual URL (absolute or relative), validate it
-                if not url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
-                    next_url = 'SkaRe:home'
+            # Only follow local paths: this prevents open redirects, and redirect() would
+            # treat any other value as a URL name and raise NoReverseMatch.
+            if not next_url.startswith('/') or not url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
+                next_url = 'SkaRe:home'
 
             return redirect(next_url)
         else:

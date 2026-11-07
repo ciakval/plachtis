@@ -170,6 +170,24 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
 
+# Django only logs to the console with DEBUG=True by default, so production tracebacks would be
+# lost. django.request stays at ERROR: 4xx responses are in the access log, and scanners cause
+# thousands of them.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'plain': {'format': '{asctime} {levelname} {name}: {message}', 'style': '{'},
+    },
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler', 'formatter': 'plain'},
+    },
+    'loggers': {
+        'django': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
+        'django.request': {'level': 'ERROR'},
+    },
+}
+
 SAIL_REGISTRY_SHEET_URL = (
     "https://docs.google.com/spreadsheets/d/e/"
     "2PACX-1vR3AYk5tYLbTke5J3yM8hhQHPSejpc7C9rCAsQ-ftmS-pTC2P2BN0xlGioeo_R8ttKMeQV_bbj_jC4m/"
